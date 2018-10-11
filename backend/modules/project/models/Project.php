@@ -21,6 +21,7 @@ class Project extends \common\models\Project
                 [
                     'project_id' => \Yii::$app->request->get('id'),
                     'card_id' => null,
+                    'company_id' => null,
                 ])
             ->all();
         $array = [];

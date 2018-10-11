@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'status',
                 'value' => $model->status0->name,
             ],
+            'salary',
             'created_at',
             'updated_at',
         ],

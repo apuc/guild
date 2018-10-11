@@ -18,6 +18,18 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
+    <?= $form->field($model, 'budget')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'company_id')->widget(Select2::class,
+        [
+            'data' => \yii\helpers\ArrayHelper::map(\common\models\Company::find()->all(),'id', 'name'),
+            'options' => ['placeholder' => '...','class' => 'form-control'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]
+    ); ?>
+
     <div class="row">
         <div class="col-xs-12">
             <?= $form->field($model, 'fields')->widget(MultipleInput::class, [

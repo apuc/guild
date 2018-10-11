@@ -100,6 +100,15 @@ use yii\widgets\ActiveForm;
             ) ?>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+        <?= $form->field($model, 'salary')->textInput(['maxlength' => true]) ?>
+        </div>
+
+    </div>
+
+
     <div class="row">
         <div class="col-xs-12">
         <?= $form->field($model, 'fields')->widget(MultipleInput::class, [

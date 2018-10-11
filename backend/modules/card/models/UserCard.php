@@ -16,6 +16,7 @@ class UserCard extends \common\models\UserCard
             [
                 'card_id' => \Yii::$app->request->get('id'),
                 'project_id' => null,
+                'company_id' => null,
             ])
             ->all();
         $array = [];
