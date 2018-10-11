@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\card\models\UserCardSearch */
@@ -22,10 +23,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
+            [
+                'label' => 'photo',
+                'format' => 'raw',
+                'value' => function($model){
+                    return Html::img(Url::to($model->photo),[
+                        'style' => 'width:100px;'
+                    ]);
+                },
+            ],
             'fio',
             'passport',
-            'photo',
             'email:email',
             //'gender',
             //'dob',
