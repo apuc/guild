@@ -19,3 +19,11 @@
     margin: 3px;
     object-fit: cover;
 }
+
+#status-use, #additionalfields-use {
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px;
+    max-height: 100px;
+    flex-direction: column;
+}

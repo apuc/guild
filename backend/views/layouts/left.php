@@ -9,6 +9,7 @@
                     ['label' => 'Доп. поля', 'icon' => 'file-text-o', 'url' => ['/fields/additional-fields']],
                     ['label' => 'Профили', 'icon' => 'users', 'url' => ['/card/user-card']],
                     ['label' => 'Пректы', 'icon' => 'files-o', 'url' => ['/project/project']],
+                    ['label' => 'Компании', 'icon' => 'files-o', 'url' => ['/company/company']],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],

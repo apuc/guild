@@ -25,6 +25,9 @@ return [
         'project' => [
             'class' => 'backend\modules\project\Project',
         ],
+        'company' => [
+            'class' => 'backend\modules\company\Company',
+        ],
     ],
     'components' => [
         'request' => [

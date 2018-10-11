@@ -20,6 +20,7 @@ class UseStatus extends \yii\db\ActiveRecord
 {
     const USE_PROFILE = 0;
     const USE_PROJECT = 1;
+    const USE_COMPANY = 2;
 
     /**
      * {@inheritdoc}
@@ -65,7 +66,8 @@ class UseStatus extends \yii\db\ActiveRecord
     {
         return [
             self::USE_PROFILE => 'Профиль',
-            self::USE_PROJECT => 'Проект'
+            self::USE_PROJECT => 'Проект',
+            self::USE_COMPANY => 'Компания'
         ];
     }
 

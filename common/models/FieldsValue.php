@@ -9,12 +9,15 @@ use Yii;
  *
  * @property int $id
  * @property int $card_id
- * @property int $project_id
  * @property int $field_id
  * @property string $value
  * @property int $order
+ * @property int $project_id
+ * @property int $company_id
  *
  * @property AdditionalFields $field
+ * @property Company $company
+ * @property Project $project
  * @property UserCard $card
  */
 class FieldsValue extends \yii\db\ActiveRecord
@@ -34,9 +37,10 @@ class FieldsValue extends \yii\db\ActiveRecord
     {
         return [
             [['field_id', 'value'], 'required'],
-            [['card_id', 'field_id', 'order', 'project_id'], 'integer'],
+            [['card_id', 'field_id', 'order', 'project_id', 'company_id'], 'integer'],
             [['value'], 'string', 'max' => 255],
             [['field_id'], 'exist', 'skipOnError' => true, 'targetClass' => AdditionalFields::class, 'targetAttribute' => ['field_id' => 'id']],
+            [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::class, 'targetAttribute' => ['company_id' => 'id']],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::class, 'targetAttribute' => ['project_id' => 'id']],
             [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::class, 'targetAttribute' => ['card_id' => 'id']],
         ];
@@ -53,6 +57,7 @@ class FieldsValue extends \yii\db\ActiveRecord
             'field_id' => 'Field ID',
             'value' => 'Value',
             'project_id' => 'Project ID',
+            'company_id' => 'Company ID',
         ];
     }
 
@@ -62,6 +67,14 @@ class FieldsValue extends \yii\db\ActiveRecord
     public function getField()
     {
         return $this->hasOne(AdditionalFields::class, ['id' => 'field_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompany()
+    {
+        return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
 
     /**
