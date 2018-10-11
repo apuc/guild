@@ -1,0 +1,21 @@
+.media__upload_img{
+    margin-bottom: 10px;
+    float: left;
+}
+.input-group {
+    position: relative;
+    display: table;
+    width: 100%;
+    border-collapse: separate;
+}
+
+.itemImg, .itemImgs{
+    float: left!important;
+    display: inline-block;
+    width: 30%!important;
+}
+
+.media__upload_img img{
+    margin: 3px;
+    object-fit: cover;
+}
