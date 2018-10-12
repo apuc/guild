@@ -13,11 +13,8 @@ return [
     'bootstrap' => ['log'],
 
     'modules' => [
-        'status' => [
-            'class' => 'backend\modules\status\Status',
-        ],
-        'fields' => [
-            'class' => 'backend\modules\fields\Fields',
+        'settings' => [
+            'class' => 'backend\modules\settings\Settings',
         ],
         'card' => [
             'class' => 'backend\modules\card\Card',

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\modules\status\models\StatusSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Statuses';
+$this->title = 'Статусы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="status-index">

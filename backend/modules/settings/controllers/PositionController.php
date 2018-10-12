@@ -1,19 +1,18 @@
 <?php
 
-namespace backend\modules\fields\controllers;
+namespace backend\modules\settings\controllers;
 
 use Yii;
-use backend\modules\fields\models\AdditionalFields;
-use backend\modules\fields\models\AdditionalFieldsSearch;
-use yii\helpers\ArrayHelper;
+use backend\modules\settings\models\Position;
+use backend\modules\settings\models\PositionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AdditionalFieldsController implements the CRUD actions for AdditionalFields model.
+ * PositionController implements the CRUD actions for Position model.
  */
-class AdditionalFieldsController extends Controller
+class PositionController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -22,7 +21,7 @@ class AdditionalFieldsController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -31,12 +30,12 @@ class AdditionalFieldsController extends Controller
     }
 
     /**
-     * Lists all AdditionalFields models.
+     * Lists all Position models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AdditionalFieldsSearch();
+        $searchModel = new PositionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +45,7 @@ class AdditionalFieldsController extends Controller
     }
 
     /**
-     * Displays a single AdditionalFields model.
+     * Displays a single Position model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -59,16 +58,16 @@ class AdditionalFieldsController extends Controller
     }
 
     /**
-     * Creates a new AdditionalFields model.
+     * Creates a new Position model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new AdditionalFields();
+        $model = new Position();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -77,7 +76,7 @@ class AdditionalFieldsController extends Controller
     }
 
     /**
-     * Updates an existing AdditionalFields model.
+     * Updates an existing Position model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -88,12 +87,8 @@ class AdditionalFieldsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
-
-        $model->use = ArrayHelper::getColumn(
-            \common\models\UseField::find()->where(['field_id' => $model->id])->asArray()->all(),
-            'use');
 
         return $this->render('update', [
             'model' => $model,
@@ -101,7 +96,7 @@ class AdditionalFieldsController extends Controller
     }
 
     /**
-     * Deletes an existing AdditionalFields model.
+     * Deletes an existing Position model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -115,15 +110,15 @@ class AdditionalFieldsController extends Controller
     }
 
     /**
-     * Finds the AdditionalFields model based on its primary key value.
+     * Finds the Position model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return AdditionalFields the loaded model
+     * @return Position the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = AdditionalFields::findOne($id)) !== null) {
+        if (($model = Position::findOne($id)) !== null) {
             return $model;
         }
 

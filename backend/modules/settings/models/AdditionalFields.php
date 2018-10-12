@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\fields\models;
+namespace backend\modules\settings\models;
 
 use common\classes\Debug;
 use common\models\UseField;

@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\status\models;
+namespace backend\modules\settings\models;
 
 use common\models\UseStatus;
 

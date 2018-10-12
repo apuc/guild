@@ -21,10 +21,11 @@ use yii\db\Expression;
  * @property string $updated_at
  * @property string $resume
  * @property string $salary
+ * @property int $position_id
  *
- * @property array $genders
- * @property string $gendersText
- *
+ * @property FieldsValue[] $fieldsValues
+ * @property ProjectUser[] $projectUsers
+ * @property Position $position
  * @property Status $status0
  */
 class UserCard extends \yii\db\ActiveRecord
@@ -59,11 +60,11 @@ class UserCard extends \yii\db\ActiveRecord
     {
         return [
             [['fio', 'status'], 'required'],
-            [['status'], 'integer'],
-            [['gender'], 'in', 'range' => array_keys($this->genders)],
+            [['gender', 'status', 'position_id'], 'integer'],
             [['dob', 'created_at', 'updated_at'], 'safe'],
             [['fio', 'passport', 'photo', 'email', 'resume'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
+            [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => Position::class, 'targetAttribute' => ['position_id' => 'id']],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
         ];
     }
@@ -86,6 +87,7 @@ class UserCard extends \yii\db\ActiveRecord
             'updated_at' => 'Дата редактирование',
             'resume' => 'Резюме',
             'salary' => 'Зарплата',
+            'position_id' => 'Должность',
         ];
     }
 
@@ -103,6 +105,14 @@ class UserCard extends \yii\db\ActiveRecord
     public function getProjectUsers()
     {
         return $this->hasMany(ProjectUser::class, ['card_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPosition()
+    {
+        return $this->hasOne(Position::class, ['id' => 'position_id']);
     }
 
     /**

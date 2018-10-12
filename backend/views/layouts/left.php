@@ -5,8 +5,16 @@
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
                 'items' => [
-                    ['label' => 'Статусы', 'icon' => 'anchor', 'url' => ['/status/status']],
-                    ['label' => 'Доп. поля', 'icon' => 'file-text-o', 'url' => ['/fields/additional-fields']],
+                    [
+                        'label' => 'Настройки', 'icon' => 'gears', 'url' => '#',
+                        'items' => [
+                            ['label' => 'Статусы', 'icon' => 'anchor', 'url' => ['/settings/status']],
+                            ['label' => 'Доп. поля', 'icon' => 'file-text-o', 'url' => ['/settings/additional-fields']],
+                            ['label' => 'Должность', 'icon' => 'spotify', 'url' => ['/settings/position']],
+                            ['label' => 'Навыки', 'icon' => 'flask', 'url' => ['/settings/skill']],
+                        ]
+                    ],
+
                     ['label' => 'Профили', 'icon' => 'users', 'url' => ['/card/user-card']],
                     ['label' => 'Пректы', 'icon' => 'files-o', 'url' => ['/project/project']],
                     ['label' => 'Компании', 'icon' => 'files-o', 'url' => ['/company/company']],

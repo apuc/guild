@@ -40,7 +40,7 @@ use yii\widgets\ActiveForm;
                         'type'  => 'dropDownList',
                         'title' => 'Поле',
                         'defaultValue' => null,
-                        'items' => \yii\helpers\ArrayHelper::map(\backend\modules\fields\models\AdditionalFields::find()
+                        'items' => \yii\helpers\ArrayHelper::map(\backend\modules\settings\models\AdditionalFields::find()
                             ->joinWith('useFields')
                             ->where(['`use_field`.`use`' => \common\models\UseStatus::USE_PROJECT])
                             ->all(),

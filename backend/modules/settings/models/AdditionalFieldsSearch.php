@@ -1,16 +1,15 @@
 <?php
 
-namespace backend\modules\status\models;
+namespace backend\modules\settings\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\status\models\Status;
 
 /**
- * StatusSearch represents the model behind the search form of `backend\modules\status\models\Status`.
+ * AdditionalFieldsSearch represents the model behind the search form of `backend\modules\card\models\AdditionalFields`.
  */
-class StatusSearch extends Status
+class AdditionalFieldsSearch extends AdditionalFields
 {
     /**
      * {@inheritdoc}
@@ -41,7 +40,7 @@ class StatusSearch extends Status
      */
     public function search($params)
     {
-        $query = Status::find();
+        $query = AdditionalFields::find();
 
         // add conditions that should always apply here
 

@@ -6,6 +6,8 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\card\models\UserCard */
+/* @var $skills \common\models\CardSkill */
+/* @var $skill \common\models\Skill */
 
 $this->title = $model->fio;
 $this->params['breadcrumbs'][] = ['label' => 'User Cards', 'url' => ['index']];
@@ -23,21 +25,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'fio',
             'passport',
             [
-                'label' => 'Photo',
+                'attribute' => 'Photo',
                 'format' => 'raw',
                 'value' => function($model){
                     return Html::tag('img', null, ['src' => $model->photo, 'width' => '100px']);
                 }
             ],
             [
-                'label' => 'Resume',
+                'attribute' => 'Resume',
                 'format' => 'raw',
                 'value' => function($model){
                     return Html::a('Скачать', $model->resume, ['target' => '_blank']);
                 }
             ],
             [
-                'label' => 'gender',
+                'attribute' => 'gender',
                 'value' => $model->gendersText,
             ],
 
@@ -45,15 +47,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'dob',
             [
-                'label' => 'status',
+                'attribute' => 'status',
                 'value' => $model->status0->name,
             ],
             'salary',
+            [
+                'attribute' => 'position_id',
+                'value' => $model->position->name,
+            ],
             'created_at',
             'updated_at',
         ],
     ]) ?>
 
+    <h2>Навыки</h2>
+
+    <?php foreach ($skills as $skill): ?>
+        <span class="btn btn-default btn-sm"><?= $skill['skill']->name; ?></span>
+    <?php endforeach; ?>
     <h2>Дополнительные сведения</h2>
 
     <?= GridView::widget([

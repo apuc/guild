@@ -1,19 +1,18 @@
 <?php
 
-namespace backend\modules\status\controllers;
+namespace backend\modules\settings\controllers;
 
 use Yii;
-use backend\modules\status\models\Status;
-use backend\modules\status\models\StatusSearch;
-use yii\helpers\ArrayHelper;
+use backend\modules\settings\models\Skill;
+use backend\modules\settings\models\SkillSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * StatusController implements the CRUD actions for Status model.
+ * SkillController implements the CRUD actions for Skill model.
  */
-class StatusController extends Controller
+class SkillController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,12 +30,12 @@ class StatusController extends Controller
     }
 
     /**
-     * Lists all Status models.
+     * Lists all Skill models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new StatusSearch();
+        $searchModel = new SkillSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +45,7 @@ class StatusController extends Controller
     }
 
     /**
-     * Displays a single Status model.
+     * Displays a single Skill model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -59,17 +58,15 @@ class StatusController extends Controller
     }
 
     /**
-     * Creates a new Status model.
+     * Creates a new Skill model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Status();
+        $model = new Skill();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->addFlash('success', 'Статус добавлен');
-
             return $this->redirect(['index']);
         }
 
@@ -79,7 +76,7 @@ class StatusController extends Controller
     }
 
     /**
-     * Updates an existing Status model.
+     * Updates an existing Skill model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -90,19 +87,16 @@ class StatusController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->addFlash('success', 'Статус обновлен');
             return $this->redirect(['index']);
         }
-        $model->use = ArrayHelper::getColumn(
-            \common\models\UseStatus::find()->where(['status_id' => $model->id])->asArray()->all(),
-            'use');
+
         return $this->render('update', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Deletes an existing Status model.
+     * Deletes an existing Skill model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -116,15 +110,15 @@ class StatusController extends Controller
     }
 
     /**
-     * Finds the Status model based on its primary key value.
+     * Finds the Skill model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Status the loaded model
+     * @return Skill the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Status::findOne($id)) !== null) {
+        if (($model = Skill::findOne($id)) !== null) {
             return $model;
         }
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace backend\modules\status;
+namespace backend\modules\settings;
 
 /**
- * status module definition class
+ * settings module definition class
  */
-class Status extends \yii\base\Module
+class Settings extends \yii\base\Module
 {
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = 'backend\modules\status\controllers';
+    public $controllerNamespace = 'backend\modules\settings\controllers';
 
     /**
      * {@inheritdoc}

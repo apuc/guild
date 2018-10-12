@@ -1,5 +1,6 @@
 <?php
 
+use kartik\select2\Select2;
 use mihaildev\elfinder\InputFile;
 use unclead\multipleinput\MultipleInput;
 use unclead\multipleinput\examples\models\ExampleModel;
@@ -103,11 +104,31 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-xs-6">
-        <?= $form->field($model, 'salary')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'salary')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-xs-6">
+            <?= $form->field($model, 'position_id')->dropDownList(
+                \yii\helpers\ArrayHelper::map(\backend\modules\settings\models\Position::find()->all(), 'id', 'name'),
+                ['prompt' => '...']
+            ) ?>
         </div>
 
     </div>
 
+
+    <div class="row">
+        <div class="col-xs-12">
+            <?= $form->field($model, 'skill')->widget(Select2::class,
+                [
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Skill::find()->all(),'id', 'name'),
+                    'options' => ['placeholder' => '...','class' => 'form-control', 'multiple' => true],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]
+            )->label('Навыки'); ?>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-xs-12">
@@ -119,7 +140,7 @@ use yii\widgets\ActiveForm;
                     'type'  => 'dropDownList',
                     'title' => 'Поле',
                     'defaultValue' => null,
-                    'items' => \yii\helpers\ArrayHelper::map(\backend\modules\fields\models\AdditionalFields::find()
+                    'items' => \yii\helpers\ArrayHelper::map(\backend\modules\settings\models\AdditionalFields::find()
                         ->joinWith('useFields')
                         ->where(['`use_field`.`use`' => \common\models\UseStatus::USE_PROFILE])
                         ->all(),
