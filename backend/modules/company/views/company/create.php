@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\company\models\Company */
 
-$this->title = 'Create Company';
-$this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
+$this->title = 'Создать компанию';
+$this->params['breadcrumbs'][] = ['label' => 'Компании', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="company-create">

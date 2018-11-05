@@ -1,5 +1,6 @@
 <?php
 
+use backend\modules\settings\models\AdditionalFields;
 use unclead\multipleinput\MultipleInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -38,7 +39,7 @@ use yii\widgets\ActiveForm;
                         'type'  => 'dropDownList',
                         'title' => 'Поле',
                         'defaultValue' => null,
-                        'items' => \yii\helpers\ArrayHelper::map(\backend\modules\fields\models\AdditionalFields::find()
+                        'items' => \yii\helpers\ArrayHelper::map(AdditionalFields::find()
                             ->joinWith('useFields')
                             ->where(['`use_field`.`use`' => \common\models\UseStatus::USE_COMPANY])
                             ->all(),
@@ -68,7 +69,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
