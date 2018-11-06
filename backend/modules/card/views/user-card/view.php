@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'salary',
             [
                 'attribute' => 'position_id',
-                'value' => $model->position->name,
+                'value' => (isset($model->position->name)) ? $model->position->name : 'Без должности',
             ],
             'created_at',
             'updated_at',

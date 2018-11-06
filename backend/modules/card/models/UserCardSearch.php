@@ -57,6 +57,8 @@ class UserCardSearch extends UserCard
             return $dataProvider;
         }
 
+        $query->where(['deleted_at' => null]);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

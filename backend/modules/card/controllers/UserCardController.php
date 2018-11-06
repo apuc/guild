@@ -3,12 +3,14 @@
 namespace backend\modules\card\controllers;
 
 use common\classes\Debug;
+use common\models\AdditionalFields;
 use common\models\CardSkill;
 use common\models\FieldsValue;
 use Yii;
 use backend\modules\card\models\UserCard;
 use backend\modules\card\models\UserCardSearch;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -119,7 +121,12 @@ class UserCardController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        //CardSkill::deleteAll(['card_id' => $id]);
+        //FieldsValue::deleteAll(['card_id' => $id]);
+        $model = $this->findModel($id);
+        $d = new \DateTime();
+        $model->deleted_at = $d->format('Y-m-d H:i');
+        $model->save();
 
         return $this->redirect(['index']);
     }

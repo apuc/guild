@@ -2,6 +2,7 @@
 
 namespace backend\modules\settings\controllers;
 
+use common\models\UseField;
 use Yii;
 use backend\modules\settings\models\AdditionalFields;
 use backend\modules\settings\models\AdditionalFieldsSearch;
@@ -109,6 +110,7 @@ class AdditionalFieldsController extends Controller
      */
     public function actionDelete($id)
     {
+        UseField::deleteAll(['field_id' => $id]);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

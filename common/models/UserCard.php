@@ -19,6 +19,7 @@ use yii\db\Expression;
  * @property int $status
  * @property string $created_at
  * @property string $updated_at
+ * @property string $deleted_at
  * @property string $resume
  * @property string $salary
  * @property int $position_id
@@ -59,9 +60,9 @@ class UserCard extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fio', 'status'], 'required'],
+            [['fio', 'status', 'gender'], 'required'],
             [['gender', 'status', 'position_id'], 'integer'],
-            [['dob', 'created_at', 'updated_at'], 'safe'],
+            [['dob', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['fio', 'passport', 'photo', 'email', 'resume'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
             [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => Position::class, 'targetAttribute' => ['position_id' => 'id']],
@@ -85,6 +86,7 @@ class UserCard extends \yii\db\ActiveRecord
             'status' => 'Статус',
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата редактирование',
+            'deleted_at' => 'Дата удаления',
             'resume' => 'Резюме',
             'salary' => 'Зарплата',
             'position_id' => 'Должность',

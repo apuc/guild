@@ -2,6 +2,7 @@
 
 namespace backend\modules\settings\controllers;
 
+use common\models\UseStatus;
 use Yii;
 use backend\modules\settings\models\Status;
 use backend\modules\settings\models\StatusSearch;
@@ -110,6 +111,7 @@ class StatusController extends Controller
      */
     public function actionDelete($id)
     {
+        UseStatus::deleteAll(['status_id' => $id]);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
