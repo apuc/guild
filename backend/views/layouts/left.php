@@ -18,6 +18,13 @@
                     ['label' => 'Профили', 'icon' => 'users', 'url' => ['/card/user-card']],
                     ['label' => 'Пректы', 'icon' => 'files-o', 'url' => ['/project/project']],
                     ['label' => 'Компании', 'icon' => 'files-o', 'url' => ['/company/company']],
+                    [
+                        'label' => 'Hh.ru', 'icon' => 'user-circle', 'url' => '#',
+                        'items' => [
+                            ['label' => 'Компании', 'icon' => 'building', 'url' => ['/hh/hh']],
+                            ['label' => 'Вакансии', 'icon' => 'user-md', 'url' => ['/hh/hh-job']],
+                        ],
+                    ]
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a85750ca57985e0961df5763c3927a1a",
+    "content-hash": "690fb4ff58b0c920877e5f27a7dd6165",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -99,7 +99,7 @@
             "version": "3.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e"
             },
             "dist": {
@@ -765,6 +765,36 @@
                 "yii2"
             ],
             "time": "2018-10-03T07:09:03+00:00"
+        },
+        {
+            "name": "kavalar/hhapi",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/apuc/hhapi.git",
+                "reference": "8e56d339b377155f559e8eb8d893b14541f9a7ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/apuc/hhapi/zipball/8e56d339b377155f559e8eb8d893b14541f9a7ed",
+                "reference": "8e56d339b377155f559e8eb8d893b14541f9a7ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kavalar",
+                    "email": "apuc06@mail.ru"
+                }
+            ],
+            "time": "2018-11-19T08:22:43+00:00"
         },
         {
             "name": "mihaildev/yii2-elfinder",
@@ -3910,7 +3940,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kartik-v/yii2-widget-select2": 20
+        "kartik-v/yii2-widget-select2": 20,
+        "kavalar/hhapi": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -16,6 +16,7 @@ use yii\db\Expression;
  * @property string $updated_at
  * @property string $budget
  * @property int $company_id
+ * @property int $hh_id
  *
  * @property FieldsValue[] $fieldsValues
  * @property Company $company
@@ -55,6 +56,7 @@ class Project extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
             [['budget'], 'string', 'max' => 100],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::class, 'targetAttribute' => ['company_id' => 'id']],
+            [['hh_id'], 'exist', 'skipOnError' => true, 'targetClass' => Hh::class, 'targetAttribute' => ['hh_id' => 'id']],
         ];
     }
 
@@ -71,6 +73,7 @@ class Project extends \yii\db\ActiveRecord
             'updated_at' => 'Дата редактирования',
             'budget' => 'Бюджет',
             'company_id' => 'Компания',
+            'hh_id' => 'Проект на hh.ru',
         ];
     }
 
@@ -88,6 +91,14 @@ class Project extends \yii\db\ActiveRecord
     public function getCompany()
     {
         return $this->hasOne(Company::class, ['id' => 'company_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHh()
+    {
+        return $this->hasOne(Hh::class, ['id' => 'hh_id']);
     }
 
     /**

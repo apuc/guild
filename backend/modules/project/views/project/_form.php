@@ -30,6 +30,16 @@ use yii\widgets\ActiveForm;
         ]
     ); ?>
 
+    <?= $form->field($model, 'hh_id')->widget(Select2::class,
+        [
+            'data' => \yii\helpers\ArrayHelper::map(\common\models\Hh::find()->all(),'id', 'title'),
+            'options' => ['placeholder' => '...','class' => 'form-control'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]
+    ); ?>
+
     <div class="row">
         <div class="col-xs-12">
             <?= $form->field($model, 'fields')->widget(MultipleInput::class, [

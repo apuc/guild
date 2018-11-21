@@ -1,0 +1,15 @@
+{
+    "name": "kavalar/hhapi",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Kavalar",
+            "email": "apuc06@mail.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0.0"
+    }
+}

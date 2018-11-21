@@ -10,6 +10,7 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    'language' => 'ru',
     'bootstrap' => ['log'],
 
     'modules' => [
@@ -24,6 +25,9 @@ return [
         ],
         'company' => [
             'class' => 'backend\modules\company\Company',
+        ],
+        'hh' => [
+            'class' => 'backend\modules\hh\Hh',
         ],
     ],
     'components' => [
