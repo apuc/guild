@@ -136,6 +136,20 @@ class HhController extends Controller
         return $this->redirect(['/hh/hh']);
     }
 
+    public function actionGetJobsRemote($id)
+    {
+        $model = \common\models\Hh::findOne($id);
+        $jobs = HHService::run()->company($model->hh_id)->getJobs();
+        $count = 0;
+        foreach ((array)$jobs as $job) {
+            if(HhJob::createFromHHRemote($job)){
+                $count++;
+            }
+        }
+        Yii::$app->session->setFlash('success', "Получено $count новых вакансий");
+        return $this->redirect(['/hh/hh']);
+    }
+
     /**
      * Finds the Hh model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

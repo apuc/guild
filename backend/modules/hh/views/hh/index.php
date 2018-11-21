@@ -34,12 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\DataColumn',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    return Html::a('Получить вакансии', \yii\helpers\Url::to([
+                    $html = Html::a('Получить все вакансии', \yii\helpers\Url::to([
                         '/hh/hh/get-jobs',
                         'id' => $model->id
                     ]), [
                         'class' => 'btn btn-success'
                     ]);
+                    $html = $html . '<br><br>' . $html = Html::a('Только "удаленная работа"', \yii\helpers\Url::to([
+                            '/hh/hh/get-jobs-remote',
+                            'id' => $model->id
+                        ]), [
+                            'class' => 'btn btn-success'
+                        ]);
+                    return $html;
                 },
             ],
 

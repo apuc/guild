@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\hhapi\core\service\HHService;
 use Yii;
 
 /**
@@ -16,6 +17,7 @@ use Yii;
  * @property int $salary_to
  * @property string $salary_currency
  * @property string $address
+ * @property string $schedule
  * @property int $dt_add
  */
 class HhJob extends \yii\db\ActiveRecord
@@ -36,7 +38,7 @@ class HhJob extends \yii\db\ActiveRecord
         return [
             [['employer_id', 'hh_id', 'salary_from', 'salary_to', 'dt_add'], 'integer'],
             [['title', 'url', 'address'], 'string', 'max' => 255],
-            [['salary_currency'], 'string', 'max' => 100],
+            [['salary_currency', 'schedule'], 'string', 'max' => 100],
         ];
     }
 
@@ -56,6 +58,7 @@ class HhJob extends \yii\db\ActiveRecord
             'salary_currency' => 'З.П. валюта',
             'address' => 'Адрес',
             'dt_add' => 'Дата',
+            'schedule' => 'График',
         ];
     }
 
@@ -81,7 +84,20 @@ class HhJob extends \yii\db\ActiveRecord
                 $j->salary_to = $data->item->salary->to;
                 $j->salary_currency = $data->item->salary->currency;
             }
+            if (!empty($data->item->schedule)) {
+                $j->schedule = $data->item->schedule->id;
+            }
             return $j->save();
+        }
+        return false;
+    }
+
+    public static function createFromHHRemote($data)
+    {
+        $v = HHService::run()->vacancy($data->item->id)->get();
+        if($v->schedule->id === 'remote'){
+            $data->item->schedule = $v->schedule;
+            return self::createFromHH($data);
         }
         return false;
     }

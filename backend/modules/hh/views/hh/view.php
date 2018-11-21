@@ -9,7 +9,8 @@ use yii\widgets\DetailView;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'hh.ru', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-//\common\classes\Debug::dd(\common\hhapi\core\service\HHService::run()->company($model->hh_id)->get())
+//\common\classes\Debug::prn(\common\hhapi\core\service\HHService::run()->vacancy(28246746)->get());
+//\common\classes\Debug::dd(\common\hhapi\core\service\HHService::run()->company($model->hh_id)->getJobs())
 ?>
 <div class="hh-view">
 
