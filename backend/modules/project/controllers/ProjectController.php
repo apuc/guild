@@ -58,14 +58,18 @@ class ProjectController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $hh = Hh::findOne($model->hh_id);
 
-        $jobsProvider = new ActiveDataProvider([
-            'query' => HhJob::find()->where(['employer_id' => $hh->hh_id]),
-            'pagination' => [
-                'pageSize' => 200,
-            ],
-        ]);
+        $jobsProvider = null;
+        if($model->hh_id){
+            $hh = Hh::findOne($model->hh_id);
+            $jobsProvider = new ActiveDataProvider([
+                'query' => HhJob::find()->where(['employer_id' => $hh->hh_id]),
+                'pagination' => [
+                    'pageSize' => 200,
+                ],
+            ]);
+        }
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => FieldsValue::find()->where(['project_id' => $id])->orderBy('order'),

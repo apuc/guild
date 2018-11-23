@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $modelFildValue,
-        'layout'=>"{items}",
+        'layout' => "{items}",
         'columns' => [
             'field.name:text:Поле',
             'value',
@@ -54,21 +54,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $modelUser,
-        'layout'=>"{items}",
+        'layout' => "{items}",
         'columns' => [
             'card.fio:text:ФИО',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {update}',
                 'buttons' => [
-                    'update' => function ($url,$model) {
+                    'update' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
                             ['/card/user-card/update', 'id' => $model->id],
                             ['target' => '_blank']
                         );
                     },
-                    'view' => function ($url,$model) {
+                    'view' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>',
                             ['/card/user-card/view', 'id' => $model->id],
@@ -81,24 +81,26 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <h2>Вакансии hh.ru</h2>
-    <?= GridView::widget([
-        'dataProvider' => $jobsProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php if ($jobsProvider): ?>
+        <h2>Вакансии hh.ru</h2>
+        <?= GridView::widget([
+            'dataProvider' => $jobsProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-            'title',
-            'url:url',
-            'salary_from',
-            'salary_to',
-            'salary_currency',
-            'address',
-            'dt_add:date',
+                'title',
+                'url:url',
+                'salary_from',
+                'salary_to',
+                'salary_currency',
+                'address',
+                'dt_add:date',
 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {delete}'
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view} {delete}'
+                ],
             ],
-        ],
-    ]); ?>
+        ]); ?>
+    <?php endif; ?>
 </div>
