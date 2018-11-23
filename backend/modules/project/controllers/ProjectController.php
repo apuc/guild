@@ -3,6 +3,8 @@
 namespace backend\modules\project\controllers;
 
 use common\models\FieldsValue;
+use common\models\Hh;
+use common\models\HhJob;
 use common\models\ProjectUser;
 use Yii;
 use backend\modules\project\models\Project;
@@ -55,6 +57,16 @@ class ProjectController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $hh = Hh::findOne($model->hh_id);
+
+        $jobsProvider = new ActiveDataProvider([
+            'query' => HhJob::find()->where(['employer_id' => $hh->hh_id]),
+            'pagination' => [
+                'pageSize' => 200,
+            ],
+        ]);
+
         $dataProvider = new ActiveDataProvider([
             'query' => FieldsValue::find()->where(['project_id' => $id])->orderBy('order'),
             'pagination' => [
@@ -70,9 +82,10 @@ class ProjectController extends Controller
         ]);
 
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'modelFildValue' => $dataProvider,
             'modelUser' => $dataProviderUser,
+            'jobsProvider' => $jobsProvider,
         ]);
     }
 

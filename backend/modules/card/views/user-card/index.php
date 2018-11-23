@@ -38,7 +38,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             //'gender',
             //'dob',
-            //'status',
+            [
+                'attribute' => 'status',
+                'value' => function($model){
+                    return $model->status0->name;
+                },
+                'filter'    => kartik\select2\Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'status',
+                    'data' => \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROFILE),
+                    'options' => ['placeholder' => 'Начните вводить...','class' => 'form-control'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]),
+            ],
             //'created_at',
             //'updated_at',
 

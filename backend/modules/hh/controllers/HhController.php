@@ -8,6 +8,7 @@ use common\models\HhJob;
 use Yii;
 use backend\modules\hh\models\Hh;
 use backend\modules\hh\models\HhSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -55,8 +56,17 @@ class HhController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $jobs = new ActiveDataProvider([
+            'query' => HhJob::find()->where(['employer_id' => $model->hh_id]),
+            'pagination' => [
+                'pageSize' => 200,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'jobs' => $jobs,
         ]);
     }
 

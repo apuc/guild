@@ -91,10 +91,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="col-xs-6">
         <?= $form->field($model, 'status')
-            ->dropDownList(\yii\helpers\ArrayHelper::map(
-                    \common\models\Status::find()
-                        ->joinWith('useStatuses')
-                        ->where(['`use_status`.`use`' => \common\models\UseStatus::USE_PROFILE])->all(), 'id', 'name'),
+            ->dropDownList(\common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROFILE),
                 [
                     'prompt' => 'Выберите'
                 ]

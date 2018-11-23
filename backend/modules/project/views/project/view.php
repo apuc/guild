@@ -30,6 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
+            [
+                'label' => 'Сраница на hh.ru',
+                'attribute' => 'hh.url'
+            ],
             'description:ntext',
             'created_at',
             'updated_at',
@@ -73,6 +77,27 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
 
+            ],
+        ],
+    ]); ?>
+
+    <h2>Вакансии hh.ru</h2>
+    <?= GridView::widget([
+        'dataProvider' => $jobsProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'title',
+            'url:url',
+            'salary_from',
+            'salary_to',
+            'salary_currency',
+            'address',
+            'dt_add:date',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {delete}'
             ],
         ],
     ]); ?>

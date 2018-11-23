@@ -6,6 +6,7 @@ use common\classes\Debug;
 use common\models\AdditionalFields;
 use common\models\CardSkill;
 use common\models\FieldsValue;
+use common\models\Status;
 use Yii;
 use backend\modules\card\models\UserCard;
 use backend\modules\card\models\UserCardSearch;
@@ -41,6 +42,8 @@ class UserCardController extends Controller
      */
     public function actionIndex()
     {
+        $status = new Status();
+        //Debug::dd($status->getUseStatuses());
         $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

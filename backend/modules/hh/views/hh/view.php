@@ -1,5 +1,6 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -36,5 +37,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'photo:image',
         ],
     ]) ?>
+    <br>
+    <h2>Вакансии</h2>
+    <?= GridView::widget([
+        'dataProvider' => $jobs,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'title',
+            'url:url',
+            'salary_from',
+            'salary_to',
+            'salary_currency',
+            'address',
+            'dt_add:date',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {delete}'
+            ],
+        ],
+    ]); ?>
 
 </div>
