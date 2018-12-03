@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
             ],
             'budget',
-            'description:ntext',
+            //'description:ntext',
             [
                 'label' => 'Исполнители',
                 'value' => function($model){
