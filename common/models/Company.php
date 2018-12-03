@@ -13,6 +13,7 @@ use yii\db\Expression;
  * @property string $name
  * @property string $description
  * @property int $status_id
+ * @property int $projectId
  * @property string $created_at
  * @property string $updated_at
  *
@@ -21,6 +22,7 @@ use yii\db\Expression;
  */
 class Company extends \yii\db\ActiveRecord
 {
+    public $projectId;
     /**
      * {@inheritdoc}
      */
@@ -49,7 +51,7 @@ class Company extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['description'], 'string'],
-            [['status_id'], 'integer'],
+            [['status_id', 'projectId'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
@@ -85,5 +87,21 @@ class Company extends \yii\db\ActiveRecord
     public function getFieldsValues()
     {
         return $this->hasMany(FieldsValue::className(), ['company_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStatus0()
+    {
+        return $this->hasOne(Status::class, ['id' => 'status']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProject()
+    {
+        return $this->hasOne(Project::class, ['company_id' => 'id']);
     }
 }

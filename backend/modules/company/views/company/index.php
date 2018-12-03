@@ -26,8 +26,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'id',
             'name',
-            'description:ntext',
-            'status_id',
+            [
+                'attribute' => 'project.name',
+                'label' => 'Проект',
+                'filter'    => kartik\select2\Select2::widget([
+                    'model' => $searchModel,
+                    'name' => 'CompanySearch[projectId]',
+                    'data' => \common\models\Project::getList(),
+                    'options' => ['placeholder' => 'Начните вводить...','class' => 'form-control'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]),
+            ],
+            //'description:ntext',
+            //'status_id',
+            [
+                'attribute' => 'status',
+                'value' => function($model){
+                    return isset($model->status0->name) ? $model->status0->name : 'Не задано';
+                },
+                'filter'    => kartik\select2\Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'status',
+                    'data' => \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_COMPANY),
+                    'options' => ['placeholder' => 'Начните вводить...','class' => 'form-control'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]),
+            ],
             //'created_at',
             //'updated_at',
 

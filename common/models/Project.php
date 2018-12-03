@@ -2,9 +2,11 @@
 
 namespace common\models;
 
+use common\classes\Debug;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "project".
@@ -107,5 +109,24 @@ class Project extends \yii\db\ActiveRecord
     public function getProjectUsers()
     {
         return $this->hasMany(ProjectUser::class, ['project_id' => 'id']);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getList()
+    {
+        return ArrayHelper::map(self::find()->all(), 'id', 'name');
+    }
+
+    public static function getListName()
+    {
+        return ArrayHelper::map(self::find()->all(), 'name', 'name');
+    }
+
+    public function getUsersNameList()
+    {
+        $model = $this->getProjectUsers()->with('card')->all();
+        return ArrayHelper::getColumn($model, 'card.fio');
     }
 }

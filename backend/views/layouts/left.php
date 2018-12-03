@@ -1,5 +1,12 @@
 <aside class="main-sidebar">
     <section class="sidebar">
+        <?php
+        $userStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROFILE);
+        $menuItems = [['label' => 'Все', 'icon' => 'user', 'url' => ['/card/user-card']]];
+        foreach($userStatuses as $key => $status){
+            $menuItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
+        }
+        ?>
 
         <?= dmstr\widgets\Menu::widget(
             [
@@ -14,8 +21,10 @@
                             ['label' => 'Навыки', 'icon' => 'flask', 'url' => ['/settings/skill']],
                         ]
                     ],
-
-                    ['label' => 'Профили', 'icon' => 'users', 'url' => ['/card/user-card']],
+                    [
+                        'label' => 'Профили', 'icon' => 'users', 'url' => '#',
+                        'items' => $menuItems,
+                    ],
                     ['label' => 'Пректы', 'icon' => 'files-o', 'url' => ['/project/project']],
                     ['label' => 'Компании', 'icon' => 'files-o', 'url' => ['/company/company']],
                     [
