@@ -33,7 +33,8 @@
                             ['label' => 'Компании', 'icon' => 'building', 'url' => ['/hh/hh']],
                             ['label' => 'Вакансии', 'icon' => 'user-md', 'url' => ['/hh/hh-job']],
                         ],
-                    ]
+                    ],
+                    ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balance/balance']],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],

@@ -37,12 +37,13 @@ class FieldsValue extends \yii\db\ActiveRecord
     {
         return [
             [['field_id', 'value'], 'required'],
-            [['card_id', 'field_id', 'order', 'project_id', 'company_id'], 'integer'],
+            [['card_id', 'field_id', 'order', 'project_id', 'company_id','balance_id'], 'integer'],
             [['value'], 'string', 'max' => 255],
             [['field_id'], 'exist', 'skipOnError' => true, 'targetClass' => AdditionalFields::class, 'targetAttribute' => ['field_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::class, 'targetAttribute' => ['company_id' => 'id']],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::class, 'targetAttribute' => ['project_id' => 'id']],
             [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::class, 'targetAttribute' => ['card_id' => 'id']],
+            [['balance_id'],'exist', 'skipOnError' => true, 'targetClass' => Balance::class, 'targetAttribute' => ['balance_id' => 'id']],
         ];
     }
 
