@@ -39,7 +39,7 @@ class UseField extends \yii\db\ActiveRecord
         return [
             [['field_id', 'use'], 'required'],
             [['field_id', 'use'], 'integer'],
-            [['field_id'], 'exist', 'skipOnError' => true, 'targetClass' => AdditionalFields::className(), 'targetAttribute' => ['field_id' => 'id']],
+            [['field_id'], 'exist', 'skipOnError' => true, 'targetClass' => AdditionalFields::class, 'targetAttribute' => ['field_id' => 'id']],
         ];
     }
 
