@@ -21,6 +21,7 @@ class UseField extends \yii\db\ActiveRecord
     const USE_PROFILE = 0;
     const USE_PROJECT = 1;
     const USE_COMPANY = 2;
+    const USE_BALANCE = 3;
 
 
     /**
@@ -39,7 +40,7 @@ class UseField extends \yii\db\ActiveRecord
         return [
             [['field_id', 'use'], 'required'],
             [['field_id', 'use'], 'integer'],
-            [['field_id'], 'exist', 'skipOnError' => true, 'targetClass' => AdditionalFields::className(), 'targetAttribute' => ['field_id' => 'id']],
+            [['field_id'], 'exist', 'skipOnError' => true, 'targetClass' => AdditionalFields::class, 'targetAttribute' => ['field_id' => 'id']],
         ];
     }
 
@@ -68,7 +69,8 @@ class UseField extends \yii\db\ActiveRecord
         return [
             self::USE_PROFILE => 'Профиль',
             self::USE_PROJECT => 'Проект',
-            self::USE_COMPANY => 'Компания'
+            self::USE_COMPANY => 'Компания',
+            self::USE_BALANCE => 'Баланс'
         ];
     }
 

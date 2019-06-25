@@ -29,6 +29,9 @@ return [
         'hh' => [
             'class' => 'backend\modules\hh\Hh',
         ],
+        'balance' => [
+            'class' => 'backend\modules\balance\Balance',
+        ],
     ],
     'components' => [
         'request' => [
