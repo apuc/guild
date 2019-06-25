@@ -7,6 +7,7 @@ use backend\modules\balance\models\BalanceSearch;
 use common\classes\Debug;
 use common\models\FieldsValue;
 use common\models\FieldsValueNew;
+use DateTime;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -18,6 +19,11 @@ class BalanceController extends Controller
     public function actionIndex()
     {
         $searchModel = new BalanceSearch();
+        if(\Yii::$app->request->get('month'))
+        {
+            $searchModel->dt_from =  date('Y-m-01');
+            $searchModel->dt_to =  date('Y-m-t');
+        }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index',[
@@ -28,6 +34,10 @@ class BalanceController extends Controller
 
     public function actionView($id)
     {
+        $model = Balance::find()
+            ->where(['id' => $id])
+            ->with('fieldsValues')
+        ->one();
         $dataProviderF = new ActiveDataProvider([
             'query' => FieldsValueNew::find()
                 ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_BALANCE])
@@ -50,7 +60,6 @@ class BalanceController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->dt_add = strtotime($model->dt_add);
             $model->save();
-//            Debug::dd($model);
 
             Yii::$app->session->addFlash('success', 'Баланса добавлен');
 
@@ -92,4 +101,5 @@ class BalanceController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

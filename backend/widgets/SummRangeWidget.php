@@ -4,6 +4,7 @@
 namespace backend\widgets;
 
 
+use common\classes\Debug;
 use yii\base\Widget;
 
 class SummRangeWidget extends Widget

@@ -3,6 +3,8 @@
 namespace backend\modules\balance\models;
 
 use common\classes\Debug;
+use common\models\FieldsValueNew;
+use DateTime;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -49,7 +51,6 @@ class BalanceSearch extends Balance
         $query = Balance::find();
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -70,19 +71,11 @@ class BalanceSearch extends Balance
             'dt_add' => $this->dt_add,
         ]);
 
-        //Debug::dd($this);
+        $query->andFilterWhere(['>=','dt_add', strtotime($this->dt_from) ?: null]);
+        $query->andFilterWhere(['<=','dt_add', strtotime($this->dt_to) ?: null]);
 
-        if($this->dt_from && $this->dt_to){
-            $query->where(['between', 'dt_add', strtotime($this->$this->dt_from), strtotime($this->$this->dt_to)]);
-        }
-        if($this->dt_from){
-            $query->where(['>', 'dt_add', strtotime($this->$this->dt_from)]);
-        }
 
-        $summ_from = $this->summ_from ?: 0;
-        $summ_to = $this->summ_to ?: 9999999999;
-
-        $query->andFilterWhere(['between', 'summ', $summ_from, $summ_to]);
+        $query->andFilterWhere(['between', 'summ', $this->summ_from ?: 0, $this->summ_to ?: 9999999999]);
 
         return $dataProvider;
     }

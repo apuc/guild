@@ -9,6 +9,7 @@ echo DatePicker::widget([
     'attribute' => 'dt_from',
     'language' => 'ru',
     'dateFormat' => 'dd-MM-yyyy',
+    'options' => ['placeholder' => 'Выберите дату (От)'],
 ]);
 
 echo " - ";
@@ -18,4 +19,5 @@ echo DatePicker::widget([
     'attribute' => 'dt_to',
     'language' => 'ru',
     'dateFormat' => 'dd-MM-yyyy',
+    'options' => ['placeholder' => 'Выберите дату (До)'],
 ]);
