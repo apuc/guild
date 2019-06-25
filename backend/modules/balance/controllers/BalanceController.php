@@ -5,7 +5,10 @@ namespace backend\modules\balance\controllers;
 use backend\modules\balance\models\Balance;
 use backend\modules\balance\models\BalanceSearch;
 use common\classes\Debug;
+use common\models\FieldsValue;
+use common\models\FieldsValueNew;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\db\Query;
@@ -15,7 +18,7 @@ class BalanceController extends Controller
     public function actionIndex()
     {
         $searchModel = new BalanceSearch();
-        $dataProvider = $searchModel->search();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index',[
             'searchModel' => $searchModel,
@@ -25,8 +28,18 @@ class BalanceController extends Controller
 
     public function actionView($id)
     {
+        $dataProviderF = new ActiveDataProvider([
+            'query' => FieldsValueNew::find()
+                ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_BALANCE])
+                ->orderBy('order'),
+            'pagination' => [
+                'pageSize' => 200,
+            ],
+        ]);
+
         return $this->render('view',[
             'model' => $this->findModel($id),
+            'dataProviderF' => $dataProviderF
         ]);
     }
 
@@ -53,7 +66,9 @@ class BalanceController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->dt_add = strtotime($model->dt_add);
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

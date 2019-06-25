@@ -17,12 +17,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'type')
-        ->dropDownList(
-          [
-              '1' => 'активный',
-              '0' => 'пассивный',
-          ]
-        )?>
+        ->dropDownList(\common\models\Balance::getTypeList())?>
 
     <?= $form->field($model, 'summ')->textInput(['maxlength' => 9]) ?>
 

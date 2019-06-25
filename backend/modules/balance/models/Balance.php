@@ -5,20 +5,23 @@ namespace backend\modules\balance\models;
 
 
 use common\models\FieldsValue;
+use common\models\FieldsValueNew;
 use common\models\ProjectUser;
 use yii\helpers\ArrayHelper;
 
 class Balance extends \common\models\Balance
 {
+    public $fields;
+
     public function init()
     {
         parent::init();
-        $fieldValue = FieldsValue::find()
+        $fieldValue = FieldsValueNew::find()
             ->where(
                 [
-                    'balance_id' => \Yii::$app->request->get('id'),
-                    'card_id' => null,
-                    'company_id' => null,
+                    //'balance_id' => \Yii::$app->request->get('id'),
+                    'item_id' => \Yii::$app->request->get('id'),
+                    'item_type' => FieldsValueNew::TYPE_BALANCE,
                 ])
             ->all();
         $array = [];
@@ -37,12 +40,12 @@ class Balance extends \common\models\Balance
             ];
         }
 
-        $user = ArrayHelper::getColumn(ProjectUser::find()->where(['project_id' => \Yii::$app->request->get('id')])->all(),
-            'card_id');
-
-        if (!empty($user)) {
-            $this->user = $user;
-
-        }
+//        $user = ArrayHelper::getColumn(ProjectUser::find()->where(['project_id' => \Yii::$app->request->get('id')])->all(),
+//            'card_id');
+//
+//        if (!empty($user)) {
+//            $this->user = $user;
+//
+//        }
     }
 }

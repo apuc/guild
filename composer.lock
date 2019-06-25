@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c8e337361e574ba82a9b37a944713b9",
+    "content-hash": "7578e68130787df83321118c46ab02e6",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -125,6 +125,46 @@
             },
             "require": {
                 "bower-asset/jquery": ">=1.6"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/moment",
+            "version": "2.24.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moment/moment.git",
+                "reference": "96d0d6791ab495859d09a868803d31a55c917de1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moment/moment/zipball/96d0d6791ab495859d09a868803d31a55c917de1",
+                "reference": "96d0d6791ab495859d09a868803d31a55c917de1"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/nkovacs-bootstrap-datetimepicker",
+            "version": "5.0.4",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:nkovacs/bootstrap-datetimepicker.git",
+                "reference": "c7cae4e1ddcc56c42135f117bba15112f18a8c77"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nkovacs/bootstrap-datetimepicker/zipball/c7cae4e1ddcc56c42135f117bba15112f18a8c77",
+                "reference": "c7cae4e1ddcc56c42135f117bba15112f18a8c77"
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.8.3",
+                "bower-asset/moment": ">=2.9.0"
             },
             "type": "bower-asset",
             "license": [
@@ -895,6 +935,51 @@
                 "yii"
             ],
             "time": "2018-10-01T17:00:54+00:00"
+        },
+        {
+            "name": "nkovacs/yii2-datetimepicker",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nkovacs/yii2-datetimepicker.git",
+                "reference": "ea99923f6851ef7e4224f9fd4411df048d97275e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nkovacs/yii2-datetimepicker/zipball/ea99923f6851ef7e4224f9fd4411df048d97275e",
+                "reference": "ea99923f6851ef7e4224f9fd4411df048d97275e",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/nkovacs-bootstrap-datetimepicker": "~5.0",
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "^2.0.4",
+                "yiisoft/yii2-bootstrap": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "nkovacs\\datetimepicker\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikola Kovacs",
+                    "email": "nikola.kovacs@gmail.com"
+                }
+            ],
+            "description": "Bootstrap datetimepicker widget for Yii 2, based on Eonasdan/bootstrap-datetimepicker.",
+            "keywords": [
+                "DateTimePicker",
+                "bootstrap",
+                "extension",
+                "yii2"
+            ],
+            "time": "2017-03-28T08:57:15+00:00"
         },
         {
             "name": "rmrevin/yii2-fontawesome",
@@ -3994,7 +4079,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4.0"
+        "php": ">=7.1.0"
     },
     "platform-dev": []
 }
