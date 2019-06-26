@@ -63,8 +63,4 @@ class FieldsValueNew extends \yii\db\ActiveRecord
         return $this->hasOne(AdditionalFields::class, ['id' => 'field_id']);
     }
 
-//    public function getadditional_fields()
-//    {
-//
-//    }
 }

@@ -2,9 +2,11 @@
 
 namespace backend\modules\company\controllers;
 
+use common\models\FieldsValueNew;
 use Yii;
 use backend\modules\company\models\Company;
 use backend\modules\company\models\CompanySearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,8 +54,17 @@ class CompanyController extends Controller
      */
     public function actionView($id)
     {
+        $dataProviderF = new ActiveDataProvider([
+            'query' => FieldsValueNew::find()
+                ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_COMPANY])
+                ->orderBy('order'),
+            'pagination' => [
+                'pageSize' => 200,
+            ],
+        ]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProviderF' => $dataProviderF
         ]);
     }
 

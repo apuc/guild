@@ -3,6 +3,7 @@
 namespace backend\modules\company\models;
 
 use common\models\FieldsValue;
+use common\models\FieldsValueNew;
 
 class Company extends \common\models\Company
 {
@@ -12,17 +13,21 @@ class Company extends \common\models\Company
     {
         parent::init();
 
-        $fieldValue = FieldsValue::find()->where(
+        $fieldValue = FieldsValueNew::find()
+            ->where(
             [
-                'company_id' => \Yii::$app->request->get('id'),
-                'project_id' => null,
-                'card_id' => null,
+                'item_id' => \Yii::$app->request->get('id'),
+                'item_type' => FieldsValueNew::TYPE_COMPANY,
             ])
             ->all();
         $array = [];
         if(!empty($fieldValue)){
             foreach ($fieldValue as $item){
-                array_push($array, ['field_id' => $item->field_id, 'value' => $item->value, 'order' => $item->order]);
+                array_push($array,
+                    ['field_id' => $item->field_id,
+                        'value' => $item->value,
+                        'order' => $item->order,
+                        'field_name' => $item->field->name]);
             }
             $this->fields = $array;
         }
@@ -32,6 +37,7 @@ class Company extends \common\models\Company
                     'field_id'   => null,
                     'value'  => null,
                     'order' => null,
+                    'field_name' => null,
                 ],
             ];
         }
@@ -44,11 +50,12 @@ class Company extends \common\models\Company
         FieldsValue::deleteAll(['company_id' => $this->id]);
 
         foreach ( $post['fields'] as $item) {
-            $fildsValue = new FieldsValue();
+            $fildsValue = new FieldsValueNew();
             $fildsValue->field_id = $item['field_id'];
             $fildsValue->value = $item['value'];
             $fildsValue->order = $item['order'];
-            $fildsValue->company_id = $this->id;
+            $fildsValue->item_id = $this->id;
+            $fildsValue->item_type = FieldsValueNew::TYPE_COMPANY;
 
             $fildsValue->save();
         }
