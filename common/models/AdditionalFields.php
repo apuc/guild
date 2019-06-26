@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\classes\Debug;
 use Yii;
 
 /**
@@ -53,7 +54,12 @@ class AdditionalFields extends \yii\db\ActiveRecord
      */
     public function getFieldsValues()
     {
-        return $this->hasMany(FieldsValue::className(), ['field_id' => 'id']);
+        return $this->hasMany(FieldsValueNew::className(), ['field_id' => 'id']);
+    }
+
+    public function getObjectValue()
+    {
+
     }
 
     /**

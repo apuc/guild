@@ -81,4 +81,13 @@ class UseField extends \yii\db\ActiveRecord
     {
         return $this->statuses[$this->status_id];
     }
+
+    /**
+     * @return string status text label
+     */
+    public static function getStatusesTextById($id)
+    {
+        $model = new self();
+        return $model->statuses[$id];
+    }
 }

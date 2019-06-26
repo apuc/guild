@@ -1,9 +1,11 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
+/* @var $dataProviderF \yii\data\ActiveDataProvider
 /* @var $model backend\modules\company\models\Company */
 
 $this->title = $model->name;
@@ -12,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="company-view">
     <p>
+        <?= Html::a('Список', ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -33,5 +36,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
         ],
     ]) ?>
+
+    <h2>Дополнительные сведения</h2>
+    <?= GridView::widget([
+        'dataProvider' => $dataProviderF,
+        'layout' => "{items}",
+        'columns' => [
+            'field.name:text:Поле',
+            [
+                'attribute' => 'value',
+                'label' => 'Значение'
+            ],
+        ],
+    ]); ?>
 
 </div>
