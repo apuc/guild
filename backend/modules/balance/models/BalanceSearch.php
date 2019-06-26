@@ -3,6 +3,8 @@
 namespace backend\modules\balance\models;
 
 use common\classes\Debug;
+use common\models\FieldsValueNew;
+use DateTime;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -17,14 +19,17 @@ class BalanceSearch extends Balance
     public $summ_to;
     public $dt_from;
     public $dt_to;
+    public $field_name;
+    public $field_value;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'type', 'summ', 'summ_from', 'summ_to'], 'integer'],
+            [['id', 'type', 'summ', 'summ_from', 'field_name', 'summ_to'], 'integer'],
             [['dt_from', 'dt_to', 'dt_add'], 'safe'],
+            [['field_value'], 'string']
         ];
     }
 
@@ -47,9 +52,8 @@ class BalanceSearch extends Balance
     public function search($params)
     {
         $query = Balance::find();
-
+        $query->leftJoin('fields_value_new','fields_value_new.item_id=balance.id AND fields_value_new.item_type=3');
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -62,6 +66,7 @@ class BalanceSearch extends Balance
             return $dataProvider;
         }
 
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -70,19 +75,15 @@ class BalanceSearch extends Balance
             'dt_add' => $this->dt_add,
         ]);
 
-        //Debug::dd($this);
+        $query->andFilterWhere(['>=','dt_add', strtotime($this->dt_from) ?: null]);
+        $query->andFilterWhere(['<=','dt_add', strtotime($this->dt_to) ?: null]);
 
-        if($this->dt_from && $this->dt_to){
-            $query->where(['between', 'dt_add', strtotime($this->$this->dt_from), strtotime($this->$this->dt_to)]);
-        }
-        if($this->dt_from){
-            $query->where(['>', 'dt_add', strtotime($this->$this->dt_from)]);
-        }
 
-        $summ_from = $this->summ_from ?: 0;
-        $summ_to = $this->summ_to ?: 9999999999;
+        $query->andFilterWhere(['between', 'summ', $this->summ_from ?: 0, $this->summ_to ?: 9999999999]);
+        $query->andFilterWhere(['fields_value_new.field_id'=>$this->field_name]);
+        $query->andFilterWhere(['LIKE', 'fields_value_new.value', $this->field_value]);
 
-        $query->andFilterWhere(['between', 'summ', $summ_from, $summ_to]);
+        $query->orderBy('balance.dt_add DESC');
 
         return $dataProvider;
     }
