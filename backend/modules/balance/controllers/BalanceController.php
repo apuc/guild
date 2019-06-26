@@ -24,6 +24,11 @@ class BalanceController extends Controller
             $searchModel->dt_from =  date('Y-m-01');
             $searchModel->dt_to =  date('Y-m-t');
         }
+        if(\Yii::$app->request->get('previous_month'))
+        {
+            $searchModel->dt_from =  date('Y-m-d', strtotime('first day of previous month'));
+            $searchModel->dt_to =  date('Y-m-d', strtotime('last day of previous month'));
+        }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index',[
@@ -34,10 +39,6 @@ class BalanceController extends Controller
 
     public function actionView($id)
     {
-        $model = Balance::find()
-            ->where(['id' => $id])
-            ->with('fieldsValues')
-        ->one();
         $dataProviderF = new ActiveDataProvider([
             'query' => FieldsValueNew::find()
                 ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_BALANCE])
@@ -73,7 +74,7 @@ class BalanceController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model =  $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->dt_add = strtotime($model->dt_add);
@@ -81,7 +82,7 @@ class BalanceController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
         ]);
     }

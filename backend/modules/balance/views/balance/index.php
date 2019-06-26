@@ -19,8 +19,10 @@ $this->params['breadcrumps'][] = $this->title;
         <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <p>
+        <?= Html::a('Показать за прошлый месяц', ['index', 'previous_month' => true], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Показать за текущий месяц', ['index', 'month' => true], ['class' => 'btn btn-primary']) ?>
     </p>
+<!--    --><?php //\common\classes\Debug::dd($searchModel->fields); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -72,6 +74,7 @@ $this->params['breadcrumps'][] = $this->title;
 
                     ]);
                 },
+                'filter'    => \backend\widgets\AdditionalFieldsFilterWidget::widget(['model' => $searchModel]),
                 'headerOptions' => ['width' => '300'],
 
             ],

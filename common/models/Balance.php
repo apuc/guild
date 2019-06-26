@@ -4,6 +4,9 @@
 namespace common\models;
 
 use common\classes\Debug;
+use PHPUnit\Framework\MockObject\Matcher\DeferredError;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "company".
@@ -26,14 +29,12 @@ class Balance extends \yii\db\ActiveRecord
         $fieldValue = FieldsValueNew::find()
             ->where(
                 [
-                    //'balance_id' => \Yii::$app->request->get('id'),
-                    'item_id' => $this->id,
+                    'item_id' => \Yii::$app->request->get('id'),
+//                    'item_id' => $this->id,
                     'item_type' => FieldsValueNew::TYPE_BALANCE,
                 ])
             ->with('field')
             ->all();
-//        Debug::dd($fieldValue[0]->field->name);
-
         $array = [];
         if (!empty($fieldValue)) {
             foreach ($fieldValue as $item) {
@@ -76,6 +77,11 @@ class Balance extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getNameList()
+    {
+        return ArrayHelper::map(AdditionalFields::find()->all(),'id','name');
+    }
+
     public static function tableName()
     {
         return 'balance';
@@ -95,6 +101,7 @@ class Balance extends \yii\db\ActiveRecord
             'type' => 'Тип',
             'summ' => 'Сумма',
             'dt_add' => 'Дата добавления',
+            'value' => 'Значение',
         ];
     }
 
