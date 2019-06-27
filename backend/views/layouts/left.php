@@ -25,7 +25,7 @@
                         'label' => 'Профили', 'icon' => 'users', 'url' => '#',
                         'items' => $menuItems,
                     ],
-                    ['label' => 'Пректы', 'icon' => 'files-o', 'url' => ['/project/project']],
+                    ['label' => 'Проекты', 'icon' => 'files-o', 'url' => ['/project/project']],
                     ['label' => 'Компании', 'icon' => 'files-o', 'url' => ['/company/company']],
                     [
                         'label' => 'Hh.ru', 'icon' => 'user-circle', 'url' => '#',

@@ -47,7 +47,7 @@ class Company extends \common\models\Company
     {
         $post = \Yii::$app->request->post('Company');
 
-        FieldsValue::deleteAll(['company_id' => $this->id]);
+        FieldsValueNew::deleteAll(['item_id' => $this->id, 'item_type' => FieldsValueNew::TYPE_COMPANY]);
 
         foreach ( $post['fields'] as $item) {
             $fildsValue = new FieldsValueNew();

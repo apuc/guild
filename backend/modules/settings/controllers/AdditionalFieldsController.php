@@ -2,6 +2,7 @@
 
 namespace backend\modules\settings\controllers;
 
+use common\classes\Debug;
 use common\models\UseField;
 use Yii;
 use backend\modules\settings\models\AdditionalFields;

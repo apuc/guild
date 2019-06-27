@@ -98,7 +98,7 @@ class UserCard extends \yii\db\ActiveRecord
      */
     public function getFieldsValues()
     {
-        return $this->hasMany(FieldsValue::class, ['card_id' => 'id']);
+        return $this->hasMany(FieldsValueNew::class, ['item_id' => 'id'])->where(['item_type' => FieldsValueNew::TYPE_PROFILE])->with('field');
     }
 
     /**
