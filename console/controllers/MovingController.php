@@ -15,37 +15,35 @@ class MovingController extends Controller
     {
         $field_value = \common\models\FieldsValue::find()->all();
 
-//        var_dump($field_value[1]->id);
-        for($i=0;$i<count($field_value);++$i)
+        foreach ($field_value as $item)
         {
-            $send_value = new FieldsValueNew();
-            $send_value->order = $field_value[$i]->order;
-//            echo $send_value->order;
-//            echo '<br>';
-            $send_value->field_id = $field_value[$i]->field_id;
-            $send_value->value = $field_value[$i]->value;
-            if($field_value[$i]->card_id != null)
-            {
-                $send_value->item_type = 0;
-                $send_value->item_id = $field_value[$i]->card_id;
-            }
-            if($field_value[$i]->balance_id != null)
-            {
-                $send_value->item_type = 3 ;
-                $send_value->item_id = $field_value[$i]->balance_id;
-            }
-            if($field_value[$i]->project_id != null)
-            {
-                $send_value->item_type = 1;
-                $send_value->item_id = $field_value[$i]->project_id;
-            }
-            if($field_value[$i]->company_id!= null)
-            {
-                $send_value->item_type = 2;
-                $send_value->item_id = $field_value[$i]->company_id;
-            }
-            $send_value->save();
+            $new_value = new FieldsValueNew();
+            $new_value->order = $item->order;
+            $new_value->field_id = $item->field_id;
+            $new_value->value = $item->value;
 
+            if($item->card_id != null)
+            {
+                $new_value->item_type = 0;
+                $new_value->item_id = $item->card_id;
+            }
+            if($item->balance_id != null)
+            {
+                $new_value->item_type = 3 ;
+                $new_value->item_id = $item->balance_id;
+            }
+            if($item->project_id != null)
+            {
+                $new_value->item_type = 1;
+                $new_value->item_id = $item->project_id;
+            }
+            if($item->company_id!= null)
+            {
+                $new_value->item_type = 2;
+                $new_value->item_id = $item->company_id;
+            }
+
+            $new_value->save();
         }
     }
 }

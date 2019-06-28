@@ -44,7 +44,6 @@ class UserCardController extends Controller
     public function actionIndex()
     {
         $status = new Status();
-        //Debug::dd($status->getUseStatuses());
         $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
