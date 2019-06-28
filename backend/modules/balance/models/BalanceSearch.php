@@ -2,13 +2,13 @@
 
 namespace backend\modules\balance\models;
 
+use backend\modules\balance\models\Balance;
 use common\classes\Debug;
 use common\models\FieldsValueNew;
 use DateTime;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\balance\models\Balance;
 
 /**
  * BalanceSearch represents the model behind the search form of `backend\modules\balance\models\Balance`.
@@ -21,6 +21,9 @@ class BalanceSearch extends Balance
     public $dt_to;
     public $field_name;
     public $field_value;
+    public $active_summ;
+    public $passive_summ;
+    public $difference;
     /**
      * {@inheritdoc}
      */
@@ -86,5 +89,28 @@ class BalanceSearch extends Balance
         $query->orderBy('balance.dt_add DESC');
 
         return $dataProvider;
+    }
+
+    public function getSummInfo()
+    {
+        $query = Balance::find()
+        ->andFilterWhere(['>=','dt_add', strtotime($this->dt_from) ?: null])
+        ->andFilterWhere(['<=','dt_add', strtotime($this->dt_to) ?: null])
+        ->all();
+//        Debug::dd($query);
+        $active_summ = 0;
+        $passive_summ = 0;
+        $difference = 0;
+        foreach ($query as $item)
+        {
+            if($item->type == 1)
+            {
+                $active_summ += $item->summ;
+            } else {
+                $passive_summ += $item->summ;
+            }
+        }
+        $difference = $active_summ - $passive_summ;
+        return compact('active_summ', 'passive_summ', 'difference');
     }
 }
