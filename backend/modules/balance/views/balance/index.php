@@ -23,10 +23,10 @@ $this->params['breadcrumps'][] = $this->title;
         <?= Html::a('Показать за текущий месяц', ['index', 'month' => true], ['class' => 'btn btn-primary']) ?>
     </p>
     <p>
-        <?= Html::label('Сумма активных балансов: ' . $summ_info['active_summ']); ?>
+        <?= Html::label('Актив: ' . $summ_info['active_summ']); ?>
     </p>
     <p>
-        <?= Html::label('Сумма пассивных балансов: ' . $summ_info['passive_summ']); ?>
+        <?= Html::label('Пассив: ' . $summ_info['passive_summ']); ?>
     </p>
     <p>
         <?= Html::label('Разница: ' . $summ_info['difference']); ?>
@@ -35,6 +35,7 @@ $this->params['breadcrumps'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+//        'layout'=> "{items}\n{summary}", // перемещение информации о записях под таблицу
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
