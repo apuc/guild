@@ -97,7 +97,6 @@ class BalanceSearch extends Balance
         ->andFilterWhere(['>=','dt_add', strtotime($this->dt_from) ?: null])
         ->andFilterWhere(['<=','dt_add', strtotime($this->dt_to) ?: null])
         ->all();
-//        Debug::dd($query);
         $active_summ = 0;
         $passive_summ = 0;
         $difference = 0;
@@ -111,6 +110,7 @@ class BalanceSearch extends Balance
             }
         }
         $difference = $active_summ - $passive_summ;
+
         return compact('active_summ', 'passive_summ', 'difference');
     }
 }
