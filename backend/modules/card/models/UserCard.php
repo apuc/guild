@@ -5,6 +5,7 @@ namespace backend\modules\card\models;
 use backend\modules\settings\models\Skill;
 use common\models\CardSkill;
 use common\models\FieldsValue;
+use common\models\FieldsValueNew;
 use yii\helpers\ArrayHelper;
 
 class UserCard extends \common\models\UserCard
@@ -16,17 +17,20 @@ class UserCard extends \common\models\UserCard
     {
         parent::init();
 
-        $fieldValue = FieldsValue::find()->where(
+        $fieldValue = FieldsValueNew::find()->where(
             [
-                'card_id' => \Yii::$app->request->get('id'),
-                'project_id' => null,
-                'company_id' => null,
+                'item_id' => \Yii::$app->request->get('id'),
+                'item_type' => FieldsValueNew::TYPE_PROFILE,
             ])
             ->all();
         $array = [];
         if(!empty($fieldValue)){
             foreach ($fieldValue as $item){
-                array_push($array, ['field_id' => $item->field_id, 'value' => $item->value, 'order' => $item->order]);
+                array_push($array,
+                    ['field_id' => $item->field_id,
+                        'value' => $item->value,
+                        'order' => $item->order,
+                        'field_name' => $item->field->name]);
             }
             $this->fields = $array;
         }
@@ -36,6 +40,7 @@ class UserCard extends \common\models\UserCard
                     'field_id'   => null,
                     'value'  => null,
                     'order' => null,
+                    'field_name' => null,
                 ],
             ];
         }
@@ -54,17 +59,16 @@ class UserCard extends \common\models\UserCard
     {
         $post = \Yii::$app->request->post('UserCard');
 
-
-
         if($post['fields']){
-            FieldsValue::deleteAll(['card_id' => $this->id]);
+            FieldsValueNew::deleteAll(['item_id' => $this->id, 'item_type' => FieldsValueNew::TYPE_PROFILE]);
 
             foreach ( $post['fields'] as $item) {
-                $fildsValue = new FieldsValue();
+                $fildsValue = new FieldsValueNew();
                 $fildsValue->field_id = $item['field_id'];
                 $fildsValue->value = $item['value'];
                 $fildsValue->order = $item['order'];
-                $fildsValue->card_id = $this->id;
+                $fildsValue->item_id = $this->id;
+                $fildsValue->item_type = FieldsValueNew::TYPE_PROFILE;
 
                 $fildsValue->save();
             }

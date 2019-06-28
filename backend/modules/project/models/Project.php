@@ -4,6 +4,7 @@ namespace backend\modules\project\models;
 
 use common\classes\Debug;
 use common\models\FieldsValue;
+use common\models\FieldsValueNew;
 use common\models\ProjectUser;
 use yii\helpers\ArrayHelper;
 
@@ -16,18 +17,21 @@ class Project extends \common\models\Project
     {
         parent::init();
 
-        $fieldValue = FieldsValue::find()
+        $fieldValue = FieldsValueNew::find()
             ->where(
                 [
-                    'project_id' => \Yii::$app->request->get('id'),
-                    'card_id' => null,
-                    'company_id' => null,
+                    'item_id' => \Yii::$app->request->get('id'),
+                    'item_type' => FieldsValueNew::TYPE_PROJECT,
                 ])
             ->all();
         $array = [];
         if (!empty($fieldValue)) {
             foreach ($fieldValue as $item) {
-                array_push($array, ['field_id' => $item->field_id, 'value' => $item->value, 'order' => $item->order]);
+                array_push($array, [
+                    'field_id' => $item->field_id,
+                    'value' => $item->value,
+                    'order' => $item->order,
+                    'field_name' => $item->field->name]);
             }
             $this->fields = $array;
         } else {
@@ -36,6 +40,7 @@ class Project extends \common\models\Project
                     'field_id' => null,
                     'value' => null,
                     'order' => null,
+                    'field_name' => null,
                 ],
             ];
         }
@@ -53,14 +58,15 @@ class Project extends \common\models\Project
     {
         $post = \Yii::$app->request->post('Project');
 
-        FieldsValue::deleteAll(['project_id' => $this->id]);
+        FieldsValueNew::deleteAll(['item_id' => $this->id, 'item_type' => FieldsValueNew::TYPE_PROJECT]);
 
         foreach ($post['fields'] as $item) {
-            $fildsValue = new FieldsValue();
+            $fildsValue = new FieldsValueNew();
             $fildsValue->field_id = $item['field_id'];
             $fildsValue->value = $item['value'];
             $fildsValue->order = $item['order'];
-            $fildsValue->project_id = $this->id;
+            $fildsValue->item_id = $this->id;
+            $fildsValue->item_type = FieldsValueNew::TYPE_PROJECT;
 
             $fildsValue->save();
         }

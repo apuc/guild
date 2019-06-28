@@ -6,6 +6,7 @@ use common\classes\Debug;
 use common\models\AdditionalFields;
 use common\models\CardSkill;
 use common\models\FieldsValue;
+use common\models\FieldsValueNew;
 use common\models\Status;
 use Yii;
 use backend\modules\card\models\UserCard;
@@ -43,7 +44,6 @@ class UserCardController extends Controller
     public function actionIndex()
     {
         $status = new Status();
-        //Debug::dd($status->getUseStatuses());
         $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -62,7 +62,9 @@ class UserCardController extends Controller
     public function actionView($id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => FieldsValue::find()->where(['card_id' => $id])->orderBy('order'),
+            'query' => FieldsValueNew::find()
+                ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROFILE])
+                ->orderBy('order'),
             'pagination' => [
                 'pageSize' => 200,
             ],
@@ -105,7 +107,7 @@ class UserCardController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+//        Debug::dd($model);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }

@@ -86,7 +86,7 @@ class Company extends \yii\db\ActiveRecord
      */
     public function getFieldsValues()
     {
-        return $this->hasMany(FieldsValue::className(), ['company_id' => 'id']);
+        return $this->hasMany(FieldsValueNew::class, ['item_id' => 'id'])->where(['item_type' => FieldsValueNew::TYPE_COMPANY])->with('field');
     }
 
     /**

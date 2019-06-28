@@ -84,7 +84,7 @@ class Project extends \yii\db\ActiveRecord
      */
     public function getFieldsValues()
     {
-        return $this->hasMany(FieldsValue::class, ['project_id' => 'id']);
+        return $this->hasMany(FieldsValueNew::class, ['item_id' => 'id'])->where(['item_type' => FieldsValueNew::TYPE_PROJECT])->with('field');
     }
 
     /**

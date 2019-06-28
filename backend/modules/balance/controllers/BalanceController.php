@@ -30,11 +30,9 @@ class BalanceController extends Controller
             $searchModel->dt_to =  date('Y-m-d', strtotime('last day of previous month'));
         }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $summ_info = $searchModel->getSummInfo();
 
-        return $this->render('index',[
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index',compact('dataProvider', 'searchModel', 'summ_info'));
     }
 
     public function actionView($id)

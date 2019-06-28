@@ -3,6 +3,7 @@
 namespace backend\modules\project\controllers;
 
 use common\models\FieldsValue;
+use common\models\FieldsValueNew;
 use common\models\Hh;
 use common\models\HhJob;
 use common\models\ProjectUser;
@@ -72,7 +73,9 @@ class ProjectController extends Controller
 
 
         $dataProvider = new ActiveDataProvider([
-            'query' => FieldsValue::find()->where(['project_id' => $id])->orderBy('order'),
+            'query' => FieldsValueNew::find()
+                ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROJECT])
+                ->orderBy('order'),
             'pagination' => [
                 'pageSize' => 200,
             ],
