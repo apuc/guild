@@ -30,6 +30,16 @@ use yii\widgets\ActiveForm;
         ]
     ); ?>
 
+    <?= $form->field($model, 'status')
+        ->dropDownList(\yii\helpers\ArrayHelper::map(
+            \common\models\Status::find()
+                ->joinWith('useStatuses')
+                ->where(['`use_status`.`use`' => \common\models\UseStatus::USE_PROJECT])->all(), 'id', 'name'),
+            [
+                'prompt' => 'Выберите'
+            ]
+        ) ?>
+
     <?= $form->field($model, 'hh_id')->widget(Select2::class,
         [
             'data' => \yii\helpers\ArrayHelper::map(\common\models\Hh::find()->all(),'id', 'title'),

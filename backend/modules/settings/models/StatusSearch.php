@@ -64,7 +64,7 @@ class StatusSearch extends Status
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
-//        Debug::dd($query->all());
+
         return $dataProvider;
     }
 }

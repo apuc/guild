@@ -2,6 +2,7 @@
 
 namespace backend\modules\project\models;
 
+use common\classes\Debug;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;

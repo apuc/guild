@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'hh.url'
             ],
             'description:ntext',
+            'status',
             'created_at',
             'updated_at',
         ],
