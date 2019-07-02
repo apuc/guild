@@ -1,7 +1,9 @@
 <?php
 
+use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\status\models\StatusSearch */
@@ -24,9 +26,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'name',
+            [
+                'label' => 'Доп. информация',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $dataProvider = new ActiveDataProvider([
+                        'query' => $model->getUseStatuses(),
+                    ]);
+                    return ListView::widget([
+                        'dataProvider' => $dataProvider,
+                        'itemView' => '_additional',
+                        'layout' => "{items}",
 
+                    ]);
+                },
+                'headerOptions' => ['width' => '300'],
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
