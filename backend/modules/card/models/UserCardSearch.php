@@ -79,7 +79,7 @@ class UserCardSearch extends UserCard
             ->andFilterWhere(['like', 'passport', $this->passport])
             ->andFilterWhere(['like', 'photo', $this->photo])
             ->andFilterWhere(['like', 'email', $this->email]);
-        
+
         $query->andFilterWhere(['skill.id' => $this->skills]);
 
         return $dataProvider;
