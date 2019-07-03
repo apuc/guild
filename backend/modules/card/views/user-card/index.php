@@ -71,10 +71,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     },
                 'filter' => kartik\select2\Select2::widget([
-                        'attribute' => 'skill_name',
+                        'attribute' => 'skills',
                     'model' => $searchModel,
                     'data' => \common\models\UserCard::getNameSkills(),
-                    'options' => ['placeholder' => 'Выбрать параметр','class' => 'form-control'],
+//                    'maintainOrder' => true,
+                    'options' => ['multiple' => true,'placeholder' => 'Выбрать параметр','class' => 'form-control'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],

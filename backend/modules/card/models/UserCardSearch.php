@@ -13,7 +13,7 @@ use backend\modules\card\models\UserCard;
  */
 class UserCardSearch extends UserCard
 {
-    public $skill_name;
+    public $skills;
     /**
      * {@inheritdoc}
      */
@@ -22,7 +22,7 @@ class UserCardSearch extends UserCard
         return [
             [['id', 'gender', 'status'], 'integer'],
             [['fio', 'passport', 'photo', 'email', 'dob', 'created_at', 'updated_at'], 'safe'],
-            [['skill_name'],'string'],
+            ['skills', 'each', 'rule' => ['integer']],
         ];
     }
 
@@ -45,7 +45,6 @@ class UserCardSearch extends UserCard
     public function search($params)
     {
         $query = UserCard::find();
-
         // add conditions that should always apply here
 
         //try join 3 tables
@@ -80,8 +79,8 @@ class UserCardSearch extends UserCard
             ->andFilterWhere(['like', 'passport', $this->passport])
             ->andFilterWhere(['like', 'photo', $this->photo])
             ->andFilterWhere(['like', 'email', $this->email]);
-
-        $query->andFilterWhere(['skill.id' => $this->skill_name]);
+        
+        $query->andFilterWhere(['skill.id' => $this->skills]);
 
         return $dataProvider;
     }
