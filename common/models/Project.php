@@ -55,6 +55,7 @@ class Project extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['description'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
+            [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
             [['name'], 'string', 'max' => 255],
             [['budget'], 'string', 'max' => 100],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::class, 'targetAttribute' => ['company_id' => 'id']],
@@ -72,6 +73,7 @@ class Project extends \yii\db\ActiveRecord
             'name' => 'Название',
             'description' => 'Описание',
             'created_at' => 'Дата создания',
+            'status' => 'Статус',
             'updated_at' => 'Дата редактирования',
             'budget' => 'Бюджет',
             'company_id' => 'Компания',
@@ -128,5 +130,10 @@ class Project extends \yii\db\ActiveRecord
     {
         $model = $this->getProjectUsers()->with('card')->all();
         return ArrayHelper::getColumn($model, 'card.fio');
+    }
+
+    public function getStatus0()
+    {
+        return $this->hasOne(Status::class, ['id' => 'status']);
     }
 }

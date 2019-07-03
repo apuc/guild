@@ -76,8 +76,9 @@ class UseStatus extends \yii\db\ActiveRecord
     /**
      * @return string status text label
      */
-    public function getStatusesText()
+    public static function getStatusesText($id)
     {
-        return $this->statuses[$this->status_id];
+        $model = new self();
+        return $model->statuses[$id];
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
 use common\models\Project;
+use common\models\UseStatus;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -45,6 +47,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model){
                     return implode(', ', $model->getUsersNameList());
                 }
+            ],
+            [
+                'attribute' => 'status',
+                'value' => function($model){
+                    return $model->status0['name'];
+                },
+                'filter'    => kartik\select2\Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'status',
+                    'data' => \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT),
+                    'options' => ['placeholder' => 'Начните вводить...','class' => 'form-control'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]),
             ],
             //'created_at',
             //'updated_at',
