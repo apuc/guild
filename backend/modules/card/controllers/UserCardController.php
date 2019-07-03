@@ -43,7 +43,6 @@ class UserCardController extends Controller
      */
     public function actionIndex()
     {
-        $status = new Status();
         $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -107,7 +106,6 @@ class UserCardController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-//        Debug::dd($model);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
