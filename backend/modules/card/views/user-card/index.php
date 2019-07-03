@@ -74,7 +74,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'skills',
                     'model' => $searchModel,
                     'data' => \common\models\UserCard::getNameSkills(),
-//                    'maintainOrder' => true,
                     'options' => ['multiple' => true,'placeholder' => 'Выбрать параметр','class' => 'form-control'],
                     'pluginOptions' => [
                         'allowClear' => true
