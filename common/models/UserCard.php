@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "user_card".
@@ -139,5 +140,15 @@ class UserCard extends \yii\db\ActiveRecord
     public function getGendersText()
     {
         return $this->genders[$this->gender];
+    }
+
+    public function getSkillValues()
+    {
+        return $this->hasMany(CardSkill::class, ['card_id' => 'id'])->with('skill');
+    }
+
+    public static function getNameSkills()
+    {
+        return ArrayHelper::map(Skill::find()->all(),'id', 'name');
     }
 }

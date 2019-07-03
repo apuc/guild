@@ -46,10 +46,12 @@ class UserCardController extends Controller
         $status = new Status();
         $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//        $skills = CardSkill::find()->where(['card_id' => 'id'])->with('skill')->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+//            'skills' => $skills,
         ]);
     }
 

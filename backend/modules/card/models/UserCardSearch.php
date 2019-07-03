@@ -2,6 +2,7 @@
 
 namespace backend\modules\card\models;
 
+use common\classes\Debug;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -12,6 +13,7 @@ use backend\modules\card\models\UserCard;
  */
 class UserCardSearch extends UserCard
 {
+    public $skill_name;
     /**
      * {@inheritdoc}
      */
@@ -20,6 +22,7 @@ class UserCardSearch extends UserCard
         return [
             [['id', 'gender', 'status'], 'integer'],
             [['fio', 'passport', 'photo', 'email', 'dob', 'created_at', 'updated_at'], 'safe'],
+            [['skill_name'],'string'],
         ];
     }
 
@@ -44,6 +47,10 @@ class UserCardSearch extends UserCard
         $query = UserCard::find();
 
         // add conditions that should always apply here
+
+        //try join 3 tables
+        $query->leftJoin('card_skill', 'card_skill.card_id=user_card.id');
+        $query->leftJoin('skill', 'skill.id=card_skill.skill_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -73,6 +80,8 @@ class UserCardSearch extends UserCard
             ->andFilterWhere(['like', 'passport', $this->passport])
             ->andFilterWhere(['like', 'photo', $this->photo])
             ->andFilterWhere(['like', 'email', $this->email]);
+
+        $query->andFilterWhere(['skill.id' => $this->skill_name]);
 
         return $dataProvider;
     }

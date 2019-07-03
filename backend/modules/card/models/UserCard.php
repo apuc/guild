@@ -74,9 +74,6 @@ class UserCard extends \common\models\UserCard
             }
         }
 
-
-
-
         if($post['skill']){
             CardSkill::deleteAll(['card_id' => $this->id]);
 
