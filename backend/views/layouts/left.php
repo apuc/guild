@@ -6,6 +6,11 @@
         foreach($userStatuses as $key => $status){
             $menuItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
         }
+        $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
+        $projectItems = [['label' => 'Все', 'icon' => 'files-o', 'url' => ['/project/project']]];
+        foreach($projectStatuses as $key => $status){
+            $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key]];
+        }
         ?>
 
         <?= dmstr\widgets\Menu::widget(
@@ -25,7 +30,9 @@
                         'label' => 'Профили', 'icon' => 'users', 'url' => '#',
                         'items' => $menuItems,
                     ],
-                    ['label' => 'Проекты', 'icon' => 'files-o', 'url' => ['/project/project']],
+                    [   'label' => 'Проекты', 'icon' => 'files-o', 'url' => ['#'],
+                        'items' => $projectItems,
+                    ],
                     ['label' => 'Компании', 'icon' => 'files-o', 'url' => ['/company/company']],
                     [
                         'label' => 'Hh.ru', 'icon' => 'user-circle', 'url' => '#',

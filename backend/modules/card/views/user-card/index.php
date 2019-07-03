@@ -61,14 +61,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => 'Навыки',
                     'format' => 'raw',
                     'value' => function($model){
-                        $dataProvider = new \yii\data\ActiveDataProvider([
-                                'query' => $model->getSkillValues(),
-                        ]);
-                        return ListView::widget([
-                            'dataProvider' => $dataProvider,
-                            'itemView' => '_additional',
-                            'layout' => "{items}",
-                        ]);
+                        $str = '';
+                        foreach ($model->skillValues as $item)
+                        {
+                            $str .= $item->skill->name . ', ';
+                        }
+                       $str = substr( $str, 0, -2);
+                        return $str;
                     },
                 'filter' => kartik\select2\Select2::widget([
                         'attribute' => 'skills',
