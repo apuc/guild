@@ -1,1 +1,0 @@
-<?= $model->skill->name; ?>

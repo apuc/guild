@@ -2,7 +2,6 @@
 
 namespace backend\modules\project\models;
 
-use common\classes\Debug;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -19,7 +18,7 @@ class ProjectSearch extends Project
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id','status'], 'integer'],
             [['name', 'description', 'created_at', 'updated_at'], 'safe'],
         ];
     }
@@ -61,6 +60,7 @@ class ProjectSearch extends Project
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
