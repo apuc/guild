@@ -67,6 +67,7 @@ class HhSearch extends Hh
         $query->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'photo', $this->photo]);
+        $query->orderBy('dt_add DESC');
 
         return $dataProvider;
     }

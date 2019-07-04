@@ -63,7 +63,7 @@ class AdditionalFieldsSearch extends AdditionalFields
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
-//        Debug::dd($query->createCommand()->rawSql);
+
         return $dataProvider;
     }
 }
