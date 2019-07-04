@@ -13,6 +13,7 @@ use backend\modules\company\models\Company;
  */
 class CompanySearch extends Company
 {
+//    public $status;
     /**
      * {@inheritdoc}
      */
@@ -43,7 +44,6 @@ class CompanySearch extends Company
     public function search($params)
     {
         $query = Company::find()->joinWith('project');
-
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -69,6 +69,7 @@ class CompanySearch extends Company
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description]);
+        $query->orderBy('created_at DESC');
 
         return $dataProvider;
     }

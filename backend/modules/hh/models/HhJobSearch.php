@@ -71,6 +71,7 @@ class HhJobSearch extends HhJob
             ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'salary_currency', $this->salary_currency])
             ->andFilterWhere(['like', 'address', $this->address]);
+        $query->orderBy('dt_add DESC');
 
         return $dataProvider;
     }

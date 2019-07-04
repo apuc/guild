@@ -54,7 +54,8 @@ class BalanceSearch extends Balance
      */
     public function search($params)
     {
-        $query = Balance::find();
+        $query = Balance::find()->distinct();
+
         $query->leftJoin('fields_value_new','fields_value_new.item_id=balance.id AND fields_value_new.item_type=3');
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([

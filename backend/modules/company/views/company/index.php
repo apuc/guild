@@ -42,13 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //'description:ntext',
             //'status_id',
             [
-                'attribute' => 'status',
+                'attribute' => 'status_id',
                 'value' => function($model){
-                    return isset($model->status0->name) ? $model->status0->name : 'Не задано';
+                    return isset($model->status->name) ? $model->status->name : 'Не задано';
                 },
                 'filter'    => kartik\select2\Select2::widget([
                     'model' => $searchModel,
-                    'attribute' => 'status',
+                    'attribute' => 'status_id',
                     'data' => \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_COMPANY),
                     'options' => ['placeholder' => 'Начните вводить...','class' => 'form-control'],
                     'pluginOptions' => [
