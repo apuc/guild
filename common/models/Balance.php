@@ -77,9 +77,14 @@ class Balance extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getNameList()
+    public static function getNameList($type)
     {
-        return ArrayHelper::map(AdditionalFields::find()->all(),'id','name');
+
+        return ArrayHelper::map(
+            AdditionalFields::find()
+            ->leftJoin('use_field', 'additional_fields.id=use_field.field_id')
+            ->where(['use_field.use' => $type])->all(), 'id', 'name'
+        );
     }
 
     public static function tableName()
