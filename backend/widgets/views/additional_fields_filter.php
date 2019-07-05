@@ -7,7 +7,7 @@ echo \kartik\select2\Select2::widget(
     [
         'model' => $model,
         'attribute' => 'field_name',
-        'data' => \common\models\Balance::getNameList(),
+        'data' => \common\models\Balance::getNameList(\common\models\UseStatus::USE_BALANCE),
         'options' => ['placeholder' => 'Выбрать параметр','class' => 'form-control'],
         'pluginOptions' => [
             'allowClear' => true
