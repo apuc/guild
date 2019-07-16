@@ -26,7 +26,7 @@ class Holiday extends ActiveRecord
     {
         return [
             [['card_id', 'dt_start', 'dt_end'], 'integer'],
-//            [['card_id', 'dt_start', 'dt_end'], 'required'],
+            [['card_id', 'dt_start', 'dt_end'], 'required'],
         ];
     }
 
