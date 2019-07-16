@@ -32,6 +32,9 @@ return [
         'balance' => [
             'class' => 'backend\modules\balance\Balance',
         ],
+        'holiday' => [
+            'class' => 'backend\modules\holiday\Holiday',
+        ],
     ],
     'components' => [
         'request' => [
