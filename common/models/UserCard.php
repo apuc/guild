@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\classes\Debug;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -150,5 +151,10 @@ class UserCard extends \yii\db\ActiveRecord
     public static function getNameSkills()
     {
         return ArrayHelper::map(Skill::find()->all(),'id', 'name');
+    }
+
+    public static function getUserList()
+    {
+        return ArrayHelper::map(self::find()->all(), 'id', 'fio');
     }
 }
