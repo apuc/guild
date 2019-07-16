@@ -53,6 +53,7 @@ class HolidaySearch extends Holiday
 
         $query->andFilterWhere(['between', 'dt_start', $dt_start, $dt_end ])
             ->orFilterWhere(['between', 'dt_end', $dt_start, $dt_end ]);
+        $query->orderBy('id DESC');
 
         return $dataProvider;
     }
