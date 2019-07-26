@@ -27,3 +27,12 @@
     max-height: 100px;
     flex-direction: column;
 }
+
+.field-usercard-fields-0-value{
+    display: flex;
+    width: auto;
+}
+
+.field-usercard-fields-0-value .itemImg {
+    width: 100% !important;
+}

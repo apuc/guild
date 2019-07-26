@@ -3,6 +3,7 @@
 namespace backend\modules\card\models;
 
 use backend\modules\settings\models\Skill;
+use common\classes\Debug;
 use common\models\CardSkill;
 use common\models\FieldsValue;
 use common\models\FieldsValueNew;
@@ -61,11 +62,14 @@ class UserCard extends \common\models\UserCard
 
         if($post['fields']){
             FieldsValueNew::deleteAll(['item_id' => $this->id, 'item_type' => FieldsValueNew::TYPE_PROFILE]);
-
             foreach ( $post['fields'] as $item) {
                 $fildsValue = new FieldsValueNew();
                 $fildsValue->field_id = $item['field_id'];
                 $fildsValue->value = $item['value'];
+                $fildsValue->type_file = 'text';
+                if(substr($item['value'],0,1) == '/'){
+                    $fildsValue->type_file = 'file';
+                }
                 $fildsValue->order = $item['order'];
                 $fildsValue->item_id = $this->id;
                 $fildsValue->item_type = FieldsValueNew::TYPE_PROFILE;

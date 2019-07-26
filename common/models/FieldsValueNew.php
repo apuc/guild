@@ -14,6 +14,7 @@ use Yii;
  * @property int $order
  * @property string $value
  * @property string $option
+ * @property string $type_file
  */
 class FieldsValueNew extends \yii\db\ActiveRecord
 {
