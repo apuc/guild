@@ -130,7 +130,7 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-xs-12">
         <?= $form->field($model, 'fields')->widget(MultipleInput::class, [
-
+            'cloneButton' => true,
             'columns' => [
                 [
                     'name'  => 'field_id',
@@ -159,8 +159,12 @@ use yii\widgets\ActiveForm;
                     'options' => [
                         'class' => 'input-priority'
                     ]
-                ]
-            ]
+                ],
+            ],
+//            'extraButtons' => function ($model, $index, $context) {
+//                Html::addCssClass($options, 'btn multiple-input-list__btn js-input-plus btn btn-default');
+//                return Html::tag('div', Html::a('', ['index'], ['class' => 'glyphicon glyphicon-plus plus-icon']), $options);
+//            },
         ])->label('Дополнительно');
         ?>
         </div>

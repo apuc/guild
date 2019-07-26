@@ -13,6 +13,7 @@ use Yii;
  * @property int $item_type
  * @property int $order
  * @property string $value
+ * @property string $option
  */
 class FieldsValueNew extends \yii\db\ActiveRecord
 {
@@ -36,7 +37,7 @@ class FieldsValueNew extends \yii\db\ActiveRecord
         return [
             [['field_id', 'item_id', 'item_type'], 'required'],
             [['field_id', 'item_id', 'item_type', 'order'], 'integer'],
-            [['value'], 'string'],
+            [['value', 'type_file'], 'string'],
         ];
     }
 
@@ -52,6 +53,7 @@ class FieldsValueNew extends \yii\db\ActiveRecord
             'item_type' => 'Item Type',
             'order' => 'Order',
             'value' => 'Value',
+            'type_file' => 'Приложение'
         ];
     }
 
