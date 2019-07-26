@@ -31,6 +31,7 @@ class UserCard extends \common\models\UserCard
                     ['field_id' => $item->field_id,
                         'value' => $item->value,
                         'order' => $item->order,
+                        'type_file' => $item->type_file,
                         'field_name' => $item->field->name]);
             }
             $this->fields = $array;
@@ -42,6 +43,7 @@ class UserCard extends \common\models\UserCard
                     'value'  => null,
                     'order' => null,
                     'field_name' => null,
+                    'type_file' => null,
                 ],
             ];
         }

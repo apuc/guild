@@ -54,7 +54,7 @@ class FieldsValueNew extends \yii\db\ActiveRecord
             'item_type' => 'Item Type',
             'order' => 'Order',
             'value' => 'Value',
-            'type_file' => 'Приложение'
+            'type_file' => 'Тип файла'
         ];
     }
 
