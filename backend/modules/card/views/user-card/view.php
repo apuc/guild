@@ -72,21 +72,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'layout'=>"{items}",
         'columns' => [
             'field.name:text:Поле',
-            'value',
             [
-                    'label' => 'Download',
-                    'format' => 'raw',
-                    'value' => function($model){
-                        if ($model->type_file == 'file'){
-                            return Html::a('Скачать', $model->value, ['target' => '_blank']);
-                        }
-                        return null;
+                'attribute' => 'value',
+                'format' => 'raw',
+                'value' => function($model){
+                    if ($model->type_file == 'file'){
+                        return $model->value . ' (' . Html::a('Скачать', $model->value, ['target' => '_blank', 'download' => 'download']) . ')';
                     }
+                    return $model->value;
+                }
             ],
         ],
     ]); ?>
-<!--    --><?php //if ($model->fields[0]['type_file'] == 'file'): ?>
-<!--    --><?//= Html::a('Скачать', $model->fields[0]['value'], ['target' => '_blank']); ?>
-<!--    --><?php //endif; ?>
-
 </div>
