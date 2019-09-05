@@ -1,5 +1,6 @@
 <?php
 
+use common\classes\Debug;
 use kartik\select2\Select2;
 use mihaildev\elfinder\InputFile;
 use unclead\multipleinput\MultipleInput;
@@ -59,7 +60,7 @@ use yii\widgets\ActiveForm;
                 'template' => '<label>Резюме</label><div class="input-group">{input}<span class="span-btn">{button}</span></div>',
                 'options' => ['class' => 'form-control itemImg', 'maxlength' => '255'],
                 'buttonOptions' => ['class' => 'btn btn-primary'],
-                'value' => $model->photo,
+                'value' => $model->resume,
                 'buttonName' => 'Выбрать резюме',
             ]);
             ?>
