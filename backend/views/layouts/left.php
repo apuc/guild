@@ -43,6 +43,7 @@
                     ],
                     ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balance/balance']],
                     ['label' => 'Отпуска', 'icon' => 'plane', 'url' => ['/holiday/holiday']],
+                    ['label' => 'Доступы', 'icon' => '', 'url' => ['/accesses/accesses']],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],

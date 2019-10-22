@@ -14,6 +14,9 @@ return [
     'bootstrap' => ['log'],
 
     'modules' => [
+        'accesses' => [
+            'class' => 'backend\modules\accesses\Accesses',
+        ],
         'settings' => [
             'class' => 'backend\modules\settings\Settings',
         ],
