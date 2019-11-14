@@ -42,7 +42,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl' => '',
+            'baseUrl' => 'secure',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
