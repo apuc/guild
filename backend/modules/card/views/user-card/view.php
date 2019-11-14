@@ -6,6 +6,7 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\card\models\UserCard */
+/* @var $userData common\models\User */
 /* @var $skills \common\models\CardSkill */
 /* @var $skill \common\models\Skill */
 
@@ -27,14 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'Photo',
                 'format' => 'raw',
-                'value' => function($model){
+                'value' => function ($model) {
                     return Html::tag('img', null, ['src' => $model->photo, 'width' => '100px']);
                 }
             ],
             [
                 'attribute' => 'Resume',
                 'format' => 'raw',
-                'value' => function($model){
+                'value' => function ($model) {
                     return Html::a('Скачать', $model->resume, ['target' => '_blank']);
                 }
             ],
@@ -62,21 +63,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h2>Навыки</h2>
 
-    <?php foreach ($skills as $skill): ?>
+    <?php foreach ($skills as $skill) : ?>
         <span class="btn btn-default btn-sm"><?= $skill['skill']->name; ?></span>
     <?php endforeach; ?>
     <h2>Дополнительные сведения</h2>
 
     <?= GridView::widget([
         'dataProvider' => $modelFildValue,
-        'layout'=>"{items}",
+        'layout' => "{items}",
         'columns' => [
             'field.name:text:Поле',
             [
                 'attribute' => 'value',
                 'format' => 'raw',
-                'value' => function($model){
-                    if ($model->type_file == 'file'){
+                'value' => function ($model) {
+                    if ($model->type_file == 'file') {
                         return $model->value . ' (' . Html::a('Скачать', $model->value, ['target' => '_blank', 'download' => 'download']) . ')';
                     }
                     return $model->value;
@@ -84,4 +85,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
 </div>

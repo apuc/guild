@@ -11,6 +11,13 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+
+    'modules' => [
+        'access' => [
+            'class' => 'frontend\modules\access\Access',
+        ],
+    ],
+
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -41,8 +48,7 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'rules' => [],
         ],
 
     ],

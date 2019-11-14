@@ -5,6 +5,7 @@ namespace backend\modules\card\controllers;
 use common\classes\Debug;
 use common\models\AdditionalFields;
 use common\models\CardSkill;
+use common\models\User;
 use common\models\FieldsValue;
 use common\models\FieldsValueNew;
 use common\models\Status;
@@ -71,10 +72,14 @@ class UserCardController extends Controller
 
         $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
 
+        $id_current_user = $this->findModel($id)->id_user;
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'modelFildValue' => $dataProvider,
             'skills' => $skills,
+            // 'userData' => $userData,
+            'userData' => User::findOne($id_current_user),
         ]);
     }
 
@@ -88,6 +93,8 @@ class UserCardController extends Controller
         $model = new UserCard();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            UserCard::generateUserForUserCard($model->id);
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -133,6 +140,17 @@ class UserCardController extends Controller
 
         return $this->redirect(['index']);
     }
+
+    /**
+     * Lists all UserCard models.
+     * @return mixed
+     */
+    public function actionGenerate()
+    {
+        $massage = UserCard::generateUserForUserCard();
+        return $this->render('generate', ['massage' => $massage]);
+    }
+
 
     /**
      * Finds the UserCard model based on its primary key value.

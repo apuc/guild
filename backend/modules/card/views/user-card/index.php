@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Сгенерировать пользователей', ['generate'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -28,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'photo',
                 'format' => 'raw',
-                'value' => function($model){
-                    return Html::img(Url::to($model->photo),[
+                'value' => function ($model) {
+                    return Html::img(Url::to($model->photo), [
                         'style' => 'width:100px;'
                     ]);
                 },
@@ -42,14 +43,14 @@ $this->params['breadcrumbs'][] = $this->title;
             //'dob',
             [
                 'attribute' => 'status',
-                'value' => function($model){
+                'value' => function ($model) {
                     return $model->status0->name;
                 },
                 'filter'    => kartik\select2\Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'status',
                     'data' => \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROFILE),
-                    'options' => ['placeholder' => 'Начните вводить...','class' => 'form-control'],
+                    'options' => ['placeholder' => 'Начните вводить...', 'class' => 'form-control'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
@@ -58,22 +59,21 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_at',
             //'updated_at',
             [
-                    'label' => 'Навыки',
-                    'format' => 'raw',
-                    'value' => function($model){
-                        $str = '';
-                        foreach ($model->skillValues as $item)
-                        {
-                            $str .= $item->skill->name . ', ';
-                        }
-                       $str = substr( $str, 0, -2);
-                        return $str;
-                    },
+                'label' => 'Навыки',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $str = '';
+                    foreach ($model->skillValues as $item) {
+                        $str .= $item->skill->name . ', ';
+                    }
+                    $str = substr($str, 0, -2);
+                    return $str;
+                },
                 'filter' => kartik\select2\Select2::widget([
-                        'attribute' => 'skills',
+                    'attribute' => 'skills',
                     'model' => $searchModel,
                     'data' => \common\models\UserCard::getNameSkills(),
-                    'options' => ['multiple' => true,'placeholder' => 'Выбрать параметр','class' => 'form-control'],
+                    'options' => ['multiple' => true, 'placeholder' => 'Выбрать параметр', 'class' => 'form-control'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
