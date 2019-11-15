@@ -1,8 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use common\classes\Debug;
-use common\models\User;
 
 /* @var $this \yii\web\View */
 /* @var $content string */

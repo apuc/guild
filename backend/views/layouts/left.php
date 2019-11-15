@@ -2,8 +2,6 @@
     <section class="sidebar">
         <?php
 
-        use common\classes\Debug;
-
         $userStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROFILE);
         $menuItems = [['label' => 'Все', 'icon' => 'user', 'url' => ['/card/user-card']]];
         foreach ($userStatuses as $key => $status) {
