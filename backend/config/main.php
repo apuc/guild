@@ -42,7 +42,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl' => 'secure',
+            'baseUrl' => '/secure',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -69,7 +69,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '' => '/card/user-card'
+                '' => '/card/user-card',
             ],
         ],
 
