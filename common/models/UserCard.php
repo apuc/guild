@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
  * This is the model class for table "user_card".
  *
  * @property int $id
+ * @property int $id_user
  * @property string $fio
  * @property string $passport
  * @property string $photo
@@ -63,7 +64,7 @@ class UserCard extends \yii\db\ActiveRecord
     {
         return [
             [['fio', 'status', 'gender'], 'required'],
-            [['gender', 'status', 'position_id'], 'integer'],
+            [['gender', 'status', 'position_id', 'id_user'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['fio', 'passport', 'photo', 'email', 'resume'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
@@ -79,6 +80,7 @@ class UserCard extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'id_user' => 'ID пользователя',
             'fio' => 'ФИО',
             'passport' => 'Паспорт',
             'photo' => 'Фото',
@@ -150,7 +152,7 @@ class UserCard extends \yii\db\ActiveRecord
 
     public static function getNameSkills()
     {
-        return ArrayHelper::map(Skill::find()->all(),'id', 'name');
+        return ArrayHelper::map(Skill::find()->all(), 'id', 'name');
     }
 
     public static function getUserList()

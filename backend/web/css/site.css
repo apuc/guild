@@ -10,7 +10,7 @@
 }
 
 .itemImg, .itemImgs{
-    float: left!important;
+    float: left !important;
     display: inline-block;
     width: 30%!important;
 }

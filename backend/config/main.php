@@ -69,7 +69,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '' => '/card/user-card'
+                '' => '/card/user-card',
             ],
         ],
 
