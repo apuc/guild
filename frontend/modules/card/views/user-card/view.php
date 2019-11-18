@@ -9,7 +9,7 @@ use yii\widgets\DetailView;
 /* @var $skill \common\models\Skill */
 /* @var $modelFildValue yii\data\ActiveDataProvider */
 
-
+$this->title = 'Профиль';
 ?>
 <div class="user-card-view">
 
@@ -48,7 +48,6 @@ use yii\widgets\DetailView;
                 }
             ],
             ['label' => 'Добвлен', 'attribute' => 'created_at',],
-            ['label' => 'Изменен', 'attribute' => 'updated_at',],
         ],
     ]);
     ?>
@@ -58,6 +57,9 @@ use yii\widgets\DetailView;
     <?php foreach ($skills as $skill) : ?>
         <span class="btn btn-default btn-sm"><?= $skill['skill']->name; ?></span>
     <?php endforeach; ?>
+
+    <?= Html::a('Добавить', ['/card/user-card/update', 'id' => $model->id], ['class' => 'btn btn-success']); ?>
+
     <h2>Дополнительные сведения</h2>
 
     <?= GridView::widget([

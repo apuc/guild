@@ -3,11 +3,10 @@
 
 namespace frontend\modules\card\controllers;
 
-use common\classes\Debug;
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
 use Yii;
-use common\models\UserCard;
+use frontend\modules\card\models\UserCard;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -26,7 +25,7 @@ class UserCardController extends Controller
             $id_user = Yii::$app->user->id;
             $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
 
-            if($result){
+            if($result) {
                 $id = $result[0]['id'];
                 $dataProvider = new ActiveDataProvider([
                     'query' => FieldsValueNew::find()
@@ -47,6 +46,25 @@ class UserCardController extends Controller
             }
             else return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);
         }
+    }
+
+    /**
+     * Updates an existing UserCard model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
