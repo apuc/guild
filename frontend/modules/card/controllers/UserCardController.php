@@ -8,11 +8,33 @@ use common\models\FieldsValueNew;
 use Yii;
 use frontend\modules\card\models\UserCard;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 class UserCardController extends Controller
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'update'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * Displays a single Product model.
      * @return mixed
@@ -20,32 +42,29 @@ class UserCardController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->isGuest) return $this->render('index', ['info' => '<h3>Пожалуйста, авторизируйтесь!</h3>']);
-        else {
-            $id_user = Yii::$app->user->id;
-            $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
+        $id_user = Yii::$app->user->id;
+        $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
 
-            if($result) {
-                $id = $result[0]['id'];
-                $dataProvider = new ActiveDataProvider([
-                    'query' => FieldsValueNew::find()
-                        ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROFILE])
-                        ->orderBy('order'),
-                    'pagination' => [
-                        'pageSize' => 200,
-                    ],
-                ]);
+        if($result) {
+            $id = $result[0]['id'];
+            $dataProvider = new ActiveDataProvider([
+                'query' => FieldsValueNew::find()
+                    ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROFILE])
+                    ->orderBy('order'),
+                'pagination' => [
+                    'pageSize' => 200,
+                ],
+            ]);
 
-                $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
+            $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
 
-                return $this->render('view', [
-                    'model' => $this->findModel($id),
-                    'modelFildValue' => $dataProvider,
-                    'skills' => $skills,
-                ]);
-            }
-            else return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+                'modelFildValue' => $dataProvider,
+                'skills' => $skills,
+            ]);
         }
+        else return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);
     }
 
     /**
