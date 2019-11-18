@@ -21,30 +21,32 @@ class UserCardController extends Controller
      */
     public function actionIndex()
     {
-        $id_user = Yii::$app->user->id;
-        $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
-        $id = $result[0]['id'];
-
         if(Yii::$app->user->isGuest) return $this->render('index', ['info' => '<h3>Пожалуйста, авторизируйтесь!</h3>']);
-        else if($id) {
-            $dataProvider = new ActiveDataProvider([
-                'query' => FieldsValueNew::find()
-                    ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROFILE])
-                    ->orderBy('order'),
-                'pagination' => [
-                    'pageSize' => 200,
-                ],
-            ]);
+        else {
+            $id_user = Yii::$app->user->id;
+            $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
 
-            $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
+            if($result){
+                $id = $result[0]['id'];
+                $dataProvider = new ActiveDataProvider([
+                    'query' => FieldsValueNew::find()
+                        ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROFILE])
+                        ->orderBy('order'),
+                    'pagination' => [
+                        'pageSize' => 200,
+                    ],
+                ]);
 
-            return $this->render('view', [
-                'model' => $this->findModel($id),
-                'modelFildValue' => $dataProvider,
-                'skills' => $skills,
-            ]);
+                $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
+
+                return $this->render('view', [
+                    'model' => $this->findModel($id),
+                    'modelFildValue' => $dataProvider,
+                    'skills' => $skills,
+                ]);
+            }
+            else return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);
         }
-        else return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);
     }
 
     /**
