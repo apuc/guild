@@ -2,11 +2,10 @@
 
 namespace frontend\modules\access\controllers;
 
-use common\classes\Debug;
-use common\models\Accesses;
 use Yii;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
+use common\models\Accesses;
 
 class AccessController extends Controller
 {
