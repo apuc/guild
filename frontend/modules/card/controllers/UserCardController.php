@@ -3,6 +3,7 @@
 
 namespace frontend\modules\card\controllers;
 
+use common\classes\Debug;
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
 use Yii;
@@ -24,23 +25,26 @@ class UserCardController extends Controller
         $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
         $id = $result[0]['id'];
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => FieldsValueNew::find()
-                ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROFILE])
-                ->orderBy('order'),
-            'pagination' => [
-                'pageSize' => 200,
-            ],
-        ]);
+        if(Yii::$app->user->isGuest) return $this->render('index', ['info' => '<h3>Пожалуйста, авторизируйтесь!</h3>']);
+        else if($id) {
+            $dataProvider = new ActiveDataProvider([
+                'query' => FieldsValueNew::find()
+                    ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROFILE])
+                    ->orderBy('order'),
+                'pagination' => [
+                    'pageSize' => 200,
+                ],
+            ]);
 
-        $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
+            $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
 
-        return $this->render('index', [
-            'model' => $this->findModel($id),
-            'modelFildValue' => $dataProvider,
-            'skills' => $skills,
-        ]);
-
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+                'modelFildValue' => $dataProvider,
+                'skills' => $skills,
+            ]);
+        }
+        else return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);
     }
 
     /**

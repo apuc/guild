@@ -52,8 +52,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '' => 'card/user-card/index',
                 'site/index' => 'card/user-card/index',
+                '' => 'card/user-card/index',
             ],
         ],
 

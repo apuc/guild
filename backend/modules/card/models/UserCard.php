@@ -134,7 +134,7 @@ class UserCard extends \common\models\UserCard
         $userCardQuery = UserCard::find();
         $card_id ? $userCardQuery->where(['id' => $card_id]) : $userCardQuery->where(['id_user' => NULL]);
         $user_card_array = $userCardQuery->all();
-        $user_array =  User::find()->select(['id', 'email'])->all();
+        $user_array = User::find()->all();
 
         foreach ($user_card_array as $user_card_value) {
 
@@ -147,7 +147,6 @@ class UserCard extends \common\models\UserCard
             if ($user_id) {
                 UserCard::genereateLinlkOnUser($user_card_value, $user_id);
             } else {
-
                 $user_id = UserCard::generateUser($user_card_value->email, $user_card_value->status);
                 UserCard::genereateLinlkOnUser($user_card_value, $user_id);
             }
