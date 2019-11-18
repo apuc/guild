@@ -5,7 +5,6 @@ namespace frontend\modules\card\controllers;
 
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
-use common\models\User;
 use Yii;
 use common\models\UserCard;
 use yii\data\ActiveDataProvider;
@@ -21,13 +20,6 @@ class UserCardController extends Controller
      */
     public function actionIndex()
     {
-       /* $id_user = Yii::$app->user->id;
-        $id = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
-
-        return $this->render('index', [
-            'model' => $this->findModel($id[0]['id']),
-        ]);*/
-
         $id_user = Yii::$app->user->id;
         $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
         $id = $result[0]['id'];
@@ -43,14 +35,10 @@ class UserCardController extends Controller
 
         $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
 
-        $id_current_user = $this->findModel($id)->id_user;
-
         return $this->render('index', [
             'model' => $this->findModel($id),
             'modelFildValue' => $dataProvider,
             'skills' => $skills,
-            // 'userData' => $userData,
-            //userData' => User::findOne($id_current_user),
         ]);
 
     }

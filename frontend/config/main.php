@@ -52,7 +52,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '' => 'card1/user-card/index',
+                '' => 'card/user-card/index',
                 'site/index' => 'card/user-card/index',
             ],
         ],
