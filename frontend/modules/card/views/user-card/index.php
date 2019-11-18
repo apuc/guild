@@ -5,29 +5,36 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\card\models\UserCard */
-/* @var $userData common\models\User */
 /* @var $skills \common\models\CardSkill */
 /* @var $skill \common\models\Skill */
 /* @var $modelFildValue yii\data\ActiveDataProvider */
 
-$this->title = $model->fio;
-$this->params['breadcrumbs'][] = ['label' => 'User Cards', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-card-view">
 
-    <p>
-        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    </p>
-
+    <h3>Личная информация</h3>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'fio',
-            'passport',
+            ['label' => 'ФИО', 'attribute' => 'fio',],
+            ['label' => 'Пасспорт', 'attribute' => 'passport',],
+            ['label' => 'Email', 'attribute' => 'email',],
             [
-                'attribute' => 'Photo',
+                'attribute' => 'gender',
+                'value' => $model->gendersText,
+            ],
+            ['label' => 'Дата рождения', 'attribute' => 'dob',],
+            [
+                'attribute' => 'status',
+                'value' => $model->status0->name,
+            ],
+            ['label' => 'Зарплата', 'attribute' => 'salary',],
+            [
+                'attribute' => 'position_id',
+                'value' => (isset($model->position->name)) ? $model->position->name : 'Без должности',
+            ],
+            [
+                'attribute' => 'Фото',
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::tag('img', null, ['src' => $model->photo, 'width' => '100px']);
@@ -40,25 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a('Скачать', $model->resume, ['target' => '_blank']);
                 }
             ],
-            [
-                'attribute' => 'gender',
-                'value' => $model->gendersText,
-            ],
-
-            'email:email',
-
-            'dob',
-            [
-                'attribute' => 'status',
-                'value' => $model->status0->name,
-            ],
-            'salary',
-            [
-                'attribute' => 'position_id',
-                'value' => (isset($model->position->name)) ? $model->position->name : 'Без должности',
-            ],
-            'created_at',
-            'updated_at',
+            ['label' => 'Добвлен', 'attribute' => 'created_at',],
+            ['label' => 'Изменен', 'attribute' => 'updated_at',],
         ],
     ]) ?>
 

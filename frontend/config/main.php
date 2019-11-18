@@ -16,6 +16,9 @@ return [
         'access' => [
             'class' => 'frontend\modules\access\Access',
         ],
+        'card' => [
+            'class' => 'frontend\modules\card\Card',
+        ],
     ],
 
     'components' => [
@@ -48,7 +51,10 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [],
+            'rules' => [
+                '' => 'card/user-card/index',
+                'site/index' => 'card/user-card/index',
+            ],
         ],
 
     ],
