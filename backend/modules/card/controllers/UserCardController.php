@@ -78,7 +78,6 @@ class UserCardController extends Controller
             'model' => $this->findModel($id),
             'modelFildValue' => $dataProvider,
             'skills' => $skills,
-            // 'userData' => $userData,
             'userData' => User::findOne($id_current_user),
         ]);
     }
