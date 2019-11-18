@@ -19,7 +19,6 @@ use yii\widgets\DetailView;
         'model' => $model,
         'attributes' => [
             ['label' => 'ФИО', 'attribute' => 'fio',],
-            ['label' => 'Пасспорт', 'attribute' => 'passport',],
             ['label' => 'Email', 'attribute' => 'email',],
             [
                 'attribute' => 'gender',
@@ -30,7 +29,6 @@ use yii\widgets\DetailView;
                 'attribute' => 'status',
                 'value' => $model->status0->name,
             ],
-            ['label' => 'Зарплата', 'attribute' => 'salary',],
             [
                 'attribute' => 'position_id',
                 'value' => (isset($model->position->name)) ? $model->position->name : 'Без должности',
@@ -43,7 +41,7 @@ use yii\widgets\DetailView;
                 }
             ],
             [
-                'attribute' => 'Resume',
+                'attribute' => 'Резюме',
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a('Скачать', $model->resume, ['target' => '_blank']);
