@@ -1,6 +1,7 @@
 <?php
 
 use backend\modules\settings\models\AdditionalFields;
+use mihaildev\elfinder\InputFile;
 use unclead\multipleinput\MultipleInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -36,12 +37,21 @@ use yii\widgets\ActiveForm;
                         'options' => ['prompt' => 'Выберите']
                     ],
                     [
-                        'name'  => 'value',
+                        'name' => 'value',
                         'title' => 'Значение',
-                        'enableError' => true,
+                        'type' => InputFile::className(),
                         'options' => [
-                            'class' => 'input-priority'
-                        ]
+                            'language' => 'ru',
+                            'controller' => 'elfinder',
+                            // вставляем название контроллера, по умолчанию равен elfinder
+                            // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-con..
+                            'name' => 'fields[value]',
+                            'id' => 'fields-value',
+                            'options' => ['class' => 'form-control itemImg', 'maxlength' => '255'],
+                            'buttonOptions' => ['class' => 'btn btn-primary'],
+                            'value' => $model->fields[0]['value'],
+                            'buttonName' => 'Выбрать файл',
+                        ],
                     ],
                     [
                         'name'  => 'order',
