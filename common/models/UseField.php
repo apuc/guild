@@ -22,6 +22,7 @@ class UseField extends \yii\db\ActiveRecord
     const USE_PROJECT = 1;
     const USE_COMPANY = 2;
     const USE_BALANCE = 3;
+    const USE_NOTE = 4;
 
 
     /**
@@ -70,7 +71,8 @@ class UseField extends \yii\db\ActiveRecord
             self::USE_PROFILE => 'Профиль',
             self::USE_PROJECT => 'Проект',
             self::USE_COMPANY => 'Компания',
-            self::USE_BALANCE => 'Баланс'
+            self::USE_BALANCE => 'Баланс',
+            self::USE_NOTE => 'Заметка'
         ];
     }
 
