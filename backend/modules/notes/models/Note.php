@@ -52,7 +52,7 @@ class Note extends \common\models\Note
 
         foreach ( $post['fields'] as $item) {
             $item['value'] = urldecode($item['value']);
-            
+
             $fieldsValue = new FieldsValueNew();
             $fieldsValue->field_id = $item['field_id'];
             $fieldsValue->item_id = $this->id;
