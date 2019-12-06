@@ -78,10 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'value',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    if ($model->type_file == 'file') {
-                        return $model->value . ' (' . Html::a('Скачать', $model->value, ['target' => '_blank', 'download' => 'download']) . ')';
-                    }
-                    return $model->value;
+                    return $model->getValue();
                 }
             ],
         ],

@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\base\ErrorException;
+use yii\base\Exception;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "fields_value_new".
@@ -23,6 +26,7 @@ class FieldsValueNew extends \yii\db\ActiveRecord
     const TYPE_COMPANY = 2;
     const TYPE_BALANCE = 3;
     const TYPE_NOTE = 4;
+
     /**
      * {@inheritdoc}
      */
@@ -65,6 +69,79 @@ class FieldsValueNew extends \yii\db\ActiveRecord
     public function getField()
     {
         return $this->hasOne(AdditionalFields::class, ['id' => 'field_id']);
+    }
+
+
+    /**
+     * get value for view
+     * @return string
+     */
+    public function getValue()
+    {
+        $test = $this->type_file === 'file' ? $this->getFileValue() : $this->getTextValue();
+        return $test;
+    }
+
+    /**
+     * @return string
+     */
+    private function getFileValue()
+    {
+        $filename = $this->getFileName();
+        $filePath = Yii::getAlias('@frontend/web' . $this->value);
+        if ($this->isImage()) {
+            $imageHTML = Html::img($this->value, ['width' => '200px', 'alt' => $filename]);
+            $downloadLinkHTML = ' (' . Html::a('Скачать', $this->value, ['target' => '_blank', 'download' => $filename]) . ')';
+            $result = $imageHTML . $downloadLinkHTML;
+        } else {
+            $result = $filename . ' (' . Html::a('Скачать', $this->value, ['target' => '_blank', 'download' => $filename]) . ')';
+        }
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    private function getTextValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getFileName()
+    {
+        if ($this->type_file === 'file') {
+            $explode = explode('/', $this->value);
+            $filename = array_pop($explode);
+            return $filename;
+        }
+        return $this->value;
+    }
+
+    /**
+     * File is image?
+     * @return bool
+     */
+    public function isImage()
+    {
+        if ($this->type_file === 'text') {
+            return false;
+        }
+
+        try {
+            $mime = mime_content_type(Yii::getAlias('@frontend/web' . $this->value));
+        } catch (ErrorException $e) {
+            return false;
+        }
+
+        $extension = explode('/', $mime)['0'];
+        if (($extension === 'image') || $extension === 'application') {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

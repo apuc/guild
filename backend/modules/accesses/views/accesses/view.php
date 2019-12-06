@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Accesses */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Accesses', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Доступы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Вы уверены, что хотите удалить эот элемент?',
+                'confirm' => 'Вы уверены, что хотите удалить этот элемент?',
                 'method' => 'post',
             ],
         ]) ?>

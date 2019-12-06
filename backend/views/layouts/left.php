@@ -8,7 +8,7 @@
             $menuItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
         }
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
-        $projectItems = [['label' => 'Все', 'icon' => 'files-o', 'url' => ['/project/project']]];
+        $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project']]];
         foreach ($projectStatuses as $key => $status) {
             $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key]];
         }
@@ -32,10 +32,10 @@
                         'items' => $menuItems,
                     ],
                     [
-                        'label' => 'Проекты', 'icon' => 'files-o', 'url' => ['#'], 'active' => \Yii::$app->controller->id == 'project',
+                        'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], 'active' => \Yii::$app->controller->id == 'project',
                         'items' => $projectItems,
                     ],
-                    ['label' => 'Компании', 'icon' => 'files-o', 'url' => ['/company/company']],
+                    ['label' => 'Компании', 'icon' => 'building', 'url' => ['/company/company'], 'active' => \Yii::$app->controller->id == 'company'],
                     [
                         'label' => 'Hh.ru', 'icon' => 'user-circle', 'url' => '#',
                         'items' => [
@@ -45,8 +45,8 @@
                     ],
                     ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balance/balance'], 'active' => \Yii::$app->controller->id == 'balance'],
                     ['label' => 'Отпуска', 'icon' => 'plane', 'url' => ['/holiday/holiday'], 'active' => \Yii::$app->controller->id == 'holiday'],
-                    ['label' => 'Доступы', 'icon' => '', 'url' => ['/accesses/accesses'], 'active' => \Yii::$app->controller->id == 'accesses'],
-                    ['label' => 'Заметки', 'icon' => '', 'url' => ['/notes/notes'], 'active' => \Yii::$app->controller->id == 'notes'],
+                    ['label' => 'Доступы', 'icon' => 'key', 'url' => ['/accesses/accesses'], 'active' => \Yii::$app->controller->id == 'accesses'],
+                    ['label' => 'Заметки', 'icon' => 'sticky-note', 'url' => ['/notes/notes'], 'active' => \Yii::$app->controller->id == 'notes'],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],

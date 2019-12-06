@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'id',
             [
-                'label' => 'photo',
+                'label' => 'Фото',
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::img(Url::to($model->photo), [
