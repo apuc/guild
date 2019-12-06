@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-xs-12">
             <?= $form->field($model, 'fields')->widget(MultipleInput::class, [
-
+                'cloneButton' => true,
                 'columns' => [
                     [
                         'name'  => 'field_id',

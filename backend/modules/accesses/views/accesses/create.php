@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model common\models\Accesses */
 
 $this->title = 'Добавить доступ';
-$this->params['breadcrumbs'][] = ['label' => 'Accesses', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Доступы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="accesses-create">
