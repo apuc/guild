@@ -71,6 +71,8 @@ class UserCard extends \common\models\UserCard
         if ($post['fields']) {
             FieldsValueNew::deleteAll(['item_id' => $this->id, 'item_type' => FieldsValueNew::TYPE_PROFILE]);
             foreach ($post['fields'] as $item) {
+                $item['value'] = urldecode($item['value']);
+
                 $fieldsValue = new FieldsValueNew();
                 $fieldsValue->field_id = $item['field_id'];
                 $fieldsValue->value = $item['value'];
