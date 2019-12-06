@@ -8,7 +8,7 @@
             $menuItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
         }
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
-        $projectItems = [['label' => 'Все', 'icon' => 'files-o', 'url' => ['/project/project']]];
+        $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project']]];
         foreach ($projectStatuses as $key => $status) {
             $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key]];
         }
