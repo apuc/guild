@@ -22,6 +22,7 @@ class FieldsValueNew extends \yii\db\ActiveRecord
     const TYPE_PROJECT = 1;
     const TYPE_COMPANY = 2;
     const TYPE_BALANCE = 3;
+    const TYPE_NOTE = 4;
     /**
      * {@inheritdoc}
      */

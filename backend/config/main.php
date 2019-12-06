@@ -38,6 +38,9 @@ return [
         'holiday' => [
             'class' => 'backend\modules\holiday\Holiday',
         ],
+        'notes' => [
+            'class' => 'backend\modules\notes\Notes',
+        ],
     ],
     'components' => [
         'request' => [

@@ -71,18 +71,19 @@ class UserCard extends \common\models\UserCard
         if ($post['fields']) {
             FieldsValueNew::deleteAll(['item_id' => $this->id, 'item_type' => FieldsValueNew::TYPE_PROFILE]);
             foreach ($post['fields'] as $item) {
-                $fildsValue = new FieldsValueNew();
-                $fildsValue->field_id = $item['field_id'];
-                $fildsValue->value = $item['value'];
-                $fildsValue->type_file = 'text';
-                if (substr($item['value'], 0, 1) == '/') {
-                    $fildsValue->type_file = 'file';
+                $fieldsValue = new FieldsValueNew();
+                $fieldsValue->field_id = $item['field_id'];
+                $fieldsValue->value = $item['value'];
+                $fieldsValue->order = $item['order'];
+                $fieldsValue->item_id = $this->id;
+                $fieldsValue->item_type = FieldsValueNew::TYPE_PROFILE;
+                if(is_file(Yii::getAlias('@frontend') . '/web/' . $item['value'])){
+                    $fieldsValue->type_file = 'file';
+                }else{
+                    $fieldsValue->type_file = 'text';
                 }
-                $fildsValue->order = $item['order'];
-                $fildsValue->item_id = $this->id;
-                $fildsValue->item_type = FieldsValueNew::TYPE_PROFILE;
 
-                $fildsValue->save();
+                $fieldsValue->save();
             }
         }
 
