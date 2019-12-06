@@ -70,8 +70,7 @@ class FieldsValueNew extends \yii\db\ActiveRecord
     {
         return $this->hasOne(AdditionalFields::class, ['id' => 'field_id']);
     }
-
-
+    
     /**
      * get value for view
      * @return string
@@ -94,7 +93,9 @@ class FieldsValueNew extends \yii\db\ActiveRecord
             $downloadLinkHTML = ' (' . Html::a('Скачать', $this->value, ['target' => '_blank', 'download' => $filename]) . ')';
             $result = $imageHTML . $downloadLinkHTML;
         } else {
-            $result = $filename . ' (' . Html::a('Скачать', $this->value, ['target' => '_blank', 'download' => $filename]) . ')';
+            $imageHTML = Html::img('/media/file.png', ['width' => '100px', 'alt' => $filename]);
+            $downloadLinkHTML = ' (' . Html::a('Скачать', $this->value, ['target' => '_blank', 'download' => $filename]) . ')';;
+            $result = $imageHTML . $filename . $downloadLinkHTML;
         }
         return $result;
     }
@@ -137,7 +138,7 @@ class FieldsValueNew extends \yii\db\ActiveRecord
         }
 
         $extension = explode('/', $mime)['0'];
-        if (($extension === 'image') || $extension === 'application') {
+        if ($extension === 'image') {
             return true;
         } else {
             return false;

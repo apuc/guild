@@ -51,6 +51,8 @@ class Note extends \common\models\Note
         FieldsValueNew::deleteAll(['item_id' => $this->id, 'item_type' => FieldsValueNew::TYPE_NOTE]);
 
         foreach ( $post['fields'] as $item) {
+            $item['value'] = urldecode($item['value']);
+
             $fieldsValue = new FieldsValueNew();
             $fieldsValue->field_id = $item['field_id'];
             $fieldsValue->item_id = $this->id;
