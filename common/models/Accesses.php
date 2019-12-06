@@ -32,7 +32,8 @@ class Accesses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'access'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
+            [['access'], 'string'],
             [['_projects'], 'safe'],
             [['_users'], 'safe'],
         ];
