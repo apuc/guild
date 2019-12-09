@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'fio',
+//            'city',
             //'passport',
             'salary',
             'email:email',
