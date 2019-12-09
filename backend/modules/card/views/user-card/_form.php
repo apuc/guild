@@ -69,6 +69,12 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-xs-6">
+            <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
         </div>
 

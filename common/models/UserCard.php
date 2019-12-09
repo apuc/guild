@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
  * @property string $resume
  * @property string $salary
  * @property int $position_id
+ * @property int $city
  *
  * @property FieldsValue[] $fieldsValues
  * @property ProjectUser[] $projectUsers
@@ -66,7 +67,7 @@ class UserCard extends \yii\db\ActiveRecord
             [['fio', 'status', 'gender'], 'required'],
             [['gender', 'status', 'position_id', 'id_user'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
-            [['fio', 'passport', 'photo', 'email', 'resume'], 'string', 'max' => 255],
+            [['fio', 'passport', 'photo', 'email', 'resume', 'city'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
             [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => Position::class, 'targetAttribute' => ['position_id' => 'id']],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
@@ -94,6 +95,7 @@ class UserCard extends \yii\db\ActiveRecord
             'resume' => 'Резюме',
             'salary' => 'Зарплата',
             'position_id' => 'Должность',
+            'city' => 'Город',
         ];
     }
 

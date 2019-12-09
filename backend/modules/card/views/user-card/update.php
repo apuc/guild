@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $model backend\modules\card\models\UserCard */
 
 $this->title = $model->fio;
-$this->params['breadcrumbs'][] = ['label' => 'User Cards', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Профили', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Редактировать';
 ?>
 <div class="user-card-update">
 
