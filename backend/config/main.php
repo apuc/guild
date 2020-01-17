@@ -41,6 +41,9 @@ return [
         'notes' => [
             'class' => 'backend\modules\notes\Notes',
         ],
+        'calendar' => [
+            'class' => 'backend\modules\calendar\Calendar',
+        ],
     ],
     'components' => [
         'request' => [

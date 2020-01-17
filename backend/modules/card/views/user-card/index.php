@@ -8,6 +8,7 @@ use yii\widgets\ListView;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\card\models\UserCardSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $total */
 
 $this->title = 'Профили';
 $this->params['breadcrumbs'][] = $this->title;
@@ -19,7 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Сгенерировать пользователей', ['generate'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
+    <?php
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -83,5 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]);
+    echo "<h3>Сумма зарплат: " . $total . "</h3>";
+    ?>
 </div>
