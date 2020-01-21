@@ -15,6 +15,22 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'fio')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'gender')->dropDownList($model->genders, ['prompt' => 'Выберите']) ?>
+
+    <?= $form->field($model, 'dob')->input(
+        'date',
+        [
+            'placeholder' => 'Zadejte svůj Datum narození',
+            'language' => 'en',
+            "data-format" => "DD MMMM YYYY",
+
+        ]
+    ) ?>
+
     <div class="row">
         <div class="col-xs-12">
             <?= $form->field($model, 'skill')->widget(

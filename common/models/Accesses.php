@@ -11,7 +11,11 @@ use yii\helpers\ArrayHelper;
  *
  * @property int $id
  * @property string $name
- * @property string $access
+ * @property string $login
+ * @property string $password
+ * @property string $link
+ * @property string $project
+ * @property string $info
  */
 class Accesses extends \yii\db\ActiveRecord
 {
@@ -32,8 +36,8 @@ class Accesses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 255],
-            [['access'], 'string'],
+            [['name', 'login', 'password', 'link', 'project' ], 'string', 'max' => 255],
+            [['info'], 'string'],
             [['_projects'], 'safe'],
             [['_users'], 'safe'],
         ];
@@ -47,7 +51,11 @@ class Accesses extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Название',
-            'access' => 'Доступ',
+            'login' => 'Логин',
+            'password' => 'Пароль',
+            'link' => 'Ссылка',
+            'project' => 'Проект',
+            'info' => 'Дополнительная информация',
         ];
     }
 
