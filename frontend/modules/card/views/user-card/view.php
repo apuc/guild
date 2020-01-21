@@ -57,8 +57,6 @@ $this->title = 'Профиль';
     <?php foreach ($skills as $skill) : ?>
         <span class="btn btn-default btn-sm"><?= $skill['skill']->name; ?></span>
     <?php endforeach; ?>
-    <br><br>
-    <?= Html::a('Добавить', ['/card/user-card/update', 'id' => $model->id], ['class' => 'btn btn-success']); ?>
 
     <h2>Дополнительные сведения</h2>
 
@@ -79,5 +77,7 @@ $this->title = 'Профиль';
             ],
         ],
     ]); ?>
+
+    <?= Html::a('Изменить', ['/card/user-card/update', 'id' => $model->id], ['class' => 'btn btn-success']); ?>
 
 </div>
