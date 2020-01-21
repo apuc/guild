@@ -30,21 +30,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'name',
-            'access',
-            [
-                'attribute' => 'userCard.fio',
-                'format' => 'raw',
-                'value' => function(\common\models\Accesses $model){
-                    return $model->getUserCardName();
-                },
-            ],
-            [
-                'attribute' => 'projects.name',
-                'format' => 'raw',
-                'value' => function(\common\models\Accesses $model){
-                    return $model->getProjectName();
-                },
-            ],
+            'login',
+            'password',
+            'link',
+            'project',
+            'info',
+//            [
+//                'attribute' => 'userCard.fio',
+//                'format' => 'raw',
+//                'value' => function(\common\models\Accesses $model){
+//                    return $model->getUserCardName();
+//                },
+//            ],
+//            [
+//                'attribute' => 'projects.name',
+//                'format' => 'raw',
+//                'value' => function(\common\models\Accesses $model){
+//                    return $model->getProjectName();
+//                },
+//            ],
         ],
     ]) ?>
 

@@ -121,7 +121,7 @@ class UserCard extends \common\models\UserCard
         $user->save();
 
         $log = "Логин: " . $email . " Пароль: " . $password . " | ";
-        //file_put_contents("log.txt", $log, FILE_APPEND | LOCK_EX);
+        file_put_contents("log.txt", $log, FILE_APPEND | LOCK_EX);
 
         return $user->id;
     }

@@ -24,10 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-
             'name',
-            'access',
+            'login',
+            'password',
+            'link',
+            'project',
             [
                 'attribute' => 'userCard.fio',
                 'format' => 'raw',
@@ -35,15 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getUserCardName();
                 },
             ],
-
-            [
-                'attribute' => 'projects.name',
-                'format' => 'raw',
-                'value' => function(\common\models\Accesses $model){
-                    return $model->getProjectName();
-                },
-            ],
-
+//            [
+//                'attribute' => 'projects.name',
+//                'format' => 'raw',
+//                'value' => function(\common\models\Accesses $model){
+//                    return $model->getProjectName();
+//                },
+//            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
