@@ -12,10 +12,11 @@ use yii\widgets\DetailView;
 $this->title = 'Профиль';
 ?>
 <div class="user-card-view">
-
     <h3>Личная информация</h3>
     <?php
-    echo DetailView::widget([
+    echo Html::a('Изменить профиль', ['/card/user-card/update', 'id' => $model->id], ['class' => 'btn btn-success'])
+    . '&nbsp' . Html::a('Изменить пароль', ['/card/user-card/password', 'id' => $model->id], ['class' => 'btn btn-success']);
+    echo  DetailView::widget([
         'model' => $model,
         'attributes' => [
             ['label' => 'ФИО', 'attribute' => 'fio',],
@@ -77,7 +78,4 @@ $this->title = 'Профиль';
             ],
         ],
     ]); ?>
-
-    <?= Html::a('Изменить', ['/card/user-card/update', 'id' => $model->id], ['class' => 'btn btn-success']); ?>
-
 </div>
