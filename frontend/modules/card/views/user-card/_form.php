@@ -17,10 +17,6 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'fio')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'gender')->dropDownList($model->genders, ['prompt' => 'Выберите']) ?>
-
     <?= $form->field($model, 'dob')->input(
         'date',
         [
@@ -30,7 +26,6 @@ use yii\helpers\ArrayHelper;
 
         ]
     ) ?>
-
     <div class="row">
         <div class="col-xs-12">
             <?= $form->field($model, 'skill')->widget(

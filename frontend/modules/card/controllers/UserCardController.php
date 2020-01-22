@@ -3,8 +3,10 @@
 
 namespace frontend\modules\card\controllers;
 
+use common\classes\Debug;
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
+use common\models\User;
 use Yii;
 use frontend\modules\card\models\UserCard;
 use yii\data\ActiveDataProvider;
@@ -57,7 +59,6 @@ class UserCardController extends Controller
             ]);
 
             $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
-
             return $this->render('view', [
                 'model' => $this->findModel($id),
                 'modelFildValue' => $dataProvider,
@@ -84,6 +85,28 @@ class UserCardController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionPassword($id)
+    {
+        $user_card = UserCard::findOne($id);
+        $model = User::findOne(['id' => $user_card->id_user]);
+
+        return $this->render('password', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionAjax() {
+        if(Yii::$app->request->isAjax) {
+            $id = $_POST['id'];
+            $password = $_POST['password'];
+
+            $user_card = UserCard::findOne($id);
+            $user = User::findOne(['id' => $user_card->id_user]);
+            $user->password = $password;
+            $user->save();
+        }
     }
 
     /**
