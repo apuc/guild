@@ -49,13 +49,15 @@ class UserCardController extends Controller
 
         $total = 0;
         if(Yii::$app->request->queryParams)
-            foreach (Yii::$app->request->queryParams as $params)
+            foreach (Yii::$app->request->queryParams as $params) {
+
                 $total = \common\models\UserCard::find()->filterWhere([
-                    'fio' => $params['fio'],
-                    'email' => $params['email'],
-                    'status' => $params['status'],
-                    'skills' => $params['skills'],
+                    'fio' => UserCard::getParameter($params, 'fio'),
+                    'email' => UserCard::getParameter($params, 'email'),
+                    'status' => UserCard::getParameter($params, 'status'),
+                    'skills' => UserCard::getParameter($params, 'skills'),
                 ])->sum('salary');
+            }
         else $total = \common\models\UserCard::find()->sum('salary');
 
         return $this->render('index', [
