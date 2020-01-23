@@ -65,6 +65,28 @@ class UserCardController extends Controller
         ]);
     }
 
+    public function actionPassword($id)
+    {
+        $user_card = UserCard::findOne($id);
+        $model = User::findOne(['id' => $user_card->id_user]);
+
+        return $this->render('password', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionAjax() {
+        if(Yii::$app->request->isAjax) {
+            $id = $_POST['id'];
+            $password = $_POST['password'];
+
+            $user_card = UserCard::findOne($id);
+            $user = User::findOne(['id' => $user_card->id_user]);
+            $user->password = $password;
+            $user->save();
+        }
+    }
+
     /**
      * Displays a single UserCard model.
      * @param integer $id

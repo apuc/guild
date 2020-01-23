@@ -12,6 +12,9 @@ $this->params['breadcrumbs'][] = 'Редактировать';
 ?>
 <div class="user-card-update">
 
+    <?php echo Html::a('Изменить пароль', ['password', 'id' => $model->id], ['class' => 'btn btn-success']);
+    ?>
+
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
