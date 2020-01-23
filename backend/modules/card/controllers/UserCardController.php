@@ -47,23 +47,9 @@ class UserCardController extends Controller
         $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $total = 0;
-        if(Yii::$app->request->queryParams)
-            foreach (Yii::$app->request->queryParams as $params) {
-
-                $total = \common\models\UserCard::find()->filterWhere([
-                    'fio' => UserCard::getParameter($params, 'fio'),
-                    'email' => UserCard::getParameter($params, 'email'),
-                    'status' => UserCard::getParameter($params, 'status'),
-                    'skills' => UserCard::getParameter($params, 'skills'),
-                ])->sum('salary');
-            }
-        else $total = \common\models\UserCard::find()->sum('salary');
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'total' => $total,
         ]);
     }
 
