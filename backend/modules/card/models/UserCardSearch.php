@@ -14,6 +14,7 @@ use backend\modules\card\models\UserCard;
 class UserCardSearch extends UserCard
 {
     public $skills;
+    public $total;
     /**
      * {@inheritdoc}
      */
@@ -85,6 +86,10 @@ class UserCardSearch extends UserCard
         $query->andFilterWhere(['skill.id' => $this->skills]);
 
         $query->orderBy('user_card.created_at DESC');
+
+        $sumQuery = clone $query;
+
+        $this->total = $sumQuery->sum('salary');
 
         return $dataProvider;
     }

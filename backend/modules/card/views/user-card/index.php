@@ -8,7 +8,6 @@ use yii\widgets\ListView;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\card\models\UserCardSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $total */
 
 $this->title = 'Профили';
 $this->params['breadcrumbs'][] = $this->title;
@@ -86,6 +85,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]);
-    echo "<h3>Сумма зарплат: " . $total . "</h3>";
+    echo "<h3>Сумма зарплат: " . $searchModel->total . "</h3>";
     ?>
 </div>
