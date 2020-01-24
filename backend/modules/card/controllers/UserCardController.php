@@ -163,17 +163,6 @@ class UserCardController extends Controller
     }
 
     /**
-     * Lists all UserCard models.
-     * @return mixed
-     */
-    public function actionGenerate()
-    {
-        $massage = UserCard::generateUserForUserCard();
-        return $this->render('generate', ['massage' => $massage]);
-    }
-
-
-    /**
      * Finds the UserCard model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
