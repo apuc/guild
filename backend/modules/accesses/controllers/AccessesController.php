@@ -114,7 +114,11 @@ class AccessesController extends Controller
 
     public function actionCustomDelete($id)
     {
+        $clean_id = str_replace('=', "", stristr($id, '='));
+        UserCardAccesses::deleteAll(['accesses_id' => $clean_id]);
+        Accesses::deleteAll(['id' => $clean_id]);
 
+        return $this->redirect(['index']);
     }
 
     /**

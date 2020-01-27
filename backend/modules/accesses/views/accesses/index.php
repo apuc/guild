@@ -43,7 +43,17 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    return $model->getProjectName();
 //                },
 //            ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'delete' => function ($data) {
+                        return Html::a("<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>",
+                            ['/accesses/accesses/custom-delete', 'id' => $data]);
+                    },
+                ],
+            ],
+//            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>
