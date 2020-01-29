@@ -7,6 +7,7 @@ use common\models\UseField;
 use Yii;
 use backend\modules\settings\models\AdditionalFields;
 use backend\modules\settings\models\AdditionalFieldsSearch;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -27,6 +28,15 @@ class AdditionalFieldsController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
                 ],
             ],
         ];

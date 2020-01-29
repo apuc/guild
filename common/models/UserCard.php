@@ -6,6 +6,7 @@ use common\classes\Debug;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 
 /**
