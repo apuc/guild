@@ -58,3 +58,9 @@ frontend
 vendor/                  contains dependent 3rd-party packages
 environments/            contains environment-based overrides
 ```
+<p>
+Для ролей поднять миграцию <br>
+    php yii migrate --migrationPath=@yii/rbac/migrations <br>
+и выполнить консольный скрипт <br>
+    php yii rbac/init <br>
+</p>
