@@ -8,6 +8,7 @@ use common\models\UserCardAccesses;
 use Yii;
 use common\models\Accesses;
 use app\modules\accesses\models\AccessesSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +28,15 @@ class AccessesController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
                 ],
             ],
         ];
@@ -108,6 +118,15 @@ class AccessesController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionCustomDelete($id)
+    {
+        $clean_id = str_replace('=', "", stristr($id, '='));
+        UserCardAccesses::deleteAll(['accesses_id' => $clean_id]);
+        Accesses::deleteAll(['id' => $clean_id]);
 
         return $this->redirect(['index']);
     }

@@ -22,6 +22,12 @@ return [
           ],
     ],
     'components' => [
+        'user' => [
+            'identityClass' => 'common\models\User',
+            'class' => 'yii\web\User',
+            'enableSession' => false,
+            'enableAutoLogin' => false,
+        ],
         'log' => [
             'targets' => [
                 [

@@ -14,6 +14,7 @@ use backend\modules\card\models\UserCard;
 use backend\modules\card\models\UserCardSearch;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -33,6 +34,15 @@ class UserCardController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
                 ],
             ],
         ];
@@ -161,17 +171,6 @@ class UserCardController extends Controller
 
         return $this->redirect(['index']);
     }
-
-    /**
-     * Lists all UserCard models.
-     * @return mixed
-     */
-    public function actionGenerate()
-    {
-        $massage = UserCard::generateUserForUserCard();
-        return $this->render('generate', ['massage' => $massage]);
-    }
-
 
     /**
      * Finds the UserCard model based on its primary key value.

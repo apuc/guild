@@ -161,8 +161,8 @@ class UserCard extends \common\models\UserCard
             }
         }
 
-        if ($user_card_array) return "Данные успешно сгенерированы";
-        else return "Нет данных для генерации";
+        if ($user_card_array) return "data generated successfully";
+        else return "no data to generate";
     }
 
     public static function getParameter($params, $key)

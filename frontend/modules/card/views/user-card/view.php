@@ -21,34 +21,11 @@ $this->title = 'Профиль';
         'attributes' => [
             ['label' => 'ФИО', 'attribute' => 'fio',],
             ['label' => 'Email', 'attribute' => 'email',],
-            [
-                'attribute' => 'gender',
-                'value' => $model->gendersText,
-            ],
             ['label' => 'Дата рождения', 'attribute' => 'dob',],
-            [
-                'attribute' => 'status',
-                'value' => $model->status0->name,
-            ],
             [
                 'attribute' => 'position_id',
                 'value' => (isset($model->position->name)) ? $model->position->name : 'Без должности',
             ],
-            [
-                'attribute' => 'Фото',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::tag('img', null, ['src' => $model->photo, 'width' => '100px']);
-                }
-            ],
-            [
-                'attribute' => 'Резюме',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::a('Скачать', $model->resume, ['target' => '_blank']);
-                }
-            ],
-            ['label' => 'Добвлен', 'attribute' => 'created_at',],
         ],
     ]);
     ?>

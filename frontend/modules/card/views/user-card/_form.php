@@ -33,9 +33,6 @@ use yii\helpers\ArrayHelper;
                 [
                     'data' => ArrayHelper::map(Skill::find()->all(), 'id', 'name'),
                     'options' => ['placeholder' => '...', 'class' => 'form-control', 'multiple' => true],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
                 ]
             )->label('Навыки'); ?>
         </div>
