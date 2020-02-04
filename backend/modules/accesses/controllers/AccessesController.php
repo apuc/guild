@@ -5,6 +5,7 @@ namespace app\modules\accesses\controllers;
 use backend\modules\card\models\UserCardSearch;
 use common\classes\Debug;
 use common\models\ProjectAccesses;
+use common\models\UserCard;
 use common\models\UserCardAccesses;
 use Yii;
 use common\models\Accesses;
@@ -52,17 +53,11 @@ class AccessesController extends Controller
     {
         $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-//        $query = \common\models\UserCard::find()->select(['id_user', 'fio', 'email']);
-//
-//        $provider = new ActiveDataProvider([
-//            'query' => $query,
-//        ]);
+        $dataProvider->query->innerJoin('user_card_accesses', 'user_card.id = user_card_accesses.user_card_id');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            //'provider' => $provider
         ]);
     }
 
