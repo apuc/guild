@@ -2,6 +2,7 @@
 
 namespace app\modules\accesses\models;
 
+use common\classes\Debug;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Accesses;
@@ -11,6 +12,8 @@ use common\models\Accesses;
  */
 class AccessesSearch extends Accesses
 {
+    public $fio;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +21,7 @@ class AccessesSearch extends Accesses
     {
         return [
             [['id'], 'integer'],
-            [['name', 'login', 'password', 'link', 'project', 'info'], 'safe'],
+            [['name', 'login', 'password', 'link', 'project', 'info', 'fio'], 'safe'],
         ];
     }
 
@@ -40,12 +43,16 @@ class AccessesSearch extends Accesses
      */
     public function search($params)
     {
-        $query = Accesses::find();
+        //Debug::dd($params);
+        $query = Accesses::find()
+            ->leftJoin('user_card_accesses', 'accesses.id = user_card_accesses.accesses_id')
+            ->leftJoin('user_card', 'user_card_accesses.user_card_id = user_card.id')
+            ->orderBy('user_card.fio asc');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query
         ]);
 
         $this->load($params);

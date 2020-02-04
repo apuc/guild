@@ -1,7 +1,8 @@
 <?php
 
+use app\modules\accesses\models\AccessesSearch;
+use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\accesses\models\AccessesSearch */
@@ -12,48 +13,41 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="accesses-index">
 
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Добавить доступ', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
+    <?php
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => true,
+        'striped' => true,
+        'hover' => true,
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'name',
-            'login',
-            'password',
-            'link',
-            'project',
             [
-                'attribute' => 'userCard.fio',
-                'format' => 'raw',
-                'value' => function(\common\models\Accesses $model){
-                    return $model->getUserCardName();
+                'class' => 'kartik\grid\ExpandRowColumn',
+                'width' => '50px',
+                'value' => function ($model, $key, $index, $column) {
+                    return GridView::ROW_COLLAPSED;
                 },
+                'detail' => function ($model, $key, $index, $column) {
+                    $searchAccesses = new AccessesSearch();
+                    $providerAccesses = $searchAccesses->search(Yii::$app->request->queryParams);
+                    $providerAccesses->query->andWhere(['user_card.id_user' => $model->id_user]);
+
+                    return Yii::$app->controller->renderPartial('_expand-row-details', ['dataProvider' => $providerAccesses]);
+                },
+                'headerOptions' => ['class' => 'kartik-sheet-style'],
+                'expandOneOnly' => true
             ],
-//            [
-//                'attribute' => 'projects.name',
-//                'format' => 'raw',
-//                'value' => function(\common\models\Accesses $model){
-//                    return $model->getProjectName();
-//                },
-//            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
-                'buttons' => [
-                    'delete' => function ($data) {
-                        return Html::a("<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>",
-                            ['/accesses/accesses/custom-delete', 'id' => $data]);
-                    },
-                ],
-            ],
-//            ['class' => 'yii\grid\ActionColumn'],
+            'fio',
+            'email'
         ],
-    ]); ?>
+    ]);
+    ?>
 </div>

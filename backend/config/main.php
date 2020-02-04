@@ -44,6 +44,9 @@ return [
         'calendar' => [
             'class' => 'backend\modules\calendar\Calendar',
         ],
+        'gridview' => [
+            'class' => 'kartik\grid\Module',
+        ]
     ],
     'components' => [
         'request' => [
