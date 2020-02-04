@@ -46,11 +46,9 @@ class UserCardSearch extends UserCard
     public function search($params)
     {
         $query = UserCard::find();
-        // add conditions that should always apply here
-        $query->where(['id'])->distinct();
-        //try join 3 tables
-        $query->leftJoin('card_skill', 'card_skill.card_id=user_card.id');
-        $query->leftJoin('skill', 'skill.id=card_skill.skill_id');
+        $query->where(['id'])->distinct()
+            ->leftJoin('card_skill', 'card_skill.card_id=user_card.id')
+            ->leftJoin('skill', 'skill.id=card_skill.skill_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
