@@ -40,7 +40,7 @@ class Accesses extends \yii\db\ActiveRecord
             [['info'], 'string'],
             [['_projects'], 'safe'],
             [['_users'], 'safe'],
-            [['name', 'login', 'password', 'link', 'project', 'info'], 'required'],
+            [['name', 'login', 'password', 'project'], 'required'],
         ];
     }
 
