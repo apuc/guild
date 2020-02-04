@@ -2,12 +2,14 @@
 
 namespace app\modules\accesses\controllers;
 
+use backend\modules\card\models\UserCardSearch;
 use common\classes\Debug;
 use common\models\ProjectAccesses;
 use common\models\UserCardAccesses;
 use Yii;
 use common\models\Accesses;
 use app\modules\accesses\models\AccessesSearch;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -48,12 +50,19 @@ class AccessesController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new AccessesSearch();
+        $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+//        $query = \common\models\UserCard::find()->select(['id_user', 'fio', 'email']);
+//
+//        $provider = new ActiveDataProvider([
+//            'query' => $query,
+//        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            //'provider' => $provider
         ]);
     }
 

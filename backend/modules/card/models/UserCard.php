@@ -126,6 +126,10 @@ class UserCard extends \common\models\UserCard
 
         $user->save();
 
+        $auth = Yii::$app->authManager;
+        $authorRole = $auth->getRole('user');
+        $auth->assign($authorRole, $user->id);
+
         $log = "Логин: " . $email . " Пароль: " . $password . " | ";
         file_put_contents("log.txt", $log, FILE_APPEND | LOCK_EX);
 
