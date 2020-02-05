@@ -2,6 +2,7 @@
 
 use backend\modules\reports\models\ReportsSearch;
 use kartik\grid\GridView;
+use yii\data\Pagination;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -38,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $searchReports = new ReportsSearch();
                     $providerReports = $searchReports->search(Yii::$app->request->queryParams);
                     $providerReports->query->andWhere(['user_card.id_user' => $model->id_user]);
+                    $providerReports->pagination->pageSize = 10;
 
                     return Yii::$app->controller->renderPartial('_expand-row-details', ['dataProvider' => $providerReports]);
                 },

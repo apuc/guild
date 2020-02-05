@@ -126,3 +126,7 @@ a.desc:after {
 .report-date {
     width: 155px;
 }
+
+.custom-text {
+    white-space: normal;
+}

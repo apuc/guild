@@ -28,7 +28,8 @@
         "mirocow/yii2-eav": "*",
         "kartik-v/yii2-widget-fileinput": "^1.0",
         "2amigos/yii2-file-upload-widget": "~1.0",
-        "kartik-v/yii2-grid": "dev-master"
+        "kartik-v/yii2-grid": "dev-master",
+        "kartik-v/yii2-widget-datetimepicker": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
