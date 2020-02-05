@@ -46,7 +46,10 @@ return [
         ],
         'gridview' => [
             'class' => 'kartik\grid\Module',
-        ]
+        ],
+        'reports' => [
+            'class' => 'backend\modules\reports\Reports',
+        ],
     ],
     'components' => [
         'request' => [

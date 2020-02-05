@@ -20,6 +20,9 @@ return [
         'card' => [
             'class' => 'frontend\modules\card\Card',
         ],
+        'reports' => [
+            'class' => 'frontend\modules\reports\Reports',
+        ],
     ],
 
     'components' => [

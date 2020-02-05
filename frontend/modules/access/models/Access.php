@@ -3,8 +3,6 @@
 
 namespace frontend\modules\access\models;
 
-
-use common\classes\Debug;
 use common\models\UserCardAccesses;
 use frontend\modules\card\models\UserCard;
 use Yii;
