@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,22 +13,32 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'created_at')->input(
-        'date',
-        [
-            'placeholder' => 'Zadejte svůj Datum narození',
-            'language' => 'en',
-            "data-format" => "DD MMMM YYYY",
-            'class' => 'form-control report-date'
+    <?php
+    $now = time();
+    $day = idate('d', $now);
+    $month = idate('m', $now);
+    $year = idate('Y', $now);
+    $date = $year."-".$month."-".$day;
 
+    if(!$model->created_at)
+        $model->created_at = $date;
+    echo '<b>Дата заполнения отчета:</b>';
+    echo DatePicker::widget([
+        'model' => $model,
+        'attribute' => 'created_at',
+        'options' => [],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd'
         ]
-    ) ?>
+    ]).'<br>';
+    ?>
 
-    <?= $form->field($model, 'today')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'today')->textarea(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'difficulties')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'difficulties')->textarea(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tomorrow')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'tomorrow')->textarea(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

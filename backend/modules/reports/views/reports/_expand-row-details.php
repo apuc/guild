@@ -3,9 +3,11 @@
 use yii\grid\GridView;
 
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $pages */
 
 echo GridView::widget([
     'dataProvider' => $dataProvider,
+
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 

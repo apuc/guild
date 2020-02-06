@@ -1,5 +1,7 @@
 <?php
 
+use kartik\date\DatePicker;
+use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -10,18 +12,27 @@ use yii\widgets\ActiveForm;
 
 <div class="reports-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin();
 
-    <?= $form->field($model, 'created_at')->input(
-        'date',
-        [
-            'placeholder' => 'Zadejte svůj Datum narození',
-            'language' => 'en',
-            "data-format" => "DD MMMM YYYY",
-            'class' => 'form-control report-date'
+    $now = time();
+    $day = idate('d', $now);
+    $month = idate('m', $now);
+    $year = idate('Y', $now);
+    $date = $year."-".$month."-".$day;
 
+    if(!$model->created_at)
+        $model->created_at = $date;
+    echo '<b>Дата заполнения отчета:</b>';
+    echo DatePicker::widget([
+        'model' => $model,
+        'attribute' => 'created_at',
+        'options' => [],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd'
         ]
-    ) ?>
+    ]).'<br>';
+    ?>
 
     <?= $form->field($model, 'today')->textarea(['maxlength' => true]) ?>
 

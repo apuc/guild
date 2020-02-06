@@ -24,13 +24,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-//            'id',
             'created_at',
-            'today',
-            'difficulties',
-            'tomorrow',
-//            'user_card_id',
-            //'status',
+            [
+                'format' => 'raw',
+                'attribute' => 'Что было сделано сегодня?',
+                'filter' => Html::activeTextInput($searchModel, 'today', ['class' => 'form-control']),
+                'value' => function ($data) { return '<div class="custom-text">'.$data->today.'</div>'; },
+            ],
+            [
+                'format' => 'raw',
+                'attribute' => 'Какие сложности возникли?',
+                'filter' => Html::activeTextInput($searchModel, 'difficulties', ['class' => 'form-control']),
+                'value' => function ($data) { return '<div class="custom-text">'.$data->difficulties.'</div>'; },
+            ],
+            [
+                'format' => 'raw',
+                'attribute' => 'Что планируется сделать завтра?',
+                'filter' => Html::activeTextInput($searchModel, 'tomorrow', ['class' => 'form-control']),
+                'value' => function ($data) { return '<div class="custom-text">'.$data->tomorrow.'</div>'; },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
