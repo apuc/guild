@@ -2,12 +2,10 @@
 
 namespace frontend\modules\reports\controllers;
 
-use common\classes\Debug;
-use common\models\Accesses;
 use Yii;
 use common\models\Reports;
 use frontend\modules\reports\models\ReportsSearch;
-use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +25,15 @@ class ReportsController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

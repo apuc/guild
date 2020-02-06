@@ -26,7 +26,7 @@ class UserCardController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'update'],
+                //'only' => ['index', 'update'],
                 'rules' => [
                     [
                         'allow' => true,
