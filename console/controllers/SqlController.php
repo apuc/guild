@@ -4,7 +4,7 @@
 namespace console\controllers;
 
 
-use backend\modules\card\models\UserCard;
+use common\models\UserCard;
 use Yii;
 use yii\console\Controller;
 

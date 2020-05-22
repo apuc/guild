@@ -52,7 +52,7 @@ use yii\widgets\ActiveForm;
                 'language' => 'ru',
                 'controller' => 'elfinder',
                 // вставляем название контроллера, по умолчанию равен elfinder
-                'filter' => ['image', 'application/zip', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+                //'filter' => ['image', 'application/zip',  'application/csv', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
                 // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-con..
                 'name' => 'UserCard[resume]',
                 'id' => 'usercard-resume',

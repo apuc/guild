@@ -162,4 +162,62 @@ class UserCard extends \yii\db\ActiveRecord
     {
         return ArrayHelper::map(self::find()->all(), 'id', 'fio');
     }
+
+    public static function generateUserForUserCard($card_id = null)
+    {
+        $userCardQuery = self::find();
+        $card_id ? $userCardQuery->where(['id' => $card_id]) : $userCardQuery->where(['id_user' => NULL]);
+        $user_card_array = $userCardQuery->all();
+        $user_array = User::find()->all();
+
+        foreach ($user_card_array as $user_card_value) {
+
+            foreach ($user_array as $user_value)
+                if ($user_card_value->email == $user_value->email) {
+                    $user_id = $user_value->id;
+                    break;
+                } else $user_id = NULL;
+
+            if ($user_id) {
+                UserCard::genereateLinlkOnUser($user_card_value, $user_id);
+            } else {
+                $user_id = UserCard::generateUser($user_card_value->email, $user_card_value->status);
+                UserCard::genereateLinlkOnUser($user_card_value, $user_id);
+            }
+        }
+
+        if ($user_card_array) return "data generated successfully";
+        else return "no data to generate";
+    }
+
+    public static function generateUser($email, $status)
+    {
+        $user = new User();
+        $auth_key = Yii::$app->security->generateRandomString();
+        $password = Yii::$app->security->generateRandomString(12);
+        $password_hash = Yii::$app->security->generatePasswordHash($password);
+
+        $user->username = $email;
+        $user->auth_key = $auth_key;
+        $user->password_hash = $password_hash;
+        $user->email = $email;
+        if ($status == 1) $user->status = 10;
+
+        $user->save();
+
+        $auth = Yii::$app->authManager;
+        $authorRole = $auth->getRole('user');
+        $auth->assign($authorRole, $user->id);
+
+        $log = "Логин: " . $email . " Пароль: " . $password . " | ";
+        file_put_contents("log.txt", $log, FILE_APPEND | LOCK_EX);
+
+        return $user->id;
+    }
+
+    public static function genereateLinlkOnUser($user_card, $user_id)
+    {
+        $user_card->id_user = $user_id;
+        $user_card->save();
+    }
 }
