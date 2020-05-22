@@ -4,7 +4,6 @@ use common\classes\Debug;
 use kartik\select2\Select2;
 use mihaildev\elfinder\InputFile;
 use unclead\multipleinput\MultipleInput;
-use unclead\multipleinput\examples\models\ExampleModel;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
