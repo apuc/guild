@@ -12,7 +12,7 @@
 .itemImg, .itemImgs{
     float: left !important;
     display: inline-block;
-    width: 30%!important;
+    /*width: 30%!important;*/
 }
 
 .media__upload_img img{
@@ -28,12 +28,21 @@
     flex-direction: column;
 }
 
-.field-usercard-fields-0-value{
+/*.field-usercard-fields-0-value{*/
+/*    display: flex;*/
+/*    width: auto;*/
+/*}*/
+
+tr td div input{
+    width: 100% !important;
+}
+
+.list-cell__value div{
     display: flex;
     width: auto;
 }
 
-.field-usercard-fields-0-value .itemImg {
+input .itemImg{
     width: 100% !important;
 }
 
