@@ -7,6 +7,7 @@ use common\models\FieldsValue;
 use common\models\FieldsValueNew;
 use common\models\ProjectUser;
 use yii\helpers\ArrayHelper;
+use Yii;
 
 class Project extends \common\models\Project
 {
@@ -31,15 +32,17 @@ class Project extends \common\models\Project
                     'field_id' => $item->field_id,
                     'value' => $item->value,
                     'order' => $item->order,
+                    'type_file' => $item->type_file,
                     'field_name' => $item->field->name]);
             }
             $this->fields = $array;
         } else {
             $this->fields = [
                 [
-                    'field_id' => null,
-                    'value' => null,
+                    'field_id'   => null,
+                    'value'  => null,
                     'order' => null,
+                    'type_file' => null,
                     'field_name' => null,
                 ],
             ];
@@ -61,14 +64,20 @@ class Project extends \common\models\Project
         FieldsValueNew::deleteAll(['item_id' => $this->id, 'item_type' => FieldsValueNew::TYPE_PROJECT]);
 
         foreach ($post['fields'] as $item) {
-            $fildsValue = new FieldsValueNew();
-            $fildsValue->field_id = $item['field_id'];
-            $fildsValue->value = $item['value'];
-            $fildsValue->order = $item['order'];
-            $fildsValue->item_id = $this->id;
-            $fildsValue->item_type = FieldsValueNew::TYPE_PROJECT;
+            $fieldsValue = new FieldsValueNew();
+            $fieldsValue->field_id = $item['field_id'];
+            $fieldsValue->value = $item['value'];
+            $fieldsValue->order = $item['order'];
+            $fieldsValue->item_id = $this->id;
+            $fieldsValue->item_type = FieldsValueNew::TYPE_PROJECT;
 
-            $fildsValue->save();
+            if(is_file(Yii::getAlias('@frontend') . '/web/' . $item['value'])){
+                $fieldsValue->type_file = 'file';
+            }else{
+                $fieldsValue->type_file = 'text';
+            }
+
+            $fieldsValue->save();
         }
 
         ProjectUser::deleteAll(['project_id' => $this->id]);

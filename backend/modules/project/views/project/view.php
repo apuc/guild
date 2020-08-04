@@ -47,7 +47,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'layout' => "{items}",
         'columns' => [
             'field.name:text:Поле',
-            'value',
+            [
+                'attribute' => 'value',
+                'format' => 'raw',
+                'label' => 'Значение',
+                'value' => function ($model) {
+                    return $model->getValue();
+                }
+            ],
         ],
     ]); ?>
 

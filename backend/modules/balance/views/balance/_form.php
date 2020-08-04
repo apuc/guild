@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\jui\DatePicker;
 use yii\web\View;
 use yii\widgets\ActiveForm;
+use mihaildev\elfinder\InputFile;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\company\models\Balance */
@@ -35,7 +36,7 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-xs-12">
             <?= $form->field($model, 'fields')->widget(MultipleInput::class, [
-
+                'cloneButton' => true,
                 'columns' => [
                     [
                         'name'  => 'field_id',
@@ -53,8 +54,16 @@ use yii\widgets\ActiveForm;
                         'name'  => 'value',
                         'title' => 'Значение',
                         'enableError' => true,
+                        'type' => InputFile::class,
                         'options' => [
-                            'class' => 'input-priority'
+                            'language' => 'ru',
+                            'controller' => 'elfinder',
+                            'name' => 'fields[value]',
+                            'id' => 'fields-value',
+                            'options' => ['class' => 'form-control itemImg', 'maxlength' => '255'],
+                            'buttonOptions' => ['class' => 'btn btn-primary'],
+                            'value' => $model->fields[0]['value'],
+                            'buttonName' => 'Выбрать файл',
                         ]
                     ],
                     [
