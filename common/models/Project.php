@@ -52,7 +52,7 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'status'], 'required'],
             [['description'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
