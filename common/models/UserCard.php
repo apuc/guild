@@ -68,7 +68,7 @@ class UserCard extends \yii\db\ActiveRecord
             [['fio', 'status', 'gender', 'email'], 'required'],
             [['gender', 'status', 'position_id', 'id_user'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
-            [['fio', 'passport', 'photo', 'email', 'resume', 'city'], 'string', 'max' => 255],
+            [['fio', 'passport', 'photo', 'email', 'resume', 'city', 'link_vk', 'link_telegram'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
             [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => Position::class, 'targetAttribute' => ['position_id' => 'id']],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
@@ -97,6 +97,8 @@ class UserCard extends \yii\db\ActiveRecord
             'salary' => 'Зарплата',
             'position_id' => 'Должность',
             'city' => 'Город',
+            'link_vk' => 'VK',
+            'link_telegram' => 'Telegram',
         ];
     }
 
