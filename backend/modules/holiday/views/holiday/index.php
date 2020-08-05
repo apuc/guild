@@ -14,6 +14,7 @@ $this->params['breadcrumps'][] = $this->title;
 <div class="holiday-index">
     <p>
         <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Календарь', ['calendar'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= \yii\grid\GridView::widget([
         'dataProvider' => $dataProvider,

@@ -2,6 +2,7 @@
 
 namespace backend\modules\holiday\controllers;
 
+use backend\modules\card\models\UserCard;
 use backend\modules\holiday\models\Holiday;
 use backend\modules\holiday\models\HolidaySearch;
 use common\classes\Debug;
@@ -99,6 +100,32 @@ class HolidayController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionCalendar()
+    {
+        $events = array();
+        $event = array();
+
+        $models = Holiday::find()->all();
+        $colors = ['#005005','#8eacbb','#fcc047', '#d05ce3', '#67daff', '#4B0082', '#757de8'];
+        $usefullColors = $colors;
+        foreach ($models as $model) {
+            $event['id'] = $model->id;
+            $event['start'] = date("Y-m-d",strtotime($model->dt_start)) . "T00:00:00";
+            $event['end'] = date("Y-m-d",strtotime($model->dt_end)+ 86404) . "T00:00:00";
+            $event['title'] = UserCard::find()->where(['id' => $model->card_id])->one()->fio;
+            if($usefullColors) {
+                $event['color'] = array_pop($usefullColors);
+            }
+            else
+            {
+                $usefullColors = $colors;
+            }
+            $events[] = $event;
+        }
+
+        return $this->render('calendar', ['events' => $events]);
     }
 
     protected function findModel($id)
