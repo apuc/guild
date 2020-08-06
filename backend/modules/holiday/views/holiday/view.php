@@ -7,7 +7,7 @@ $this->title = 'Отпуск №' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Список отпусков', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-    <div class="balance-view">
+<div class="balance-view">
     <p>
         <?= Html::a('Список', ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -20,17 +20,28 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-<?= DetailView::widget([
-    'model' => $model,
-    'attributes' => [
-        [
-            'label' => 'ФИО',
-            'value' => function($model)
-            {
-                return $model->users->fio;
-            },
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            [
+                'label' => 'ФИО',
+                'value' => function ($model) {
+                    return $model->users->fio;
+                },
+            ],
+            'dt_start',
+            'dt_end'
         ],
-        'dt_start',
-        'dt_end'
-    ],
-]) ?>
+    ]) ?>
+    <h2>История изменений</h2>
+
+    <?= \yii\grid\GridView::widget([
+        'dataProvider' => $changeDataProvider,
+        'columns' => [
+            'label',
+            'old_value',
+            'new_value',
+            'created_at',
+        ],
+    ]);
+    ?>

@@ -91,9 +91,17 @@ class NotesController extends Controller
             ],
         ]);
 
+        $changeDataProvider = new ActiveDataProvider([
+            'query' => \common\models\ChangeHistory::find()->where(['type_id' => $this->findModel($id)->id]),
+            'pagination' => [
+                'pageSize' => 200,
+            ]
+        ]);
+
         return $this->render('view', [
            'model' => Note::findOne($id),
-           'additionalDataProvider' => $additionalDataProvider
+           'additionalDataProvider' => $additionalDataProvider,
+            'changeDataProvider' => $changeDataProvider,
         ]);
     }
 

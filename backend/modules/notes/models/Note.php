@@ -44,6 +44,15 @@ class Note extends \common\models\Note
         }
     }
 
+    public function behaviors()
+    {
+        return [
+            'log' => [
+                'class' => \common\behaviors\LogBehavior::class,
+            ]
+        ];
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         $post = \Yii::$app->request->post('Note');

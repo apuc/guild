@@ -43,6 +43,15 @@ class Company extends \common\models\Company
         }
     }
 
+    public function behaviors()
+    {
+        return [
+            'log' => [
+                'class' => \common\behaviors\LogBehavior::class,
+            ]
+        ];
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         $post = \Yii::$app->request->post('Company');
