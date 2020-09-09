@@ -6,6 +6,7 @@ use backend\modules\holiday\models\Holiday;
 use backend\modules\holiday\models\HolidaySearch;
 use common\classes\Debug;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -52,8 +53,16 @@ class HolidayController extends Controller
     {
         $model = $this->findModel($id);
 
+        $changeDataProvider = new ActiveDataProvider([
+            'query' => \common\models\ChangeHistory::find()->where(['type_id' => $this->findModel($id)->id]),
+            'pagination' => [
+                'pageSize' => 200,
+            ]
+        ]);
+
         return $this->render('view', [
             'model' => $model,
+            'changeDataProvider' => $changeDataProvider,
             ]);
     }
 

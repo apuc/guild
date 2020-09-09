@@ -53,6 +53,15 @@ class Project extends \common\models\Project
 
         }
     }
+    
+    public function behaviors()
+    {
+        return [
+            'log' => [
+                'class' => \common\behaviors\LogBehavior::class,
+            ]
+        ];
+    }
 
     public function afterSave($insert, $changedAttributes)
     {
