@@ -1,21 +1,26 @@
 <?php
-    use yii\helpers\Html;
-    use yii\widgets\ActiveForm;
+
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+
+
+/* @var $this yii\web\View */
+/* @var $model */
+/* @var $form yii\widgets\ActiveForm */
 ?>
 
-<?php $form = ActiveForm::begin([
-    'id' => 'password-form',
-    'enableClientValidation' => true,
-    'enableAjaxValidation'   => false,
-    'method' => 'post',
-]); ?>
+<div class="user-card-form">
 
-<h4>Введите новый пароль</h4>
+    <?php $form = ActiveForm::begin(); ?>
 
-<?= Html::input('text', 'password', '', ['class' => 'form-control custom-input']) ?>
+    <?= Html::input('text', 'password', '', ['class' => 'form-control custom-input']) ?>
 
-<br>
+    <br>
 
-<?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+    <div class="form-group">
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    </div>
 
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
+
+</div>

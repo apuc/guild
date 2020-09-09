@@ -68,16 +68,10 @@ class UserCardController extends Controller
         else return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);
     }
 
-    /**
-     * Updates an existing UserCard model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionUpdate()
     {
-        $model = $this->findModel($id);
+        $model = UserCard::findOne(['id_user' => Yii::$app->user->identity->id]);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index', 'id' => $model->id]);
         }
@@ -87,26 +81,20 @@ class UserCardController extends Controller
         ]);
     }
 
-    public function actionPassword($id)
+    public function actionPassword()
     {
-        $user_card = UserCard::findOne($id);
-        $model = User::findOne(['id' => $user_card->id_user]);
+        $model = User::findOne(Yii::$app->user->identity->id);
+
+        if (Yii::$app->request->post()) {
+            $model->setPassword(Yii::$app->request->post()['password']);
+            $model->save();
+
+            return $this->redirect(['index', 'id' => $model->id]);
+        }
 
         return $this->render('password', [
             'model' => $model,
         ]);
-    }
-
-    public function actionAjax() {
-        if(Yii::$app->request->isAjax) {
-            $id = $_POST['id'];
-            $password = $_POST['password'];
-
-            $user_card = UserCard::findOne($id);
-            $user = User::findOne(['id' => $user_card->id_user]);
-            $user->password = $password;
-            $user->save();
-        }
     }
 
     /**

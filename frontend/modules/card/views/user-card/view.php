@@ -8,14 +8,16 @@ use yii\widgets\DetailView;
 /* @var $skills \common\models\CardSkill */
 /* @var $skill \common\models\Skill */
 /* @var $modelFildValue yii\data\ActiveDataProvider */
+/* @var $model */
 
 $this->title = 'Профиль';
 ?>
 <div class="user-card-view">
     <h3>Личная информация</h3>
     <?php
-    echo Html::a('Изменить профиль', ['/card/user-card/update', 'id' => $model->id], ['class' => 'btn btn-success'])
-    . '&nbsp' . Html::a('Изменить пароль', ['/card/user-card/password', 'id' => $model->id], ['class' => 'btn btn-success']);
+    echo Html::a('Изменить профиль', ['/card/user-card/update'], ['class' => 'btn btn-success'])
+    . '&nbsp' . Html::a('Изменить пароль', ['/card/user-card/password'], ['class' => 'btn btn-success']) . '<br><br>';
+
     echo  DetailView::widget([
         'model' => $model,
         'attributes' => [
