@@ -62,6 +62,21 @@ class AccessesController extends Controller
     }
 
     /**
+     * Lists all Accesses models.
+     * @return mixed
+     */
+    public function actionAll()
+    {
+        $searchModel = new AccessesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('all', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Displays a single Accesses model.
      * @param integer $id
      * @return mixed

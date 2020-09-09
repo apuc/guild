@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Добавить доступ', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Все доступы', ['all'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php
