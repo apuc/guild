@@ -70,6 +70,12 @@ use yii\widgets\ActiveForm;
         <div class="col-xs-6">
             <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
         </div>
+        <div class="col-xs-3">
+            <?= $form->field($model, 'link_vk')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-xs-3">
+            <?= $form->field($model, 'link_telegram')->textInput(['maxlength' => true]) ?>
+        </div>
     </div>
 
     <div class="row">

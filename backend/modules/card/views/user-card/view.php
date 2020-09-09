@@ -53,6 +53,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'email:email',
 
+            'link_vk:url',
+
+            'link_telegram:url',
+
             'dob',
             [
                 'attribute' => 'status',
