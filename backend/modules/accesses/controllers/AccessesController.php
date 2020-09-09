@@ -147,6 +147,8 @@ class AccessesController extends Controller
         UserCardAccesses::deleteAll(['accesses_id' => $clean_id]);
         Accesses::deleteAll(['id' => $clean_id]);
 
+        Yii::$app->session->setFlash('success', "Доступ удален");
+
         return $this->redirect(['index']);
     }
 
