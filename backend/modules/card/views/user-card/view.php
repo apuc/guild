@@ -9,7 +9,8 @@ use yii\widgets\DetailView;
 /* @var $userData common\models\User */
 /* @var $skills \common\models\CardSkill */
 /* @var $skill \common\models\Skill */
-/* @var $modelFildValue yii\data\ActiveDataProvider */
+/* @var $modelFieldValue yii\data\ActiveDataProvider */
+/* @var $changeDataProvider yii\data\ActiveDataProvider */
 
 $this->title = $model->fio;
 $this->params['breadcrumbs'][] = ['label' => 'Профили', 'url' => ['index']];
@@ -75,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2>Дополнительные сведения</h2>
 
     <?= GridView::widget([
-        'dataProvider' => $modelFildValue,
+        'dataProvider' => $modelFieldValue,
         'layout' => "{items}",
         'columns' => [
             'field.name:text:Поле',
@@ -87,6 +88,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
         ],
+    ]); ?>
+
+    <h2>История изменений</h2>
+
+    <?= GridView::widget([
+        'dataProvider' => $changeDataProvider,
+        'columns' => [
+            'label',
+            'old_value',
+            'new_value',
+            'created_at',
+            ],
     ]); ?>
 
 </div>

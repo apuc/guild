@@ -20,5 +20,12 @@ use yii\helpers\ArrayHelper;
  */
 class Balance extends \common\models\Balance
 {
-
+    public function behaviors()
+    {
+        return [
+            'log' => [
+                'class' => \common\behaviors\LogBehavior::class,
+            ]
+        ];
+    }
 }

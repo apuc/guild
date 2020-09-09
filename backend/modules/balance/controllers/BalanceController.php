@@ -73,9 +73,17 @@ class BalanceController extends Controller
             ],
         ]);
 
+        $changeDataProvider = new ActiveDataProvider([
+            'query' => \common\models\ChangeHistory::find()->where(['type_id' => $this->findModel($id)->id]),
+            'pagination' => [
+                'pageSize' => 200,
+            ]
+        ]);
+
         return $this->render('view',[
             'model' => $this->findModel($id),
-            'dataProviderF' => $dataProviderF
+            'dataProviderF' => $dataProviderF,
+            'changeDataProvider' => $changeDataProvider,
         ]);
     }
 

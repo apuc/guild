@@ -5,6 +5,7 @@ namespace backend\modules\card\controllers;
 use common\classes\Debug;
 use common\models\AdditionalFields;
 use common\models\CardSkill;
+use common\Models\ChangeHistory;
 use common\models\User;
 use common\models\FieldsValue;
 use common\models\FieldsValueNew;
@@ -105,12 +106,19 @@ class UserCardController extends Controller
         $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
 
         $id_current_user = $this->findModel($id)->id_user;
+        $changeDataProvider = new ActiveDataProvider([
+            'query' => \common\models\ChangeHistory::find()->where(['type_id' => $this->findModel($id)->id]),
+            'pagination' => [
+                'pageSize' => 200,
+            ]
+        ]);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'modelFildValue' => $dataProvider,
+            'modelFieldValue' => $dataProvider,
             'skills' => $skills,
             'userData' => User::findOne($id_current_user),
+            'changeDataProvider' => $changeDataProvider,
         ]);
     }
 

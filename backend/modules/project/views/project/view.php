@@ -104,4 +104,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
     <?php endif; ?>
+
+    <h2>История изменений</h2>
+
+    <?= GridView::widget([
+        'dataProvider' => $changeDataProvider,
+        'columns' => [
+            'label',
+            'old_value',
+            'new_value',
+            'created_at',
+        ],
+    ]); ?>
 </div>
