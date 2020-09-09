@@ -4,6 +4,7 @@ use backend\modules\settings\models\AdditionalFields;
 use unclead\multipleinput\MultipleInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use mihaildev\elfinder\InputFile;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\company\models\Company */
@@ -31,12 +32,12 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-xs-12">
-            <?= $form->field($model, 'fields')->widget(MultipleInput::class, [
-
+            <?= $form->field($model, 'fields')->widget(MultipleInput::class,[
+                'cloneButton' => true,
                 'columns' => [
                     [
-                        'name'  => 'field_id',
-                        'type'  => 'dropDownList',
+                        'name' => 'field_id',
+                        'type' => 'dropDownList',
                         'title' => 'Поле',
                         'defaultValue' => null,
                         'items' => \yii\helpers\ArrayHelper::map(AdditionalFields::find()
@@ -47,21 +48,31 @@ use yii\widgets\ActiveForm;
                         'options' => ['prompt' => 'Выберите']
                     ],
                     [
-                        'name'  => 'value',
+                        'name' => 'value',
                         'title' => 'Значение',
                         'enableError' => true,
+                        'type' => InputFile::class,
                         'options' => [
-                            'class' => 'input-priority'
-                        ]
+                            'language' => 'ru',
+                            'controller' => 'elfinder',
+                            // вставляем название контроллера, по умолчанию равен elfinder
+                            // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-con..
+                            'name' => 'fields[value]',
+                            'id' => 'fields-value',
+                            'options' => ['class' => 'form-control itemImg', 'maxlength' => '255'],
+                            'buttonOptions' => ['class' => 'btn btn-primary'],
+                            'value' => $model->fields[0]['value'],
+                            'buttonName' => 'Выбрать файл',
+                        ],
                     ],
                     [
-                        'name'  => 'order',
+                        'name' => 'order',
                         'title' => 'Приоритет',
                         'enableError' => true,
                         'options' => [
                             'class' => 'input-priority'
                         ]
-                    ]
+                    ],
                 ]
             ])->label('Дополнительно');
             ?>
