@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\classes\Debug;
 use Yii;
 
 /**
@@ -19,6 +20,8 @@ use Yii;
  */
 class Reports extends \yii\db\ActiveRecord
 {
+    public $_task;
+
     /**
      * {@inheritdoc}
      */
@@ -34,7 +37,8 @@ class Reports extends \yii\db\ActiveRecord
     {
         return [
             [['user_card_id', 'status'], 'integer'],
-            [['user_card_id', 'created_at', 'today'], 'required'],
+            [['_task'], 'checkIsArray'],
+            [['user_card_id', 'created_at'], 'required'],
             [['today', 'difficulties', 'tomorrow', 'created_at'], 'string', 'max' => 255],
             [['user_card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['user_card_id' => 'id']],
         ];
@@ -56,12 +60,61 @@ class Reports extends \yii\db\ActiveRecord
         ];
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        $this->saveTask();
+    }
+
+    public function afterFind()
+    {
+
+        parent::afterFind();
+        $this->_task = [];
+        if ($this->task) {
+            $i = 0;
+            foreach ($this->task as $task) {
+                $this->_task[$i]['task'] = $task->task;
+                $this->_task[$i]['hours_spent'] = $task->hours_spent;
+                $i++;
+            }
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUserCard()
     {
         return $this->hasOne(UserCard::className(), ['id' => 'user_card_id']);
+    }
+
+    public function getTask()
+    {
+        return $this->hasMany(ReportsTask::class, ['report_id' => 'id']);
+    }
+
+    public function saveTask()
+    {
+        ReportsTask::deleteAll(['report_id' => $this->id]);
+        if ($this->_task) {
+            foreach ($this->_task as $task) {
+                $taskModel = new ReportsTask();
+                $taskModel->report_id = $this->id;
+                $taskModel->task = $task['task'];
+                $taskModel->hours_spent = (float)$task['hours_spent'];
+                $taskModel->status = 1;
+                $taskModel->created_at = time();
+                $taskModel->save();
+            }
+        }
+    }
+
+    public function checkIsArray()
+    {
+        if (!is_array($this->_task)) {
+            $this->addError('_task', 'X is not array!');
+        }
     }
 
     public static function getFio($data)

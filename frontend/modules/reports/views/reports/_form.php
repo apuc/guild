@@ -1,6 +1,7 @@
 <?php
 
 use kartik\date\DatePicker;
+use unclead\multipleinput\MultipleInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -34,7 +35,24 @@ use yii\widgets\ActiveForm;
     ]).'<br>';
     ?>
 
-    <?= $form->field($model, 'today')->textarea(['maxlength' => true]) ?>
+    <?= $form->field($model, '_task')->widget(MultipleInput::class, [
+        'cloneButton' => true,
+        'max' => 10,
+        'columns' => [
+            [
+                'name'  => 'task',
+                'title' => 'Задача',
+            ],
+            [
+                'name'  => 'hours_spent',
+                'title' => 'Кол-во часов',
+                'options' => [
+                    'type' => 'number',
+                    'style' => 'width:100px'
+                ],
+            ],
+        ],
+    ])->label('Какие задачаи были выполнены:'); ?>
 
     <?= $form->field($model, 'difficulties')->textarea(['maxlength' => true]) ?>
 

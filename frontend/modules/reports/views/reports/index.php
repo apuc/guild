@@ -26,10 +26,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'created_at',
             [
+                'attribute' => 'today',
                 'format' => 'raw',
-                'attribute' => 'Что было сделано сегодня?',
-                'filter' => Html::activeTextInput($searchModel, 'today', ['class' => 'form-control']),
-                'value' => function ($data) { return '<div class="custom-text">'.$data->today.'</div>'; },
+                'label' => 'Задачи',
+                'value' => function ($model) {
+                    $text = '';
+                    if ($model->task) {
+                        $i = 1;
+                        foreach ($model->task as $task) {
+                            $text .= "<p>$i. ($task->hours_spent ч.) $task->task</p>";
+                            $i++;
+                        }
+                    }
+                    return $text;
+                }
             ],
             [
                 'format' => 'raw',

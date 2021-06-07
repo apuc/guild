@@ -3,6 +3,7 @@
 namespace backend\modules\reports\controllers;
 
 use backend\modules\card\models\UserCardSearch;
+use common\classes\Debug;
 use Yii;
 use common\models\Reports;
 use backend\modules\reports\models\ReportsSearch;
@@ -79,7 +80,8 @@ class ReportsController extends Controller
     {
         $model = new Reports();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

@@ -29,14 +29,30 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
 //            'id',
             'created_at',
-            'today',
+            [
+                'attribute' => 'today',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $text = '';
+                    if ($model->task) {
+                        $i = 1;
+                        foreach ($model->task as $task) {
+                            $text .= "<p>$i. ($task->hours_spent ч.) $task->task</p>";
+                            $i++;
+                        }
+                    }
+                    return $text;
+                }
+            ],
             'difficulties',
             'tomorrow',
 //            'user_card_id',
             [
                 'format' => 'raw',
                 'attribute' => 'ФИО',
-                'value' => function ($data) { return \common\models\Reports::getFio($data); },
+                'value' => function ($data) {
+                    return \common\models\Reports::getFio($data);
+                },
             ],
         ],
     ]) ?>

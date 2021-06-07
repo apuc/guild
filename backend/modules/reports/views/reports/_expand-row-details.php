@@ -12,7 +12,21 @@ echo GridView::widget([
         ['class' => 'yii\grid\SerialColumn'],
 
         'created_at',
-        'today',
+        [
+            'attribute' => 'today',
+            'format' => 'raw',
+            'value' => function ($model) {
+                $text = '';
+                if ($model->task) {
+                    $i = 1;
+                    foreach ($model->task as $task) {
+                        $text .= "<p>$i. ($task->hours_spent ч.) $task->task</p>";
+                        $i++;
+                    }
+                }
+                return $text;
+            }
+        ],
         'difficulties',
         'tomorrow',
 
