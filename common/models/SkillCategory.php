@@ -5,22 +5,21 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "skill".
+ * This is the model class for table "skill_category".
  *
  * @property int $id
  * @property string $name
- * @property integer $category_id
  *
- * @property CardSkill[] $cardSkills
+ * @property Skill[] $skills
  */
-class Skill extends \yii\db\ActiveRecord
+class SkillCategory extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'skill';
+        return 'skill_category';
     }
 
     /**
@@ -30,8 +29,7 @@ class Skill extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['category_id'], 'integer'],
-            [['name'], 'string', 'max' => 100],
+            [['name'], 'string', 'max' => 255],
         ];
     }
 
@@ -49,13 +47,13 @@ class Skill extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCardSkills()
+    public function getSkills()
     {
-        return $this->hasMany(CardSkill::className(), ['skill_id' => 'id']);
+        return $this->hasMany(Skill::className(), ['category' => 'id']);
     }
 
-    public function getCategory()
+    public static function getAll()
     {
-        return $this->hasOne(SkillCategory::class, ['id' => 'category_id']);
+        return self::find()->all();
     }
 }

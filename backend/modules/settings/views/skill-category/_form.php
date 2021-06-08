@@ -4,18 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\settings\models\Skill */
+/* @var $model common\models\SkillCategory */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="skill-form">
+<div class="skill-category-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'category_id')->dropDownList(
-        \yii\helpers\ArrayHelper::map(\common\models\SkillCategory::getAll(), 'id', 'name')
-    ); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
