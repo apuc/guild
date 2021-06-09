@@ -14,6 +14,9 @@ return [
     'controllerNamespace' => 'frontend\controllers',
 
     'modules' => [
+        'api' => [
+            'class' => 'frontend\modules\api\Api',
+        ],
         'access' => [
             'class' => 'frontend\modules\access\Access',
         ],
@@ -58,6 +61,7 @@ return [
             'rules' => [
                 'site/index' => 'card/user-card/index',
                 '' => 'card/user-card/index',
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'skills'],
             ],
         ],
 

@@ -58,4 +58,10 @@ class Skill extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SkillCategory::class, ['id' => 'category_id']);
     }
+
+    public static function getNameById($id)
+    {
+        $model = self::find()->where(['id' => $id])->one();
+        return $model ? $model->name : null;
+    }
 }

@@ -50,6 +50,9 @@ return [
         'reports' => [
             'class' => 'backend\modules\reports\Reports',
         ],
+        'options' => [
+            'class' => 'backend\modules\options\Options',
+        ],
     ],
     'components' => [
         'request' => [

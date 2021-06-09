@@ -1,22 +1,18 @@
 <?php
 
-namespace backend\modules\settings\controllers;
+namespace backend\modules\options\controllers;
 
-use backend\modules\options\Options;
-use backend\modules\settings\models\SkillsOnMainPageForm;
-use common\classes\Debug;
 use Yii;
-use backend\modules\settings\models\Skill;
-use backend\modules\settings\models\SkillSearch;
-use yii\filters\AccessControl;
+use backend\modules\options\models\Options;
+use backend\modules\options\models\OptionsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SkillController implements the CRUD actions for Skill model.
+ * OptionsController implements the CRUD actions for Options model.
  */
-class SkillController extends Controller
+class OptionsController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,25 +26,16 @@ class SkillController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                ],
-            ],
         ];
     }
 
     /**
-     * Lists all Skill models.
+     * Lists all Options models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SkillSearch();
+        $searchModel = new OptionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -58,7 +45,7 @@ class SkillController extends Controller
     }
 
     /**
-     * Displays a single Skill model.
+     * Displays a single Options model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -71,16 +58,16 @@ class SkillController extends Controller
     }
 
     /**
-     * Creates a new Skill model.
+     * Creates a new Options model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Skill();
+        $model = new Options();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -89,7 +76,7 @@ class SkillController extends Controller
     }
 
     /**
-     * Updates an existing Skill model.
+     * Updates an existing Options model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -100,7 +87,7 @@ class SkillController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -108,23 +95,8 @@ class SkillController extends Controller
         ]);
     }
 
-    public function actionSkillsOnMainPage()
-    {
-        $model = new SkillsOnMainPageForm();
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->saveSkills();
-            $model->showMsg = true;
-        } else {
-            $skills = \common\models\Options::getValue('skills_on_main_page');
-            $model->load(json_decode($skills, true));
-        }
-
-        return $this->render('skills-on-main-page', ['model' => $model]);
-    }
-
     /**
-     * Deletes an existing Skill model.
+     * Deletes an existing Options model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -138,15 +110,15 @@ class SkillController extends Controller
     }
 
     /**
-     * Finds the Skill model based on its primary key value.
+     * Finds the Options model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Skill the loaded model
+     * @return Options the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Skill::findOne($id)) !== null) {
+        if (($model = Options::findOne($id)) !== null) {
             return $model;
         }
 
