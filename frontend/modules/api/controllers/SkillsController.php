@@ -21,7 +21,7 @@ class SkillsController extends \yii\rest\Controller
                 'class' => GsCors::class,
                 'cors' => [
                     'Origin' => ['*'],
-                    'Access-Control-Allow-Credentials' => true,
+                    //'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Allow-Headers' => [
                         'Content-Type',
                         'Access-Control-Allow-Headers',
