@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\behaviors\GsCors;
 use common\models\Options;
 use yii\filters\AccessControl;
 
@@ -16,6 +17,19 @@ class SkillsController extends \yii\rest\Controller
                     'application/json' => \yii\web\Response::FORMAT_JSON,
                 ],
             ],
+            'corsFilter' => [
+                'class' => GsCors::class,
+                'cors' => [
+                    'Origin' => ['*'],
+                    'Access-Control-Allow-Credentials' => true,
+                    'Access-Control-Allow-Headers' => [
+                        'Content-Type',
+                        'Access-Control-Allow-Headers',
+                        'Authorization',
+                        'X-Requested-With'
+                    ],
+                ]
+            ]
         ];
     }
 
