@@ -44,19 +44,19 @@ class SkillsOnMainPageForm extends Model
         if ($this->skills_back) {
             $res['SkillsOnMainPageForm']['skills_back'] = $this->skills_back;
             foreach ($this->skills_back as $item) {
-                $resToFront['skills_back'][] = [$item => \common\models\Skill::getNameById($item)];
+                $resToFront['skills_back'][] = ['id' => $item, 'tags' => \common\models\Skill::getNameById($item)];
             }
         }
         if ($this->skills_front) {
             $res['SkillsOnMainPageForm']['skills_front'] = $this->skills_front;
             foreach ($this->skills_front as $item) {
-                $resToFront['skills_front'][] = [$item => \common\models\Skill::getNameById($item)];
+                $resToFront['skills_front'][] = ['id' => $item, 'tags' => \common\models\Skill::getNameById($item)];
             }
         }
         if ($this->skills_design) {
             $res['SkillsOnMainPageForm']['skills_design'] = $this->skills_design;
             foreach ($this->skills_design as $item) {
-                $resToFront['skills_design'][] = [$item => \common\models\Skill::getNameById($item)];
+                $resToFront['skills_design'][] = ['id' => $item, 'tags' => \common\models\Skill::getNameById($item)];
             }
         }
 
