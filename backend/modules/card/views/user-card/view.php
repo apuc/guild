@@ -69,6 +69,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'created_at',
             'updated_at',
+            [
+                'attribute' => 'vc_text',
+                'format' => 'raw'
+            ]
         ],
     ]) ?>
 
@@ -77,6 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php foreach ($skills as $skill) : ?>
         <span class="btn btn-default btn-sm"><?= $skill['skill']->name; ?></span>
     <?php endforeach; ?>
+
     <h2>Дополнительные сведения</h2>
 
     <?= GridView::widget([

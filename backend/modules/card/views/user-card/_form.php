@@ -1,5 +1,6 @@
 <?php
 
+use asmoday74\ckeditor5\EditorClassic;
 use common\classes\Debug;
 use kartik\select2\Select2;
 use mihaildev\elfinder\InputFile;
@@ -144,6 +145,12 @@ use yii\widgets\ActiveForm;
             )->label('Навыки'); ?>
         </div>
     </div>
+
+    <?= $form->field($model, 'vc_text')->widget(EditorClassic::className(),[
+        'clientOptions' => [
+            'language' => 'ru',
+        ]
+    ]); ?>
 
     <div class="row">
         <div class="col-xs-12">

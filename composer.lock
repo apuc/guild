@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa1395e986b21ee60c85db006a32bcc9",
+    "content-hash": "720b3677e423d8946aeb7857883c7328",
     "packages": [
         {
             "name": "2amigos/yii2-file-upload-widget",
@@ -169,6 +169,46 @@
             "time": "2019-08-29T08:20:20+00:00"
         },
         {
+            "name": "asmoday74/yii2-ckeditor5",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/asmoday74/yii2-ckeditor5.git",
+                "reference": "d5cb38abfc6afd9f0a8729662897ecefc83b18a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/asmoday74/yii2-ckeditor5/zipball/d5cb38abfc6afd9f0a8729662897ecefc83b18a6",
+                "reference": "d5cb38abfc6afd9f0a8729662897ecefc83b18a6",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "asmoday74\\ckeditor5\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Maksim Klimov"
+                }
+            ],
+            "description": "CKEditor 5 WYSIWYG widget for Yii2",
+            "keywords": [
+                "ckeditor 5",
+                "extension",
+                "yii2"
+            ],
+            "time": "2019-09-24T20:23:27+00:00"
+        },
+        {
             "name": "bower-asset/blueimp-canvas-to-blob",
             "version": "v3.16.0",
             "source": {
@@ -227,7 +267,7 @@
             "version": "v2.24.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:blueimp/JavaScript-Load-Image.git",
+                "url": "https://github.com/blueimp/JavaScript-Load-Image.git",
                 "reference": "1196b4ce3c56f01cacf90fc5527b324ecccdf3b0"
             },
             "dist": {
@@ -242,7 +282,7 @@
             "version": "v3.13.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:blueimp/JavaScript-Templates.git",
+                "url": "https://github.com/blueimp/JavaScript-Templates.git",
                 "reference": "07b3dd455b971cf5d087fc86889fcadae48ab2fc"
             },
             "dist": {
@@ -633,6 +673,59 @@
                 "php"
             ],
             "time": "2019-07-30T19:33:28+00:00"
+        },
+        {
+            "name": "edofre/yii2-fullcalendar-scheduler",
+            "version": "V1.1.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Edofre/yii2-fullcalendar-scheduler.git",
+                "reference": "36a2fe9e1bbb51d290423cbca87f3f12d00e9198"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Edofre/yii2-fullcalendar-scheduler/zipball/36a2fe9e1bbb51d290423cbca87f3f12d00e9198",
+                "reference": "36a2fe9e1bbb51d290423cbca87f3f12d00e9198",
+                "shasum": ""
+            },
+            "require": {
+                "npm-asset/fullcalendar": "v3.8.0",
+                "npm-asset/fullcalendar-scheduler": "1.9.1",
+                "php": ">=5.5.0",
+                "yiisoft/yii2": ">=2.0.9",
+                "yiisoft/yii2-jui": ">=2.0.6"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "edofre\\fullcalendarscheduler\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Edo Freriks",
+                    "email": "edofre@gmail.com"
+                }
+            ],
+            "description": "Yii2 widget for fullcalendar scheduler module",
+            "homepage": "https://github.com/edofre/yii2-fullcalendar-scheduler",
+            "keywords": [
+                "calendar",
+                "event",
+                "fullcalendar-scheduler",
+                "javascript",
+                "scheduler"
+            ],
+            "time": "2018-03-28T09:19:09+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -1395,6 +1488,63 @@
                 "yii2"
             ],
             "time": "2017-03-28T08:57:15+00:00"
+        },
+        {
+            "name": "npm-asset/fullcalendar",
+            "version": "3.8.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/fullcalendar/-/fullcalendar-3.8.0.tgz"
+            },
+            "require": {
+                "npm-asset/jquery": ">=2,<4.0",
+                "npm-asset/moment": ">=2.9.0,<3.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/fullcalendar-scheduler",
+            "version": "1.9.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/fullcalendar-scheduler/-/fullcalendar-scheduler-1.9.1.tgz"
+            },
+            "require": {
+                "npm-asset/fullcalendar": "~3.8.0",
+                "npm-asset/jquery": ">=2,<4.0",
+                "npm-asset/moment": ">=2.9.0,<3.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "SEE LICENSE IN LICENSE.md"
+            ]
+        },
+        {
+            "name": "npm-asset/jquery",
+            "version": "3.6.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery/-/jquery-3.6.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/moment",
+            "version": "2.29.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "rmrevin/yii2-fontawesome",

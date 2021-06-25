@@ -30,7 +30,8 @@
         "2amigos/yii2-file-upload-widget": "~1.0",
         "kartik-v/yii2-grid": "dev-master",
         "kartik-v/yii2-widget-datetimepicker": "dev-master",
-        "edofre/yii2-fullcalendar-scheduler": "V1.1.12"
+        "edofre/yii2-fullcalendar-scheduler": "V1.1.12",
+        "asmoday74/yii2-ckeditor5": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
