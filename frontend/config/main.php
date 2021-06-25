@@ -60,6 +60,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'site/index' => 'card/user-card/index',
+                'api/profile/<id:\d+>' => 'api/profile/index',
                 '' => 'card/user-card/index',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'skills'],
             ],
