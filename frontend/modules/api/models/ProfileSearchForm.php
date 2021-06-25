@@ -5,6 +5,7 @@ namespace frontend\modules\api\models;
 
 
 use backend\modules\card\models\UserCard;
+use common\classes\Debug;
 use yii\base\Model;
 
 /**
@@ -52,12 +53,17 @@ class ProfileSearchForm extends Model
 
     public function byParams()
     {
-        $model = UserCard::find()
-            ->joinWith(['skillValues']);
+        $model = UserCard::find();
+
 
         if($this->skills){
+            $model->joinWith(['skillValues']);
+            Debug::prn(123);
             $this->skills = explode(',', $this->skills);
             $model->where(['card_skill.skill_id' => $this->skills]);
+        }
+        else{
+            $model->with('skillValues');
         }
 
         return $model->limit($this->limit)
