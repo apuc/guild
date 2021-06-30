@@ -129,6 +129,14 @@ use yii\widgets\ActiveForm;
         </div>
 
     </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <?= $form->field($model, 'level')->dropDownList(
+                \common\models\UserCard::getLevelList(),
+                ['prompt' => '...']
+            ) ?>
+        </div>
+    </div>
 
 
     <div class="row">

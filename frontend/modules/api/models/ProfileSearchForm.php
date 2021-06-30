@@ -58,7 +58,6 @@ class ProfileSearchForm extends Model
 
         if($this->skills){
             $model->joinWith(['skillValues']);
-            Debug::prn(123);
             $this->skills = explode(',', $this->skills);
             $model->where(['card_skill.skill_id' => $this->skills]);
         }

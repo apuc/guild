@@ -29,6 +29,7 @@ use yii\helpers\ArrayHelper;
  * @property string $vc_text
  * @property int $position_id
  * @property int $city
+ * @property int $level
  *
  * @property FieldsValue[] $fieldsValues
  * @property ProjectUser[] $projectUsers
@@ -39,6 +40,33 @@ class UserCard extends \yii\db\ActiveRecord
 {
     const GENDER_M = 0;
     const GENDER_W = 1;
+
+    const LEVEL_JUNIOR = 1;
+    const LEVEL_MIDDLE = 2;
+    const LEVEL_MIDDLE_PLUS = 3;
+    const LEVEL_SENIOR = 4;
+
+    /**
+     * @return string[]
+     */
+    public static function getLevelList(): array
+    {
+        return [
+            self::LEVEL_JUNIOR => 'Junior',
+            self::LEVEL_MIDDLE => 'Middle',
+            self::LEVEL_MIDDLE_PLUS => 'Middle+',
+            self::LEVEL_SENIOR => 'Senior',
+        ];
+    }
+
+    /**
+     * @param int $level
+     * @return string
+     */
+    public static function getLevelLabel(int $level): string
+    {
+        return self::getLevelList()[$level];
+    }
 
     public function behaviors()
     {
@@ -67,7 +95,7 @@ class UserCard extends \yii\db\ActiveRecord
     {
         return [
             [['fio', 'status', 'gender', 'email'], 'required'],
-            [['gender', 'status', 'position_id', 'id_user'], 'integer'],
+            [['gender', 'status', 'position_id', 'id_user', 'level'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at', 'vc_text'], 'safe'],
             [['fio', 'passport', 'photo', 'email', 'resume', 'city', 'link_vk', 'link_telegram'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
@@ -100,7 +128,8 @@ class UserCard extends \yii\db\ActiveRecord
             'city' => 'Город',
             'link_vk' => 'VK',
             'link_telegram' => 'Telegram',
-            'vc_text' => 'Резюме текст'
+            'vc_text' => 'Резюме текст',
+            'level' => 'Уровень'
         ];
     }
 

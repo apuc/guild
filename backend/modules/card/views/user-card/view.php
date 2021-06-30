@@ -36,6 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'attribute' => 'level',
+                'value' => function($model){
+                    return \common\models\UserCard::getLevelLabel($model->level);
+                }
+            ],
+            [
                 'attribute' => 'resume',
                 'format' => 'raw',
                 'value' => function ($model) {
