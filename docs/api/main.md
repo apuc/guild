@@ -55,3 +55,17 @@
 </p>
 
 `https://guild.craft-group.xyz/api/profile?limit=5&offset=5&skills=1`
+
+### Одна запись
+`https://guild.craft-group.xyz/api/profile/{id}`
+
+<p>
+    Для того чтобы получить данные одной записи необходимо отправить <b>GET</b> запрос
+    на URL https://guild.craft-group.xyz/api/profile/{id} , где <b>id</b> это идинтификатор 
+    профиля.
+</p>
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/profile/6`
