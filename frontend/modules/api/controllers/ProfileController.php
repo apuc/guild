@@ -4,6 +4,7 @@ namespace frontend\modules\api\controllers;
 
 use common\behaviors\GsCors;
 use common\classes\Debug;
+use common\models\InterviewRequest;
 use frontend\modules\api\models\ProfileSearchForm;
 
 class ProfileController extends \yii\rest\Controller
@@ -39,11 +40,25 @@ class ProfileController extends \yii\rest\Controller
         $searchModel = new ProfileSearchForm();
         $searchModel->attributes = \Yii::$app->request->get();
 
-        if ($id){
+        if ($id) {
             return $searchModel->byId();
         }
 
         return $searchModel->byParams();
+    }
+
+    public function actionAddToInterview()
+    {
+        if (\Yii::$app->request->isPost) {
+            $model = new InterviewRequest();
+            $model->attributes = \Yii::$app->request->post();
+            $model->created_at = time();
+            if ($model->save()){
+                return ['status' => 'success'];
+            }
+
+            return ['status' => 'error'];
+        }
     }
 
 }
