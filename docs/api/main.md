@@ -60,7 +60,7 @@
 `https://guild.craft-group.xyz/api/profile/{id}`
 
 <p>
-    Для того чтобы получить данные одной записи необходимо отправить <b>GET</b> запрос
+    Для того, чтобы получить данные одной записи необходимо отправить <b>GET</b> запрос
     на URL https://guild.craft-group.xyz/api/profile/{id} , где <b>id</b> это идинтификатор 
     профиля.
 </p>
@@ -69,3 +69,56 @@
 </p>
 
 `https://guild.craft-group.xyz/api/profile/6`
+
+### Пригласить на собеседование
+`https://guild.craft-group.xyz/api/profile/add-to-interview`
+
+<p>
+    Для того, отправить приглашение профилю на собеседование, необходимо сделать 
+    <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/profile/add-to-interview
+</p>
+<p>
+    Возможные параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            email*
+        </td>
+        <td>
+            Почта пользователя, который хочет пригласить на собеседование. 
+        </td>
+    </tr>
+    <tr>
+        <td>
+            profile_id*
+        </td>
+        <td>
+            Идентификатор профиля. 
+        </td>
+    </tr>
+    <tr>
+        <td>
+            phone
+        </td>
+        <td>
+            Телефон 
+        </td>
+    </tr>
+    <tr>
+        <td>
+            comment
+        </td>
+        <td>
+            Дополнительные пожелания по собеседованию. 
+        </td>
+    </tr>
+</table>
