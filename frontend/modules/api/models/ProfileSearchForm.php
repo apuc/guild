@@ -66,6 +66,7 @@ class ProfileSearchForm extends Model
         }
 
         $model->andWhere(['status' => [4, 12]]);
+        $model->andWhere(['deleted_at' => null]);
 
         return $model->limit($this->limit)
             ->offset($this->offset)->orderBy('id DESC')->asArray()->all();
