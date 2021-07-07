@@ -94,7 +94,7 @@ class UserCard extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fio', 'status', 'gender', 'email', 'level'], 'required'],
+            [['fio', 'status', 'gender', 'email', 'level', 'position_id'], 'required'],
             [['gender', 'status', 'position_id', 'id_user', 'level'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at', 'vc_text'], 'safe'],
             [['fio', 'passport', 'photo', 'email', 'resume', 'city', 'link_vk', 'link_telegram'], 'string', 'max' => 255],
