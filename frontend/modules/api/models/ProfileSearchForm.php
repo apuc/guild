@@ -65,8 +65,10 @@ class ProfileSearchForm extends Model
             $model->with('skillValues');
         }
 
+        $model->andWhere(['status' => [4, 12]]);
+
         return $model->limit($this->limit)
-            ->offset($this->offset)->asArray()->all();
+            ->offset($this->offset)->orderBy('id DESC')->asArray()->all();
     }
 
 }
