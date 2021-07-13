@@ -60,13 +60,16 @@ class ProfileSearchForm extends Model
             $model->joinWith(['skillValues']);
             $this->skills = explode(',', $this->skills);
             $model->where(['card_skill.skill_id' => $this->skills]);
+            $model->having('COUNT(DISTINCT skill_id) = ' . count($this->skills));
         }
         else{
-            $model->with('skillValues');
+            $model->joinWith('skillValues');
         }
 
         $model->andWhere(['status' => [4, 12]]);
         $model->andWhere(['deleted_at' => null]);
+
+        $model->groupBy('card_skill.card_id');
 
         return $model->limit($this->limit)
             ->offset($this->offset)->orderBy('id DESC')->asArray()->all();

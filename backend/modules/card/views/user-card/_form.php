@@ -154,6 +154,12 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-xs-12">
+            <?= $form->field($model, 'vc_text_short')->textarea() ?>
+        </div>
+    </div>
+
     <?= $form->field($model, 'vc_text')->widget(EditorClassic::className(),[
         'clientOptions' => [
             'language' => 'ru',

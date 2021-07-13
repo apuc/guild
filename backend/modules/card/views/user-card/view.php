@@ -75,6 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'created_at',
             'updated_at',
+            'vc_text_short',
             [
                 'attribute' => 'vc_text',
                 'format' => 'raw'
