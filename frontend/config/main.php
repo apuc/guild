@@ -15,6 +15,15 @@ return [
 
     'modules' => [
         'api' => [
+            'components' => [
+                'user' => [
+                    'identityClass' => 'frontend\modules\api\models\User',
+                    'enableAutoLogin' => true,
+                    'enableSession' => false,
+                    'class' => 'frontend\modules\api\models\User',
+                    //'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
+                ],
+            ],
             'class' => 'frontend\modules\api\Api',
         ],
         'access' => [
@@ -32,6 +41,9 @@ return [
         'request' => [
             'csrfParam' => '_csrf-frontend',
             'baseUrl' => '',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
         ],
         'user' => [
             'identityClass' => 'common\models\User',
