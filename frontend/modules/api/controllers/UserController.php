@@ -3,6 +3,8 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\behaviors\GsCors;
+use common\classes\Debug;
 use common\models\User;
 use frontend\modules\api\models\LoginForm;
 use Yii;
@@ -29,6 +31,19 @@ class UserController extends ActiveController
             'authenticatior' => [
                 'class' => QueryParamAuth::class, //implement access token authentication
                 'except' => ['login'], // no need to verify the access token method, pay attention to distinguish between $noAclLogin
+            ],
+            'corsFilter' => [
+                'class' => GsCors::class,
+                'cors' => [
+                    'Origin' => ['*'],
+                    //'Access-Control-Allow-Credentials' => true,
+                    'Access-Control-Allow-Headers' => [
+                        'Content-Type',
+                        'Access-Control-Allow-Headers',
+                        'Authorization',
+                        'X-Requested-With'
+                    ],
+                ]
             ]
         ]);
     }
