@@ -63,7 +63,7 @@ class UserController extends ActiveController
         $model = new LoginForm();
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->login()) {
             return [
-                'access_token' => $model->login(),
+                'access_token' => $model->login(), 'access_token_expired_at' => $model->getUser()->getTokenExpiredAt()
             ];
         } else {
             throw new BadRequestHttpException(json_encode($model->errors));

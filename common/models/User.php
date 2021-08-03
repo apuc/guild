@@ -20,6 +20,7 @@ use yii\web\UnauthorizedHttpException;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property $access_token_expired_at
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -83,6 +84,12 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
     }
+
+    public function getTokenExpiredAt()
+    {
+        return $this->access_token_expired_at;
+    }
+
     /**
      * Finds user by username
      *
@@ -124,7 +131,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }

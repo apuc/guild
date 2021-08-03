@@ -68,7 +68,6 @@ class Reports extends \yii\db\ActiveRecord
 
     public function afterFind()
     {
-
         parent::afterFind();
         $this->_task = [];
         if ($this->task) {

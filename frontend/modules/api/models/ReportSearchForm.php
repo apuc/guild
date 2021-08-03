@@ -38,7 +38,8 @@ class ReportSearchForm extends Model
     public function byParams()
     {
         $queryBuilder = Reports::find()
-            ->andWhere(['between', 'created_at', $this->fromDate, $this->toDate, $this->user_id])
+            ->with('task')
+            ->andWhere(['between', 'reports.created_at', $this->fromDate, $this->toDate, $this->user_id])
             ->limit($this->limit)
             ->offset($this->offset);
 
@@ -47,7 +48,7 @@ class ReportSearchForm extends Model
             $queryBuilder->andWhere(['user_card_id' => $userCardId]);
         }
 
-        $data = $queryBuilder->all();
+        $data = $queryBuilder->asArray()->all();
 
         return $data;
     }
