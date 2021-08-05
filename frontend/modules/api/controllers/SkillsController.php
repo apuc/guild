@@ -5,6 +5,7 @@ namespace frontend\modules\api\controllers;
 use common\behaviors\GsCors;
 use common\models\Options;
 use yii\filters\AccessControl;
+use yii\filters\auth\QueryParamAuth;
 
 class SkillsController extends \yii\rest\Controller
 {
@@ -16,6 +17,10 @@ class SkillsController extends \yii\rest\Controller
                 'formats' => [
                     'application/json' => \yii\web\Response::FORMAT_JSON,
                 ],
+            ],
+            'authenticatior' => [
+                'class' => QueryParamAuth::class, //implement access token authentication
+                'except' => ['login'], // no need to verify the access token method, pay attention to distinguish between $noAclLogin
             ],
             'corsFilter' => [
                 'class' => GsCors::class,

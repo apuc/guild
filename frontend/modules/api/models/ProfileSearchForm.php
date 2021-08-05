@@ -72,7 +72,7 @@ class ProfileSearchForm extends Model
         $model->groupBy('card_skill.card_id');
 
         return $model->limit($this->limit)
-            ->offset($this->offset)->orderBy('id DESC')->asArray()->all();
+            ->offset($this->offset)->orderBy('updated_at DESC')->asArray()->all();
     }
 
 }
