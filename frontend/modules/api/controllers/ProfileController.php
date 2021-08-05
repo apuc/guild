@@ -20,10 +20,10 @@ class ProfileController extends \yii\rest\Controller
                     'application/json' => \yii\web\Response::FORMAT_JSON,
                 ],
             ],
-//            'authenticatior' => [
-//                'class' => QueryParamAuth::class, //implement access token authentication
-//                'except' => ['login'], // no need to verify the access token method, pay attention to distinguish between $noAclLogin
-//            ],
+            'authenticatior' => [
+                'class' => QueryParamAuth::class, //implement access token authentication
+                'except' => ['login'], // no need to verify the access token method, pay attention to distinguish between $noAclLogin
+            ],
             'corsFilter' => [
                 'class' => GsCors::class,
                 'cors' => [
