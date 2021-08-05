@@ -27,7 +27,7 @@ class ProfileController extends \yii\rest\Controller
             'corsFilter' => [
                 'class' => GsCors::class,
                 'cors' => [
-                    'Origin' => ['*'],
+                    'Origin' => ['https://itguild.info'],
                     //'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Allow-Headers' => [
                         'Content-Type',
