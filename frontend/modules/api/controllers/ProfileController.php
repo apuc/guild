@@ -24,19 +24,19 @@ class ProfileController extends \yii\rest\Controller
                 'class' => QueryParamAuth::class, //implement access token authentication
                 'except' => ['login'], // no need to verify the access token method, pay attention to distinguish between $noAclLogin
             ],
-            'corsFilter' => [
-                'class' => GsCors::class,
-                'cors' => [
-                    'Origin' => ['https://itguild.info'],
-                    //'Access-Control-Allow-Credentials' => true,
-                    'Access-Control-Allow-Headers' => [
-                        'Content-Type',
-                        'Access-Control-Allow-Headers',
-                        'Authorization',
-                        'X-Requested-With'
-                    ],
-                ]
-            ]
+//            'corsFilter' => [
+//                'class' => GsCors::class,
+//                'cors' => [
+//                    'Origin' => ['https://itguild.info'],
+//                    //'Access-Control-Allow-Credentials' => true,
+//                    'Access-Control-Allow-Headers' => [
+//                        'Content-Type',
+//                        'Access-Control-Allow-Headers',
+//                        'Authorization',
+//                        'X-Requested-With'
+//                    ],
+//                ]
+//            ]
         ];
     }
 
