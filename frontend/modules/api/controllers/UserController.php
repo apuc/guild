@@ -8,6 +8,8 @@ use common\classes\Debug;
 use common\models\User;
 use frontend\modules\api\models\LoginForm;
 use Yii;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
 use yii\rest\ActiveController;
 use yii\helpers\ArrayHelper;
@@ -28,9 +30,11 @@ class UserController extends ActiveController
                     'application/json' => Response::FORMAT_JSON,
                 ],
             ],
-            'authenticatior' => [
-                'class' => QueryParamAuth::class, //implement access token authentication
-                'except' => ['login'], // no need to verify the access token method, pay attention to distinguish between $noAclLogin
+            'authenticator' => [
+                'class' => CompositeAuth::class,
+                'authMethods' => [
+                    HttpBearerAuth::class,
+                ],
             ],
             'corsFilter' => [
                 'class' => GsCors::class,

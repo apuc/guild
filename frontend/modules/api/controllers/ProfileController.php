@@ -6,6 +6,8 @@ use common\behaviors\GsCors;
 use common\classes\Debug;
 use common\models\InterviewRequest;
 use frontend\modules\api\models\ProfileSearchForm;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 
 class ProfileController extends \yii\rest\Controller
@@ -20,10 +22,12 @@ class ProfileController extends \yii\rest\Controller
                     'application/json' => \yii\web\Response::FORMAT_JSON,
                 ],
             ],
-            'authenticatior' => [
-                'class' => QueryParamAuth::class, //implement access token authentication
-                'except' => ['login'], // no need to verify the access token method, pay attention to distinguish between $noAclLogin
-            ],
+            'authenticator' => [
+                'class' => CompositeAuth::class,
+                'authMethods' => [
+                    HttpBearerAuth::class,
+                ],
+            ]
 //            'corsFilter' => [
 //                'class' => GsCors::class,
 //                'cors' => [
