@@ -83,7 +83,9 @@ class UserCardSearch extends UserCard
 
         $query->andFilterWhere(['skill.id' => $this->skills]);
 
-        $query->orderBy('user_card.created_at DESC');
+        $query->orderBy('user_card.updated_at DESC');
+
+        $query->groupBy('card_skill.card_id');
 
         $sumQuery = clone $query;
 
