@@ -30,25 +30,25 @@ class UserController extends ActiveController
                     'application/json' => Response::FORMAT_JSON,
                 ],
             ],
-            'authenticator' => [
-                'class' => CompositeAuth::class,
-                'authMethods' => [
-                    HttpBearerAuth::class,
-                ],
-            ],
-            'corsFilter' => [
-                'class' => GsCors::class,
-                'cors' => [
-                    'Origin' => ['*'],
-                    //'Access-Control-Allow-Credentials' => true,
-                    'Access-Control-Allow-Headers' => [
-                        'Content-Type',
-                        'Access-Control-Allow-Headers',
-                        'Authorization',
-                        'X-Requested-With'
-                    ],
-                ]
-            ]
+//            'authenticator' => [
+//                'class' => CompositeAuth::class,
+//                'authMethods' => [
+//                    HttpBearerAuth::class,
+//                ],
+//            ],
+//            'corsFilter' => [
+//                'class' => GsCors::class,
+//                'cors' => [
+//                    'Origin' => ['*'],
+//                    //'Access-Control-Allow-Credentials' => true,
+//                    'Access-Control-Allow-Headers' => [
+//                        'Content-Type',
+//                        'Access-Control-Allow-Headers',
+//                        'Authorization',
+//                        'X-Requested-With'
+//                    ],
+//                ]
+//            ]
         ]);
     }
 
