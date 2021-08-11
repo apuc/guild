@@ -28,6 +28,8 @@ use yii\helpers\ArrayHelper;
  * @property string $salary
  * @property string $vc_text
  * @property string $vc_text_short
+ * @property string $specification
+ * @property int $years_of_exp
  * @property int $position_id
  * @property int $city
  * @property int $level
@@ -96,9 +98,9 @@ class UserCard extends \yii\db\ActiveRecord
     {
         return [
             [['fio', 'status', 'gender', 'email', 'level', 'position_id'], 'required'],
-            [['gender', 'status', 'position_id', 'id_user', 'level'], 'integer'],
+            [['gender', 'status', 'position_id', 'id_user', 'level', 'years_of_exp'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at', 'vc_text', 'vc_text_short'], 'safe'],
-            [['fio', 'passport', 'photo', 'email', 'resume', 'city', 'link_vk', 'link_telegram'], 'string', 'max' => 255],
+            [['fio', 'passport', 'photo', 'email', 'resume', 'city', 'link_vk', 'link_telegram', 'specification'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
             [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => Position::class, 'targetAttribute' => ['position_id' => 'id']],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
@@ -131,7 +133,9 @@ class UserCard extends \yii\db\ActiveRecord
             'link_telegram' => 'Telegram',
             'vc_text' => 'Резюме текст',
             'vc_text_short' => 'Резюме короткий текст',
-            'level' => 'Уровень'
+            'level' => 'Уровень',
+            'years_of_exp' => 'Лет опыта',
+            'specification' => 'Спецификация'
         ];
     }
 

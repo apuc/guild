@@ -42,6 +42,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'attribute' => 'specification',
+                'value' => $model->specification
+            ],
+            [
                 'attribute' => 'resume',
                 'format' => 'raw',
                 'value' => function ($model) {

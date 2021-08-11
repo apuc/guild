@@ -136,6 +136,15 @@ use yii\widgets\ActiveForm;
                 ['prompt' => '...']
             ) ?>
         </div>
+        <div class="col-xs-6">
+            <?= $form->field($model, 'specification')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <?= $form->field($model, 'years_of_exp')->input('number') ?>
+        </div>
     </div>
 
 
