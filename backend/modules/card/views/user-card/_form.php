@@ -20,7 +20,6 @@ use yii\widgets\ActiveForm;
         <div class="col-xs-6">
             <?= $form->field($model, 'fio')->textInput(['maxlength' => true]) ?>
         </div>
-
         <div class="col-xs-6">
             <?= $form->field($model, 'passport')->textInput(['maxlength' => true]) ?>
         </div>
@@ -28,7 +27,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row" style="padding-bottom: 15px">
         <div class="imgUpload col-xs-6">
-            <div class="media__upload_img"><img src="<?= $model->photo; ?>" width="100px" /></div>
+            <div class="media__upload_img"><img src="<?= $model->photo; ?>" width="100px"/></div>
             <?php
             echo InputFile::widget([
                 'language' => 'ru',
@@ -47,7 +46,7 @@ use yii\widgets\ActiveForm;
             ?>
         </div>
         <div class="col-xs-6">
-            <!--<div class="media__upload_img"><img src="<?/*= $model->photo; */ ?>" width="100px"/></div>-->
+            <!--<div class="media__upload_img"><img src="<? /*= $model->photo; */ ?>" width="100px"/></div>-->
             <?php
             echo InputFile::widget([
                 'language' => 'ru',
@@ -118,9 +117,11 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="row">
-        <div class="col-xs-6">
-            <?= $form->field($model, 'salary')->textInput(['maxlength' => true]) ?>
-        </div>
+        <?php if (Yii::$app->user->can('confidential_information')): ?>
+            <div class="col-xs-6">
+                <?= $form->field($model, 'salary')->textInput(['maxlength' => true]) ?>
+            </div>
+        <?php endif; ?>
         <div class="col-xs-6">
             <?= $form->field($model, 'position_id')->dropDownList(
                 \yii\helpers\ArrayHelper::map(\backend\modules\settings\models\Position::find()->all(), 'id', 'name'),
@@ -169,7 +170,7 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-    <?= $form->field($model, 'vc_text')->widget(EditorClassic::className(),[
+    <?= $form->field($model, 'vc_text')->widget(EditorClassic::className(), [
         'clientOptions' => [
             'language' => 'ru',
         ]
@@ -181,8 +182,8 @@ use yii\widgets\ActiveForm;
                 'cloneButton' => true,
                 'columns' => [
                     [
-                        'name'  => 'field_id',
-                        'type'  => 'dropDownList',
+                        'name' => 'field_id',
+                        'type' => 'dropDownList',
                         'title' => 'Поле',
                         'defaultValue' => null,
                         'items' => \yii\helpers\ArrayHelper::map(
@@ -213,7 +214,7 @@ use yii\widgets\ActiveForm;
                         ],
                     ],
                     [
-                        'name'  => 'order',
+                        'name' => 'order',
                         'title' => 'Приоритет',
                         'enableError' => true,
                         'options' => [

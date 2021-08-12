@@ -72,7 +72,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'value' => $model->status0->name,
             ],
-            'salary',
+            [
+                'attribute' => 'salary',
+                'visible' => Yii::$app->user->can('confidential_information')
+            ],
             [
                 'attribute' => 'position_id',
                 'value' => (isset($model->position->name)) ? $model->position->name : 'Без должности',

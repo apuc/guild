@@ -38,7 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'fio',
 //            'city',
             //'passport',
-            'salary',
+            [
+                'attribute' => 'salary',
+                'visible' => Yii::$app->user->can('confidential_information')
+            ],
             'email:email',
             //'gender',
             //'dob',

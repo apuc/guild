@@ -4,6 +4,7 @@
 namespace console\controllers;
 
 
+use common\models\User;
 use Yii;
 use yii\console\Controller;
 
@@ -32,5 +33,42 @@ class RbacController extends Controller
 
         $auth->assign($user, 2);
         $auth->assign($admin, 1);
+    }
+
+    public function actionCreateEditor()
+    {
+        $auth = Yii::$app->authManager;
+
+        $confidentialInformation = $auth->createPermission('confidential_information');
+        $confidentialInformation->description = 'Возможность видеть конфиденциальную информацию';
+        $auth->add($confidentialInformation);
+
+        $secure = $auth->getPermission('secure');
+
+        $profileEditor = $auth->createRole('profileEditor');
+        $auth->add($profileEditor);
+        $auth->addChild($profileEditor, $secure);
+
+        $admin = $auth->getRole('admin');
+        $auth->addChild($admin, $confidentialInformation);
+        $auth->addChild($admin, $profileEditor);
+
+        $profileEditorUser = $this->createEditor();
+        $auth->assign($profileEditor, $profileEditorUser->id);
+
+    }
+
+    private function createEditor()
+    {
+        if (!($user = User::findByUsername('profile_editor'))) {
+            $user = new User();
+            $user->username = 'profile_editor';
+            $user->email = 'profile_editor@itguild.info';
+            $user->setPassword('0023edsaqw');
+            $user->generateAuthKey();
+            $user->save(false);
+        }
+
+        return $user;
     }
 }
