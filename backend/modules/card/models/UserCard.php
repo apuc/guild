@@ -76,7 +76,7 @@ class UserCard extends \common\models\UserCard
 
     public function beforeSave($insert)
     {
-        if(is_array(\Yii::$app->request->post('UserCard')))
+        if(isset(\Yii::$app->request->post('UserCard')['salary']))
         {
             $this->salary = str_replace(' ', '', \Yii::$app->request->post('UserCard')['salary']);
         }
