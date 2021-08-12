@@ -20,12 +20,13 @@ class ProfileSearchForm extends Model
     public $limit = 10;
     public $offset = 0;
     public $skills;
+    public $position_id;
     public $id;
 
     public function rules()
     {
         return [
-            [['id', 'limit', 'offset'], 'safe'],
+            [['id', 'limit', 'offset', 'position_id'], 'safe'],
             [['skills'], 'checkIsArray'],
         ];
     }
@@ -53,7 +54,7 @@ class ProfileSearchForm extends Model
 
     public function byParams()
     {
-        $model = UserCard::find();
+        $model = UserCard::find()->select('user_card.id');
 
 
         if($this->skills){
@@ -65,6 +66,8 @@ class ProfileSearchForm extends Model
         else{
             $model->joinWith('skillValues');
         }
+
+        $model->andFilterWhere(['position_id' => $this->position_id]);
 
         $model->andWhere(['status' => [4, 12]]);
         $model->andWhere(['deleted_at' => null]);
