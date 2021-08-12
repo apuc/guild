@@ -54,7 +54,7 @@ class ProfileSearchForm extends Model
 
     public function byParams()
     {
-        $model = UserCard::find()->select('user_card.id');
+        $model = UserCard::find();
 
 
         if($this->skills){
