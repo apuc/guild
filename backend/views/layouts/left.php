@@ -42,17 +42,25 @@
                         'label' => 'Hh.ru', 'icon' => 'user-circle', 'url' => '#',
                         'items' => [
                             ['label' => 'Компании', 'icon' => 'building', 'url' => ['/hh/hh'], 'active' => \Yii::$app->controller->id == 'hh'],
-                            ['label' => 'Вакансии', 'icon' => 'user-md', 'url' => ['/hh/hh-job'],  'active' => \Yii::$app->controller->id == 'hh-job'],
+                            ['label' => 'Вакансии', 'icon' => 'user-md', 'url' => ['/hh/hh-job'], 'active' => \Yii::$app->controller->id == 'hh-job'],
                         ],
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
-                    ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balance/balance'], 'active' => \Yii::$app->controller->id == 'balance', 'visible' => Yii::$app->user->can('confidential_information')],
+                    ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balan                                                                                         ce/balance'], 'active' => \Yii::$app->controller->id == 'balance', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Отпуска', 'icon' => 'plane', 'url' => ['/holiday/holiday'], 'active' => \Yii::$app->controller->id == 'holiday', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Доступы', 'icon' => 'key', 'url' => ['/accesses/accesses'], 'active' => \Yii::$app->controller->id == 'accesses', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Заметки', 'icon' => 'sticky-note', 'url' => ['/notes/notes'], 'active' => \Yii::$app->controller->id == 'notes', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Календарь ДР', 'icon' => 'calendar', 'url' => ['/calendar/calendar'], 'active' => \Yii::$app->controller->id == 'calendar', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Отчеты', 'icon' => 'list-alt', 'url' => ['/reports/reports'], 'active' => \Yii::$app->controller->id == 'reports', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Опции', 'icon' => 'list-alt', 'url' => ['/options/options'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('confidential_information')],
+                    [
+                        'label' => 'Запрос интервью (' . \common\models\InterviewRequest::getNewCount() . ')',
+                        'icon' => 'list-alt',
+                        'url' => ['/interview/interview'],
+                        'active' => \Yii::$app->controller->id == 'interview',
+                        'visible' => Yii::$app->user->can('confidential_information'),
+                        'badge' => '<span class="badge badge-info right">4</span>'
+                    ],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],

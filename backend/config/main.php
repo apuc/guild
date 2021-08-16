@@ -53,6 +53,9 @@ return [
         'options' => [
             'class' => 'backend\modules\options\Options',
         ],
+        'interview' => [
+            'class' => 'backend\modules\interview\Interview',
+        ],
     ],
     'components' => [
         'request' => [

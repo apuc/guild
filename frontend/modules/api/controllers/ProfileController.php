@@ -62,6 +62,7 @@ class ProfileController extends \yii\rest\Controller
             $model = new InterviewRequest();
             $model->attributes = \Yii::$app->request->post();
             $model->created_at = time();
+            $model->user_id = \Yii::$app->user->id;
             if ($model->save()){
                 return ['status' => 'success'];
             }
