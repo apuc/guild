@@ -17,6 +17,23 @@ class SqlController extends Controller
         echo "script completed successfully\n";
     }
 
+    public function actionAddAva()
+    {
+        $model = UserCard::find()->all();
+        foreach ($model as $item) {
+            if(!$item->photo){
+                if($item->gender === 1){
+                    $item->photo = '/profileava/f' . random_int(1, 6) . '.png';
+                }
+                else {
+                    $item->photo = '/profileava/m' . random_int(1, 10) . '.png';
+                }
+                $item->save();
+            }
+        }
+        echo "script completed successfully\n";
+    }
+
     public function actionGenerateUser()
     {
         echo UserCard::generateUserForUserCard() . "\n";
