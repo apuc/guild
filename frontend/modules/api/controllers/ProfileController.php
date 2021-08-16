@@ -67,7 +67,8 @@ class ProfileController extends \yii\rest\Controller
                 return ['status' => 'success'];
             }
 
-            return ['status' => 'error'];
+            \Yii::$app->response->statusCode = 400;
+            return ['status' => 'error', 'errors' => $model->errors];
         }
     }
 
