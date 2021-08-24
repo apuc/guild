@@ -67,11 +67,16 @@ class ProfileController extends \yii\rest\Controller
             $model->created_at = time();
             $model->user_id = \Yii::$app->user->id;
 
-            if ($model->save()){
+            if ($model->save()) {
                 $token = \Yii::$app->params['telegramBotToken'];
                 $chat_id = \Yii::$app->params['telegramBotChatId'];
 
-                $message = "Пришёл запрос на интервью.\nПрофиль: {$attributes['profile_id']}\nТелефон: {$attributes['phone']}\nEmail: {$attributes['email']}\nКомментарий: {$attributes['comment']}";
+                $message =
+                    "Пришёл запрос на интервью.\n".
+                    "Профиль: {$attributes['profile_id']}\n".
+                    "Телефон: {$attributes['phone']}\n".
+                    "Email: {$attributes['email']}\n".
+                    "Комментарий: {$attributes['comment']}";
 
                 $bot = new TelegramBotService($token);
                 $bot->sendMessageTo($chat_id, $message);
