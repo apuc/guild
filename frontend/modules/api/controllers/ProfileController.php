@@ -80,6 +80,7 @@ class ProfileController extends \yii\rest\Controller
                       "Email: ~email~\n".
                       "Комментарий: ~comment~"
                 ];
+
                 $templateProcessor = new BotNotificationTemplateProcessor($templates);
                 $message = $templateProcessor->renderTemplate('interview_request', $attributes);
 
