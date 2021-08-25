@@ -6,6 +6,7 @@ use common\behaviors\GsCors;
 use common\classes\Debug;
 use common\models\InterviewRequest;
 use frontend\modules\api\models\ProfileSearchForm;
+use kavalar\BotNotificationTemplateProcessor;
 use kavalar\TelegramBotService;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
@@ -71,12 +72,16 @@ class ProfileController extends \yii\rest\Controller
                 $token = \Yii::$app->params['telegramBotToken'];
                 $chat_id = \Yii::$app->params['telegramBotChatId'];
 
-                $message =
-                    "Пришёл запрос на интервью.\n".
-                    "Профиль: {$attributes['profile_id']}\n".
-                    "Телефон: {$attributes['phone']}\n".
-                    "Email: {$attributes['email']}\n".
-                    "Комментарий: {$attributes['comment']}";
+                $templates = [
+                  'interview_request'  => 
+                      "Пришёл запрос на интервью.\n".
+                      "Профиль: ~profile_id~\n".
+                      "Телефон: ~phone~\n".
+                      "Email: ~email~\n".
+                      "Комментарий: ~comment~"
+                ];
+                $templateProcessor = new BotNotificationTemplateProcessor($templates);
+                $message = $templateProcessor->renderTemplate('interview_request', $attributes);
 
                 $bot = new TelegramBotService($token);
                 $bot->sendMessageTo($chat_id, $message);
