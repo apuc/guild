@@ -6,6 +6,7 @@ use common\behaviors\GsCors;
 use common\classes\Debug;
 use common\models\InterviewRequest;
 use frontend\modules\api\models\ProfileSearchForm;
+use kavalar\TelegramBotService;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
@@ -59,11 +60,26 @@ class ProfileController extends \yii\rest\Controller
     public function actionAddToInterview()
     {
         if (\Yii::$app->request->isPost) {
+            $attributes = \Yii::$app->request->post();
+
             $model = new InterviewRequest();
-            $model->attributes = \Yii::$app->request->post();
+            $model->attributes = $attributes;
             $model->created_at = time();
             $model->user_id = \Yii::$app->user->id;
-            if ($model->save()){
+
+            if ($model->save()) {
+                $token = \Yii::$app->params['telegramBotToken'];
+                $chat_id = \Yii::$app->params['telegramBotChatId'];
+
+                $message =
+                    "Пришёл запрос на интервью.\n".
+                    "Профиль: {$attributes['profile_id']}\n".
+                    "Телефон: {$attributes['phone']}\n".
+                    "Email: {$attributes['email']}\n".
+                    "Комментарий: {$attributes['comment']}";
+
+                $bot = new TelegramBotService($token);
+                $bot->sendMessageTo($chat_id, $message);
                 return ['status' => 'success'];
             }
 
