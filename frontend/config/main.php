@@ -87,6 +87,8 @@ return [
                       "Email: ~email~\n".
                       "Комментарий: ~comment~"
             ],
+            'telegramBotToken' => $params['telegramBotToken'],
+            'telegramChatId' => $params['telegramChatId'],
         ],
 
     ],
