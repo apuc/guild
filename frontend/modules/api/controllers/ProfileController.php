@@ -69,23 +69,7 @@ class ProfileController extends \yii\rest\Controller
             $model->user_id = \Yii::$app->user->id;
 
             if ($model->save()) {
-                $token = \Yii::$app->params['telegramBotToken'];
-                $chat_id = \Yii::$app->params['telegramBotChatId'];
-
-                $templates = [
-                  'interview_request'  => 
-                      "Пришёл запрос на интервью.\n".
-                      "Профиль: ~profile_id~\n".
-                      "Телефон: ~phone~\n".
-                      "Email: ~email~\n".
-                      "Комментарий: ~comment~"
-                ];
-
-                $templateProcessor = new BotNotificationTemplateProcessor($templates);
-                $message = $templateProcessor->renderTemplate('interview_request', $attributes);
-
-                $bot = new TelegramBotService($token);
-                $bot->sendMessageTo($chat_id, $message);
+                \Yii::$app->telegram_bot->sendRenderedMessage('interview_request', $attributes);
                 return ['status' => 'success'];
             }
 
