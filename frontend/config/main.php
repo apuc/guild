@@ -88,7 +88,7 @@ return [
                       "Комментарий: ~comment~"
             ],
             'telegramBotToken' => $params['telegramBotToken'],
-            'telegramChatId' => $params['telegramChatId'],
+            'telegramChatId' => $params['telegramBotChatId'],
         ],
 
     ],
