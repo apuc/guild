@@ -1,11 +1,7 @@
 <?php
 
-use backend\modules\reports\models\ReportsSearch;
-use kartik\grid\GridView;
-use yii\data\Pagination;
 use yii\helpers\Html;
 use common\models\Reports;
-use  \common\classes\Debug;
 use backend\modules\reports\models\Month;
 
 
@@ -14,6 +10,9 @@ use backend\modules\reports\models\Month;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $reports common\models\Reports */
 /* @var $ID */
+/* @var $reports_month */
+/* @var $date */
+
 
 
 $month = new Month($date);
@@ -41,28 +40,8 @@ function get_color($date, $dates_created_at)
 
 $this->title = 'Календарь пользователя - ' . Reports::getFio($reports[0]);
 $dates_created_at = array_unique(array_map('get_dates_created_at', $reports));
-
-//for ($date = '2021-08-01', $i = 0; $date != '2021-09-01'; $date = next_day($date, 1), $i++) {
-//    if ($i == 7) {
-//        echo '<div>';
-//        $i = 0;
-//    }
-//    if (in_array($date, $dates_created_at)) {
-//        $color = 'primary';
-//    } else
-//        $color = 'danger';
-//    echo Html::a($date, ['reports/?date=' . $date], ['class' => 'btn btn-' . $color . '',
-//        'style' => 'margin: 10px;']);
-//
-//}
-//
-
-//
-//?>
-<?= Html::csrfMetaTags() ?>
+?>
 <section class="calendar-contain">
-
-
     <aside class="calendar__sidebar">
         <section class="title-bar">
             <?= Html::input('date', 'date', isset($_GET['date']) ? $_GET['date'] : date('Y-m-d'), [
@@ -74,137 +53,10 @@ $dates_created_at = array_unique(array_map('get_dates_created_at', $reports));
         </section>
         <h2 class="sidebar__heading"><?= date('l') ?><br><?= date('F d') ?></h2>
         <ul class="sidebar__list">
-            <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th><a href="/secure/reports/reports/index?date=2021-08-31&amp;sort=today" data-sort="today">Что
-                            было сделано
-                            сегодня?</a></th>
-                    <th><a href="/secure/reports/reports/index?date=2021-08-31&amp;sort=difficulties"
-                           data-sort="difficulties">Какие
-                            сложности возникли?</a></th>
-                    <th><a href="/secure/reports/reports/index?date=2021-08-31&amp;sort=tomorrow" data-sort="tomorrow">Что
-                            планируется сделать завтра?</a></th>
-                    <th class="action-column">&nbsp;</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-key="4">
-                    <td>1</td>
-                    <td><p>1. (1 ч.) asd</p></td>
-                    <td></td>
-                    <td></td>
-                    <td><a href="/secure/reports/reports/view?id=4" title="Просмотр" aria-label="Просмотр"
-                           data-pjax="0">
-                            <svg aria-hidden="true"
-                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1.125em"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                <path fill="currentColor"
-                                      d="M573 241C518 136 411 64 288 64S58 136 3 241a32 32 0 000 30c55 105 162 177 285 177s230-72 285-177a32 32 0 000-30zM288 400a144 144 0 11144-144 144 144 0 01-144 144zm0-240a95 95 0 00-25 4 48 48 0 01-67 67 96 96 0 1092-71z"></path>
-                            </svg>
-                        </a> <a href="/secure/reports/reports/update?id=4" title="Редактировать"
-                                aria-label="Редактировать"
-                                data-pjax="0">
-                            <svg aria-hidden="true"
-                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1em"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <path fill="currentColor"
-                                      d="M498 142l-46 46c-5 5-13 5-17 0L324 77c-5-5-5-12 0-17l46-46c19-19 49-19 68 0l60 60c19 19 19 49 0 68zm-214-42L22 362 0 484c-3 16 12 30 28 28l122-22 262-262c5-5 5-13 0-17L301 100c-4-5-12-5-17 0zM124 340c-5-6-5-14 0-20l154-154c6-5 14-5 20 0s5 14 0 20L144 340c-6 5-14 5-20 0zm-36 84h48v36l-64 12-32-31 12-65h36v48z"></path>
-                            </svg>
-                        </a> <a href="/secure/reports/reports/delete?id=4" title="Удалить" aria-label="Удалить"
-                                data-pjax="0"
-                                data-confirm="Вы уверены, что хотите удалить этот элемент?" data-method="post">
-                            <svg aria-hidden="true"
-                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:.875em"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                      d="M32 464a48 48 0 0048 48h288a48 48 0 0048-48V128H32zm272-256a16 16 0 0132 0v224a16 16 0 01-32 0zm-96 0a16 16 0 0132 0v224a16 16 0 01-32 0zm-96 0a16 16 0 0132 0v224a16 16 0 01-32 0zM432 32H312l-9-19a24 24 0 00-22-13H167a24 24 0 00-22 13l-9 19H16A16 16 0 000 48v32a16 16 0 0016 16h416a16 16 0 0016-16V48a16 16 0 00-16-16z"></path>
-                            </svg>
-                        </a></td>
-                </tr>
-                <tr data-key="9">
-                    <td>2</td>
-                    <td><p>1. (23 ч.) asdasd</p></td>
-                    <td></td>
-                    <td></td>
-                    <td><a href="/secure/reports/reports/view?id=9" title="Просмотр" aria-label="Просмотр"
-                           data-pjax="0">
-                            <svg aria-hidden="true"
-                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1.125em"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                            </svg>
-                        </a> <a href="/secure/reports/reports/update?id=9" title="Редактировать"
-                                aria-label="Редактировать"
-                                data-pjax="0">
-                            <svg aria-hidden="true"
-                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1em"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            </svg>
-                        </a> <a href="/secure/reports/reports/delete?id=9" title="Удалить" aria-label="Удалить"
-                                data-pjax="0"
-                                data-confirm="Вы уверены, что хотите удалить этот элемент?" data-method="post">
-                            <svg aria-hidden="true"
-                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:.875em"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            </svg>
-                        </a></td>
-                </tr>
-                </tbody>
-            </table>
+
         </ul>
     </aside>
-
-
     <section class="calendar__days">
-        <!--        <section class="calendar__top-bar">-->
-        <!--            <span class="top-bar__days">Mon</span>-->
-        <!--            <span class="top-bar__days">Tue</span>-->
-        <!--            <span class="top-bar__days">Wed</span>-->
-        <!--            <span class="top-bar__days">Thu</span>-->
-        <!--            <span class="top-bar__days">Fri</span>-->
-        <!--            <span class="top-bar__days">Sat</span>-->
-        <!--            <span class="top-bar__days">Sun</span>-->
-        <!--        </section>-->
-        <!---->
-        <!--        --><?php
-        //        $index = 1;
-        //        if (count($month->inactive_begin)) {
-        //            echo '<section class="calendar__week">';
-        //
-        //            for ($index = 1; $index <= count($month->inactive_begin); $index++, $index_raw++)
-        //                echo '                <div class="calendar__day inactive">
-        //
-        //                    <span class="calendar__date">' . $month->inactive_begin[$index] . '</span>
-        //                </div>';
-        //        }
-        //        for (; $index <= array_key_last($month->active); $index++, $index_raw++) {
-        //
-        //            if ($index_raw % 7 == 0) {
-        //                if ($index != 1) echo '</section>';
-        //                echo '<section class="calendar__week">
-        //        ';
-        //            }
-        //            echo '
-        //        <div class="calendar__day">
-        //                    <span class="calendar__date ' . get_color(date('Y-m-' . $month->active[$index], strtotime($date)), $dates_created_at) . '">
-        //                        ' . $month->active[$index] . '
-        //        </span>
-        //        </div>
-        //        ';
-        //        }
-        //        ?>
-        <!--        --><?php //for (; $index <= array_key_last($month->inactive_end); $index++, $index_raw++): ?>
-        <!--            --><?php //if ($index_raw % 7 == 0)
-        //                echo '
-        //                </section>
-        //        <section class="calendar__week ">
-        //        ';
-        //            ?>
-        <!--            <div class="calendar__day inactive">-->
-        <!--                <span class="calendar__date "><? //= $month->inactive_end[$index] ?><!--</span>-->
-        <!--            </div>-->
-        <!--        --><?php //endfor; ?>
     </section>
 
 </section>
@@ -389,7 +241,6 @@ ${report['today'][j]['task']}</p>`
         }
     };
 
-
     const CALENDAR_BAR = ` < section
 
                 class
@@ -457,7 +308,6 @@ ${report['today'][j]['task']}</p>`
             if (days[i].classList.contains('inactive')) {
                 days[i].onclick = function () {
                     let date = getFutureDate(datePicker.value, parseInt(days[i].textContent))
-                    console.log(date)
                     datePicker.value = date;
                     datePicker.onchange()
                 }
@@ -471,14 +321,13 @@ ${report['today'][j]['task']}</p>`
     }
 
     calendar.load()
-
+    datePicker.onchange()
 
     function isOldDatePicker(datePicker, oldDate) {
         if (datePicker.value.substr(0, 7) == oldDate)
             return true;
         return false
     }
-
 
     async function updateMonthReports(date) {
 
@@ -509,7 +358,7 @@ ${report['today'][j]['task']}</p>`
                 date = new Date(date.getFullYear(), date.getMonth() - 1, value);
             }
         }
-        return date.getFullYear() + '-' + IntToDate(date.getMonth()+1) + '-' + IntToDate(value);
+        return date.getFullYear() + '-' + IntToDate(date.getMonth() + 1) + '-' + IntToDate(value);
 
     }
 

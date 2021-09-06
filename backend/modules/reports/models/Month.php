@@ -16,16 +16,13 @@ class Month
 
     public function __construct($date = null)
     {
-//        $date = '2021-08-10';
         $this->inactive_begin = [];
         $this->inactive_end = [];
-//        Debug::prn($date);
         if (!$date and !self::is_date($date)) {
 
             $date = date('Y-m-d');
             Debug::dd($date);
         }
-//        Debug::dd($date);
 
         $first_day_of_week = self::get_day_week(self::get_first_day($date));
         $quantity_days = self::get_days_month($date);
@@ -47,7 +44,6 @@ class Month
         for ($index = $first_day_of_week - 1; $index >= 1; $index--, $day--) {
             $this->inactive_begin[$index] = $day;
         }
-//        Debug::dd($first_day_of_week);
         $day = 1;
         $index_end = (in_array($first_day_of_week, [6,7])?42:35);
         for ($index = $quantity_days + $first_day_of_week; $index <=$index_end; $index++, $day++) {
@@ -55,7 +51,6 @@ class Month
         }
 
         $this->days = array_merge($this->inactive_end, $this->inactive_begin, $this->active);
-//        Debug::dd($this);
 
     }
 
@@ -90,12 +85,5 @@ class Month
     {
         return date("t", strtotime($date));
     }
-
-
-    public function a()
-    {
-//        $a = date('w', strtotime(date('')))
-    }
-
 
 }
