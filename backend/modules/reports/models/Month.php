@@ -19,9 +19,7 @@ class Month
         $this->inactive_begin = [];
         $this->inactive_end = [];
         if (!$date and !self::is_date($date)) {
-
             $date = date('Y-m-d');
-            Debug::dd($date);
         }
 
         $first_day_of_week = self::get_day_week(self::get_first_day($date));
