@@ -210,140 +210,40 @@ $dates_created_at = array_unique(array_map('get_dates_created_at', $reports));
 </section>
 <script>
 
-    class CalendarBuilder {
+    class HtmlCalendar {
 
-        constructor(month, reports, innerElem, datePicker, before = '') {
+        constructor(month, reports, before = '') {
             this.month = month;
-            this.Elem = innerElem;
             this.reports = reports;
             this.before = before;
             this.datePicker = datePicker;
+
+            this.classDay = 'calendar__day';
 
             this.nameDate = document.querySelector('.sidebar__heading');
 
             this.initBefore();
         }
 
-        build() {
+        getHtml() {
             this.getInactiveBegin();
             this.getActive();
             this.getInactiveEnd();
-            this.loadInElem();
-
-            this.initAfter();
-            let rep = this.loadMonthReports();
-            console.log(rep)
-            console.log(123)
-            // this.activeButtonsDays();
-
+            return this.html;
         }
 
-        update(month, reports = null) {
+        update(month, reports) {
             this.month = month;
             this.reports = reports;
-
             this.initBefore();
 
-            this.build();
         }
 
         initBefore() {
             this.html = '';
             this.index = 1;
             this.indexRaw = 0;
-            this.classDay = 'calendar__day';
             this.date = document.querySelector('#date').value.substr(0, 7);
-        }
-
-        initAfter() {
-            this.days = document.querySelectorAll('.calendar__day');
-        }
-
-        loadInElem() {
-            this.Elem.innerHTML = this.before + this.html;
-        }
-
-        activeButtonsDays() {
-            // console.log(this.days);
-            for (let i = 0; i < Object.keys(this.days).length; i++) {
-                // if (this.days[i].querySelector('.calendar__date.inactive')) {
-                //     this.clickInactive(this.days[i])''
-                // } else
-                console.log(this.days[i])
-                console.log(i)
-                this.days[i].dayOnClick = this.dayOnClick;
-                this.days[i].changeDateFutureOrPast = this.changeDateFutureOrPast;
-                this.days[i].nameDate = this.nameDate;
-                this.days[i].datePicker = this.datePicker;
-                this.days[i].IntToDate = this.IntToDate;
-                this.days[i].loadMonthReports = this.loadMonthReports;
-                this.days[i].update = this.update;
-
-                this.days[i].onclick = function () {
-                    this.dayOnClick(this)
-                };
-            }
-
-        }
-
-        dayOnClick(day) {
-            // console.log(day)
-            // alert(parseInt(days[i].textContent))
-            let number_date = parseInt(day.textContent);
-            number_date = this.IntToDate(number_date);
-
-            if (day.classList.contains('inactive')) {
-                this.changeDateFutureOrPast(number_date);
-            } else {
-                this.datePicker.value = this.datePicker.value.substr(0, 8) + number_date;
-
-
-                let date = new Date(this.datePicker.value);
-                let monthName = date.toLocaleString('default', {month: 'long'});
-                let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
-
-                console.log(this.nameDate)
-                this.nameDate.innerHTML = dayWeekName + '<br>' + monthName + ' ' + date.toString().split(' ')[2];
-            }
-
-        }
-
-        changeDateFutureOrPast(number_date) {
-            let date = new Date(this.datePicker.value);
-            if (parseInt(this.textContent) <= 7) {
-                if (date.getMonth() == 11) {
-                    date = new Date(date.getFullYear() + 1, 0, 1);
-                } else {
-                    date = new Date(date.getFullYear(), date.getMonth() + 1, number_date);
-                }
-                // console.log(date.getFullYear() + '-' + (parseInt(date.getMonth())+1) + '-' + number_date)
-                // datePicker.value = date.toISOString().substring(0, 10);
-            } else {
-                if (date.getMonth() == 0) {
-                    date = new Date(date.getFullYear() - 1, 11, 1);
-                } else {
-                    date = new Date(date.getFullYear(), date.getMonth() - 1, 1);
-                }
-                // console.log(date.getFullYear() + '-' + (parseInt(date.getMonth())+1) + '-' + number_date)
-                // datePicker.value = date.getFullYear() + '-' + date.getMonth() + '-' + number_date
-            }
-            console.log(this)
-            this.loadMonthReports()
-                .then(function (reports_month) {
-                    console.log(reports_month)
-                    let reports = (JSON.parse(reports_month))[0]['reports']
-                    let month = (JSON.parse(reports_month))[0]['month']
-
-                    reports_month[1](month, reports);
-                })
-            this.datePicker.value = date.getFullYear() + '-' + this.IntToDate(parseInt(date.getMonth()) + 1) + '-' + number_date
-
-        }
-
-        IntToDate(number_date) {
-            if (Math.floor(number_date / 10) === 0)
-                number_date = '0' + number_date;
-            return number_date
         }
 
         getInactiveBegin() {
@@ -399,76 +299,179 @@ $dates_created_at = array_unique(array_map('get_dates_created_at', $reports));
         getLastKey(obj) {
             return Object.keys(obj)[Object.keys(obj).length - 1];
         }
+    }
 
-        async loadMonthReports() {
-            let datePicker = this.datePicker;
-            let makeRequest = function () {
-                return new Promise(function (resolve, reject) {
-                    let monthNumber = datePicker.value.substr(5, 2);
-                    let yearNumber = datePicker.value.substr(0, 4);
-                    let req = new XMLHttpRequest();
-                    req.open('get', '../ajax/get-reports-for-month-by-id-year-month?id=<?=$ID?>' +
-                        '&month=' + monthNumber +
-                        '&year=' + yearNumber
-                    )
-                    ;
-                    req.setRequestHeader('Content-type', 'application/json');
-                    req.onload = function () {
-                        if (this.status >= 200 && this.status < 300) {
-                            let response = [req.response, this.update]
+    class HtmlReports {
+        constructor(reports) {
+            //TODO выходные дни - праздники
+            this.reports = reports;
+        }
 
-                            resolve(response);
-                        }
+        getHtmlByDate(date) {
 
-                    };
-                    req.send();
-                })
+            if ([0, 6].includes(new Date(date).getDay())) {
+                return "Выходной день";
             }
-            return await makeRequest();
+            if (!this.reports)
+                return 'Нет репортов за месяц';
+            let j = 0;
+            let html = `<ul class="sidebar__list">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th><a href="/secure/reports/reports/index?date=2021-08-31&amp;sort=today" data-sort="today">Что
+                            было сделано
+                            сегодня?</a></th>
+                        <th><a href="/secure/reports/reports/index?date=2021-08-31&amp;sort=difficulties"
+                               data-sort="difficulties">Какие
+                            сложности возникли?</a></th>
+                        <th><a href="/secure/reports/reports/index?date=2021-08-31&amp;sort=tomorrow" data-sort="tomorrow">Что
+                            планируется сделать завтра?</a></th>
+                        <th class="action-column">&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>`;
+            for (let k = 0, i = 0, report = this.reports[i]; i < Object.keys(this.reports).length; i++) {
+                report = this.reports[i];
+                if (report['created_at'] == date) {
+                    k++;
+                    html += `<tr data-key="${report['id']}">
+                    <td>${k}</td><td>`;
+
+                    for (j = 0; j < Object.keys(report['today']).length; j++) {
+                        html += `<p>${j + 1}. (${report['today'][j]['hours_spent']} ч.)
+${report['today'][j]['task']}</p>`
+                    }
+
+                    html += `</td>
+                    <td>${report['difficulties']}</td>
+                    <td>${report['tomorrow']}</td>
+                    <td>
+<a href="/secure/reports/reports/view?id=${report['id']}" title="Просмотр" aria-label="Просмотр"
+                           data-pjax="0">
+                            <svg aria-hidden="true"
+                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1.125em"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                <path fill="currentColor"
+                                      d="M573 241C518 136 411 64 288 64S58 136 3 241a32 32 0 000 30c55 105 162 177 285 177s230-72 285-177a32 32 0 000-30zM288 400a144 144 0 11144-144 144 144 0 01-144 144zm0-240a95 95 0 00-25 4 48 48 0 01-67 67 96 96 0 1092-71z"></path>
+                            </svg>
+                        </a>
+<a href="/secure/reports/reports/update?id=${report['id']}" title="Редактировать"
+                                aria-label="Редактировать"
+                                data-pjax="0">
+                            <svg aria-hidden="true"
+                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1em"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path fill="currentColor"
+                                      d="M498 142l-46 46c-5 5-13 5-17 0L324 77c-5-5-5-12 0-17l46-46c19-19 49-19 68 0l60 60c19 19 19 49 0 68zm-214-42L22 362 0 484c-3 16 12 30 28 28l122-22 262-262c5-5 5-13 0-17L301 100c-4-5-12-5-17 0zM124 340c-5-6-5-14 0-20l154-154c6-5 14-5 20 0s5 14 0 20L144 340c-6 5-14 5-20 0zm-36 84h48v36l-64 12-32-31 12-65h36v48z"></path>
+                            </svg>
+                        </a>
+<a href="/secure/reports/reports/delete?id=${report['id']}" title="Удалить" aria-label="Удалить"
+                                data-pjax="0"
+                                data-confirm="Вы уверены, что хотите удалить этот элемент?" data-method="post">
+                            <svg aria-hidden="true"
+                                 style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:.875em"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path fill="currentColor"
+                                      d="M32 464a48 48 0 0048 48h288a48 48 0 0048-48V128H32zm272-256a16 16 0 0132 0v224a16 16 0 01-32 0zm-96 0a16 16 0 0132 0v224a16 16 0 01-32 0zm-96 0a16 16 0 0132 0v224a16 16 0 01-32 0zM432 32H312l-9-19a24 24 0 00-22-13H167a24 24 0 00-22 13l-9 19H16A16 16 0 000 48v32a16 16 0 0016 16h416a16 16 0 0016-16V48a16 16 0 00-16-16z"></path>
+                            </svg>
+                        </a></td>
+`;
+                }
+            }
+            if (j == 0) {
+                return "За этот день не было отчетов";
+            }
+
+
+            return html;
         }
+    };
 
-    }
 
+    const CALENDAR_BAR = ` < section
 
-    const CALENDAR_BAR = `<section class="calendar__top-bar">
-        <span class="top-bar__days">Mon</span>
-    <span class="top-bar__days">Tue</span>
-    <span class="top-bar__days">Wed</span>
-    <span class="top-bar__days">Thu</span>
-    <span class="top-bar__days">Fri</span>
-    <span class="top-bar__days">Sat</span>
-    <span class="top-bar__days">Sun</span>
-    </section>`;
+                class
 
-    let reports = (JSON.parse('<?=$reports_month?>'))['reports']
-    let month = (JSON.parse('<?=$reports_month?>'))['month']
+                = "calendar__top-bar" >
+                    < span
+
+                class
+
+                = "top-bar__days" > Mon < /span>
+                <span class="top-bar__days">Tue</span>
+                <span class="top-bar__days">Wed</span>
+                <span class="top-bar__days">Thu</span>
+                <span class="top-bar__days">Fri</span>
+                <span class="top-bar__days">Sat</span>
+                <span class="top-bar__days">Sun</span>
+            </section>
+                `;
+
+    let reports = (JSON.parse('<?=$reports_month?>'))['reports'];
+    let month = (JSON.parse('<?=$reports_month?>'))['month'];
     let datePicker = document.querySelector('#date');
-
-    let calendarBuilder = new CalendarBuilder(
-        month, reports, document.querySelector('.calendar__days'), datePicker, CALENDAR_BAR);
-    calendarBuilder.build()
-
-    let days = document.querySelectorAll('.calendar__day');
-
-
     let oldDate = datePicker.value.substr(0, 7);
+    let nameDate = document.querySelector('.sidebar__heading');
 
-    datePicker.onchange = function () {
-        console.log(this.value)
-        if (!isOldDatePicker(datePicker, oldDate)) {
-            oldDate = datePicker.value.substr(0, 7);
+    let reportsBoard = document.querySelector('.sidebar__list');
+    let htmlReports = new HtmlReports(reports);
 
-            get_reports_ajax(datePicker)
-                .then(function (reports_month) {
-                    let reports = (JSON.parse(reports_month))['reports']
-                    let month = (JSON.parse(reports_month))['month']
-                    calendarBuilder.update(month, reports);
-                })
+    let htmlCalendar = new HtmlCalendar(month, reports, CALENDAR_BAR);
+    let calendar = document.querySelector('.calendar__days');
+
+
+    calendar.load = async function () {
+
+        htmlCalendar.update(month, reports)
+        calendar.innerHTML = htmlCalendar.getHtml();
+
+        htmlReports.reports = reports;
+        htmlReports.getHtmlByDate('2021-08-31')
+
+        datePicker.onchange = function () {
+            if (!isOldDatePicker(datePicker, oldDate)) {
+                oldDate = datePicker.value.substr(0, 7);
+
+                updateMonthReports(datePicker.value)
+                    .then(reportsMonth => {
+                        reports = reportsMonth['reports'];
+                        month = reportsMonth['month'];
+
+                        calendar.load();
+                    })
+
+            }
+            let date = new Date(datePicker.value);
+            let monthName = date.toLocaleString('default', {month: 'long'});
+            let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
+            nameDate.innerHTML = `${dayWeekName} <br>${monthName} ${datePicker.value.substr(8, 2)}`;
+            reportsBoard.innerHTML = htmlReports.getHtmlByDate(datePicker.value)
+        }
+
+        let days = document.querySelectorAll('.calendar__day');
+        for (let i = 0; i < Object.keys(days).length; i++) {
+            let dateDay = parseInt(days[i].textContent);
+
+            if (days[i].classList.contains('inactive')) {
+                days[i].onclick = function () {
+                    let date = getFutureDate(datePicker.value, parseInt(days[i].textContent))
+                    console.log(date)
+                    datePicker.value = date;
+                    datePicker.onchange()
+                }
+            } else {
+                days[i].onclick = function () {
+                    datePicker.value = datePicker.value.substr(0, 8) + IntToDate(dateDay);
+                    datePicker.onchange()
+                }
+            }
         }
     }
 
+    calendar.load()
 
-    let nameDate = document.querySelector('.sidebar__heading');
 
     function isOldDatePicker(datePicker, oldDate) {
         if (datePicker.value.substr(0, 7) == oldDate)
@@ -477,26 +480,44 @@ $dates_created_at = array_unique(array_map('get_dates_created_at', $reports));
     }
 
 
-    function get_reports_ajax(datePicker) {
-        return new Promise(function (resolve, reject) {
-            let monthNumber = datePicker.value.substr(5, 2);
-            let yearNumber = datePicker.value.substr(0, 4);
-            let req = new XMLHttpRequest();
-            req.open('get', '../ajax/get-reports-for-month-by-id-year-month?id=<?=$ID?>' +
-                '&month=' + monthNumber +
-                '&year=' + yearNumber
-            );
-            req.setRequestHeader('Content-type', 'application/json');
-            req.onload = function () {
-                if (this.status >= 200 && this.status < 300) {
-                    resolve(req.response);
-                }
+    async function updateMonthReports(date) {
 
-            };
-            req.send();
-        })
+        let monthNumber = date.substr(5, 2);
+        let yearNumber = date.substr(0, 4);
+
+        return fetch('../ajax/get-reports-for-month-by-id-year-month?id=<?=$ID?>' +
+            '&month=' + monthNumber +
+            '&year=' + yearNumber)
+            .then((res) => {
+                return res.json()
+            })
+
     }
 
+    function getFutureDate(dat, value) {
+        let date = new Date(dat);
+        if (value < 8) {
+            if (date.getMonth() == 11) {
+                date = new Date(date.getFullYear() + 1, 0, value);
+            } else {
+                date = new Date(date.getFullYear(), date.getMonth() + 1, value);
+            }
+        } else {
+            if (date.getMonth() == 0) {
+                date = new Date(date.getFullYear() - 1, 11, value);
+            } else {
+                date = new Date(date.getFullYear(), date.getMonth() - 1, value);
+            }
+        }
+        return date.getFullYear() + '-' + IntToDate(date.getMonth()+1) + '-' + IntToDate(value);
+
+    }
+
+    function IntToDate(number_date) {
+        if (Math.floor(number_date / 10) === 0)
+            number_date = '0' + number_date;
+        return number_date
+    }
 
 </script>
 

@@ -73,15 +73,21 @@ class ReportsController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $reports = $dataProvider->getModels();
-//        Debug::dd($dataProvider);
+
+        $ID = $reports[0]->user_card_id;
+
+        $reports_no_task = array_column($reports, 'attributes');
+        for ($i = 0; $i < count($reports); $i++) {
+            $reports_no_task[$i]['today'] = array_column($reports[$i]->task, 'attributes');
+        }
         $month = new Month($date);
 
         if (!Yii::$app->request->isAjax) {
             return $this->render('user', [
-                'ID' => $reports[0]->id,
+                'ID' => $ID,
                 'reports' => $reports,
-                'reports_month' => json_encode(array_merge(['reports'=>array_column($reports, 'attributes')],
-                    ['month'=>(array)$month])),
+                'reports_month' => json_encode(array_merge(['reports' => $reports_no_task],
+                    ['month' => (array)$month])),
                 'date' => $date
             ]);
         }

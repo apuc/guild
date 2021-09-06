@@ -86,7 +86,7 @@ function next_day($date, $number)
             'attribute' => 'ФИО',
             'filter' => Html::activeTextInput($searchModel, 'fio', ['class' => 'form-control']),
             'value' => function ($data) {
-                return '<a href="./reports/user?id='.$data['user_card_id'].'">' . \common\models\Reports::getFio($data) . '</a>';
+                return '<a href="./user?id='.$data['user_card_id'].'">' . \common\models\Reports::getFio($data) . '</a>';
             },
         ],
 

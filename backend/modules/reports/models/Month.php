@@ -47,9 +47,9 @@ class Month
         for ($index = $first_day_of_week - 1; $index >= 1; $index--, $day--) {
             $this->inactive_begin[$index] = $day;
         }
-
+//        Debug::dd($first_day_of_week);
         $day = 1;
-        $index_end = ($first_day_of_week==7?42:35);
+        $index_end = (in_array($first_day_of_week, [6,7])?42:35);
         for ($index = $quantity_days + $first_day_of_week; $index <=$index_end; $index++, $day++) {
             $this->inactive_end[$index] = $day;
         }
