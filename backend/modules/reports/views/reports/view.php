@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'user_card_id',
             [
                 'format' => 'raw',
-                'attribute' => 'ФИО',
+                'attribute' => 'asdФИО',
                 'value' => function ($data) {
                     return \common\models\Reports::getFio($data);
                 },

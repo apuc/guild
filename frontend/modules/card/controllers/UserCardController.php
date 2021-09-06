@@ -45,8 +45,9 @@ class UserCardController extends Controller
     public function actionIndex()
     {
         $id_user = Yii::$app->user->id;
+        echo $id_user;
+//        die();
         $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
-
         if($result) {
             $id = $result[0]['id'];
             $dataProvider = new ActiveDataProvider([
