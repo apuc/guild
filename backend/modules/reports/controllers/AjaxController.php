@@ -21,8 +21,6 @@ class AjaxController extends \yii\web\Controller
 
         $searchModel = new ReportsSearch();
         $searchModel->id = $id;
-        $searchModel->month = $month;
-        $searchModel->year = $year;
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

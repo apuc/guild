@@ -4,16 +4,13 @@ namespace backend\modules\reports\controllers;
 
 use backend\modules\card\models\UserCardSearch;
 use backend\modules\reports\models\Month;
-use common\classes\Debug;
 use Yii;
 use common\models\Reports;
 use backend\modules\reports\models\ReportsSearch;
-use yii\base\Model;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\Response;
 
 /**
  * ReportsController implements the CRUD actions for Reports model.
@@ -63,7 +60,6 @@ class ReportsController extends Controller
     public function actionUser($id, $date = null)
     {
         if (!(isset($date) and preg_match("/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/", $date))) {
-//            Debug::dd('неверный формат даты');
             $date = date('Y-m-01');
         }
         $date = date('Y-m-01', strtotime($date));
