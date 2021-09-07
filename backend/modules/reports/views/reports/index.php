@@ -19,6 +19,7 @@ function next_day($date, $number)
 {
     return date('Y-m-d', strtotime($date) + 3600 * 24 * $number);
 }
+
 ?>
 <div class="reports-index">
 
@@ -28,33 +29,35 @@ function next_day($date, $number)
     </p>
     <p>
         <?php
-        if (!$_GET){
-            $url = '../..'.Yii::$app->request->url .'?ReportsSearch[created_at]=';
-        } else{
-            $url = '../..'.Yii::$app->request->url .'&ReportsSearch[created_at]=';
+        if (!$_GET) {
+            $url = '../..' . Yii::$app->request->url . '?ReportsSearch[created_at]=';
+        } else {
+            $url = '../..' . Yii::$app->request->url . '&ReportsSearch[created_at]=';
         }
 
         for ($date = TODAY;
         $date != WEEK_AGO;
         $date = next_day($date, -1)): ?>
 
-        <?= Html::a($date, [$url. $date], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a($date, ['index', 'ReportsSearch[created_at]' => $date], ['class' => 'btn btn-primary']) ?>
     <?php endfor; ?></div>
 <div class="row">
     <div class="col-xs-6">
-
+        <?php $form =  \yii\widgets\ActiveForm::begin() ?>
+        <?= $form->field($searchModel, 'today')->hiddenInput()->label(false) ?>
+        <?php \yii\widgets\ActiveForm::end() ?>
         <form method="get" style="display: inline-flex;">
-            <?php if(isset($_GET['ReportsSearch'])):?>
-            <input name="ReportsSearch[today]" type="hidden" value="<?=($_GET['ReportsSearch']['today'])?>">
-            <input name="ReportsSearch[difficulties]" type="hidden" value="<?=($_GET['ReportsSearch']['difficulties'])?>">
-            <input name="ReportsSearch[tomorrow]" type="hidden" value="<?=($_GET['ReportsSearch']['tomorrow'])?>">
-            <input name="ReportsSearch[user_card_id]" type="hidden">
-            <?php if(isset($_GET['ReportsSearch']['user_card_id'])){
-                foreach ($_GET['ReportsSearch']['user_card_id'] as $res)
-                echo
-                 '<input name="ReportsSearch[user_card_id][]" type="hidden" value="'.$res.'">';
-            }
-            ?>
+            <?php if (isset($_GET['ReportsSearch'])): ?>
+                <input name="ReportsSearch[today]" type="hidden" value="<?= $searchModel->today ?>">
+                <input name="ReportsSearch[difficulties]" type="hidden" value="<?= $searchModel->difficulties ?>">
+                <input name="ReportsSearch[tomorrow]" type="hidden" value="<?= $searchModel->tomorrow ?>">
+                <input name="ReportsSearch[user_card_id]" type="hidden">
+                <?php if (isset($_GET['ReportsSearch']['user_card_id'])) {
+                    foreach ($_GET['ReportsSearch']['user_card_id'] as $res)
+                        echo
+                            '<input name="ReportsSearch[user_card_id][]" type="hidden" value="' . $res . '">';
+                }
+                ?>
             <?php endif;
             ?>
 
@@ -71,7 +74,7 @@ function next_day($date, $number)
 
             <?= Html::button('Сортировка по дате', ['class' => 'btn btn-danger sort_by_date', 'type' => 'submit']) ?>
 
-            <?= Html::a('Все дни', ['index'], ['class' => 'btn btn-dark']) ?>
+            <?= Html::a('Все дни', ['index'], ['class' => 'btn btn-primary']) ?>
 
 
         </form>
@@ -89,33 +92,33 @@ function next_day($date, $number)
         [
             'format' => 'raw',
             'attribute' => 'created_at',
-            'filter' =>   Html::input('date', 'ReportsSearch[created_at]',
+            'filter' => Html::input('date', 'ReportsSearch[created_at]',
                 null, [
                     'class' => 'form-control',
                     'style' => 'display:',
                     'id' => 'date'
 
-                ]) ,
+                ]),
             'value' => 'created_at',
         ],
-        [
-            'attribute' => 'today',
-            'format' => 'raw',
-            'value' => function ($model) {
-
-                $text = '';
-                if ($model->task) {
-                    $i = 1;
-                    foreach ($model->task as $task) {
-                        $text .= "<p>$i. ($task->hours_spent ч.) $task->task</p>";
-                        $i++;
-                    }
-                }
-                return $text;
-            }
-        ],
-        'difficulties',
-        'tomorrow',
+//        [
+//            'attribute' => 'today',
+//            'format' => 'raw',
+//            'value' => function ($model) {
+//
+//                $text = '';
+//                if ($model->task) {
+//                    $i = 1;
+//                    foreach ($model->task as $task) {
+//                        $text .= "<p>$i. ($task->hours_spent ч.) $task->task</p>";
+//                        $i++;
+//                    }
+//                }
+//                return $text;
+//            }
+//        ],
+        //'difficulties',
+        //'tomorrow',
         [
             'format' => 'raw',
             'attribute' => 'user_card_id',
@@ -130,7 +133,7 @@ function next_day($date, $number)
                 ],
             ]),
             'value' => function ($data) {
-                return '<a href="'.Yii::getAlias('@web').'/reports/reports/user?id=' . $data['user_card_id'] . '">' . \common\models\Reports::getFio($data) . '</a>';
+                return '<a href="' . Yii::getAlias('@web') . '/reports/reports/user?id=' . $data['user_card_id'] . '">' . \common\models\Reports::getFio($data) . '</a>';
             },
         ],
 
