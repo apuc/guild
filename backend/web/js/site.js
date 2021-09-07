@@ -1,4 +1,3 @@
-alert(123);
 
 $(function(){
     $('#options').change(function(){

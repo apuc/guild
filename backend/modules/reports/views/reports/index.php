@@ -1,11 +1,14 @@
 <?php
 
+
 use yii\helpers\Html;
 use yii\grid\GridView;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\reports\models\ReportsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $user_id__fio */
 
 $this->title = 'Отчеты';
 $this->params['breadcrumbs'][] = $this->title;
@@ -16,7 +19,6 @@ function next_day($date, $number)
 {
     return date('Y-m-d', strtotime($date) + 3600 * 24 * $number);
 }
-
 ?>
 <div class="reports-index">
 
@@ -25,20 +27,47 @@ function next_day($date, $number)
         <?= Html::a('Сгрупированный по пользователям вид', ['group'], ['class' => 'btn btn-success']) ?>
     </p>
     <p>
-        <?php for ($date = TODAY; $date != WEEK_AGO; $date = next_day($date, -1)): ?>
-                <?= Html::a($date, ['reports/?date=' . $date], ['class' => 'btn btn-primary']) ?>
-        <?php endfor; ?></div>
+        <?php
+        if (!$_GET){
+            $url = '../..'.Yii::$app->request->url .'?ReportsSearch[created_at]=';
+        } else{
+            $url = '../..'.Yii::$app->request->url .'&ReportsSearch[created_at]=';
+        }
+
+        for ($date = TODAY;
+        $date != WEEK_AGO;
+        $date = next_day($date, -1)): ?>
+
+        <?= Html::a($date, [$url. $date], ['class' => 'btn btn-primary']) ?>
+    <?php endfor; ?></div>
 <div class="row">
     <div class="col-xs-6">
 
         <form method="get" style="display: inline-flex;">
+            <?php if(isset($_GET['ReportsSearch'])):?>
+            <input name="ReportsSearch[today]" type="hidden" value="<?=($_GET['ReportsSearch']['today'])?>">
+            <input name="ReportsSearch[difficulties]" type="hidden" value="<?=($_GET['ReportsSearch']['difficulties'])?>">
+            <input name="ReportsSearch[tomorrow]" type="hidden" value="<?=($_GET['ReportsSearch']['tomorrow'])?>">
+            <input name="ReportsSearch[user_card_id]" type="hidden">
+            <?php if(isset($_GET['ReportsSearch']['user_card_id'])){
+                foreach ($_GET['ReportsSearch']['user_card_id'] as $res)
+                echo
+                 '<input name="ReportsSearch[user_card_id][]" type="hidden" value="'.$res.'">';
+            }
+            ?>
+            <?php endif;
+            ?>
 
-            <?= Html::input('date', 'date', isset($_GET['date']) ? $_GET['date'] : date('Y-m-d'), [
-                'class' => 'form-control',
-                'style' => 'display:',
-                'id' => 'date'
+            <?= Html::input('date', 'ReportsSearch[created_at]',
+                isset($_GET['ReportsSearch']['created_at']) ? $_GET['ReportsSearch']['created_at'] : date('Y-m-d'), [
+                    'class' => 'form-control',
+                    'style' => 'display:',
+                    'id' => 'date'
 
-            ]) ?>
+                ]) ?>
+
+
+
 
             <?= Html::button('Сортировка по дате', ['class' => 'btn btn-danger sort_by_date', 'type' => 'submit']) ?>
 
@@ -49,12 +78,7 @@ function next_day($date, $number)
     </div>
 
 </div>
-<!--    <div class="row" style="margin: 10px 0px 0 5px">-->
 </p>
-<?php
-//echo '<pre>';
-//var_dump($dataProvider);
-//echo '</pre>';?>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
@@ -62,7 +86,18 @@ function next_day($date, $number)
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 
-        'created_at',
+        [
+            'format' => 'raw',
+            'attribute' => 'created_at',
+            'filter' =>   Html::input('date', 'ReportsSearch[created_at]',
+                null, [
+                    'class' => 'form-control',
+                    'style' => 'display:',
+                    'id' => 'date'
+
+                ]) ,
+            'value' => 'created_at',
+        ],
         [
             'attribute' => 'today',
             'format' => 'raw',
@@ -83,10 +118,19 @@ function next_day($date, $number)
         'tomorrow',
         [
             'format' => 'raw',
-            'attribute' => 'ФИО',
-            'filter' => Html::activeTextInput($searchModel, 'fio', ['class' => 'form-control']),
+            'attribute' => 'user_card_id',
+            'filter' => kartik\select2\Select2::widget([
+                'model' => $searchModel,
+                'attribute' => 'user_card_id',
+                'data' => $user_id__fio,
+                'options' => ['multiple' => true, 'class' => 'form-control'],
+                'pluginOptions' => [
+
+                    'multiple' => true,
+                ],
+            ]),
             'value' => function ($data) {
-                return '<a href="./reports/user?id='.$data['user_card_id'].'">' . \common\models\Reports::getFio($data) . '</a>';
+                return '<a href="'.Yii::getAlias('@web').'/reports/reports/user?id=' . $data['user_card_id'] . '">' . \common\models\Reports::getFio($data) . '</a>';
             },
         ],
 
@@ -99,18 +143,9 @@ $this->registerCssFile('../../css/site.css');
 
 </div>
 
-<script>
-    // let date = document.querySelector('#date')
-    //     date.onchange = function (){
-    //     window.location.replace(`./?date=${date.value}`);
-    // }
-</script>
 <style>
     .row * {
         margin-right: 10px;
     }
 
-    .row {
-        margin-left: 1px;
-    }
 </style>

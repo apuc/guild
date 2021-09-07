@@ -48,11 +48,19 @@ class ReportsController extends Controller
     public function actionIndex()
     {
         $searchModel = new ReportsSearch();
+        $reports = $searchModel->search([])->getModels();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $user_id__fio = [];
+        for ($i=0; $i<count($reports);$i++){
+            $user_id__fio[$reports[$i]->user_card_id] = \common\models\Reports::getFio($reports[$i]);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'user_id__fio' => $user_id__fio,
+
         ]);
     }
 

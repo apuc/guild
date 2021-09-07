@@ -60,9 +60,6 @@ class ReportsSearch extends Reports
         $this->load($params);
 
 
-        if (isset($params['date']) and preg_match("/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/", $params['date']) and !isset($params['id'])) {
-            $this->created_at = $params['date'];
-        }
         if (isset($params['year'])) {
             $query->andFilterWhere(['=', 'YEAR(reports.created_at)', $params['year']]);
         }
