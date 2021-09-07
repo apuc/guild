@@ -7,6 +7,8 @@ use common\classes\Debug;
 use common\models\InterviewRequest;
 use common\models\User;
 use frontend\modules\api\models\ProfileSearchForm;
+use kavalar\BotNotificationTemplateProcessor;
+use kavalar\TelegramBotService;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
@@ -60,11 +62,14 @@ class ProfileController extends \yii\rest\Controller
     public function actionAddToInterview()
     {
         if (\Yii::$app->request->isPost) {
+            $attributes = \Yii::$app->request->post();
+
             $model = new InterviewRequest();
-            $model->attributes = \Yii::$app->request->post();
+            $model->attributes = $attributes;
             $model->created_at = time();
             $model->user_id = \Yii::$app->user->id;
             if ($model->save()) {
+                \Yii::$app->telegram_bot->sendRenderedMessage('interview_request', $attributes);
                 return ['status' => 'success'];
             }
 

@@ -85,7 +85,7 @@ class UserCardSearch extends UserCard
 
         $query->orderBy('user_card.updated_at DESC');
 
-        $query->groupBy('card_skill.card_id');
+//        $query->groupBy('card_skill.card_id');
 
         $sumQuery = clone $query;
 

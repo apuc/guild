@@ -77,6 +77,19 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'skills'],
             ],
         ],
+        'telegram_bot' => [
+            'class' => 'kavalar\TelegramBotApi',
+            'templates' => [
+                'interview_request'  =>
+                      "Пришёл запрос на интервью.\n".
+                      "Профиль: ~profile_id~\n".
+                      "Телефон: ~phone~\n".
+                      "Email: ~email~\n".
+                      "Комментарий: ~comment~"
+            ],
+            'telegramBotToken' => $params['telegramBotToken'],
+            'telegramChatId' => $params['telegramBotChatId'],
+        ],
 
     ],
     'params' => $params,

@@ -50,7 +50,7 @@ class ReportsController extends Controller
         $dataProvider->query
             ->where(['user_card.id_user' => Yii::$app->user->identity->id])
             ->innerJoin('user_card', 'reports.user_card_id = user_card.id');
-
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
