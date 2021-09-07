@@ -5,6 +5,7 @@ namespace frontend\modules\api\controllers;
 use common\behaviors\GsCors;
 use common\classes\Debug;
 use common\models\InterviewRequest;
+use common\models\User;
 use frontend\modules\api\models\ProfileSearchForm;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
@@ -63,13 +64,23 @@ class ProfileController extends \yii\rest\Controller
             $model->attributes = \Yii::$app->request->post();
             $model->created_at = time();
             $model->user_id = \Yii::$app->user->id;
-            if ($model->save()){
+            if ($model->save()) {
                 return ['status' => 'success'];
             }
 
             \Yii::$app->response->statusCode = 400;
             return ['status' => 'error', 'errors' => $model->errors];
         }
+    }
+
+    public function actionMe()
+    {
+        if(isset(\Yii::$app->user->id)){
+            $user = User::find()->with('userCard')->where(['id' => \Yii::$app->user->id])->one();
+        }
+
+        \Yii::$app->response->statusCode = 401;
+        return ['status' => 'error', 'errors' => 'No authorized'];
     }
 
 }

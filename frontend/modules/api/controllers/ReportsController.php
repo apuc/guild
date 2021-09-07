@@ -3,6 +3,7 @@
 namespace frontend\modules\api\controllers;
 
 use common\behaviors\GsCors;
+use common\classes\Debug;
 use common\models\Reports;
 use frontend\modules\api\models\ReportSearchForm;
 use JsonException;
@@ -31,19 +32,19 @@ class ReportsController extends Controller
                     'application/json' => Response::FORMAT_JSON,
                 ],
             ],
-            'corsFilter' => [
-                'class' => GsCors::class,
-                'cors' => [
-                    'Origin' => ['*'],
-                    //'Access-Control-Allow-Credentials' => true,
-                    'Access-Control-Allow-Headers' => [
-                        'Content-Type',
-                        'Access-Control-Allow-Headers',
-                        'Authorization',
-                        'X-Requested-With'
-                    ],
-                ]
-            ],
+//            'corsFilter' => [
+//                'class' => GsCors::class,
+//                'cors' => [
+//                    'Origin' => ['*'],
+//                    //'Access-Control-Allow-Credentials' => true,
+//                    'Access-Control-Allow-Headers' => [
+//                        'Content-Type',
+//                        'Access-Control-Allow-Headers',
+//                        'Authorization',
+//                        'X-Requested-With'
+//                    ],
+//                ]
+//            ],
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => [
@@ -70,7 +71,7 @@ class ReportsController extends Controller
     {
         $reportsModel = new Reports();
 
-        $params = Yii::$app->request->get();
+        $params = Yii::$app->request->post();
         $reportsModel->attributes = $params;
 
         if(!$reportsModel->validate()){

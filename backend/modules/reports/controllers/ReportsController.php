@@ -9,6 +9,7 @@ use common\models\Reports;
 use backend\modules\reports\models\ReportsSearch;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\JsonResponseFormatter;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
