@@ -1,3 +1,4 @@
+
 $(function(){
     $('#options').change(function(){
         month = $('#options :selected').val();

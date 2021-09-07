@@ -1,3 +1,6 @@
+.body{
+    display: none;
+}
 .media__upload_img{
     margin-bottom: 10px;
     float: left;

@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data' => \common\models\UserCard::getNameSkills(),
                     'options' => ['multiple' => true, 'placeholder' => 'Выбрать параметр', 'class' => 'form-control'],
                     'pluginOptions' => [
-                        'allowClear' => true
+                        'allowClear' => true,
                     ],
                 ]),
             ],
