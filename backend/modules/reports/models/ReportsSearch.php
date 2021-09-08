@@ -59,7 +59,9 @@ class ReportsSearch extends Reports
 
         $this->load($params);
 
-
+        if (isset($params['user_id'])) {
+           $this->user_card_id = $params['user_id'];
+        }
         if (isset($params['year'])) {
             $query->andFilterWhere(['=', 'YEAR(reports.created_at)', $params['year']]);
         }
@@ -79,7 +81,7 @@ class ReportsSearch extends Reports
 
 
         $query->andFilterWhere([
-            'user_card.id' => $this->id,
+            'reports.id' => $this->id,
             'reports.created_at' => $this->created_at,
             'user_card_id' => $this->user_card_id,
         ]);
