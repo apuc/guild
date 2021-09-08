@@ -1,8 +1,10 @@
 <?php
 
 
+use common\models\Reports;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 
 
 /* @var $this yii\web\View */
@@ -12,6 +14,14 @@ use yii\grid\GridView;
 
 $this->title = 'Отчеты';
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerCss('
+.date_sort {
+display: inline-flex;
+}
+.row * {
+    margin-right: 10px;
+}
+');
 
 define('TODAY', date('Y-m-d'));
 define('WEEK_AGO', date('Y-m-d', time() - 3600 * 24 * 7));
@@ -19,81 +29,63 @@ function next_day($date, $number)
 {
     return date('Y-m-d', strtotime($date) + 3600 * 24 * $number);
 }
-
 ?>
-<div class="reports-index">
 
-    <p>
+<?= Html::beginTag('div', ['class' => 'reports-index'])?>
+    <?=Html::beginTag('p')?>
+
         <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Сгрупированный по пользователям вид', ['group'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <p>
-        <?php
-        if (!$_GET) {
-            $url = '../..' . Yii::$app->request->url . '?ReportsSearch[created_at]=';
-        } else {
-            $url = '../..' . Yii::$app->request->url . '&ReportsSearch[created_at]=';
-        }
 
-        for ($date = TODAY;
-        $date != WEEK_AGO;
-        $date = next_day($date, -1)): ?>
+    <?=Html::endTag('p')?>
 
-        <?= Html::a($date, ['index', 'ReportsSearch[created_at]' => $date], ['class' => 'btn btn-primary']) ?>
-    <?php endfor; ?></div>
-<div class="row">
-    <div class="col-xs-6">
-        <?php $form =  \yii\widgets\ActiveForm::begin() ?>
-        <?= $form->field($searchModel, 'today')->hiddenInput()->label(false) ?>
-        <?php \yii\widgets\ActiveForm::end() ?>
-        <form method="get" style="display: inline-flex;">
-            <?php if (isset($_GET['ReportsSearch'])): ?>
-                <input name="ReportsSearch[today]" type="hidden" value="<?= $searchModel->today ?>">
-                <input name="ReportsSearch[difficulties]" type="hidden" value="<?= $searchModel->difficulties ?>">
-                <input name="ReportsSearch[tomorrow]" type="hidden" value="<?= $searchModel->tomorrow ?>">
-                <input name="ReportsSearch[user_card_id]" type="hidden">
-                <?php if (isset($_GET['ReportsSearch']['user_card_id'])) {
-                    foreach ($_GET['ReportsSearch']['user_card_id'] as $res)
-                        echo
-                            '<input name="ReportsSearch[user_card_id][]" type="hidden" value="' . $res . '">';
-                }
-                ?>
-            <?php endif;
-            ?>
+    <?=Html::beginTag('p')?>
 
-            <?= Html::input('date', 'ReportsSearch[created_at]',
-                isset($_GET['ReportsSearch']['created_at']) ? $_GET['ReportsSearch']['created_at'] : date('Y-m-d'), [
-                    'class' => 'form-control',
-                    'style' => 'display:',
-                    'id' => 'date'
+        <?php for ($date = TODAY; $date != WEEK_AGO; $date = next_day($date, -1)): ?>
+            <?= Html::a($date, ['index', 'ReportsSearch[created_at]' => $date], ['class' => 'btn btn-primary']) ?>
 
-                ]) ?>
+        <?php endfor; ?>
+    <?=Html::endTag('p')?>
+<?= Html::endTag('div')?>
 
+<?= Html::beginTag('div', ['class' => 'row'])?>
+    <?= Html::beginTag('div', ['class' => 'col-xs-6'])?>
+        <?php $form = ActiveForm::begin(['method' => 'get', 'options' => ['class' => 'date_sort'] ])?>
 
+        <?php foreach (array_keys($searchModel->attributes )as $attribute): ?>
+            <?php if($attribute == 'user_card_id'):?>
+                <?php if($searchModel->user_card_id):?>
+                    <?php foreach ($searchModel->user_card_id as $i => $id):?>
+                        <?= $form->field($searchModel, 'user_card_id['.$i.']')->hiddenInput()->label(false)?>
+                    <?php endforeach;?>
+                <?php endif;?>
+            <?php continue?>
+            <?php endif;?>
 
+            <?php if($attribute == 'created_at'):?>
+                <?= Html::input('date', 'ReportsSearch[created_at]',
+                    $searchModel->created_at ? $searchModel->created_at : date('Y-m-d'),
+                    ['class' => 'form-control']) ?>
 
-            <?= Html::button('Сортировка по дате', ['class' => 'btn btn-danger sort_by_date', 'type' => 'submit']) ?>
+                <?= Html::submitButton('Сортировка по дате', ['class' => 'btn btn-danger']) ?>
+                <?= Html::a('Все дни', ['index'], ['class' => 'btn btn-primary']) ?>
+                <?php continue?>
+            <?php endif?>
 
-            <?= Html::a('Все дни', ['index'], ['class' => 'btn btn-primary']) ?>
+        <?php endforeach; ?>
 
-
-        </form>
-    </div>
-
-</div>
-</p>
+        <?php ActiveForm::end() ?>
+    <?= Html::endTag('div')?>
+<?= Html::endTag('div')?>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
-
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
-
         [
             'format' => 'raw',
             'attribute' => 'created_at',
-            'filter' => Html::input('date', 'ReportsSearch[created_at]',
-                null, [
+            'filter' => Html::input('date', 'ReportsSearch[created_at]', null, [
                     'class' => 'form-control',
                     'style' => 'display:',
                     'id' => 'date'
@@ -127,28 +119,14 @@ function next_day($date, $number)
                 'attribute' => 'user_card_id',
                 'data' => $user_id__fio,
                 'options' => ['multiple' => true, 'class' => 'form-control'],
-                'pluginOptions' => [
-
-                    'multiple' => true,
-                ],
             ]),
-            'value' => function ($data) {
-                return '<a href="' . Yii::getAlias('@web') . '/reports/reports/user?id=' . $data['user_card_id'] . '">' . \common\models\Reports::getFio($data) . '</a>';
+            'value' => function ($model) {
+                return Html::a(Reports::getFio($model).' '.Html::tag('i', null, ['class' => 'far fa-calendar-alt']),
+                    ['user', 'user_id' => $model['user_card_id']]);
+
             },
         ],
 
         ['class' => 'yii\grid\ActionColumn'],
     ],
-]);
-$this->registerCssFile('../../css/site.css');
-?>
-
-
-</div>
-
-<style>
-    .row * {
-        margin-right: 10px;
-    }
-
-</style>
+]);?>

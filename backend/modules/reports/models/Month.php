@@ -2,10 +2,6 @@
 
 namespace backend\modules\reports\models;
 
-use common\classes\Debug;
-use yii\base\Model;
-use function GuzzleHttp\Psr7\str;
-
 class Month
 {
 
@@ -18,10 +14,9 @@ class Month
     {
         $this->inactive_begin = [];
         $this->inactive_end = [];
-        if (!$date and !self::is_date($date)) {
+        if ( !($date and self::is_date($date)) ){
             $date = date('Y-m-d');
         }
-
         $first_day_of_week = self::get_day_week(self::get_first_day($date));
         $quantity_days = self::get_days_month($date);
 

@@ -4,170 +4,154 @@ use yii\helpers\Html;
 use common\models\Reports;
 use backend\modules\reports\models\Month;
 
-
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\reports\models\ReportsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $reports common\models\Reports */
-/* @var $ID */
-/* @var $reports_month */
-/* @var $date */
 
+$reports = $dataProvider->getModels();
+$USER_ID = $searchModel->user_card_id;
 
-
-$month = new Month($date);
-$index_raw = 0;
-
-function next_day($date, $number)
-{
-    return date('Y-m-d', strtotime($date) + 3600 * 24 * $number);
+$reports_array = array_column($reports, 'attributes');
+foreach ($reports as $i => $report){
+    $reports_array[$i]['today'] = array_column($report->task, 'attributes');
 }
+$reports_month = json_encode(array_merge(
+        ['reports' => $reports_array],
+        ['month' => (array)new Month()])
+);
 
-function get_dates_created_at(Reports $report)
-{
-    return $report->created_at;
-}
-
-function get_color($date, $dates_created_at)
-{
-    if (in_array(Month::get_day_week($date), array(6, 7)))
-        return;
-    if (in_array($date, $dates_created_at)) {
-        return 'success';
-    } else
-        return 'danger';
-}
-
-$this->title = 'Календарь пользователя - ' . Reports::getFio($reports[0]);
-$dates_created_at = array_unique(array_map('get_dates_created_at', $reports));
+$this->registerCssFile('@web/css/calendar.css');
+$this->title = 'Календарь пользователя - ' . Reports::getFio($searchModel);
 ?>
-<section class="calendar-contain">
-    <aside class="calendar__sidebar">
-        <section class="title-bar">
-            <?= Html::input('date', 'date', isset($_GET['date']) ? $_GET['date'] : date('Y-m-d'), [
-                'class' => 'form-control',
-                'style' => 'display:',
-                'id' => 'date',
-            ]) ?>
 
-        </section>
-        <h2 class="sidebar__heading"><?= date('l') ?><br><?= date('F d') ?></h2>
-        <ul class="sidebar__list">
+<?=Html::beginTag('section', ['class' => 'calendar-contain'])?>
+    <?=Html::beginTag('aside', ['class' => 'calendar__sidebar'])?>
+        <?=Html::beginTag('section', ['class' => 'title-bar'])?>
+            <?= Html::a('<i class="fas fa-long-arrow-alt-left"></i> Назад', Yii::$app->request->referrer, ['class' => 'btn btn-primary',]) ?>
+            <?= Html::input('date', null, date('Y-m-d'), ['class' => 'form-control', 'id' => 'date',]) ?>
+        <?=Html::endTag('section')?>
 
-        </ul>
-    </aside>
-    <section class="calendar__days">
-    </section>
+        <?=Html::tag('h2', date('l').'<br>'.date('F d'), ['class' => 'sidebar__heading'])?>
 
-</section>
+        <?=Html::beginTag('ul', ['class' => 'sidebar__list'])?>
+        <?=Html::endTag('ul')?>
+    <?=Html::endTag('aside')?>
+
+    <?=Html::beginTag('section', ['class' => 'calendar__days'])?>
+    <?=Html::endTag('section')?>
+
+<?=Html::endTag('section')?>
+
+
 <script>
+class HtmlCalendar {
 
-    class HtmlCalendar {
+    constructor(month, reports, before = '') {
+        this.month = month;
+        this.reports = reports;
+        this.before = before;
+        this.datePicker = datePicker;
 
-        constructor(month, reports, before = '') {
-            this.month = month;
-            this.reports = reports;
-            this.before = before;
-            this.datePicker = datePicker;
+        this.classDay = 'calendar__day';
 
-            this.classDay = 'calendar__day';
+        this.initBefore();
+    }
 
-            this.nameDate = document.querySelector('.sidebar__heading');
+    getHtml() {
+        console.log(reports)
+        this.getInactiveBegin();
+        this.getActive();
+        this.getInactiveEnd();
+        return this.html;
+    }
 
-            this.initBefore();
-        }
+    update(month, reports) {
+        this.month = month;
+        this.reports = reports;
+        this.initBefore();
 
-        getHtml() {
-            this.getInactiveBegin();
-            this.getActive();
-            this.getInactiveEnd();
-            return this.html;
-        }
+    }
 
-        update(month, reports) {
-            this.month = month;
-            this.reports = reports;
-            this.initBefore();
+    initBefore() {
+        this.html = '';
+        this.index = 1;
+        this.indexRaw = 0;
+        this.date = document.querySelector('#date').value.substr(0, 7);
+    }
 
-        }
+    getInactiveBegin() {
+        if (Object.keys(this.month['inactive_begin']).length > 0) {
+            this.html += '<section class="calendar__week">';
 
-        initBefore() {
-            this.html = '';
-            this.index = 1;
-            this.indexRaw = 0;
-            this.date = document.querySelector('#date').value.substr(0, 7);
-        }
-
-        getInactiveBegin() {
-            if (Object.keys(this.month['inactive_begin']).length > 0) {
-                this.html += '<section class="calendar__week">';
-
-                for (; this.index <= Object.keys(this.month['inactive_begin']).length; this.index++, this.indexRaw++) {
-                    this.html += this.getCalendarDay('inactive_begin', 'inactive');
-                }
+            for (; this.index <= Object.keys(this.month['inactive_begin']).length; this.index++, this.indexRaw++) {
+                this.html += this.getCalendarDay('inactive_begin', 'inactive');
             }
-        }
-
-        getActive() {
-            for (; this.index <= this.getLastKey(this.month['active']); this.index++, this.indexRaw++) {
-                if (this.indexRaw % 7 == 0) {
-                    if (this.index != 1) {
-                        this.html += '</section>';
-                    }
-                    this.html += '<section class="calendar__week">';
-                }
-                this.html += this.getCalendarDay('active')
-            }
-        }
-
-        getInactiveEnd() {
-            for (; this.index <= this.getLastKey(this.month['inactive_end']); this.index++, this.indexRaw++) {
-                if (this.indexRaw % 7 == 0) {
-                    this.html += `</section>
-                            <section class="calendar__week ">`;
-                }
-                this.html += this.getCalendarDay('inactive_end', 'inactive');
-            }
-        }
-
-        getCalendarDay(type, className = '') {
-            return `<div class="${this.classDay} ${className}">
-                <span class="calendar__date ${this.getColor(this.date + '-' + this.month[type][this.index])}">${this.month[type][this.index]}</span>
-            </div>`;
-        }
-
-        getColor(date) {
-            let d = new Date(date)
-            if ([6, 0].includes(d.getDay()))
-                return;
-            for (let i in this.reports) {
-                if (this.reports[i]['created_at'] == date) {
-                    return 'success';
-                }
-            }
-            return 'danger';
-        }
-
-        getLastKey(obj) {
-            return Object.keys(obj)[Object.keys(obj).length - 1];
         }
     }
 
-    class HtmlReports {
-        constructor(reports) {
-            //TODO выходные дни - праздники
-            this.reports = reports;
+    getActive() {
+        for (; this.index <= this.getLastKey(this.month['active']); this.index++, this.indexRaw++) {
+            if (this.indexRaw % 7 == 0) {
+                if (this.index != 1) {
+                    this.html += '</section>';
+                }
+                this.html += '<section class="calendar__week">';
+            }
+            this.html += this.getCalendarDay('active')
+        }
+    }
+
+    getInactiveEnd() {
+        for (; this.index <= this.getLastKey(this.month['inactive_end']); this.index++, this.indexRaw++) {
+            if (this.indexRaw % 7 == 0) {
+                this.html += `</section>
+                            <section class="calendar__week ">`;
+            }
+            this.html += this.getCalendarDay('inactive_end', 'inactive');
+        }
+    }
+
+    getCalendarDay(type, className = '') {
+        return `<div class="${this.classDay} ${className}">
+                <span class="calendar__date ${this.getColor(this.date + '-' + IntToDate(this.month[type][this.index]) )}">${this.month[type][this.index]}</span>
+            </div>`;
+    }
+
+    getColor(date) {
+        let d = new Date(date)
+        if ([6, 0].includes(d.getDay()))
+            return;
+        for (let i = 0; i < Object.keys(this.reports).length; i++) {
+
+            if (this.reports[i]['created_at'] == date) {
+                return 'success';
+            }
         }
 
-        getHtmlByDate(date) {
+        return 'danger';
 
-            if ([0, 6].includes(new Date(date).getDay())) {
-                return "Выходной день";
-            }
-            if (!this.reports)
-                return 'Нет репортов за месяц';
-            let j = 0;
-            let html = `<ul class="sidebar__list">
+    }
+
+    getLastKey(obj) {
+        return Object.keys(obj)[Object.keys(obj).length - 1];
+    }
+}
+
+class HtmlReports {
+constructor(reports) {
+    //TODO выходные дни - праздники
+this.reports = reports;
+}
+
+    getHtmlByDate(date) {
+
+        if ([0, 6].includes(new Date(date).getDay())) {
+            return "Выходной день";
+        }
+        if (!this.reports)
+            return 'Нет репортов за месяц';
+        let j = 0;
+        let html = `<ul class="sidebar__list">
                 <table class="table table-striped table-bordered">
                     <thead>
                     <tr>
@@ -184,19 +168,19 @@ $dates_created_at = array_unique(array_map('get_dates_created_at', $reports));
                     </tr>
                     </thead>
                     <tbody>`;
-            for (let k = 0, i = 0, report = this.reports[i]; i < Object.keys(this.reports).length; i++) {
-                report = this.reports[i];
-                if (report['created_at'] == date) {
-                    k++;
-                    html += `<tr data-key="${report['id']}">
+        for (let k = 0, i = 0, report = this.reports[i]; i < Object.keys(this.reports).length; i++) {
+    report = this.reports[i];
+    if (report['created_at'] == date) {
+        k++;
+        html += `<tr data-key="${report['id']}">
                     <td>${k}</td><td>`;
 
-                    for (j = 0; j < Object.keys(report['today']).length; j++) {
-                        html += `<p>${j + 1}. (${report['today'][j]['hours_spent']} ч.)
+        for (j = 0; j < Object.keys(report['today']).length; j++) {
+            html += `<p>${j + 1}. (${report['today'][j]['hours_spent']} ч.)
 ${report['today'][j]['task']}</p>`
-                    }
+                }
 
-                    html += `</td>
+        html += `</td>
                     <td>${report['difficulties']}</td>
                     <td>${report['tomorrow']}</td>
                     <td>
@@ -230,18 +214,18 @@ ${report['today'][j]['task']}</p>`
                             </svg>
                         </a></td>
 `;
-                }
-            }
-            if (j == 0) {
-                return "За этот день не было отчетов";
-            }
-
-
-            return html;
+    }
+}
+        if (j == 0) {
+            return "За этот день не было отчетов";
         }
-    };
 
-    const CALENDAR_BAR = ` < section
+
+        return html;
+    }
+}
+
+const CALENDAR_BAR = ` < section
 
                 class
 
@@ -260,488 +244,131 @@ ${report['today'][j]['task']}</p>`
             </section>
                 `;
 
-    let reports = (JSON.parse('<?=$reports_month?>'))['reports'];
-    let month = (JSON.parse('<?=$reports_month?>'))['month'];
-    let datePicker = document.querySelector('#date');
-    let oldDate = datePicker.value.substr(0, 7);
-    let nameDate = document.querySelector('.sidebar__heading');
+let reports = (JSON.parse('<?=$reports_month?>'))['reports'];
+let month = (JSON.parse('<?=$reports_month?>'))['month'];
+let datePicker = document.querySelector('#date');
+let oldDate = datePicker.value.substr(0, 7);
+let nameDateBoard = document.querySelector('.sidebar__heading');
 
-    let reportsBoard = document.querySelector('.sidebar__list');
-    let htmlReports = new HtmlReports(reports);
+let reportsBoard = document.querySelector('.sidebar__list');
+let htmlReports = new HtmlReports(reports);
 
-    let htmlCalendar = new HtmlCalendar(month, reports, CALENDAR_BAR);
-    let calendar = document.querySelector('.calendar__days');
+let htmlCalendar = new HtmlCalendar(month, reports, CALENDAR_BAR);
+let calendar = document.querySelector('.calendar__days');
 
 
-    calendar.load = async function () {
+calendar.load = async function (day) {
+    htmlCalendar.update(month, reports)
+    calendar.innerHTML = htmlCalendar.getHtml();
 
-        htmlCalendar.update(month, reports)
-        calendar.innerHTML = htmlCalendar.getHtml();
+    htmlReports.reports = reports;
+    htmlReports.getHtmlByDate('2021-08-31')
 
-        htmlReports.reports = reports;
-        htmlReports.getHtmlByDate('2021-08-31')
+    datePicker.onchange = function (day=null) {
+        let days = document.querySelectorAll('.calendar__day ')
 
-        datePicker.onchange = function () {
-            if (!isOldDatePicker(datePicker, oldDate)) {
-                oldDate = datePicker.value.substr(0, 7);
+        for (let i = 0; i < days.length; i++) {
+            if (days[i].classList.contains('active_day'))
+                days[i].classList.remove('active_day')
 
-                updateMonthReports(datePicker.value)
-                    .then(reportsMonth => {
-                        reports = reportsMonth['reports'];
-                        month = reportsMonth['month'];
-
-                        calendar.load();
-                    })
-
-            }
-            let date = new Date(datePicker.value);
-            let monthName = date.toLocaleString('default', {month: 'long'});
-            let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
-            nameDate.innerHTML = `${dayWeekName} <br>${monthName} ${datePicker.value.substr(8, 2)}`;
-            reportsBoard.innerHTML = htmlReports.getHtmlByDate(datePicker.value)
         }
 
-        let days = document.querySelectorAll('.calendar__day');
-        for (let i = 0; i < Object.keys(days).length; i++) {
-            let dateDay = parseInt(days[i].textContent);
+        if (!isOldDatePicker(datePicker, oldDate)) {
+            oldDate = datePicker.value.substr(0, 7);
 
-            if (days[i].classList.contains('inactive')) {
-                days[i].onclick = function () {
-                    let date = getFutureDate(datePicker.value, parseInt(days[i].textContent))
-                    datePicker.value = date;
-                    datePicker.onchange()
-                }
-            } else {
-                days[i].onclick = function () {
-                    datePicker.value = datePicker.value.substr(0, 8) + IntToDate(dateDay);
-                    datePicker.onchange()
-                }
-            }
-        }
-    }
+            updateMonthReports(datePicker.value)
+            .then(reportsMonth => {
+                reports = reportsMonth['reports'];
+                month = reportsMonth['month'];
 
-    calendar.load()
-    datePicker.onchange()
-
-    function isOldDatePicker(datePicker, oldDate) {
-        if (datePicker.value.substr(0, 7) == oldDate)
-            return true;
-        return false
-    }
-
-    async function updateMonthReports(date) {
-
-        let monthNumber = date.substr(5, 2);
-        let yearNumber = date.substr(0, 4);
-
-        return fetch('../ajax/get-reports-for-month-by-id-year-month?id=<?=$ID?>' +
-            '&month=' + monthNumber +
-            '&year=' + yearNumber)
-            .then((res) => {
-                return res.json()
+                calendar.load(day);
+                let date = new Date(datePicker.value);
+                let monthName = date.toLocaleString('default', {month: 'long'});
+                let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
+                nameDateBoard.innerHTML = `${dayWeekName} <br>${monthName} ${datePicker.value.substr(8, 2)}`;
+                reportsBoard.innerHTML = htmlReports.getHtmlByDate(datePicker.value)
             })
 
+        }
+        let date = new Date(datePicker.value);
+        let monthName = date.toLocaleString('default', {month: 'long'});
+        let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
+        nameDateBoard.innerHTML = `${dayWeekName} <br>${monthName} ${datePicker.value.substr(8, 2)}`;
+        reportsBoard.innerHTML = htmlReports.getHtmlByDate(datePicker.value)
     }
 
-    function getFutureDate(dat, value) {
-        let date = new Date(dat);
-        if (value < 8) {
-            if (date.getMonth() == 11) {
-                date = new Date(date.getFullYear() + 1, 0, value);
-            } else {
-                date = new Date(date.getFullYear(), date.getMonth() + 1, value);
+    let days = document.querySelectorAll('.calendar__day');
+    for (let i = 0; i < Object.keys(days).length; i++) {
+        let dateDay = parseInt(days[i].textContent);
+        if (day) {
+            if (parseInt(day.textContent) == dateDay && !days[i].classList.contains('inactive')) {
+                days[i].classList.add('active_day')
+            }
+        }
+
+        if (days[i].classList.contains('inactive')) {
+            days[i].onclick = function () {
+                let date = getFutureDate(datePicker.value, parseInt(days[i].textContent))
+                datePicker.value = date;
+                datePicker.onchange(this)
             }
         } else {
-            if (date.getMonth() == 0) {
-                date = new Date(date.getFullYear() - 1, 11, value);
-            } else {
-                date = new Date(date.getFullYear(), date.getMonth() - 1, value);
+            days[i].onclick = function () {
+
+                datePicker.value = datePicker.value.substr(0, 8) + IntToDate(dateDay);
+                datePicker.onchange(this)
+                days[i].classList.add('active_day')
             }
         }
-        return date.getFullYear() + '-' + IntToDate(date.getMonth() + 1) + '-' + IntToDate(value);
-
     }
+}
 
-    function IntToDate(number_date) {
-        if (Math.floor(number_date / 10) === 0)
-            number_date = '0' + number_date;
-        return number_date
+calendar.load()
+datePicker.onchange()
+
+function isOldDatePicker(datePicker, oldDate) {
+    if (datePicker.value.substr(0, 7) == oldDate)
+        return true;
+    return false
+}
+
+async function updateMonthReports(date) {
+
+    let monthNumber = date.substr(5, 2);
+    let yearNumber = date.substr(0, 4);
+    return fetch('../ajax/get-reports-for-month-by-id-year-month?user_id=<?=$USER_ID?>' +
+            '&month=' + monthNumber +
+            '&year=' + yearNumber)
+        .then((res) => {
+        return res.json()
+        })
+
+}
+
+function getFutureDate(dat, value) {
+    let date = new Date(dat);
+    if (value < 8) {
+        if (date.getMonth() == 11) {
+            date = new Date(date.getFullYear() + 1, 0, value);
+        } else {
+            date = new Date(date.getFullYear(), date.getMonth() + 1, value);
+        }
+    } else {
+        if (date.getMonth() == 0) {
+            date = new Date(date.getFullYear() - 1, 11, value);
+        } else {
+            date = new Date(date.getFullYear(), date.getMonth() - 1, value);
+        }
     }
+    return date.getFullYear() + '-' + IntToDate(date.getMonth() + 1) + '-' + IntToDate(value);
 
+}
+
+function IntToDate(number_date) {
+    if (Math.floor(number_date / 10) === 0)
+        number_date = '0' + number_date;
+    return number_date
+}
 </script>
-
-<style>
-
-    .calendar-contain {
-        position: relative;
-        left: 0;
-        right: 0;
-        border-radius: 0;
-        width: 100%;
-        overflow: hidden;
-        max-width: 1920px;
-        min-width: 450px;
-        margin: 1rem auto;
-        background-color: #f5f7f6;
-        box-shadow: 5px 5px 72px rgba(30, 46, 50, 0.5);
-        color: #040605;
-    }
-
-    @media screen and (min-width: 55em) {
-        .calendar-contain {
-            margin: auto;
-            top: 5%;
-        }
-    }
-
-    .title-bar {
-        position: relative;
-        width: 100%;
-        display: table;
-        text-align: right;
-        background: #f5f7f6;
-        padding: 0.5rem;
-        margin-bottom: 0;
-    }
-
-    .title-bar:after {
-        display: table;
-        clear: both;
-    }
-
-    .title-bar__burger {
-        display: block;
-        position: relative;
-        float: left;
-        overflow: hidden;
-        margin: 0;
-        padding: 0;
-        width: 38px;
-        height: 30px;
-        font-size: 0;
-        text-indent: -9999px;
-        appearance: none;
-        box-shadow: none;
-        border: none;
-        cursor: pointer;
-        background: none;
-    }
-
-    .title-bar__burger:focus {
-        outline: none;
-    }
-
-    .burger__lines {
-        display: block;
-        position: absolute;
-        width: 18px;
-        top: 15px;
-        left: 0;
-        right: 0;
-        margin: auto;
-        height: 1px;
-        background: #040605;
-    }
-
-    .burger__lines:before, .burger__lines:after {
-        position: absolute;
-        display: block;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background-color: #040605;
-        content: "";
-    }
-
-    .burger__lines:before {
-        top: -5px;
-    }
-
-    .burger__lines:after {
-        bottom: -5px;
-    }
-
-    .title-bar__year {
-        display: block;
-        position: relative;
-        float: left;
-        font-size: 1rem;
-        line-height: 30px;
-        width: 43%;
-        padding: 0 0.5rem;
-        text-align: left;
-    }
-
-    @media screen and (min-width: 55em) {
-        .title-bar__year {
-            width: 27%;
-        }
-    }
-
-    .title-bar__month {
-        position: relative;
-        /*float: center;*/
-        font-size: 1rem;
-        line-height: 30px;
-        width: 22%;
-        padding: 0 0.5rem;
-        text-align: center;
-        margin-right: 67px;
-        word-spacing: 30px;
-    }
-
-    @media screen and (min-width: 55em) {
-        .title-bar__month {
-            width: 12%;
-        }
-    }
-
-    .title-bar__minimize, .title-bar__maximize, .title-bar__close {
-        position: relative;
-        float: left;
-        width: 34px;
-        height: 34px;
-    }
-
-    .title-bar__minimize:before, .title-bar__maximize:before, .title-bar__close:before, .title-bar__minimize:after, .title-bar__maximize:after, .title-bar__close:after {
-        top: 30%;
-        right: 30%;
-        bottom: 30%;
-        left: 30%;
-        content: " ";
-        position: absolute;
-        border-color: #8e8e8e;
-        border-style: solid;
-        border-width: 0 0 2px 0;
-    }
-
-    .title-bar .title-bar__controls {
-        display: inline-block;
-        vertical-align: top;
-        position: relative;
-        float: right;
-        width: auto;
-    }
-
-    .title-bar .title-bar__controls:before, .title-bar .title-bar__controls:after {
-        content: none;
-    }
-
-    .title-bar .title-bar__minimize:before {
-        border-bottom-width: 2px;
-    }
-
-    .title-bar .title-bar__maximize:before {
-        border-width: 1px 1px 2px 1px;
-    }
-
-    .title-bar .title-bar__close:before, .title-bar .title-bar__close:after {
-        bottom: 50%;
-        top: 49.9%;
-    }
-
-    .title-bar .title-bar__close:before {
-        transform: rotate(45deg);
-    }
-
-    .title-bar .title-bar__close:after {
-        transform: rotate(-45deg);
-    }
-
-    .calendar__sidebar {
-        width: 100%;
-        margin: 0 auto;
-        float: none;
-        background: linear-gradient(120deg, #eff3f3, #e1e7e8);
-        padding-bottom: 0.7rem;
-    }
-
-    @media screen and (min-width: 55em) {
-        .calendar__sidebar {
-            position: absolute;
-            height: 100%;
-            width: 50%;
-            float: left;
-            margin-bottom: 0;
-        }
-    }
-
-    .calendar__sidebar .content {
-        padding: 2rem 1.5rem 2rem 4rem;
-        color: #040605;
-    }
-
-    .sidebar__nav {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        margin-bottom: 0.9rem;
-        padding: 0.7rem 1rem;
-        background-color: #f5f7f6;
-    }
-
-    .sidebar__nav-item {
-        display: inline-block;
-        width: 22px;
-        margin-right: 23px;
-        padding: 0;
-        opacity: 0.8;
-    }
-
-    .sidebar__list {
-        list-style: none;
-        margin: 0;
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-
-    .sidebar__list-item {
-        margin: 1.2rem 0;
-        color: #2d4338;
-        font-weight: 100;
-        font-size: 1rem;
-    }
-
-    .list-item__time {
-        display: inline-block;
-        width: 60px;
-    }
-
-    @media screen and (min-width: 55em) {
-        .list-item__time {
-            margin-right: 2rem;
-        }
-    }
-
-    .sidebar__list-item--complete {
-        color: rgba(4, 6, 5, 0.3);
-    }
-
-    .sidebar__list-item--complete .list-item__time {
-        color: rgba(4, 6, 5, 0.3);
-    }
-
-    .sidebar__heading {
-        font-size: 2.2rem;
-        font-weight: bold;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        margin-bottom: 3rem;
-        margin-top: 1rem;
-    }
-
-    .sidebar__heading span {
-        float: right;
-        font-weight: 300;
-    }
-
-    .calendar__heading-highlight {
-        color: #2d444a;
-        font-weight: 900;
-    }
-
-    .calendar__days {
-        display: flex;
-        flex-flow: column wrap;
-        align-items: stretch;
-        width: 100%;
-        float: none;
-        min-height: 580px;
-        height: 100%;
-        font-size: 12px;
-        /*padding: 0.8rem 0 1rem 1rem;*/
-        #b8cad6 background: #f5f7f6;
-    }
-
-    @media screen and (min-width: 55em) {
-        .calendar__days {
-            width: 50%;
-            float: right;
-        }
-    }
-
-    .calendar__top-bar {
-        background: #b8cad6;
-        text-align: center;
-        display: flex;
-        flex: 56px 0 0;
-    }
-
-    .top-bar__days {
-        width: 100%;
-        padding: 0 5px;
-        color: #2d4338;
-        font-weight: 100;
-        -webkit-font-smoothing: subpixel-antialiased;
-        font-size: 1rem;
-    }
-
-    .calendar__week {
-        display: flex;
-        flex: 1 1 0;
-    }
-
-    .calendar__day {
-        text-align: center;
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: space-between;
-        width: 100%;
-        padding: 1.9rem 0.2rem 0.2rem;
-    }
-
-
-    .calendar__date {
-        color: #040605;
-        font-size: 1.7rem;
-        font-weight: 600;
-        line-height: 0.7;
-    }
-
-    @media screen and (min-width: 55em) {
-        .calendar__date {
-            font-size: 2.3rem;
-        }
-    }
-
-    .calendar__week .inactive .calendar__date, .calendar__week .inactive .task-count {
-        color: #c6c6c6;
-    }
-
-    .calendar__week .today .calendar__date {
-        color: #fd588a;
-    }
-
-    .calendar__task {
-        color: #040605;
-        display: flex;
-        font-size: 0.8rem;
-    }
-
-    @media screen and (min-width: 55em) {
-        .calendar__task {
-            font-size: 1rem;
-        }
-    }
-
-    .calendar__task.calendar__task--today {
-        color: #fd588a;
-    }
-
-
-    .danger {
-        color: red;
-    }
-
-    .success {
-        color: green;
-    }
-
-    .calendar__day:hover {
-        color: #0a0a0a;
-        background: #a6a6a6;
-        cursor: pointer;
-    }
-</style>
 
 
