@@ -56,6 +56,9 @@ return [
         'interview' => [
             'class' => 'backend\modules\interview\Interview',
         ],
+        'achievements' => [
+            'class' => 'backend\modules\achievements\Achievements',
+        ],
     ],
     'components' => [
         'request' => [
