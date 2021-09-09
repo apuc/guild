@@ -20,14 +20,6 @@ class m210908_110644_create_achievement_table_and_link_table_to_user_card extend
             'description' => $this->text(),
             'status' => $this->integer()->defaultValue(1),
         ]);
-        $this->addForeignKey(
-            'fk-achievement-status',
-            'achievement',
-            'status',
-            'status',
-            'id',
-            'CASCADE'
-        );
         $this->createTable('{{%achievement_user_card}}', [
             'id' => $this->primaryKey(),
             'user_card_id' => $this->integer(),
