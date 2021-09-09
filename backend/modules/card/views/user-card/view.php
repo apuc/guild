@@ -8,7 +8,9 @@ use yii\widgets\DetailView;
 /* @var $model backend\modules\card\models\UserCard */
 /* @var $userData common\models\User */
 /* @var $skills \common\models\CardSkill */
+/* @var $achievements \common\models\AchievementUserCard */
 /* @var $skill \common\models\Skill */
+/* @var $achievement \common\models\Achievement */
 /* @var $modelFieldValue yii\data\ActiveDataProvider */
 /* @var $changeDataProvider yii\data\ActiveDataProvider */
 
@@ -91,9 +93,20 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <h2>Навыки</h2>
-
     <?php foreach ($skills as $skill) : ?>
         <span class="btn btn-default btn-sm"><?= $skill['skill']->name; ?></span>
+    <?php endforeach; ?>
+
+    <h2>Достижения</h2>
+    <?php foreach ($achievements as $achievement) : ?>
+        <a target="_blank"
+           href="<? echo \yii\helpers\Url::to(['/achievements/achievements/view', 'id' => $achievement['achievement']->id]);?>"
+           class="btn btn-default btn-sm">
+            <?= Html::tag('img', null,
+                ['src' =>  $achievement['achievement']->img, 'height' => '50px', 'alt'=> $achievement['achievement']->title]
+            ) ?>
+            <?= $achievement['achievement']->title; ?>
+        </a>
     <?php endforeach; ?>
 
     <h2>Дополнительные сведения</h2>

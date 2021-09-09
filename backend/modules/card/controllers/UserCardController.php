@@ -3,6 +3,7 @@
 namespace backend\modules\card\controllers;
 
 use common\classes\Debug;
+use common\models\AchievementUserCard;
 use common\models\AdditionalFields;
 use common\models\CardSkill;
 use common\Models\ChangeHistory;
@@ -104,6 +105,12 @@ class UserCardController extends Controller
         ]);
 
         $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
+        $achievements =
+            AchievementUserCard::find()->where(['user_card_id' => $id])
+                ->innerJoinWith(['achievement' => function($query) {
+                    $query->andWhere(['status' => \common\models\Achievement::STATUS_ACTIVE]);
+                }])
+                ->all();
 
         $id_current_user = $this->findModel($id)->id_user;
         $changeDataProvider = new ActiveDataProvider([
@@ -117,6 +124,7 @@ class UserCardController extends Controller
             'model' => $this->findModel($id),
             'modelFieldValue' => $dataProvider,
             'skills' => $skills,
+            'achievements' => $achievements,
             'userData' => User::findOne($id_current_user),
             'changeDataProvider' => $changeDataProvider,
         ]);

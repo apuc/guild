@@ -2,6 +2,7 @@
 
 use asmoday74\ckeditor5\EditorClassic;
 use common\classes\Debug;
+use common\models\Achievement;
 use kartik\select2\Select2;
 use mihaildev\elfinder\InputFile;
 use unclead\multipleinput\MultipleInput;
@@ -175,6 +176,19 @@ use yii\widgets\ActiveForm;
             'language' => 'ru',
         ]
     ]); ?>
+    <div class="row">
+        <div class="col-xs-12">
+            <?= $form->field($model, 'achievements')->widget(Select2::class,
+                [
+                    'data' => \yii\helpers\ArrayHelper::map(Achievement::find()->where(['status' => Achievement::STATUS_ACTIVE])->all(),'id', 'title'),
+                    'options' => ['placeholder' => '...','class' => 'form-control', 'multiple' => true],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]
+            ); ?>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-xs-12">

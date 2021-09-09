@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $user_card_id
- * @property int $achievement
+ * @property int $achievement_id
  *
  * @property Accesses $accesses
  * @property UserCard $userCard
