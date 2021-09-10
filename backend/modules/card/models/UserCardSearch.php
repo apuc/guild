@@ -6,7 +6,6 @@ use common\classes\Debug;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\card\models\UserCard;
 
 /**
  * UserCardSearch represents the model behind the search form of `backend\modules\card\models\UserCard`.
@@ -63,6 +62,10 @@ class UserCardSearch extends UserCard
         }
 
         $query->where(['deleted_at' => null]);
+
+        if (isset($params['month'])) {
+            $query->andFilterWhere(['=', 'MONTH(dob)', $params['month']]);
+        }
 
         // grid filtering conditions
         $query->andFilterWhere([
