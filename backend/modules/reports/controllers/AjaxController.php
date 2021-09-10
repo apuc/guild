@@ -35,10 +35,7 @@ class AjaxController extends \yii\web\Controller
         $response = Yii::$app->response;
         $response->format = Response::FORMAT_JSON;
         $response->getHeaders()->set('Content-Type', 'application/json; charset=utf-8');
-        $response->content = json_encode(array_merge(
-                ['reports' => $reports_array],
-                ['month' => (array)new Month($year.'-'.$month.'-01')])
-        );
+        $response->content = json_encode($reports_array);
 
         return $response;
     }
