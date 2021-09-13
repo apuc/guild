@@ -43,8 +43,6 @@ class CalendarController extends Controller
      * @return string
      */
     public function actionCalendar(){
-        $searchModel = new UserCardSearch();
-        $dataProvider = $searchModel->search(['month'=>date('m', strtotime('2019-07-03'))]);
         return $this->render('calendar');
     }
 
