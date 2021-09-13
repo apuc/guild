@@ -4,6 +4,7 @@
 namespace frontend\modules\card\controllers;
 
 use common\classes\Debug;
+use common\models\AchievementUserCard;
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
 use common\models\User;
@@ -60,10 +61,18 @@ class UserCardController extends Controller
             ]);
 
             $skills = CardSkill::find()->where(['card_id' => $id])->with('skill')->all();
+            $achievements = AchievementUserCard::find()
+                ->where(['user_card_id' => $id])
+                ->innerJoinWith(['achievement' => function($query) {
+                    $query->andWhere(['status' => \common\models\Achievement::STATUS_ACTIVE]);
+                }])
+                ->all();
+
             return $this->render('view', [
                 'model' => $this->findModel($id),
                 'modelFildValue' => $dataProvider,
                 'skills' => $skills,
+                'achievements' => $achievements,
             ]);
         }
         else return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);

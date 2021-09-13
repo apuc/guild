@@ -7,6 +7,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $skills \common\models\CardSkill */
 /* @var $skill \common\models\Skill */
+/* @var $achievements \common\models\Achievement */
 /* @var $modelFildValue yii\data\ActiveDataProvider */
 /* @var $model */
 
@@ -31,11 +32,22 @@ $this->title = 'Профиль';
         ],
     ]);
     ?>
-
     <h2>Навыки</h2>
 
     <?php foreach ($skills as $skill) : ?>
         <span class="btn btn-default btn-sm"><?= $skill['skill']->name; ?></span>
+    <?php endforeach; ?>
+
+    <h2>Достижения</h2>
+    <?php foreach ($achievements as $achievement) : ?>
+        <a target="_blank"
+           href="<? echo \yii\helpers\Url::to(['/achievements/achievements/view', 'id' => $achievement['achievement']->id]);?>"
+           class="btn btn-default btn-sm">
+            <?= Html::tag('img', null,
+                ['src' =>  $achievement['achievement']->img, 'height' => '50px','width' => '50px', 'alt'=> $achievement['achievement']->title]
+            ) ?>
+            <?= $achievement['achievement']->title; ?>
+        </a>
     <?php endforeach; ?>
 
     <h2>Дополнительные сведения</h2>

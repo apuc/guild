@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
            href="<? echo \yii\helpers\Url::to(['/achievements/achievements/view', 'id' => $achievement['achievement']->id]);?>"
            class="btn btn-default btn-sm">
             <?= Html::tag('img', null,
-                ['src' =>  $achievement['achievement']->img, 'height' => '50px', 'alt'=> $achievement['achievement']->title]
+                ['src' =>  $achievement['achievement']->img, 'height' => '50px', 'width' => '50px', 'alt'=> $achievement['achievement']->title]
             ) ?>
             <?= $achievement['achievement']->title; ?>
         </a>
