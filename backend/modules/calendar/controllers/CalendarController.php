@@ -42,12 +42,10 @@ class CalendarController extends Controller
      * Renders the index view for the module
      * @return string
      */
-    public function actionAlternative(){
+    public function actionCalendar(){
         $searchModel = new UserCardSearch();
         $dataProvider = $searchModel->search(['month'=>date('m', strtotime('2019-07-03'))]);
-        return $this->render('alternative', [
-            'dataProvider' => $dataProvider
-        ]);
+        return $this->render('calendar');
     }
 
     public function actionIndex()

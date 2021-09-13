@@ -27,7 +27,7 @@ use yii\widgets\Pjax;
     </select>
 </p>
 <?=Html::a('Календарь дней рождений '.Html::tag('i', null, ['class' => 'far fa-calendar-alt']),
-    ['alternative'], ['class' => 'btn btn-success', 'style' => 'margin-left: 10px'])?>
+    ['calendar'], ['class' => 'btn btn-success', 'style' => 'margin-left: 10px'])?>
 </div>
 <?php
 Pjax::begin(['id' => 'reload']);
