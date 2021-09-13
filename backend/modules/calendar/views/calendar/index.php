@@ -4,9 +4,10 @@
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 use yii\grid\GridView;
+use yii\helpers\Html;
 use yii\widgets\Pjax;
 ?>
-
+<div style="display: flex;align-items: flex-start;">
 <p>
     <select id="options" class="btn btn-secondary dropdown-toggle">
         <option selected="selected" value="?month=00">Выберите месяц</option>
@@ -25,7 +26,9 @@ use yii\widgets\Pjax;
         <option value="?month=12">декабрь</option>
     </select>
 </p>
-
+<?=Html::a('Календарь дней рождений '.Html::tag('i', null, ['class' => 'far fa-calendar-alt']),
+    ['calendar'], ['class' => 'btn btn-success', 'style' => 'margin-left: 10px'])?>
+</div>
 <?php
 Pjax::begin(['id' => 'reload']);
 echo GridView::widget([

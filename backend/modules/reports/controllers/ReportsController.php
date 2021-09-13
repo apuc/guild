@@ -7,8 +7,8 @@ use Yii;
 use common\models\Reports;
 use backend\modules\reports\models\ReportsSearch;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
-use yii\web\JsonResponseFormatter;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -48,9 +48,14 @@ class ReportsController extends Controller
     public function actionIndex()
     {
         $searchModel = new ReportsSearch();
-        $user_id__fio = [];
-        foreach ($searchModel->search([])->getModels() as $model)
-            $user_id__fio[$model->user_card_id] = \common\models\Reports::getFio($model);
+        $user_id__fio = ArrayHelper::map(ArrayHelper::toArray($searchModel->search([])->getModels(), [
+            'common\models\Reports' => [
+                'user_card_id',
+                'fio' => function ($report) {
+                    return Reports::getFio($report);
+                }
+            ],
+        ]),'user_card_id', 'fio');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -61,14 +66,38 @@ class ReportsController extends Controller
     }
 
 
-    public function actionUser($user_id)
+    public function actionCalendar($user_id)
     {
         $searchModel = new ReportsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel->user_card_id = $user_id;
+        $dataProvider = $searchModel->search([]);
 
-        return $this->render('user', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+
+        $reports_array = ArrayHelper::toArray($dataProvider->getModels(), [
+            'common\models\Reports' => [
+                'id',
+                'created_at',
+                'difficulties',
+                'tomorrow',
+                'user_card_id',
+                'today' => function ($report) {
+                    return ArrayHelper::toArray($report->task, [
+                        'common\models\ReportsTask' => [
+                            'hours_spent',
+                            'task'
+                        ],
+                    ]);
+                }
+            ],
+        ]);
+
+        if (!$dataProvider->getCount()){
+            return  $this->render('non-exist_user_id', ['id' => $user_id]);
+        }
+        return $this->render('calendar', [
+            'reports' => $reports_array,
+            'fio' => Reports::getFio($searchModel),
+            'USER_ID' => $user_id
         ]);
 
     }

@@ -3,7 +3,6 @@
 namespace backend\modules\calendar\controllers;
 
 use backend\modules\card\models\UserCardSearch;
-use common\classes\Debug;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
@@ -43,6 +42,10 @@ class CalendarController extends Controller
      * Renders the index view for the module
      * @return string
      */
+    public function actionCalendar(){
+        return $this->render('calendar');
+    }
+
     public function actionIndex()
     {
         $searchModel = new UserCardSearch();

@@ -5,6 +5,7 @@ use common\models\Reports;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 
 /* @var $this yii\web\View */
@@ -14,15 +15,7 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Отчеты';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerCss('
-.date_sort {
-display: inline-flex;
-}
-.row * {
-    margin-right: 10px;
-}
-');
-
+$this->registerCss('.row * {margin-right: 10px;}');
 define('TODAY', date('Y-m-d'));
 define('WEEK_AGO', date('Y-m-d', time() - 3600 * 24 * 7));
 function next_day($date, $number)
@@ -50,7 +43,7 @@ function next_day($date, $number)
 
 <?= Html::beginTag('div', ['class' => 'row'])?>
     <?= Html::beginTag('div', ['class' => 'col-xs-6'])?>
-        <?php $form = ActiveForm::begin(['method' => 'get', 'options' => ['class' => 'date_sort'] ])?>
+        <?php $form = ActiveForm::begin(['method' => 'get', 'options' => ['style' => 'display: inline-flex;'] ])?>
 
         <?php foreach (array_keys($searchModel->attributes )as $attribute): ?>
             <?php if($attribute == 'user_card_id'):?>
@@ -77,6 +70,7 @@ function next_day($date, $number)
         <?php ActiveForm::end() ?>
     <?= Html::endTag('div')?>
 <?= Html::endTag('div')?>
+<?php Pjax::begin();?>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
@@ -122,7 +116,7 @@ function next_day($date, $number)
             ]),
             'value' => function ($model) {
                 return Html::a(Reports::getFio($model).' '.Html::tag('i', null, ['class' => 'far fa-calendar-alt']),
-                    ['user', 'user_id' => $model['user_card_id']]);
+                    ['calendar', 'user_id' => $model['user_card_id']]);
 
             },
         ],
@@ -130,3 +124,4 @@ function next_day($date, $number)
         ['class' => 'yii\grid\ActionColumn'],
     ],
 ]);?>
+<?php Pjax::end();?>
