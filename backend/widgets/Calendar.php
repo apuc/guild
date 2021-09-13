@@ -13,30 +13,13 @@ class Calendar extends Widget
 
     public $css;
 
-    public $runBuild = 'function (date, content){
-        this.build(date, content)
-    }';
+    public $dayUpdate;
 
-    public $updateContent = "function(){
-        return [];
-        /*
-        Example, return [model1, model2, model3 , ...] : 
-        
-        let monthNumber = date.substr(5, 2);
-        return fetch('../ajax/get-birthday-by-month?' +
-            'month=' + monthNumber)
-            .then((res) => {
-                return res.json()
-            })*/
-    }";
+    public $monthUpdate;
 
-    public $getColor = "function (date, dates = null) {
-        return `className`; 
-        }";
+    public $colorClasses = ['accept' => 'access', 'default' => 'danger', 'offDay' => ''];
 
-    public $getHtmlContentForDate = 'function (content, date) {
-        return `<div class="content">${content}</div>`;
-    }';
+    public $offDaysShow = 1;
 
     public $script = 'CalendarHelper.main()';
 
@@ -62,12 +45,59 @@ class Calendar extends Widget
             echo Html::beginTag('section', ['class' => 'calendar__days']);
             echo Html::endTag('section');
         echo Html::endTag('section');
-
         $this->view->registerJs('
-            CalendarHelper._runBuild = ' . $this->runBuild . ';
-            CalendarHelper._getHtmlContentForDate = ' . $this->getHtmlContentForDate . ';
-            CalendarHelper._updateContent = async ' . $this->updateContent . ';
-            CalendarHelper._getColor = ' . $this->getColor . ';
+            CalendarHelper._getDayContent = async function(date){
+                let url =  `'.$this->dayUpdate['url'].'?`;
+                '.(isset($this->dayUpdate['data'])?'
+                let data = '.json_encode($this->dayUpdate['data']):'
+                let data = {};
+                    ').'
+                if(Object.keys(data).length){
+                    for (let key in data){
+                        url += key+`=`+ data[key]+`&`
+                    }
+                }
+                return fetch(url+
+                `date=` + DateHelper.dateToString(date))
+                .then((res) => {
+                    return res.text()
+                })
+            };
+            
+            
+            CalendarHelper._getMonth = async function(month, year){
+                let url =  `'.$this->monthUpdate['url'].'?`;
+                '.(isset($this->monthUpdate['data'])?'
+                let data = '.json_encode($this->monthUpdate['data']):'
+                let data = {};
+                    ').'
+                if(Object.keys(data).length){
+                    for (let key in data){
+                        url += key+`=`+ data[key]+`&`
+                    }
+                }
+                return fetch(url+
+                `&month=` + month +
+                `&year=` + year)
+                .then((res) => {
+                    return res.json()
+                })
+            };
+            
+            CalendarHelper._getColor = function (date, dates = null) {
+            if ('.$this->offDaysShow.')
+                    if ([6, 0].includes(date.getDay()))
+                        return `'.$this->colorClasses['offDay'].'`;
+                        
+                for (let i = 0; i<dates.length; i++){
+                    if (dates[i] == DateHelper.dateToString(date)){
+                        return `'.$this->colorClasses['accept'].'`
+                    }
+                }
+                
+                return `'.$this->colorClasses['default'].'`;
+            }
+            
             
             '.$this->script
         );

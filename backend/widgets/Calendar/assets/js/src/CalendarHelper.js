@@ -48,42 +48,44 @@ class CalendarHelper {
         let nameDateBoard = document.querySelector('.sidebar__heading');
         let contentBoard = document.querySelector('.sidebar__list');
 
-        this._updateContent(datePicker.value)
-            .then(content => {
+        this._getMonth(datePicker.value.substr(5, 2), datePicker.value.substr(0, 4))
+            .then(dates => {
 
-                this._runBuild(DateHelper.stringToDate(datePicker.value), content)
+                this.build(DateHelper.stringToDate(datePicker.value), dates)
 
-                datePicker.onchange = function (day = null) {
+                datePicker.onchange = async function (day = null) {
                     let days = document.querySelectorAll('.calendar__day ')
 
                     for (let i = 0; i < days.length; i++) {
-                        if (parseInt(days[i].textContent)===parseInt(datePicker.value.substr(8,2))){
+                        if (parseInt(days[i].textContent) === parseInt(datePicker.value.substr(8, 2)) &&
+                            !days[i].classList.contains('inactive')) {
                             days[i].classList.add('active_day')
-                        } else
-                        if (days[i].classList.contains('active_day'))
+                        } else if (days[i].classList.contains('active_day'))
                             days[i].classList.remove('active_day')
                     }
 
                     if (!CalendarHelper.isOldDatePicker(datePicker, oldDate)) {
                         oldDate = datePicker.value.substr(0, 7);
 
-                        CalendarHelper._updateContent(datePicker.value)
-                            .then(content => {
+                        CalendarHelper._getMonth(datePicker.value.substr(5, 2), datePicker.value.substr(0, 4))
+                            .then(dates => {
 
                                 CalendarHelper.main(day)
                                 let date = new Date(datePicker.value);
                                 let monthName = date.toLocaleString('default', {month: 'long'});
                                 let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
                                 nameDateBoard.innerHTML = `${dayWeekName} <br>${monthName} ${datePicker.value.substr(8, 2)}`;
-                                contentBoard.innerHTML = CalendarHelper._getHtmlContentForDate(content, datePicker.value)
+                                contentBoard.innerHTML = CalendarHelper._getHtmlContentForDate(dates, datePicker.value)
                             })
 
                     }
+
+
                     let date = new Date(datePicker.value);
                     let monthName = date.toLocaleString('default', {month: 'long'});
                     let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
                     nameDateBoard.innerHTML = `${dayWeekName} <br>${monthName} ${datePicker.value.substr(8, 2)}`;
-                    contentBoard.innerHTML = CalendarHelper._getHtmlContentForDate(content, datePicker.value)
+                    contentBoard.innerHTML = await CalendarHelper._getDayContent(date)
                 }
 
                 let days = document.querySelectorAll('.calendar__day');
@@ -125,10 +127,9 @@ class CalendarHelper {
     }
 
     static
-    async _updateContent(date) {
-        let monthNumber = date.substr(5, 2);
+    async _getMonth(month, year) {
         return fetch('../ajax/get-birthday-by-month?' +
-            'month=' + monthNumber)
+            'month=' + month)
             .then((res) => {
                 return res.json()
             })
@@ -156,13 +157,19 @@ class CalendarHelper {
     }
 
     static _getColor(date, dates = null) {
-        if (dates != null && dates.includes(DateHelper.dateToString(date))) {
-            return 'success';
+        if (dates == null || dates.length == 0) {
+            return ``;
         }
-        if ([6, 0].includes(date.getDay()))
-            return;
+        for (dateContent of dates){
+            if (dateContent['date'] == date){
+                return dateContent['class'];
+            }
+        }
+        return ``;
+    }
 
-        return 'danger';
+    static async _getDayContent(date){
+
     }
 
     static _getFutureDate(dat, value) {
@@ -218,3 +225,5 @@ class CalendarHelper {
     }
 
 }
+
+

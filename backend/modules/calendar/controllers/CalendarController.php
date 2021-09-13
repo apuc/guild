@@ -42,11 +42,11 @@ class CalendarController extends Controller
      * Renders the index view for the module
      * @return string
      */
-    public function actionCalendar(){
-        return $this->render('calendar');
+    public function actionIndex(){
+        return $this->render('index');
     }
 
-    public function actionIndex()
+    public function actionTable()
     {
         $searchModel = new UserCardSearch();
         $user_card = \common\models\UserCard::find()->all();
@@ -67,7 +67,7 @@ class CalendarController extends Controller
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         }
 
-        return $this->render('index', [
+        return $this->render('table', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
