@@ -66,6 +66,13 @@ class UserCardSearch extends UserCard
         if (isset($params['month'])) {
             $query->andFilterWhere(['=', 'MONTH(dob)', $params['month']]);
         }
+        if (isset($params['day'])) {
+            $query->andFilterWhere(['=', 'DAY(dob)', $params['day']]);
+        }
+        if (isset($params['date'])) {
+            $query->andFilterWhere(['=', 'MONTH(dob)', substr($params['date'], 5,2)]);
+            $query->andFilterWhere(['=', 'DAY(dob)', substr($params['date'],8,2)]);
+        }
 
         // grid filtering conditions
         $query->andFilterWhere([
