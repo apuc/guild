@@ -295,6 +295,13 @@
 
 `https://guild.craft-group.xyz/api/reports/update`
 
+<p>
+    Для удаления отчета необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/reports/update
+</p>
+
+<p>
+    Возможные параметры:
+</p>
 <table>
     <tr>
         <th>
