@@ -40,14 +40,12 @@ $this->title = 'Профиль';
 
     <h2>Достижения</h2>
     <?php foreach ($achievements as $achievement) : ?>
-        <a target="_blank"
-           href="<? echo \yii\helpers\Url::to(['/achievements/achievements/view', 'id' => $achievement['achievement']->id]);?>"
-           class="btn btn-default btn-sm">
+        <div class="btn btn-default btn-sm">
             <?= Html::tag('img', null,
                 ['src' =>  $achievement['achievement']->img, 'height' => '50px','width' => '50px']
             ) ?>
             <?= $achievement['achievement']->title; ?>
-        </a>
+        </div>
     <?php endforeach; ?>
 
     <h2>Дополнительные сведения</h2>
