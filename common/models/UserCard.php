@@ -38,6 +38,7 @@ use yii\helpers\ArrayHelper;
  * @property ProjectUser[] $projectUsers
  * @property Position $position
  * @property Status $status0
+ * @property Achievement[] $achievements
  */
 class UserCard extends \yii\db\ActiveRecord
 {
@@ -169,6 +170,14 @@ class UserCard extends \yii\db\ActiveRecord
     public function getStatus0()
     {
         return $this->hasOne(Status::class, ['id' => 'status']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAchievements(): \yii\db\ActiveQuery
+    {
+        return $this->hasMany(AchievementUserCard::class, ['user_card_id' => 'id'])->with('achievement');
     }
 
     public function getGenders()
