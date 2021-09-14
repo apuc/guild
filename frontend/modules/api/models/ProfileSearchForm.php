@@ -20,6 +20,8 @@ class ProfileSearchForm extends Model
     public $limit = 10;
     public $offset = 0;
     public $skills;
+    public $achievements;
+
     public $position_id;
     public $id;
 
@@ -28,6 +30,7 @@ class ProfileSearchForm extends Model
         return [
             [['id', 'limit', 'offset', 'position_id'], 'safe'],
             [['skills'], 'checkIsArray'],
+            [['achievements'], 'checkIsArray'],
         ];
     }
 
@@ -45,6 +48,7 @@ class ProfileSearchForm extends Model
             return UserCard::find()
                 ->where(['id' => $this->id])
                 ->with(['skillValues'])
+                ->with(['achievements'])
                 ->asArray()
                 ->one();
         }
@@ -65,6 +69,16 @@ class ProfileSearchForm extends Model
         }
         else{
             $model->joinWith('skillValues');
+        }
+
+        if($this->achievements){
+            $model->joinWith(['achievements']);
+            $this->achievements = explode(',', $this->achievements);
+            $model->where(['achievement_user_card.achievement_id' => $this->achievements]);
+            $model->having('COUNT(DISTINCT achievement_id) = ' . count($this->achievements));
+        }
+        else{
+            $model->joinWith('achievements');
         }
 
         $model->andFilterWhere(['position_id' => $this->position_id]);
