@@ -39,13 +39,12 @@ class ReportSearchForm extends Model
     {
         $queryBuilder = Reports::find()
             ->with('task')
-            ->andWhere(['between', 'reports.created_at', $this->fromDate, $this->toDate, $this->user_id])
+            ->andWhere(['between', 'reports.created_at', $this->fromDate, $this->toDate])
             ->limit($this->limit)
             ->offset($this->offset);
 
         if(isset($this->user_id)) {
-            $userCardId = UserCard::findByUserId($this->user_id)->id;
-            $queryBuilder->andWhere(['user_card_id' => $userCardId]);
+            $queryBuilder->andWhere(['user_card_id' => $this->user_id]);
         }
 
         $data = $queryBuilder->asArray()->all();

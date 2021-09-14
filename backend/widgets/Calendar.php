@@ -3,6 +3,7 @@
 namespace backend\widgets;
 
 
+use common\classes\Debug;
 use yii\base\Widget;
 use yii\helpers\Html;
 
@@ -17,14 +18,25 @@ class Calendar extends Widget
 
     public $monthUpdate;
 
-    public $colorClasses = ['accept' => 'access', 'default' => 'danger', 'offDay' => ''];
+    public $colorClasses;// = ['accept' => 'access', 'default' => 'danger', 'offDay' => ''];
 
-    public $offDaysShow = 1;
+    public $offDaysShow = 0;
 
     public $script = 'CalendarHelper.main()';
 
     public function init()
     {
+        if (!isset($this->monthUpdate['url'])){
+            Debug::dd('Не существует $monthUpdate["url"]');
+        }
+        if (!isset($this->dayUpdate['url'])){
+            Debug::dd('Не существует $dayUpdate["url"]');
+        }
+        if (!isset($this->colorClasses)){
+            Debug::dd('Не существует $colorClasses;<br> ["accept" => "access", "default" => "danger", "offDay" => ""]');
+        }
+
+
         parent::init();
         $view = $this->getView();
         AppAsset::register($view);
