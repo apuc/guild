@@ -71,10 +71,10 @@ class ProfileSearchForm extends Model
 
         $model->joinWith('achievements');
 
-//        $model->andFilterWhere(['position_id' => $this->position_id]);
-//
-//        $model->andWhere(['status' => [4, 12]]);
-//        $model->andWhere(['deleted_at' => null]);
+        $model->andFilterWhere(['position_id' => $this->position_id]);
+
+        $model->andWhere(['status' => [4, 12]]);
+        $model->andWhere(['deleted_at' => null]);
 
         $model->groupBy('card_skill.card_id');
 
