@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2>Достижения</h2>
     <?php foreach ($achievements as $achievement) : ?>
         <a target="_blank"
-           href="<? \yii\helpers\Url::to(['/achievements/achievements/view', 'id' => $achievement['achievement']->id]);?>"
+           href="<?php \yii\helpers\Url::to(['/achievements/achievements/view', 'id' => $achievement['achievement']->id]);?>"
            class="btn btn-default btn-sm">
             <?= Html::tag('img', null,
                 ['src' =>  $achievement['achievement']->img, 'height' => '50px', 'width' => '50px']

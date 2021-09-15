@@ -1,4 +1,4 @@
-# Документация  API
+# Документация API
 
 ## Навыки
 ### Популярные навыки
@@ -54,21 +54,90 @@
     Пример запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/profile?limit=5&offset=5&skills=1`
+`https://guild.craft-group.xyz/api/profile?limit=5&offset=5&skills=1,2`
+
+<p>
+    Возвращает <b>массив</b> объектов <b>Профилей</b>. <br>
+    Каждый объект <b>Профиля</b> имеет такой вид:
+</p>
+
+```json5
+{
+  "id": "1",
+  "fio": "f23f",
+  "passport": "f23", 
+  "photo": "''", 
+  "email": "f", 
+  "gender": "1", 
+  "dob": "2021-09-17", 
+  "status": "2",
+  "created_at": "2021-09-08 16:30:34",
+  "updated_at": "2021-09-09 08:41:02",
+  "resume": "", 
+  "salary": "", 
+  "position_id": "1",
+  "deleted_at": null, 
+  "id_user": "1", 
+  "city": "", 
+  "link_vk": "",
+  "link_telegram": "",
+  "vc_text": "",
+  "level": "2", //
+  "vc_text_short": "",
+  "years_of_exp": "0",
+  "specification": "",
+  "skillValues": [ //Массив навыков привязанных к этому профилю
+    {
+      "id": "1",
+      "card_id": "1", //card_id из таблицы card_skill
+      "skill_id": "1",//skill_id из таблицы card_skill
+      "skill": {
+        "id": "1", //id из таблицы skill
+        "name": "SQL",
+        "category_id": "1"
+      }
+    },
+    //...
+  ],
+  "achievements": [ //Массив достижений привязанных к этому профилю
+    {
+      "id": "7",
+      "user_card_id": "1",//user_card_id из таблицы achievement_user_card
+      "achievement_id": "1",//achievement_id из таблицы achievement_user_card
+      "achievement": {
+        "id": "1", //id из таблицы achievement
+        "slug": "newguy",
+        "title": "Новичок",
+        "img": "",
+        "description": "Ты начал у нас работу",
+        "status": "1" // 1 - Активно, 2 - Неактивно
+      }
+    },
+    //...
+  ]
+}
+```
+
 
 ### Одна запись
 `https://guild.craft-group.xyz/api/profile/{id}`
 
 <p>
     Для того, чтобы получить данные одной записи необходимо отправить <b>GET</b> запрос
-    на URL https://guild.craft-group.xyz/api/profile/{id} , где <b>id</b> это идинтификатор 
+    на URL https://guild.craft-group.xyz/api/profile/{id} , где <b>id</b> это идентификатор 
     профиля.
 </p>
-<p>
+<p> 
     Пример запроса:
 </p>
 
 `https://guild.craft-group.xyz/api/profile/6`
+
+<p>
+    Возвращает объект <b>Профиля</b>. <br>
+    Как выглядит можно посмотреть выше.
+</p>
+
 
 ### Пригласить на собеседование
 `https://guild.craft-group.xyz/api/profile/add-to-interview`

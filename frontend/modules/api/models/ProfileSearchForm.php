@@ -20,6 +20,7 @@ class ProfileSearchForm extends Model
     public $limit = 10;
     public $offset = 0;
     public $skills;
+
     public $position_id;
     public $id;
 
@@ -45,6 +46,7 @@ class ProfileSearchForm extends Model
             return UserCard::find()
                 ->where(['id' => $this->id])
                 ->with(['skillValues'])
+                ->with(['achievements'])
                 ->asArray()
                 ->one();
         }
@@ -67,10 +69,12 @@ class ProfileSearchForm extends Model
             $model->joinWith('skillValues');
         }
 
-        $model->andFilterWhere(['position_id' => $this->position_id]);
+        $model->joinWith('achievements');
 
-        $model->andWhere(['status' => [4, 12]]);
-        $model->andWhere(['deleted_at' => null]);
+//        $model->andFilterWhere(['position_id' => $this->position_id]);
+//
+//        $model->andWhere(['status' => [4, 12]]);
+//        $model->andWhere(['deleted_at' => null]);
 
         $model->groupBy('card_skill.card_id');
 
