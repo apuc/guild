@@ -58,7 +58,23 @@ class ReportsController extends Controller
         ]),'user_card_id', 'fio');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
+        return $this->render('index');
+    }
+
+    public function actionList()
+    {
+        $searchModel = new ReportsSearch();
+        $user_id__fio = ArrayHelper::map(ArrayHelper::toArray($searchModel->search([])->getModels(), [
+            'common\models\Reports' => [
+                'user_card_id',
+                'fio' => function ($report) {
+                    return Reports::getFio($report);
+                }
+            ],
+        ]),'user_card_id', 'fio');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('list', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'user_id__fio' => $user_id__fio,
@@ -94,7 +110,7 @@ class ReportsController extends Controller
         if (!$dataProvider->getCount()){
             return  $this->render('non-exist_user_id', ['id' => $user_id]);
         }
-        return $this->render('calendar', [
+        return $this->render('calendarOneUser', [
             'reports' => $reports_array,
             'fio' => Reports::getFio($searchModel),
             'USER_ID' => $user_id

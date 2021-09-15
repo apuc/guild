@@ -6,6 +6,7 @@ namespace backend\widgets;
 use common\classes\Debug;
 use yii\base\Widget;
 use yii\helpers\Html;
+use yii\widgets\Pjax;
 
 
 class Calendar extends Widget
@@ -51,8 +52,10 @@ class Calendar extends Widget
                     echo Html::input('date', null, date('Y-m-d'), ['class' => 'form-control', 'id' => 'date',]);
                 echo Html::endTag('section');
                 echo Html::tag('h2', date('l') . '<br>' . date('F d'), ['class' => 'sidebar__heading']);
-                echo Html::beginTag('ul', ['class' => 'sidebar__list']);
-                echo Html::endTag('ul');
+                echo '<div class="table-responsive" style="height: 77%">';
+                Pjax::begin(['enablePushState' => false, 'class' => 'sidebar__list']);
+                Pjax::end();
+                echo '</div>';
             echo Html::endTag('aside');
             echo Html::beginTag('section', ['class' => 'calendar__days']);
             echo Html::endTag('section');
