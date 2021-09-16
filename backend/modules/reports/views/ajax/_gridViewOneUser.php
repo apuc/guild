@@ -3,6 +3,7 @@
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
+/* @var $searchModel backend\modules\reports\models\ReportsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 echo GridView::widget([
@@ -27,7 +28,12 @@ echo GridView::widget([
         ],
         'difficulties',
         'tomorrow',
-        ['class' => 'yii\grid\ActionColumn'],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'urlCreator' => function ($action, $model, $key, $index) {
+                return \yii\helpers\Url::base(true) . '/reports/reports/' . $action . '?id=' . $model->id;
+            }
+        ],
     ],
 ]);
 die();

@@ -220,6 +220,12 @@
     padding-left: 1rem;
     padding-right: 1rem;
 }
+#p0 {
+    list-style: none;
+    margin: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
 
 .sidebar__list-item {
     margin: 1.2rem 0;

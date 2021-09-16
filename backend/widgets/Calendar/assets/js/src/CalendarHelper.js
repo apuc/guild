@@ -46,11 +46,10 @@ class CalendarHelper {
         let oldDate = datePicker.value.substr(0, 7);
 
         let nameDateBoard = document.querySelector('.sidebar__heading');
-        let contentBoard = document.querySelector('.sidebar__list');
+
 
         this._getMonth(datePicker.value.substr(5, 2), datePicker.value.substr(0, 4))
             .then(dates => {
-
                 this.build(DateHelper.stringToDate(datePicker.value), dates)
 
                 datePicker.onchange = async function (day = null) {
@@ -75,7 +74,7 @@ class CalendarHelper {
                                 let monthName = date.toLocaleString('default', {month: 'long'});
                                 let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
                                 nameDateBoard.innerHTML = `${dayWeekName} <br>${monthName} ${datePicker.value.substr(8, 2)}`;
-                                contentBoard.innerHTML = CalendarHelper._getHtmlContentForDate(dates, datePicker.value)
+                                document.querySelector('#p0').innerHTML = CalendarHelper._getHtmlContentForDate(dates, datePicker.value)
                             })
 
                     }
@@ -85,7 +84,7 @@ class CalendarHelper {
                     let monthName = date.toLocaleString('default', {month: 'long'});
                     let dayWeekName = date.toLocaleString('default', {weekday: 'long'});
                     nameDateBoard.innerHTML = `${dayWeekName} <br>${monthName} ${datePicker.value.substr(8, 2)}`;
-                    contentBoard.innerHTML = await CalendarHelper._getDayContent(date)
+                    document.querySelector('#p0').innerHTML = await CalendarHelper._getDayContent(date)
                 }
 
                 let days = document.querySelectorAll('.calendar__day');
@@ -111,6 +110,7 @@ class CalendarHelper {
                     }
                 }
 
+                datePicker.onchange()
 
             })
     }

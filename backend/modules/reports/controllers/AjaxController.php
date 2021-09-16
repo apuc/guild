@@ -10,17 +10,22 @@ use yii\web\Response;
 class AjaxController extends \yii\web\Controller
 {
 
-    public function actionGetReportsForDayByDate($user_id, $date)
+    public function actionGetReportsForDayByDate($date, $user_id = null)
     {
         $searchModel = new ReportsSearch();
-        $params = ['ReportsSearch' => ['created_at' => $date], 'user_id' => $user_id];
+        $params = ['ReportsSearch' => ['created_at' => $date]];
+        $view = '_gridViewAllUsers';
+        if ($user_id){
+            $params['user_id'] = $user_id;
+            $view = '_gridViewOneUser';
+        }
         $dataProvider = $searchModel->search($params);
-        return $this->render('_gridView', [
-            'dataProvider' => $dataProvider
+        return $this->render($view, [
+            'dataProvider' => $dataProvider,
         ]);
     }
 
-    public function actionGetReportsForMonthByIdYearMonth($user_id, $year, $month)
+    public function actionGetReportsForMonthByIdYearMonth($year, $month, $user_id=null)
     {
         $searchModel = new ReportsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

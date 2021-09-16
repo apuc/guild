@@ -11,7 +11,11 @@ echo GridView::widget([
         ['class' => 'yii\grid\SerialColumn'],
         'fio',
         'dob',
-        ['class' => 'yii\grid\ActionColumn'],
+        ['class' => 'yii\grid\ActionColumn',
+            'urlCreator' => function ($action, $model, $key, $index) {
+                return \yii\helpers\Url::base(true) . '/calendar/calendar/' . $action . '?id=' . $model->id;
+            }
+        ],
     ],
 ]);
 die();
