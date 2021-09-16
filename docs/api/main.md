@@ -390,7 +390,7 @@
     </tr>
     <tr>
         <td>
-            created_at*
+            created_at
         </td>
         <td>
             Дата (yyyy-mm-dd) создания.
