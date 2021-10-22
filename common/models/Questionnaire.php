@@ -1,0 +1,145 @@
+<?php
+
+namespace common\models;
+
+use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
+
+/**
+ * This is the model class for table "questionnaire".
+ *
+ * @property int $id
+ * @property int $category_id
+ * @property string $title
+ * @property int $status
+ * @property string $created_at
+ * @property string $updated_at
+ * @property int $time_limit
+ *
+ * @property Question[] $questions
+ * @property QuestionnaireCategory $category
+ * @property UserQuestionnaire[] $userQuestionnaires
+ */
+class Questionnaire extends \yii\db\ActiveRecord
+{
+    const STATUS_PASSIVE = 0;
+    const STATUS_ACTIVE = 1;
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'questionnaire';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['category_id', 'status', 'time_limit'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            ['title', 'unique'],
+            [['title'], 'string', 'max' => 255],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => QuestionnaireCategory::className(), 'targetAttribute' => ['category_id' => 'id']],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'category_id' => 'Категория',
+            'title' => 'Название анкеты',
+            'status' => 'Статус',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'time_limit' => 'Время на выполнение',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getQuestions()
+    {
+        return $this->hasMany(Question::className(), ['questionnaire_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(QuestionnaireCategory::className(), ['id' => 'category_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserQuestionnaires()
+    {
+        return $this->hasMany(UserQuestionnaire::className(), ['questionnaire_id' => 'id']);
+    }
+
+    public function getStatuses()
+    {
+        return [
+            self::STATUS_ACTIVE => 'Активна',
+            self::STATUS_PASSIVE => 'Не используется'
+        ];
+    }
+
+    public function getStatusText()
+    {
+        return $this->statuses[$this->status];
+    }
+
+    public function getCategoryTitle()
+    {
+        return $this->getCategory()->one()->title;
+    }
+
+    public function getLimitTime()
+    {
+        if ($this->time_limit === null)
+        {
+            return 'Не ограничено';
+        }
+
+        return date("H:i:s", mktime(null, null, $this->time_limit));
+    }
+
+    public static function getQuestionnaireByCategory($category_id)
+    {
+        $categories = self::find()->where(['category_id' => $category_id,   'status' => '1'])->all();
+        $catArr = \yii\helpers\ArrayHelper::map($categories, 'id', 'title');
+
+        $formattedCatArr = array();
+        foreach ($catArr as $key => $value){
+            $formattedCatArr[] = array('id' => $key, 'name' => $value);
+        }
+
+        return $formattedCatArr;
+    }
+}
