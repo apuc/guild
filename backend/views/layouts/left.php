@@ -46,7 +46,7 @@
                         ],
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
-                    ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balan                                                                                         ce/balance'], 'active' => \Yii::$app->controller->id == 'balance', 'visible' => Yii::$app->user->can('confidential_information')],
+                    ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balance/balance'], 'active' => \Yii::$app->controller->id == 'balance', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Отпуска', 'icon' => 'plane', 'url' => ['/holiday/holiday'], 'active' => \Yii::$app->controller->id == 'holiday', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Достижения', 'icon' => 'trophy', 'url' => ['/achievements/achievements'], 'active' => \Yii::$app->controller->id == 'achievements', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Доступы', 'icon' => 'key', 'url' => ['/accesses/accesses'], 'active' => \Yii::$app->controller->id == 'accesses', 'visible' => Yii::$app->user->can('confidential_information')],
@@ -61,6 +61,20 @@
                         'active' => \Yii::$app->controller->id == 'interview',
                         'visible' => Yii::$app->user->can('confidential_information'),
                         'badge' => '<span class="badge badge-info right">4</span>'
+                    ],
+                    [
+                        'label' => 'Анкеты', 'icon' => 'gears', 'url' => '#',
+                        'items' => [
+                            ['label' => 'Категории анкет', 'icon' => 'file-text-o', 'url' => ['/questionnaire/questionnaire-category'], 'active' => \Yii::$app->controller->id == 'questionnaire-category'],
+                            ['label' => 'Список анкет', 'icon' => 'file-text-o', 'url' => ['/questionnaire/questionnaire'], 'active' => \Yii::$app->controller->id == 'questionnaire'],
+                            ['label' => 'Типы вопросов', 'icon' => 'file-text-o', 'url' => ['/questionnaire/question-type'], 'active' => \Yii::$app->controller->id == 'question-type'],
+                            ['label' => 'Вопросы', 'icon' => 'file-text-o', 'url' => ['/questionnaire/question'], 'active' => \Yii::$app->controller->id == 'question'],
+                            ['label' => 'Ответы', 'icon' => 'file-text-o', 'url' => ['/questionnaire/answer'], 'active' => \Yii::$app->controller->id == 'answer'],
+                            ['label' => 'Анкеты пользователей', 'icon' => 'file-text-o', 'url' => ['/questionnaire/user-questionnaire'], 'active' => \Yii::$app->controller->id == 'user-questionnaire'],
+                            ['label' => 'Ответы пользователей', 'icon' => 'file-text-o', 'url' => ['/questionnaire/user-response'], 'active' => \Yii::$app->controller->id == 'user-response'],
+                        ],
+
+//                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],

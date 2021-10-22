@@ -33,7 +33,10 @@
         "edofre/yii2-fullcalendar-scheduler": "V1.1.12",
         "asmoday74/yii2-ckeditor5": "*",
         "kavalar/telegram_bot": "^0.2.0",
-        "kavalar/yii2-telegram-bot": "^0.1.0"
+        "kavalar/yii2-telegram-bot": "^0.1.0",
+        "ramsey/uuid": "^4.2",
+        "kartik-v/yii2-widget-depdrop": "dev-master",
+        "2amigos/yii2-transliterator-helper": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

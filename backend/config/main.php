@@ -59,11 +59,17 @@ return [
         'achievements' => [
             'class' => 'backend\modules\achievements\Achievements',
         ],
+        'test' => [
+            'class' => 'backend\modules\test\Test',
+        ],
+        'questionnaire' => [
+            'class' => 'backend\modules\questionnaire\Questionnaire',
+        ],
     ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl' => '/secure',
+            'baseUrl' => '', // /secure
         ],
         'user' => [
             'identityClass' => 'common\models\User',
