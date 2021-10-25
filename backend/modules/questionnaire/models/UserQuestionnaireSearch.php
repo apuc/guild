@@ -19,6 +19,7 @@ class UserQuestionnaireSearch extends UserQuestionnaire
         return [
             [['id', 'questionnaire_id', 'user_id', 'score', 'status'], 'integer'],
             [['uuid', 'created_at', 'updated_at'], 'safe'],
+            [['percent_correct_answers'], 'number'],
         ];
     }
 
@@ -65,6 +66,7 @@ class UserQuestionnaireSearch extends UserQuestionnaire
             'updated_at' => $this->updated_at,
             'score' => $this->score,
             'status' => $this->status,
+            'percent_correct_answers' => $this->percent_correct_answers,
         ]);
 
         $query->andFilterWhere(['like', 'uuid', $this->uuid]);

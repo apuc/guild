@@ -156,9 +156,9 @@ class UserResponse extends \yii\db\ActiveRecord
         {
             $correct_answers = $this->getCorrectAnswers();
 
-            foreach ($correct_answers as $correct_answerr)
+            foreach ($correct_answers as $correct_answer)
             {
-                if ($this->response_body === $correct_answerr['answer_body'])
+                if ($this->response_body === $correct_answer['answer_body'])
                 {
                     $this->answer_flag = 1;
                     $this->save();

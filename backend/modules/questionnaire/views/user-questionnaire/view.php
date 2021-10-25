@@ -20,6 +20,8 @@ YiiAsset::register($this);
 ?>
 <div class="user-questionnaire-view">
 
+<!--    --><?php //var_dump($model->setPercentCorrectAnswers(4)); die();?>
+
     <p>
         <?= Html::a('Список', ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -47,9 +49,16 @@ YiiAsset::register($this);
             'uuid',
             'score',
             [
+                'attribute' => 'percent_correct_answers',
+                'value' => function($model) {
+                    $percent = $model->percent_correct_answers * 100;
+                    return $percent . '%';
+                }
+            ],
+            [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => function ($model) {
+                'value' => function($model) {
                     return Html::tag(
                         'span',
                         $model->status ? 'Active' : 'Not Active',

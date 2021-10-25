@@ -117,7 +117,7 @@ class Answer extends \yii\db\ActiveRecord
         return $this->flags[$this->status];
     }
 
-    static function getCurrentAnswersNum($question_id)
+    static function getCorrectAnswersNum($question_id)
     {
         return Answer::find()
             ->where('question_id=:question_id', [':question_id' => $question_id])

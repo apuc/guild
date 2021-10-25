@@ -10,6 +10,7 @@ use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use backend\modules\questionnaire\models\Question;
 use backend\modules\questionnaire\models\UserResponse;
+use \backend\modules\questionnaire\models\Answer;
 
 /**
  * This is the model class for table "user_questionnaire".
@@ -22,6 +23,7 @@ use backend\modules\questionnaire\models\UserResponse;
  * @property string $updated_at
  * @property int $score
  * @property int $status
+ * @property double $percent_correct_answers
  *
  * @property Questionnaire $questionnaire
  * @property User $user
@@ -61,6 +63,7 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
         return [
             [['questionnaire_id', 'user_id', 'status'], 'required'],
             [['questionnaire_id', 'user_id', 'score', 'status'], 'integer'],
+            [['percent_correct_answers'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['uuid'], 'string', 'max' => 36],
             [['uuid'], 'unique'],
@@ -93,6 +96,7 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
             'status' => 'Статус',
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
+            'percent_correct_answers' => 'Процент правильных ответов',
         ];
     }
 
@@ -182,7 +186,7 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
     public function getScore()
     {
         $responses_questions = $this->hasMany(UserResponse::className(), ['user_questionnaire_id' => 'id'])
-            ->joinWith('question')->all();
+            ->joinWith('question')->asArray()->all();
 
         $calc_score = $this->calculateScore($responses_questions);
         $this->score = $calc_score;
@@ -192,10 +196,12 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
     protected function calculateScore($responses_questions)
     {
         $score = null;
+        $user_correct_answers_num = null;
         foreach ($responses_questions as $response_question)
         {
             if($this->isCorrect($response_question['answer_flag']))
             {
+                $user_correct_answers_num += 1;
                 switch ($response_question['question']['question_type_id'])
                 {
                     case '1':  // open question
@@ -210,6 +216,9 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
                 }
             }
         }
+
+        $this->setPercentCorrectAnswers($user_correct_answers_num);
+
         if($score === null) {
             return $score;
         }
@@ -220,7 +229,7 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
 
     protected function correctAnswersNum($question_id)
     {
-        return Answer::getCurrentAnswersNum($question_id);
+        return Answer::getCorrectAnswersNum($question_id);
     }
 
     protected function isCorrect($answer_flag): bool
@@ -229,6 +238,34 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
             return true;
         }
         return false;
+    }
+
+    protected function setPercentCorrectAnswers($user_correct_answers_num)
+    {
+        $all_correct_answers_num = $this->numCorrectAnswersWithoutOpenQuestions();
+        $all_correct_answers_num += $this->numOpenQuestionsAnswers();
+
+        $percent = $user_correct_answers_num / $all_correct_answers_num;
+
+        $this->percent_correct_answers = round($percent, 2);
+        $this->save();
+    }
+
+    protected function numCorrectAnswersWithoutOpenQuestions()
+    {
+        return $this->hasMany(Answer::className(), ['question_id' => 'question_id'])
+            ->viaTable('user_response', ['user_questionnaire_id' => 'id'])
+            ->where(['answer_flag' => '1'])
+            ->andWhere(['status' => '1'])
+            ->count();
+    }
+
+    protected function numOpenQuestionsAnswers()
+    {
+        return $this->hasMany(Question::className(), ['id' => 'question_id'])
+            ->viaTable('user_response', ['user_questionnaire_id' => 'id'])
+            ->where(['question_type_id' => '1'])
+            ->count();
     }
 
     public function rateResponses()

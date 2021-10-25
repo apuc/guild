@@ -40,6 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'UUID',
             'score',
             [
+                'attribute' => 'percent_correct_answers',
+                'value' => function($model) {
+                    $percent = $model->percent_correct_answers * 100;
+                    return $percent . '%';
+                }
+            ],
+            [
                 'attribute' => 'status',
                 'format' => 'raw',
                 'value' => function ($model) {
