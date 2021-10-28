@@ -152,4 +152,12 @@ class Question extends \yii\db\ActiveRecord
 
         return date("i:s", mktime(null, null, $this->time_limit));
     }
+
+    public static function getActiveQuestions($questionnaire_id)
+    {
+        return self::find()->where(['questionnaire_id' => $questionnaire_id])
+            ->andWhere(['status' => '1'])
+            ->AsArray()
+            ->all();
+    }
 }

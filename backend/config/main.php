@@ -65,15 +65,41 @@ return [
         'questionnaire' => [
             'class' => 'backend\modules\questionnaire\Questionnaire',
         ],
+        'api' => [
+            'components' => [
+                'user' => [
+                    'identityClass' => 'backend\modules\api\models\User',
+                    'enableAutoLogin' => true,
+                    'enableSession' => false,
+                    'class' => 'backend\modules\api\models\User',
+                    //'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
+                ],
+            ],
+            'class' => 'backend\modules\api\Api',
+        ],
     ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
             'baseUrl' => '', // /secure
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+                'text/xml' => 'yii/web/XmlParser',
+            ],
+        ],
+        'response' => [
+            'formatters' => [
+                'json' => [
+                    'class' => 'yii\web\JsonResponseFormatter',
+                    'prettyPrint' => YII_DEBUG,
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                ],
+            ],
         ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
+//            'enableSession' => false,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'authManager' => [
@@ -100,6 +126,12 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '' => '/card/user-card',
+//                'api/user-questionnaire/<id:\d+>' => 'api/profile/user-questionnaire',
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'user-questionnaire',
+                    'except' => ['delete', 'update'],
+                ],
             ],
         ],
 

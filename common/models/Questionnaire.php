@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -84,6 +85,15 @@ class Questionnaire extends \yii\db\ActiveRecord
     public function getQuestions()
     {
         return $this->hasMany(Question::className(), ['questionnaire_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAnswers()
+    {
+        return $this->hasMany(Answer::className(), ['question_id' => 'id'])
+            ->viaTable('question', ['questionnaire_id' => 'id']);
     }
 
     /**

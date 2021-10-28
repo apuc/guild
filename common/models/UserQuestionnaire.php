@@ -277,4 +277,11 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
             $response->rateResponse();
         }
     }
+
+    public static function findActiveUserQuestionnaires($user_id)
+    {
+        return self::find()->where(['user_id' => $user_id])
+            ->andWhere(['status' => '1'])
+            ->all();
+    }
 }

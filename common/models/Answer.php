@@ -125,4 +125,12 @@ class Answer extends \yii\db\ActiveRecord
             ->andWhere('status=1')
             ->count();
     }
+
+    public static function getActiveAnswers($question_id)
+    {
+        return self::find()->where(['question_id' => $question_id])
+            ->andWhere(['status' => '1'])
+            ->AsArray()
+            ->all();
+    }
 }

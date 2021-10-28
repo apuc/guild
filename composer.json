@@ -36,7 +36,8 @@
         "kavalar/yii2-telegram-bot": "^0.1.0",
         "ramsey/uuid": "^4.2",
         "kartik-v/yii2-widget-depdrop": "dev-master",
-        "2amigos/yii2-transliterator-helper": "*"
+        "2amigos/yii2-transliterator-helper": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
