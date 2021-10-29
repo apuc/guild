@@ -49,7 +49,7 @@ use kartik\depdrop\DepDrop;
     ); ?>
 
     <?= $form->field($model, 'status')->dropDownList(
-        $model->statuses,
+        \common\helpers\StatusHelper::statusList(),
         [
             'prompt' => 'Выберите'
         ]

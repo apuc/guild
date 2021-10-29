@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-//            'id',
             [
+                    'filter'  => \yii\helpers\ArrayHelper::map(\common\models\Question::find()->where(['!=', 'question_type_id', '1'])->all(), 'id', 'question_body'),
                 'attribute' => 'question_id',
                 'value' => function($model){
                     return  $model->getQuestionBody();
@@ -34,32 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'answer_flag',
                 'format' => 'raw',
+                'filter' => \common\helpers\AnswerHelper::answerFlagsList(),
                 'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->answer_flag ? 'Correct' : 'Wrong',
-                        [
-                            'class' => 'label label-' . ($model->answer_flag ? 'success' : 'danger'),
-                        ]
-                    );
+                    return \common\helpers\AnswerHelper::statusLabel($model->answer_flag);
                 },
             ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
-                },
+                'filter' => \common\helpers\StatusHelper::statusList(),
+                'value' => function($model){
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
+                }
             ],
-            //'created_at',
-            //'updated_at',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

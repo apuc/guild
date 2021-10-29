@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить этот элемент?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -47,14 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format' => 'raw',
+                'filter' => \common\helpers\StatusHelper::statusList(),
                 'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
                 },
             ],
             'created_at',
@@ -62,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'time_limit',
                 'value' => function($model){
-                    return $model->limitTime;
+                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
                 }
             ],
             'score'

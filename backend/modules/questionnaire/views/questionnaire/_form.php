@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList(
-        $model->statuses,
+        \common\helpers\StatusHelper::statusList(),
         [
             'prompt' => 'Выберите'
         ]

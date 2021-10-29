@@ -12,9 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="questionnaire-index">
 
-    <!--    <h1>-->
-    <!--       <?//= Html::encode($this->title) ?>   -->
-    <!--    </h1>-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -26,22 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//           'id',
-
             'title',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
-                },
+                'filter' => \common\helpers\StatusHelper::statusList(),
+                'value' => function($model){
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
+                }
             ],
             [
                 'attribute' => 'category_id',
@@ -49,15 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return  $model->getCategoryTitle();
                 }
             ],
-//            'created_at',
-//            'updated_at',
             [
                 'attribute' => 'time_limit',
                 'value' => function($model){
-                    return $model->limitTime;
+                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
                 }
             ],
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

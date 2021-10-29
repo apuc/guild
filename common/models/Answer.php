@@ -2,8 +2,8 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 
 /**
@@ -78,9 +78,9 @@ class Answer extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getQuestion()
+    public function getQuestion(): ActiveQuery
     {
         return $this->hasOne(Question::className(), ['id' => 'question_id']);
     }
@@ -89,32 +89,6 @@ class Answer extends \yii\db\ActiveRecord
     public function getQuestionBody()
     {
         return $this->getQuestion()->one()->question_body;
-    }
-
-    public function getStatuses()
-    {
-        return [
-            self::STATUS_ACTIVE => 'Активен',
-            self::STATUS_PASSIVE => 'Не используется'
-        ];
-    }
-
-    public function getStatusText()
-    {
-        return $this->statuses[$this->status];
-    }
-
-    public function getFlags()
-    {
-        return [
-            self::FLAG_TRUE => 'Правильный',
-            self::FLAG_FALSE => 'Ошибочный',
-        ];
-    }
-
-    public function getFlagText()
-    {
-        return $this->flags[$this->status];
     }
 
     static function getCorrectAnswersNum($question_id)
@@ -126,7 +100,7 @@ class Answer extends \yii\db\ActiveRecord
             ->count();
     }
 
-    public static function getActiveAnswers($question_id)
+    public static function getActiveAnswers($question_id): array
     {
         return self::find()->where(['question_id' => $question_id])
             ->andWhere(['status' => '1'])

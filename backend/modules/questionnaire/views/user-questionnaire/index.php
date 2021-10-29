@@ -12,8 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-questionnaire-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Назначить анкету пользователю', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -23,8 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
             [
                 'attribute' => 'questionnaire_id',
                 'value' => function($model){
@@ -37,7 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getUserName();
                 }
             ],
-//            'UUID',
             'score',
             [
                 'attribute' => 'percent_correct_answers',
@@ -49,14 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format' => 'raw',
+                'filter' => \common\helpers\StatusHelper::statusList(),
                 'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
                 },
             ],
             'created_at',

@@ -2,8 +2,6 @@
 
 namespace common\models;
 
-use phpDocumentor\Reflection\Types\This;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
@@ -112,38 +110,15 @@ class Questionnaire extends \yii\db\ActiveRecord
         return $this->hasMany(UserQuestionnaire::className(), ['questionnaire_id' => 'id']);
     }
 
-    public function getStatuses()
-    {
-        return [
-            self::STATUS_ACTIVE => 'Активна',
-            self::STATUS_PASSIVE => 'Не используется'
-        ];
-    }
-
-    public function getStatusText()
-    {
-        return $this->statuses[$this->status];
-    }
-
     public function getCategoryTitle()
     {
         return $this->getCategory()->one()->title;
     }
 
-    public function getLimitTime()
-    {
-        if ($this->time_limit === null)
-        {
-            return 'Не ограничено';
-        }
-
-        return date("H:i:s", mktime(null, null, $this->time_limit));
-    }
-
     public static function getQuestionnaireByCategory($category_id)
     {
         $categories = self::find()->where(['category_id' => $category_id,   'status' => '1'])->all();
-        $catArr = \yii\helpers\ArrayHelper::map($categories, 'id', 'title');
+        $catArr = ArrayHelper::map($categories, 'id', 'title');
 
         $formattedCatArr = array();
         foreach ($catArr as $key => $value){

@@ -23,22 +23,18 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'answer_body')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'answer_flag')->dropDownList(
-        $model->flags,
+        \common\helpers\AnswerHelper::answerFlagsList(),
         [
             'prompt' => 'Выберите'
         ]
     ) ?>
 
     <?= $form->field($model, 'status')->dropDownList(
-        $model->statuses,
+        \common\helpers\StatusHelper::statusList(),
         [
             'prompt' => 'Выберите'
         ]
     ) ?>
-
-    <!--    <?//= $form->field($model, 'created_at')->textInput() ?>  -->
-
-    <!--    <?//= $form->field($model, 'updated_at')->textInput() ?>  -->
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

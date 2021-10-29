@@ -2,6 +2,7 @@
 
 namespace backend\modules\questionnaire\controllers;
 
+use backend\modules\questionnaire\models\QuestionSearch;
 use Yii;
 use backend\modules\questionnaire\models\Questionnaire;
 use backend\modules\questionnaire\models\QuestionnaireSearch;
@@ -9,6 +10,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * QuestionnaireController implements the CRUD actions for Questionnaire model.
@@ -54,6 +56,7 @@ class QuestionnaireController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
+        $questionSearchModel = new QuestionSearch();
         $questionDataProvider = new ActiveDataProvider([
             'query' => $model->getQuestions(),
             'pagination' => [
@@ -64,6 +67,7 @@ class QuestionnaireController extends Controller
         return $this->render('view', [
             'model' => $model,
             'questionDataProvider' => $questionDataProvider,
+            'questionSearchModel' =>  $questionSearchModel,
         ]);
     }
 
@@ -89,10 +93,10 @@ class QuestionnaireController extends Controller
      * Updates an existing Questionnaire model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
-     * @return mixed
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -109,10 +113,10 @@ class QuestionnaireController extends Controller
      * Deletes an existing Questionnaire model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
-     * @return mixed
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id)
     {
         $this->findModel($id)->delete();
 

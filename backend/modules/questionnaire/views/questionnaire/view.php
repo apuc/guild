@@ -1,6 +1,5 @@
 <?php
 
-use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -8,6 +7,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\questionnaire\models\Questionnaire */
 /* @var $questionDataProvider yii\data\ActiveDataProvider */
+/* @var $questionSearchModel  backend\modules\questionnaire\models\QuestionSearch */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Questionnaires', 'url' => ['index']];
@@ -15,10 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="questionnaire-view">
-
-    <!--    <h1>-->
-    <!--        <?//= Html::encode($this->title) ?>  -->
-    <!--    </h1>-->
 
     <p>
         <?= Html::a('Список', ['index'], ['class' => 'btn btn-primary']) ?>
@@ -47,13 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
                 },
             ],
             'created_at',
@@ -61,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'time_limit',
                 'value' => function($model){
-                    return $model->limitTime;
+                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
                 }
             ]
         ],
@@ -69,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div>
         <h2>
-            <?= 'Вопросы анкеты: ' . Html::encode($this->title) ?>
+            <?= 'Вопросы анкеты: '?>
         </h2>
     </div>
 
@@ -77,36 +67,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
     echo GridView::widget([
         'dataProvider' => $questionDataProvider,
+        'filterModel' => $questionSearchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'question_type_id',
-            'questionnaire_id',
             'question_body',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
+                'filter' => \common\helpers\StatusHelper::statusList(),
+                'value' => function($model) {
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
                 },
             ],
-//            'created_at',
-//            'updated_at',
             [
                 'attribute' => 'time_limit',
+                'format' => 'raw',
                 'value' => function($model){
-                    return $model->limitTime;
+                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
                 }
             ],
             'score',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {update}', // {delete}

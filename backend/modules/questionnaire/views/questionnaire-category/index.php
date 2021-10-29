@@ -23,25 +23,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
             'title',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
+                'filter' => \common\helpers\StatusHelper::statusList(),
+                'value' => function($model) {
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
                 },
             ],
-//            'created_at',
-//            'updated_at',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

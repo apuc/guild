@@ -12,12 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="question-index">
 
-    <!--    <h1>-->
-    <!--        <?//= Html::encode($this->title) ?>  -->
-    <!--    </h1>-->
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Создать вопрос', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -27,8 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
             'question_body',
             [
                 'attribute' => 'question_type_id',
@@ -47,26 +39,18 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format' => 'raw',
+                'filter' => \common\helpers\StatusHelper::statusList(),
                 'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
                 },
             ],
-            //'created_at',
-            //'updated_at',
             [
                 'attribute' => 'time_limit',
                 'value' => function($model){
-                    return $model->limitTime;
+                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
                 }
             ],
             'score',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

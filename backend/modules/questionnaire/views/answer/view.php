@@ -46,28 +46,18 @@ function cut_title($str)
             [
                 'attribute' => 'answer_flag',
                 'format' => 'raw',
+                'filter' => \common\helpers\AnswerHelper::answerFlagsList(),
                 'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->answer_flag ? 'Correct' : 'Wrong',
-                        [
-                            'class' => 'label label-' . ($model->answer_flag ? 'success' : 'danger'),
-                        ]
-                    );
+                    return \common\helpers\AnswerHelper::statusLabel($model->status);
                 },
             ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    return \yii\helpers\Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
-                },
+                'filter' => \common\helpers\StatusHelper::statusList(),
+                'value' => function($model){
+                    return \common\helpers\StatusHelper::statusLabel($model->status);
+                }
             ],
             'created_at',
             'updated_at',
