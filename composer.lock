@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b61e162658b6b66bebc3ba305d476c8c",
+    "content-hash": "87552c9f0d88300635082bc7f18b1ad8",
     "packages": [
         {
             "name": "2amigos/yii2-file-upload-widget",
@@ -402,7 +402,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -430,46 +430,6 @@
             },
             "require": {
                 "bower-asset/jquery": ">=1.6"
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "bower-asset/moment",
-            "version": "2.29.1",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:moment/moment.git",
-                "reference": "b7ec8e2ec068e03de4f832f28362675bb9e02261"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment/zipball/b7ec8e2ec068e03de4f832f28362675bb9e02261",
-                "reference": "b7ec8e2ec068e03de4f832f28362675bb9e02261"
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "bower-asset/nkovacs-bootstrap-datetimepicker",
-            "version": "5.0.5",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:nkovacs/bootstrap-datetimepicker.git",
-                "reference": "e2cd618741a467b702cc1076c3dc07472cd226b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nkovacs/bootstrap-datetimepicker/zipball/e2cd618741a467b702cc1076c3dc07472cd226b5",
-                "reference": "e2cd618741a467b702cc1076c3dc07472cd226b5"
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.8.3",
-                "bower-asset/moment": ">=2.9.0"
             },
             "type": "bower-asset",
             "license": [
@@ -1350,12 +1310,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-grid.git",
-                "reference": "c8411420e3e1d146b24d22967fd3267df58791ad"
+                "reference": "394ac8dce4aefc4d02b9b4bdf39ac234be20ed4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/c8411420e3e1d146b24d22967fd3267df58791ad",
-                "reference": "c8411420e3e1d146b24d22967fd3267df58791ad",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/394ac8dce4aefc4d02b9b4bdf39ac234be20ed4e",
+                "reference": "394ac8dce4aefc4d02b9b4bdf39ac234be20ed4e",
                 "shasum": ""
             },
             "require": {
@@ -1407,7 +1367,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-09-27T04:44:51+00:00"
+            "time": "2021-10-27T04:16:38+00:00"
         },
         {
             "name": "kartik-v/yii2-krajee-base",
@@ -1464,124 +1424,6 @@
                 "source": "https://github.com/kartik-v/yii2-krajee-base/tree/v3.0.1"
             },
             "time": "2021-09-03T10:16:59+00:00"
-        },
-        {
-            "name": "kartik-v/yii2-widget-datepicker",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "98257627814abf52aa8c1e6dc020d8eb6c1c39b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/98257627814abf52aa8c1e6dc020d8eb6c1c39b5",
-                "reference": "98257627814abf52aa8c1e6dc020d8eb6c1c39b5",
-                "shasum": ""
-            },
-            "require": {
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
-            },
-            "default-branch": true,
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.4.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "kartik\\date\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Kartik Visweswaran",
-                    "email": "kartikv2@gmail.com",
-                    "homepage": "http://www.krajee.com/"
-                }
-            ],
-            "description": "Enhanced Yii2 wrapper for the bootstrap datepicker plugin (sub repo split from yii2-widgets).",
-            "homepage": "https://github.com/kartik-v/yii2-widget-datepicker",
-            "keywords": [
-                "date",
-                "extension",
-                "form",
-                "jquery",
-                "picker",
-                "plugin",
-                "select2",
-                "widget",
-                "yii2"
-            ],
-            "support": {
-                "issues": "https://github.com/kartik-v/yii2-widget-datepicker/issues",
-                "source": "https://github.com/kartik-v/yii2-widget-datepicker/tree/master"
-            },
-            "time": "2020-12-29T09:25:58+00:00"
-        },
-        {
-            "name": "kartik-v/yii2-widget-datetimepicker",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
-                "reference": "881985a5e482a4e37d1901c7857912ba5af3f298"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/881985a5e482a4e37d1901c7857912ba5af3f298",
-                "reference": "881985a5e482a4e37d1901c7857912ba5af3f298",
-                "shasum": ""
-            },
-            "require": {
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
-            },
-            "default-branch": true,
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "kartik\\datetime\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Kartik Visweswaran",
-                    "email": "kartikv2@gmail.com",
-                    "homepage": "http://www.krajee.com/"
-                }
-            ],
-            "description": "Enhanced Yii2 wrapper for the bootstrap datetimepicker plugin (sub repo split from yii2-widgets)",
-            "homepage": "https://github.com/kartik-v/yii2-widget-datetimepicker",
-            "keywords": [
-                "datetime",
-                "extension",
-                "form",
-                "jquery",
-                "picker",
-                "plugin",
-                "select2",
-                "widget",
-                "yii2"
-            ],
-            "support": {
-                "issues": "https://github.com/kartik-v/yii2-widget-datetimepicker/issues",
-                "source": "https://github.com/kartik-v/yii2-widget-datetimepicker/tree/v1.5.0"
-            },
-            "time": "2021-10-28T03:39:38+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-depdrop",
@@ -2067,55 +1909,6 @@
             "time": "2017-01-07T19:07:59+00:00"
         },
         {
-            "name": "nkovacs/yii2-datetimepicker",
-            "version": "3.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nkovacs/yii2-datetimepicker.git",
-                "reference": "ea99923f6851ef7e4224f9fd4411df048d97275e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nkovacs/yii2-datetimepicker/zipball/ea99923f6851ef7e4224f9fd4411df048d97275e",
-                "reference": "ea99923f6851ef7e4224f9fd4411df048d97275e",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/nkovacs-bootstrap-datetimepicker": "~5.0",
-                "php": ">=5.4.0",
-                "yiisoft/yii2": "^2.0.4",
-                "yiisoft/yii2-bootstrap": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "nkovacs\\datetimepicker\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Nikola Kovacs",
-                    "email": "nikola.kovacs@gmail.com"
-                }
-            ],
-            "description": "Bootstrap datetimepicker widget for Yii 2, based on Eonasdan/bootstrap-datetimepicker.",
-            "keywords": [
-                "DateTimePicker",
-                "bootstrap",
-                "extension",
-                "yii2"
-            ],
-            "support": {
-                "issues": "https://github.com/nkovacs/yii2-datetimepicker/issues",
-                "source": "https://github.com/nkovacs/yii2-datetimepicker/tree/4-inline-mode"
-            },
-            "time": "2017-03-28T08:57:15+00:00"
-        },
-        {
             "name": "npm-asset/fullcalendar",
             "version": "3.8.0",
             "dist": {
@@ -2561,16 +2354,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v6.2.7",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "15f7faf8508e04471f666633addacf54c0ab5933"
+                "reference": "8a5d5072dca8f48460fce2f4131fcc495eec654c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/15f7faf8508e04471f666633addacf54c0ab5933",
-                "reference": "15f7faf8508e04471f666633addacf54c0ab5933",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/8a5d5072dca8f48460fce2f4131fcc495eec654c",
+                "reference": "8a5d5072dca8f48460fce2f4131fcc495eec654c",
                 "shasum": ""
             },
             "require": {
@@ -2582,7 +2375,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.0",
-                "symfony/phpunit-bridge": "^4.4|^5.0"
+                "symfony/phpunit-bridge": "^4.4|^5.4"
             },
             "suggest": {
                 "ext-intl": "Needed to support internationalized email addresses"
@@ -2620,7 +2413,7 @@
             ],
             "support": {
                 "issues": "https://github.com/swiftmailer/swiftmailer/issues",
-                "source": "https://github.com/swiftmailer/swiftmailer/tree/v6.2.7"
+                "source": "https://github.com/swiftmailer/swiftmailer/tree/v6.3.0"
             },
             "funding": [
                 {
@@ -2632,7 +2425,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-09T12:30:35+00:00"
+            "time": "2021-10-18T15:26:12+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -4562,16 +4355,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.2.2",
+            "version": "5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "069a785b2141f5bcf49f3e353548dc1cce6df556"
+                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/069a785b2141f5bcf49f3e353548dc1cce6df556",
-                "reference": "069a785b2141f5bcf49f3e353548dc1cce6df556",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/622548b623e81ca6d78b721c5e029f4ce664f170",
+                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170",
                 "shasum": ""
             },
             "require": {
@@ -4582,7 +4375,8 @@
                 "webmozart/assert": "^1.9.1"
             },
             "require-dev": {
-                "mockery/mockery": "~1.3.2"
+                "mockery/mockery": "~1.3.2",
+                "psalm/phar": "^4.8"
             },
             "type": "library",
             "extra": {
@@ -4612,9 +4406,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/master"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.3.0"
             },
-            "time": "2020-09-03T19:13:55+00:00"
+            "time": "2021-10-19T17:43:47+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -6041,16 +5835,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.4.30",
+            "version": "v4.4.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "a3f7189a0665ee33b50e9e228c46f50f5acbed22"
+                "reference": "8dbd23ef7a8884051482183ddee8d9061b5feed0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/a3f7189a0665ee33b50e9e228c46f50f5acbed22",
-                "reference": "a3f7189a0665ee33b50e9e228c46f50f5acbed22",
+                "url": "https://api.github.com/repos/symfony/console/zipball/8dbd23ef7a8884051482183ddee8d9061b5feed0",
+                "reference": "8dbd23ef7a8884051482183ddee8d9061b5feed0",
                 "shasum": ""
             },
             "require": {
@@ -6111,7 +5905,7 @@
             "description": "Eases the creation of beautiful and testable command line interfaces",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/console/tree/v4.4.30"
+                "source": "https://github.com/symfony/console/tree/v4.4.33"
             },
             "funding": [
                 {
@@ -6127,7 +5921,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-25T19:27:26+00:00"
+            "time": "2021-10-25T16:36:08+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -7078,9 +6872,7 @@
     "stability-flags": {
         "kartik-v/yii2-widget-select2": 20,
         "kavalar/hhapi": 20,
-        "kartik-v/yii2-widget-datepicker": 20,
         "kartik-v/yii2-grid": 20,
-        "kartik-v/yii2-widget-datetimepicker": 20,
         "kartik-v/yii2-widget-depdrop": 20,
         "kartik-v/yii2-widget-timepicker": 20
     },
