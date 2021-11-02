@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-                    'filter'  => \yii\helpers\ArrayHelper::map(\common\models\Question::find()->where(['!=', 'question_type_id', '1'])->all(), 'id', 'question_body'),
+                'filter'  => \yii\helpers\ArrayHelper::map(\common\models\Question::find()->where(['!=', 'question_type_id', '1'])->all(), 'id', 'question_body'),
                 'attribute' => 'question_id',
                 'value' => function($model){
                     return  $model->getQuestionBody();
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'filter' => \common\helpers\AnswerHelper::answerFlagsList(),
                 'value' => function ($model) {
-                    return \common\helpers\AnswerHelper::statusLabel($model->answer_flag);
+                    return \common\helpers\AnswerHelper::answerStatusLabel($model->answer_flag);
                 },
             ],
             [

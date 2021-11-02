@@ -24,12 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'question_body',
             [
                 'attribute' => 'question_type_id',
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\questionnaire\models\QuestionType::find()->all(), 'id', 'question_type'),
                 'value' => function($model){
                     return  $model->getQuestionTitle();
                 }
             ],
             [
                 'attribute' => 'questionnaire_id',
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\questionnaire\models\Questionnaire::find()->all(), 'id', 'title'),
                 'value' => function($model){
                     return  $model->getQuestionnaireTitle();
                 }
@@ -46,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'time_limit',
+                'format' => 'raw',
                 'value' => function($model){
                     return \common\helpers\TimeHelper::limitTime($model->time_limit);
                 }

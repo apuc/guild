@@ -23,12 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'questionnaire_id',
+                'filter' => \yii\helpers\ArrayHelper::map(backend\modules\questionnaire\models\Questionnaire::find()->all(), 'id', 'title'),
                 'value' => function($model){
                     return  $model->getQuestionnaireTitle();
                 }
             ],
             [
                 'attribute' => 'user_id',
+                'filter' => \yii\helpers\ArrayHelper::map(\common\models\User::find()->all(), 'id', 'username'),
                 'value' => function($model){
                     return $model->getUserName();
                 }

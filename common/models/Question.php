@@ -17,7 +17,7 @@ use yii\db\Expression;
  * @property int $next_question
  * @property int $status
  * @property int $score
- * @property int $time_limit
+ * @property string $time_limit
  * @property string $created_at
  * @property string $updated_at
  *
@@ -59,12 +59,25 @@ class Question extends \yii\db\ActiveRecord
     {
         return [
             [['status', 'question_type_id', 'questionnaire_id', 'question_body', 'score'], 'required'],
-            [['question_type_id', 'questionnaire_id', 'question_priority', 'next_question', 'status', 'score', 'time_limit'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['question_type_id', 'questionnaire_id', 'question_priority', 'next_question', 'status', 'score'], 'integer'],
+            [['created_at', 'updated_at', 'time_limit'], 'safe'],
             [['question_body'], 'string', 'max' => 255],
             [['questionnaire_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questionnaire::className(), 'targetAttribute' => ['questionnaire_id' => 'id']],
             [['question_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => QuestionType::className(), 'targetAttribute' => ['question_type_id' => 'id']],
         ];
+    }
+
+    public function beforeSave($insert): bool
+    {
+        if (parent::beforeSave($insert)) {
+            if (strtotime($this->time_limit, '0') === 0)
+            {
+                $this->time_limit = null;
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -118,14 +131,6 @@ class Question extends \yii\db\ActiveRecord
     public function getUserResponses()
     {
         return $this->hasMany(UserResponse::className(), ['question_id' => 'id']);
-    }
-
-    public function getStatuses()
-    {
-        return [
-            self::STATUS_ACTIVE => 'Активен',
-            self::STATUS_PASSIVE => 'Не используется'
-        ];
     }
 
     public function getStatusText()

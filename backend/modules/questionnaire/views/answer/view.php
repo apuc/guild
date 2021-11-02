@@ -48,7 +48,7 @@ function cut_title($str)
                 'format' => 'raw',
                 'filter' => \common\helpers\AnswerHelper::answerFlagsList(),
                 'value' => function ($model) {
-                    return \common\helpers\AnswerHelper::statusLabel($model->status);
+                    return \common\helpers\AnswerHelper::answerStatusLabel($model->status);
                 },
             ],
             [

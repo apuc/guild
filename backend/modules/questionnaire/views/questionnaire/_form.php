@@ -1,6 +1,7 @@
 <?php
 
 use kartik\select2\Select2;
+use kartik\time\TimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -32,21 +33,19 @@ use yii\widgets\ActiveForm;
         ]
     ) ?>
 
-    <?= $form->field($model, 'time_limit')->dropDownList(
+    <?= $form->field($model, 'time_limit')->widget(TimePicker::class,
         [
-            '' => 'Не ограничено',
-            '600' => '10 минут',
-            '900' => '15 минут',
-            '1200' => '20 минут',
-            '1800' => '30 минут',
-            '2700' => '45 минут',
-            '3600' => '1 час',
-        ]
-    )
-    ?>
+            'name' => 'time_limit_picker',
+            'pluginOptions' => [
+                'showSeconds' => false,
+                'showMeridian' => false,
+                'minuteStep' => 1,
+                'defaultTime' => ''
+                ]
+        ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Создать', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -17,8 +17,8 @@ class QuestionSearch extends Question
     public function rules()
     {
         return [
-            [['id', 'question_type_id', 'questionnaire_id', 'question_priority', 'next_question', 'status', 'score', 'time_limit'], 'integer'],
-            [['question_body', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'question_type_id', 'questionnaire_id', 'question_priority', 'next_question', 'status', 'score'], 'integer'],
+            [['question_body', 'created_at', 'updated_at', 'time_limit'], 'safe'],
         ];
     }
 

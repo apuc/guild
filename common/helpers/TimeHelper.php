@@ -2,6 +2,7 @@
 
 namespace common\helpers;
 
+use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
@@ -11,13 +12,13 @@ class TimeHelper
     {
         if ($time_limit === null)
         {
-            return 'Не ограниченоTEST';
+            return 'Не ограничено';
         }
 
-        return date("H:i:s", mktime(null, null, $time_limit)) . ' (HH:mm:ss)';
-
-//        $date
-//        return Html::tag('span', $date, ['class' => 'label label-primary']);
+        return Html::tag(
+            'span',
+            Yii::$app->formatter->asDuration(strtotime($time_limit, '0')),
+            ['class' => 'label label-primary']
+        );
     }
-
 }

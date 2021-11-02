@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property int $status
  * @property string $created_at
  * @property string $updated_at
- * @property int $time_limit
+ * @property string $time_limit
  *
  * @property Question[] $questions
  * @property QuestionnaireCategory $category
@@ -52,8 +52,9 @@ class Questionnaire extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'status', 'time_limit'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['category_id', 'status', 'title'], 'required'],
+            [['category_id', 'status'], 'integer'],
+            [['created_at', 'updated_at', 'time_limit'], 'safe'],
             ['title', 'unique'],
             [['title'], 'string', 'max' => 255],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -73,8 +74,21 @@ class Questionnaire extends \yii\db\ActiveRecord
             'status' => 'Статус',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'time_limit' => 'Время на выполнение',
+            'time_limit' => 'Время на выполнение (HH:mm)',
         ];
+    }
+
+    public function beforeSave($insert): bool
+    {
+        if (parent::beforeSave($insert)) {
+            if (strtotime($this->time_limit, '0') === 0)
+            {
+                $this->time_limit = null;
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

@@ -34,12 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'category_id',
+                'filter' => \yii\helpers\ArrayHelper::map(common\models\QuestionnaireCategory::find()->all(), 'id', 'title'),
                 'value' => function($model){
                     return  $model->getCategoryTitle();
                 }
             ],
             [
                 'attribute' => 'time_limit',
+                'format' => 'raw',
                 'value' => function($model){
                     return \common\helpers\TimeHelper::limitTime($model->time_limit);
                 }

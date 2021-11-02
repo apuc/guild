@@ -56,6 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
             [
                 'attribute' => 'time_limit',
+                'format' => 'raw',
                 'value' => function($model){
                     return \common\helpers\TimeHelper::limitTime($model->time_limit);
                 }

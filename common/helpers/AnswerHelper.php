@@ -22,7 +22,7 @@ class AnswerHelper
     /**
      * @throws Exception
      */
-    public static function statusLabel($status): string
+    public static function answerStatusLabel($status): string
     {
         switch ($status) {
             case self::FLAG_FALSE:
@@ -38,5 +38,28 @@ class AnswerHelper
         return Html::tag('span', ArrayHelper::getValue(self::answerFlagsList(), $status), [
             'class' => $class,
         ]);
+    }
+
+    public static function answerFlagLable($answer_flag)
+    {
+        $class = 'label label-warning';
+        $content = 'Не проверен';
+
+        if ($answer_flag > 0)
+        {
+            $class = 'label label-success';
+            $answer_flag < 1 ? $content = $answer_flag *100 . '%' : $content = 'Верен';
+        }
+        else if ($answer_flag === 0.0)
+        {
+            $class = 'label label-danger';
+            $content = 'Не верен';
+        }
+
+        return Html::tag('span', $content,
+            [
+                'class' => $class,
+            ]
+        );
     }
 }

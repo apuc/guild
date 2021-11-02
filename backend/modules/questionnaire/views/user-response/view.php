@@ -54,7 +54,13 @@ function cut_title($str)
             'response_body',
             'created_at',
             'updated_at',
-            'answer_flag',
+            [
+                'attribute' => 'answer_flag',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return \common\helpers\AnswerHelper::answerFlagLable($model->answer_flag);
+                },
+            ],
             'user_questionnaires_uuid',
         ],
     ]) ?>

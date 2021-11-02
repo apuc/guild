@@ -70,13 +70,7 @@ YiiAsset::register($this);
                 'attribute' => 'status',
                 'format' => 'raw',
                 'value' => function($model) {
-                    return Html::tag(
-                        'span',
-                        $model->status ? 'Active' : 'Not Active',
-                        [
-                            'class' => 'label label-' . ($model->status ? 'success' : 'danger'),
-                        ]
-                    );
+                    return common\helpers\StatusHelper::statusLabel($model->status);
                 },
             ],
             'created_at',
@@ -149,30 +143,9 @@ YiiAsset::register($this);
                         'attribute' => 'answer_flag',
                         'format' => 'raw',
                         'value' => function ($model) {
-                            $answerFlag = $model->answer_flag;
-
-                            $class = 'label label-warning';
-                            $content = 'Not verified';
-
-                            if ($answerFlag > 0)
-                            {
-                                $class = 'label label-success';
-                                $answerFlag < 1 ? $content = $answerFlag *100 . '%' : $content = 'True';
-                            }
-                            else if ($answerFlag === 0.0)
-                            {
-                                $class = 'label label-danger';
-                                $content = 'Wrong';
-                            }
-
-                            return Html::tag(
-                                'span',
-                                $content,
-                                [
-                                    'class' => $class,
-                                ]
-                            );
+                            return \common\helpers\AnswerHelper::answerFlagLable($model->answer_flag);
                         },
+
                     ],
                     [
                         'class' => 'yii\grid\ActionColumn',
