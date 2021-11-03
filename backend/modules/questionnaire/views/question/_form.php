@@ -47,7 +47,7 @@ use yii\widgets\ActiveForm;
         ]
     ) ?>
 
-    <?= $form->field($model, 'time_limit')->widget(TimePicker::class,
+    <?= $form->field($model, 'time_limit')->widget(\backend\components\timepicker\src\TimePicker::class,
         [
             'name' => 'time_limit_picker',
             'pluginOptions' => [
