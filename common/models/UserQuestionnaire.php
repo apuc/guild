@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-use Ramsey\Uuid\Uuid;
+//use Ramsey\Uuid\Uuid;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
@@ -71,15 +71,15 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            $this->uuid = Uuid::uuid4()->toString();
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    public function beforeSave($insert)
+//    {
+//        if (parent::beforeSave($insert)) {
+//            $this->uuid = Uuid::uuid4()->toString();
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     /**
      * {@inheritdoc}
