@@ -1,7 +1,11 @@
 <?php
 
+use common\helpers\StatusHelper;
+use common\models\User;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use backend\modules\questionnaire\models\Questionnaire;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\questionnaire\models\UserQuestionnaireSearch */
@@ -23,17 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'questionnaire_id',
-                'filter' => \yii\helpers\ArrayHelper::map(backend\modules\questionnaire\models\Questionnaire::find()->all(), 'id', 'title'),
-                'value' => function($model){
-                    return  $model->getQuestionnaireTitle();
-                }
+                'filter' => Questionnaire::find()->select(['title', 'id'])->indexBy('id')->column(),
+                'value' => 'questionnaire.title'
             ],
             [
                 'attribute' => 'user_id',
-                'filter' => \yii\helpers\ArrayHelper::map(\common\models\User::find()->all(), 'id', 'username'),
-                'value' => function($model){
-                    return $model->getUserName();
-                }
+                'filter' => ArrayHelper::map(User::find()->all(), 'id', 'username'),
+                'value' => 'user.username'
             ],
             'score',
             [
@@ -46,9 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => \common\helpers\StatusHelper::statusList(),
+                'filter' => StatusHelper::statusList(),
                 'value' => function ($model) {
-                    return \common\helpers\StatusHelper::statusLabel($model->status);
+                    return StatusHelper::statusLabel($model->status);
                 },
             ],
             'created_at',

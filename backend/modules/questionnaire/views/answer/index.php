@@ -1,5 +1,8 @@
 <?php
 
+use backend\modules\questionnaire\models\Question;
+use common\helpers\AnswerHelper;
+use common\helpers\StatusHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -24,27 +27,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-                'filter'  => \yii\helpers\ArrayHelper::map(\common\models\Question::find()->where(['!=', 'question_type_id', '1'])->all(), 'id', 'question_body'),
+                'filter' => Question::find()->select(['question_body', 'id'])->where(['!=', 'question_type_id', '1'])->indexBy('id')->column(),
                 'attribute' => 'question_id',
-                'value' => function($model){
-                    return  $model->getQuestionBody();
-                }
+                'value' => 'question.question_body'
             ],
             'answer_body',
             [
                 'attribute' => 'answer_flag',
                 'format' => 'raw',
-                'filter' => \common\helpers\AnswerHelper::answerFlagsList(),
+                'filter' => AnswerHelper::answerFlagsList(),
                 'value' => function ($model) {
-                    return \common\helpers\AnswerHelper::answerStatusLabel($model->answer_flag);
+                    return AnswerHelper::answerStatusLabel($model->answer_flag);
                 },
             ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => \common\helpers\StatusHelper::statusList(),
+                'filter' => StatusHelper::statusList(),
                 'value' => function($model){
-                    return \common\helpers\StatusHelper::statusLabel($model->status);
+                    return StatusHelper::statusLabel($model->status);
                 }
             ],
             ['class' => 'yii\grid\ActionColumn'],

@@ -1,5 +1,8 @@
 <?php
 
+use common\helpers\AnswerHelper;
+use common\helpers\StatusHelper;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -39,25 +42,19 @@ function cut_title($str)
             'id',
             [
                 'attribute' => 'question_id',
-                'value' => function($model){
-                    return  $model->getQuestionBody();
-                }
+                'value' => ArrayHelper::getValue($model, 'question.question_body'),
             ],
             [
                 'attribute' => 'answer_flag',
                 'format' => 'raw',
-                'filter' => \common\helpers\AnswerHelper::answerFlagsList(),
-                'value' => function ($model) {
-                    return \common\helpers\AnswerHelper::answerStatusLabel($model->status);
-                },
+                'filter' => AnswerHelper::answerFlagsList(),
+                'value' => AnswerHelper::answerStatusLabel($model->answer_flag),
             ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => \common\helpers\StatusHelper::statusList(),
-                'value' => function($model){
-                    return \common\helpers\StatusHelper::statusLabel($model->status);
-                }
+                'filter' => StatusHelper::statusList(),
+                'value' => StatusHelper::statusLabel($model->status),
             ],
             'created_at',
             'updated_at',

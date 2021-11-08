@@ -1,7 +1,9 @@
 <?php
 
+use backend\components\timepicker\src\TimePicker;
+use common\helpers\StatusHelper;
+use backend\modules\questionnaire\models\QuestionnaireCategory;
 use kartik\select2\Select2;
-use kartik\time\TimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -16,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'category_id')->widget(Select2::class,
         [
-            'data' => \yii\helpers\ArrayHelper::map(\common\models\QuestionnaireCategory::find()->all(),'id', 'title'),
+            'data' => QuestionnaireCategory::find()->select(['title', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true
@@ -27,13 +29,13 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList(
-        \common\helpers\StatusHelper::statusList(),
+        StatusHelper::statusList(),
         [
             'prompt' => 'Выберите'
         ]
     ) ?>
 
-    <?= $form->field($model, 'time_limit')->widget(\backend\components\timepicker\src\TimePicker::class,
+    <?= $form->field($model, 'time_limit')->widget(TimePicker::class,
         [
             'name' => 'time_limit_picker',
             'pluginOptions' => [

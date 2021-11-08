@@ -40,7 +40,7 @@ class QuestionSearch extends Question
      */
     public function search($params)
     {
-        $query = Question::find();
+        $query = Question::find()->with(['questionnaire', 'questionType']);
 
         // add conditions that should always apply here
 

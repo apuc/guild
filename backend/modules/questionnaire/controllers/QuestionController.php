@@ -2,9 +2,11 @@
 
 namespace backend\modules\questionnaire\controllers;
 
+use backend\modules\questionnaire\models\AnswerSearch;
 use Yii;
 use backend\modules\questionnaire\models\Question;
 use backend\modules\questionnaire\models\QuestionSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,8 +54,19 @@ class QuestionController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $answerSearchModel = new AnswerSearch();
+        $answerDataProvider = new ActiveDataProvider([
+            'query' => $model->getAnswers(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'answerSearchModel' => $answerSearchModel,
+            'answerDataProvider' => $answerDataProvider,
         ]);
     }
 
@@ -62,11 +75,23 @@ class QuestionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($questionnaire_id = null, $question_type_id = null)
     {
         $model = new Question();
+        $model->questionnaire_id = $questionnaire_id;
+        $model->question_type_id = $question_type_id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            if ($questionnaire_id !== null )
+            {
+                return $this->redirect(['questionnaire/view', 'id' => $questionnaire_id]);
+            }
+            elseif ($question_type_id !== null)
+            {
+                return $this->redirect(['question-type/view', 'id' => $question_type_id]);
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -82,11 +107,21 @@ class QuestionController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id, $questionnaire_id = null, $question_type_id = null)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            if ($questionnaire_id !== null)
+            {
+                return $this->redirect(['questionnaire/view', 'id' => $questionnaire_id]);
+            }
+            elseif ($question_type_id !== null)
+            {
+                return $this->redirect(['question-type/view', 'id' => $question_type_id]);
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -102,9 +137,19 @@ class QuestionController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id, $questionnaire_id = null, $question_type_id = null)
     {
+
         $this->findModel($id)->delete();
+
+        if ($questionnaire_id !== null)
+        {
+            return $this->redirect(['questionnaire/view', 'id' => $questionnaire_id]);
+        }
+        elseif ($question_type_id !== null)
+        {
+            return $this->redirect(['question-type/view', 'id' => $question_type_id]);
+        }
 
         return $this->redirect(['index']);
     }

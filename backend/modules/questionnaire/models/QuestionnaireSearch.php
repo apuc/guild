@@ -40,7 +40,7 @@ class QuestionnaireSearch extends Questionnaire
      */
     public function search($params)
     {
-        $query = Questionnaire::find();
+        $query = Questionnaire::find()->with('category');
 
         // add conditions that should always apply here
 

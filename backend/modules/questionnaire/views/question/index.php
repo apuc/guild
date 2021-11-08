@@ -1,5 +1,9 @@
 <?php
 
+use backend\modules\questionnaire\models\Questionnaire;
+use backend\modules\questionnaire\models\QuestionType;
+use common\helpers\StatusHelper;
+use common\helpers\TimeHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -24,33 +28,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'question_body',
             [
                 'attribute' => 'question_type_id',
-                'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\questionnaire\models\QuestionType::find()->all(), 'id', 'question_type'),
-                'value' => function($model){
-                    return  $model->getQuestionTitle();
-                }
+                'filter' => QuestionType::find()->select(['question_type', 'id'])->indexBy('id')->column(),
+                'value' => 'questionType.question_type'
             ],
             [
                 'attribute' => 'questionnaire_id',
-                'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\questionnaire\models\Questionnaire::find()->all(), 'id', 'title'),
-                'value' => function($model){
-                    return  $model->getQuestionnaireTitle();
-                }
+                'filter' => Questionnaire::find()->select(['title', 'id'])->indexBy('id')->column(),
+                'value' => 'questionnaire.title',
             ],
             'question_priority',
             'next_question',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => \common\helpers\StatusHelper::statusList(),
+                'filter' => StatusHelper::statusList(),
                 'value' => function ($model) {
-                    return \common\helpers\StatusHelper::statusLabel($model->status);
+                    return StatusHelper::statusLabel($model->status);
                 },
             ],
             [
                 'attribute' => 'time_limit',
                 'format' => 'raw',
                 'value' => function($model){
-                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
+                    return TimeHelper::limitTime($model->time_limit);
                 }
             ],
             'score',

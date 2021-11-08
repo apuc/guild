@@ -1,5 +1,9 @@
 <?php
 
+use backend\modules\questionnaire\models\QuestionnaireCategory;
+use common\helpers\StatusHelper;
+use common\helpers\TimeHelper;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -27,26 +31,25 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => \common\helpers\StatusHelper::statusList(),
+                'filter' => StatusHelper::statusList(),
                 'value' => function($model){
-                    return \common\helpers\StatusHelper::statusLabel($model->status);
+                    return StatusHelper::statusLabel($model->status);
                 }
             ],
             [
                 'attribute' => 'category_id',
-                'filter' => \yii\helpers\ArrayHelper::map(common\models\QuestionnaireCategory::find()->all(), 'id', 'title'),
-                'value' => function($model){
-                    return  $model->getCategoryTitle();
-                }
+                'filter' => QuestionnaireCategory::find()->select(['title', 'id'])->indexBy('id')->column(),
+                'value' => 'category.title'
             ],
             [
                 'attribute' => 'time_limit',
                 'format' => 'raw',
                 'value' => function($model){
-                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
+                    return TimeHelper::limitTime($model->time_limit);
                 }
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+
 </div>

@@ -1,5 +1,7 @@
 <?php
 
+use backend\modules\questionnaire\models\Question;
+use backend\modules\questionnaire\models\UserQuestionnaire;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -29,7 +31,7 @@ use yii\widgets\ActiveForm;
     ) ?>
 
     <?= $form->field($model, 'user_id')->widget(Select2::class, [
-        'data' => \yii\helpers\ArrayHelper::map(\common\models\User::find()->all(),'id', 'username'),
+        'data' => \common\models\User::find()->select(['username','id'] )->indexBy('id')->column(),
         'options' => ['placeholder' => '...','class' => 'form-control'],
         'pluginOptions' => [
             'allowClear' => true
@@ -38,16 +40,15 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <?= $form->field($model, 'question_id')->widget(Select2::class,[
-        'data' => \yii\helpers\ArrayHelper::map(\common\models\Question::find()
-//                ->where('question_type_id != :question_type_id', ['question_type_id' => 1])
-            ->all(), 'id', 'question_body'),
+
+        'data' => Question::find()->select(['question_body', 'id'])->indexBy('id')->column(),
         'pluginOptions' => [
             'allowClear' => true // 'id != :id', ['id'=>1]
         ],
     ])?>
 
     <?= $form->field($model, 'user_questionnaire_id')->widget(Select2::class,[
-        'data' => \yii\helpers\ArrayHelper::map(\common\models\UserQuestionnaire::find()->all(), 'id', 'id'),
+        'data' => UserQuestionnaire::find()->select(['id', 'id'])->indexBy('id')->column(),
         'options' => ['placeholder' => '...','class' => 'form-control'],
         'pluginOptions' => [
             'allowClear' => true

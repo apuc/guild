@@ -3,6 +3,8 @@
 namespace common\models;
 
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -21,7 +23,7 @@ use yii\helpers\ArrayHelper;
  * @property QuestionnaireCategory $category
  * @property UserQuestionnaire[] $userQuestionnaires
  */
-class Questionnaire extends \yii\db\ActiveRecord
+class Questionnaire extends ActiveRecord
 {
     const STATUS_PASSIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -92,7 +94,7 @@ class Questionnaire extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getQuestions()
     {
@@ -100,7 +102,7 @@ class Questionnaire extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getAnswers()
     {
@@ -109,36 +111,25 @@ class Questionnaire extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getCategory()
+    public function getCategory(): ActiveQuery
     {
         return $this->hasOne(QuestionnaireCategory::className(), ['id' => 'category_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUserQuestionnaires()
     {
         return $this->hasMany(UserQuestionnaire::className(), ['questionnaire_id' => 'id']);
     }
 
-    public function getCategoryTitle()
-    {
-        return $this->getCategory()->one()->title;
-    }
-
-    public static function getQuestionnaireByCategory($category_id)
+    public static function questionnairesOfCategoryArr($category_id): array
     {
         $categories = self::find()->where(['category_id' => $category_id,   'status' => '1'])->all();
-        $catArr = ArrayHelper::map($categories, 'id', 'title');
 
-        $formattedCatArr = array();
-        foreach ($catArr as $key => $value){
-            $formattedCatArr[] = array('id' => $key, 'name' => $value);
-        }
-
-        return $formattedCatArr;
+        return ArrayHelper::map($categories, 'id', 'title');
     }
 }

@@ -1,7 +1,10 @@
 <?php
 
+use backend\components\timepicker\src\TimePicker;
+use backend\modules\questionnaire\models\Questionnaire;
+use backend\modules\questionnaire\models\QuestionType;
+use common\helpers\StatusHelper;
 use kartik\select2\Select2;
-use kartik\time\TimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -16,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'question_type_id')->widget(Select2::class,
         [
-            'data' => \yii\helpers\ArrayHelper::map(\common\models\QuestionType::find()->all(),'id', 'question_type'),
+            'data' => QuestionType::find()->select(['question_type', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true
@@ -26,7 +29,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'questionnaire_id')->widget(Select2::class,
         [
-            'data' => \yii\helpers\ArrayHelper::map(\common\models\Questionnaire::find()->all(),'id', 'title'),
+            'data' => Questionnaire::find()->select(['title', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true
@@ -41,13 +44,13 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'next_question')->textInput() ?>
 
     <?= $form->field($model, 'status')->dropDownList(
-        \common\helpers\StatusHelper::statusList(),
+        StatusHelper::statusList(),
         [
             'prompt' => 'Выберите'
         ]
     ) ?>
 
-    <?= $form->field($model, 'time_limit')->widget(\backend\components\timepicker\src\TimePicker::class,
+    <?= $form->field($model, 'time_limit')->widget(TimePicker::class,
         [
             'name' => 'time_limit_picker',
             'pluginOptions' => [
@@ -59,8 +62,6 @@ use yii\widgets\ActiveForm;
         ]) ?>
 
     <?= $form->field($model, 'score')->textInput(['maxlength' => true]) ?>
-
-
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

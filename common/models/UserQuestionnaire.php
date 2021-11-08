@@ -3,7 +3,6 @@
 namespace common\models;
 
 use Ramsey\Uuid\Uuid;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
@@ -134,11 +133,6 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
         return $this->getUser()->one()->username;
     }
 
-    public function getCategoryId(): string
-    {
-        return $this->created_at;
-    }
-
     public static function getQuestionnaireByUser($id): array
     {
         $questionnaire = ArrayHelper::map(self::find()->where(['user_id' => $id])
@@ -153,105 +147,13 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
         return $formatQuestionnaireArr;
     }
 
-    public function getStatuses(): array
-    {
-        return [
-            self::STATUS_ACTIVE => 'Активен',
-            self::STATUS_PASSIVE => 'Не используется'
-        ];
-    }
-
-    public function getStatusText()
-    {
-        return $this->statuses[$this->status];
-    }
-
-    public function checkAnswerFlagsForNull(): bool
-    {
-        $responses = $this->getUserResponses()->AsArray()->all();
-        foreach ($responses as $response)
-        {
-            if (ArrayHelper::isIn(null, $response))
-                return false;
-        }
-        return true;
-    }
-
     public function getQuestions(): ActiveQuery
     {
         return $this->hasMany(Question::className(), ['id' => 'question_id'])
             ->viaTable('user_response', ['user_questionnaire_id' => 'id']);
     }
 
-    public function getScore()
-    {
-        $responses_questions = $this->hasMany(UserResponse::className(), ['user_questionnaire_id' => 'id'])
-            ->joinWith('question')->asArray()->all();
-
-        $calc_score = $this->calculateScore($responses_questions);
-        $this->score = $calc_score;
-        $this->save();
-    }
-
-    protected function calculateScore($responses_questions)
-    {
-        $score = null;
-        $user_correct_answers_num = null;
-        foreach ($responses_questions as $response_question)
-        {
-            if($this->isCorrect($response_question['answer_flag']))
-            {
-                $user_correct_answers_num += 1;
-                switch ($response_question['question']['question_type_id'])
-                {
-                    case '1':  // open question
-                        $score += $response_question['answer_flag'] * $response_question['question']['score'];
-                        break;
-                    case '2':  // one answer
-                        $score += $response_question['question']['score'];
-                        break;
-                    case '3':  // multi answer
-                        $score += $response_question['question']['score'] / $this->correctAnswersNum($response_question['question']['id']);
-                        break;
-                }
-            }
-        }
-
-        $this->setPercentCorrectAnswers($user_correct_answers_num);
-
-        if($score === null) {
-            return $score;
-        }
-        else {
-            return round($score);
-        }
-    }
-
-    protected function correctAnswersNum($question_id)
-    {
-        return Answer::getCorrectAnswersNum($question_id);
-    }
-
-    protected function isCorrect($answer_flag): bool
-    {
-        if ($answer_flag > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    protected function setPercentCorrectAnswers($user_correct_answers_num)
-    {
-        $all_correct_answers_num = $this->numCorrectAnswersWithoutOpenQuestions();
-        $all_correct_answers_num += $this->numOpenQuestionsAnswers();
-
-        $percent = $user_correct_answers_num / $all_correct_answers_num;
-
-        $this->percent_correct_answers = round($percent, 2);
-        $this->save();
-    }
-
-    protected function numCorrectAnswersWithoutOpenQuestions()
+    public function numCorrectAnswersWithoutOpenQuestions()
     {
         return $this->hasMany(Answer::className(), ['question_id' => 'question_id'])
             ->viaTable('user_response', ['user_questionnaire_id' => 'id'])
@@ -260,22 +162,12 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
             ->count();
     }
 
-    protected function numOpenQuestionsAnswers()
+    public function numOpenQuestionsAnswers()
     {
         return $this->hasMany(Question::className(), ['id' => 'question_id'])
             ->viaTable('user_response', ['user_questionnaire_id' => 'id'])
             ->where(['question_type_id' => '1'])
             ->count();
-    }
-
-    public function rateResponses()
-    {
-        $responses = $this->getUserResponses()->all();
-
-        foreach ($responses as $response)
-        {
-            $response->rateResponse();
-        }
     }
 
     public static function findActiveUserQuestionnaires($user_id)

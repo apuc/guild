@@ -63,15 +63,15 @@
                         'badge' => '<span class="badge badge-info right">4</span>'
                     ],
                     [
-                        'label' => 'Анкеты', 'icon' => 'gears', 'url' => '#',
+                        'label' => 'Анкеты', 'icon' => 'book', 'url' => '#',
                         'items' => [
-                            ['label' => 'Категории анкет', 'icon' => 'file-text-o', 'url' => ['/questionnaire/questionnaire-category'], 'active' => \Yii::$app->controller->id == 'questionnaire-category'],
-                            ['label' => 'Список анкет', 'icon' => 'file-text-o', 'url' => ['/questionnaire/questionnaire'], 'active' => \Yii::$app->controller->id == 'questionnaire'],
-                            ['label' => 'Типы вопросов', 'icon' => 'file-text-o', 'url' => ['/questionnaire/question-type'], 'active' => \Yii::$app->controller->id == 'question-type'],
-                            ['label' => 'Вопросы', 'icon' => 'file-text-o', 'url' => ['/questionnaire/question'], 'active' => \Yii::$app->controller->id == 'question'],
-                            ['label' => 'Ответы', 'icon' => 'file-text-o', 'url' => ['/questionnaire/answer'], 'active' => \Yii::$app->controller->id == 'answer'],
-                            ['label' => 'Анкеты пользователей', 'icon' => 'file-text-o', 'url' => ['/questionnaire/user-questionnaire'], 'active' => \Yii::$app->controller->id == 'user-questionnaire'],
-                            ['label' => 'Ответы пользователей', 'icon' => 'file-text-o', 'url' => ['/questionnaire/user-response'], 'active' => \Yii::$app->controller->id == 'user-response'],
+                            ['label' => 'Типы вопросов', 'icon' => 'pencil-square-o', 'url' => ['/questionnaire/question-type'], 'active' => \Yii::$app->controller->id == 'question-type'],
+                            ['label' => 'Категории анкет', 'icon' => 'pencil-square', 'url' => ['/questionnaire/questionnaire-category'], 'active' => \Yii::$app->controller->id == 'questionnaire-category'],
+                            ['label' => 'Список анкет', 'icon' => 'clipboard', 'url' => ['/questionnaire/questionnaire'], 'active' => \Yii::$app->controller->id == 'questionnaire'],
+                            ['label' => 'Вопросы', 'icon' => 'question', 'url' => ['/questionnaire/question'], 'active' => \Yii::$app->controller->id == 'question'],
+                            ['label' => 'Ответы', 'icon' => 'comment', 'url' => ['/questionnaire/answer'], 'active' => \Yii::$app->controller->id == 'answer'],
+                            ['label' => 'Анкеты пользователей', 'icon' => 'drivers-license', 'url' => ['/questionnaire/user-questionnaire'], 'active' => \Yii::$app->controller->id == 'user-questionnaire'],
+                            ['label' => 'Ответы пользователей', 'icon' => 'comments', 'url' => ['/questionnaire/user-response'], 'active' => \Yii::$app->controller->id == 'user-response'],
                         ],
 
 //                        'visible' => Yii::$app->user->can('confidential_information')

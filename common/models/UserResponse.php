@@ -2,9 +2,9 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use \backend\modules\questionnaire\models\UserQuestionnaire;
@@ -25,7 +25,7 @@ use \backend\modules\questionnaire\models\UserQuestionnaire;
  * @property Question $question
  * @property User $user
  */
-class UserResponse extends \yii\db\ActiveRecord
+class UserResponse extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -104,17 +104,7 @@ class UserResponse extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getUserName()
-    {
-        return $this->getUser()->one()->username;
-    }
-
-    public function getQuestionBody()
-    {
-        return $this->getQuestion()->one()->question_body;
-    }
-
-    private function getCorrectAnswers()
+    public function getCorrectAnswers()
     {
         return $this->hasMany(Answer::class, ['question_id' => 'question_id'])
             ->where(['answer_flag' => '1'])->all();
@@ -124,49 +114,18 @@ class UserResponse extends \yii\db\ActiveRecord
     {
         $tmp = $this->hasOne(Questionnaire::className(), ['id' => 'questionnaire_id'])
             ->viaTable('user_questionnaire', ['id' => 'user_questionnaire_id'])->one();
-
-        $value = ArrayHelper::getValue($tmp, 'title');
-
-        return $value;
+        return ArrayHelper::getValue($tmp, 'title');
     }
-
 
     public function getQuestionType()
     {
-        $qType = $this->hasOne(QuestionType::class, ['id' => 'question_type_id'])
-            ->viaTable('question', ['id' => 'question_id'])->one();
-
-        $value = ArrayHelper::getValue($qType, 'question_type');
-
-        return $value;
+        return ArrayHelper::getValue($this->hasOne(QuestionType::class, ['id' => 'question_type_id'])
+            ->viaTable('question', ['id' => 'question_id'])->one(), 'question_type');
     }
 
     public function getQuestionTypeValue()
     {
         $qType = $this->getQuestion()->one();
-
-        $value = ArrayHelper::getValue($qType, 'question_type_id');
-
-        return $value;
-    }
-
-    public function rateResponse()
-    {
-        if ($this->answer_flag === null && $this->getQuestionTypeValue() != 1)  // not open question
-        {
-            $correct_answers = $this->getCorrectAnswers();
-
-            foreach ($correct_answers as $correct_answer)
-            {
-                if ($this->response_body === $correct_answer['answer_body'])
-                {
-                    $this->answer_flag = 1;
-                    $this->save();
-                    return;
-                }
-            }
-            $this->answer_flag = 0;
-            $this->save();
-        }
+        return ArrayHelper::getValue($qType, 'question_type_id');
     }
 }

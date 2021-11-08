@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
@@ -133,32 +132,7 @@ class Question extends \yii\db\ActiveRecord
         return $this->hasMany(UserResponse::className(), ['question_id' => 'id']);
     }
 
-    public function getStatusText()
-    {
-        return $this->statuses[$this->status];
-    }
-
-    public function getQuestionnaireTitle()
-    {
-        return $this->getQuestionnaire()->one()->title;
-    }
-
-    public function getQuestionTitle()
-    {
-        return $this->getQuestionType()->one()->question_type;
-    }
-
-    public function getLimitTime()
-    {
-        if ($this->time_limit === null)
-        {
-            return 'Не ограничено';
-        }
-
-        return date("i:s", mktime(null, null, $this->time_limit));
-    }
-
-    public static function getActiveQuestions($questionnaire_id)
+    public static function activeQuestions($questionnaire_id)
     {
         return self::find()->where(['questionnaire_id' => $questionnaire_id])
             ->andWhere(['status' => '1'])

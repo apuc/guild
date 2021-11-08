@@ -40,7 +40,7 @@ class QuestionController extends \yii\rest\Controller
             throw new NotFoundHttpException('Incorrect questionnaire ID');
         }
 
-        $questions = Question::getActiveQuestions($questionnaire_id);
+        $questions = Question::activeQuestions($questionnaire_id);
         if(empty($questions)) {
             throw new NotFoundHttpException('Active questionnaire not found');
         }

@@ -2,9 +2,11 @@
 
 namespace backend\modules\questionnaire\controllers;
 
+use backend\modules\questionnaire\models\QuestionSearch;
 use Yii;
 use backend\modules\questionnaire\models\QuestionType;
 use backend\modules\questionnaire\models\QuestionTypeSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,8 +54,19 @@ class QuestionTypeController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $questionSearchModel = new QuestionSearch();
+        $questionDataProvider = new ActiveDataProvider([
+            'query' => $model->getQuestions(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'questionDataProvider' => $questionDataProvider,
+            'questionSearchModel' =>  $questionSearchModel,
         ]);
     }
 

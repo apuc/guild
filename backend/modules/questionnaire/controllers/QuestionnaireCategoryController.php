@@ -2,9 +2,11 @@
 
 namespace backend\modules\questionnaire\controllers;
 
+use backend\modules\questionnaire\models\QuestionnaireSearch;
 use Yii;
 use backend\modules\questionnaire\models\QuestionnaireCategory;
 use backend\modules\questionnaire\models\QuestionnaireCategorySearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,8 +54,20 @@ class QuestionnaireCategoryController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $questionnaireSearchModel = new QuestionnaireSearch();
+        $questionnaireDataProvider = new ActiveDataProvider([
+            'query' => $model->getQuestionnaires(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'questionnaireDataProvider' => $questionnaireDataProvider,
+            'questionnaireSearchModel' =>  $questionnaireSearchModel,
         ]);
     }
 

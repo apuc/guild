@@ -2,8 +2,8 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "question_type".
@@ -14,7 +14,7 @@ use yii\behaviors\SluggableBehavior;
  *
  * @property Question[] $questions
  */
-class QuestionType extends \yii\db\ActiveRecord
+class QuestionType extends ActiveRecord
 {
     /**
      * {@inheritdoc}

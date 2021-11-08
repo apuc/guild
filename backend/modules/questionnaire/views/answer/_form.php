@@ -1,5 +1,8 @@
 <?php
 
+use backend\modules\questionnaire\models\Question;
+use common\helpers\AnswerHelper;
+use common\helpers\StatusHelper;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -14,23 +17,26 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'question_id')->widget(Select2::class, [
-        'data' => \yii\helpers\ArrayHelper::map(\common\models\Question::find()->where(['!=', 'question_type_id', '1'])->all(), 'id', 'question_body'),
+        'data' => Question::find()->select(['question_body', 'id'])
+            ->where(['!=', 'question_type_id', '1'])
+            ->indexBy('id')
+            ->column(),
         'pluginOptions' => [
-            'allowClear' => true
+            'allowClear' => false
         ],
     ]) ?>
 
     <?= $form->field($model, 'answer_body')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'answer_flag')->dropDownList(
-        \common\helpers\AnswerHelper::answerFlagsList(),
+        AnswerHelper::answerFlagsList(),
         [
             'prompt' => 'Выберите'
         ]
     ) ?>
 
     <?= $form->field($model, 'status')->dropDownList(
-        \common\helpers\StatusHelper::statusList(),
+        StatusHelper::statusList(),
         [
             'prompt' => 'Выберите'
         ]

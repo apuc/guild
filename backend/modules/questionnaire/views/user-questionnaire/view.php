@@ -1,7 +1,11 @@
 <?php
 
+use common\helpers\ScoreCalculatorHelper;
+use common\helpers\AnswerHelper;
+use common\helpers\StatusHelper;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\YiiAsset;
 use yii\widgets\DetailView;
@@ -51,11 +55,11 @@ YiiAsset::register($this);
             'id',
             [
                 'attribute' => 'questionnaires_id',
-                'value' => $questionnaire,
+                'value' => ArrayHelper::getValue($model, 'questionnaire.title'),
             ],
             [
                 'attribute' => 'user_id',
-                'value' => $user,
+                'value' => ArrayHelper::getValue($model, 'user.username'),
             ],
             'uuid',
             'score',
@@ -69,9 +73,7 @@ YiiAsset::register($this);
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => function($model) {
-                    return common\helpers\StatusHelper::statusLabel($model->status);
-                },
+                'value' => StatusHelper::statusLabel($model->status),
             ],
             'created_at',
             'updated_at',
@@ -96,7 +98,7 @@ YiiAsset::register($this);
                 'class' => 'btn btn-success',
             ],
         ]);
-        if($model->checkAnswerFlagsForNull())
+        if(ScoreCalculatorHelper::checkAnswerFlagsForNull($model))
         {
             echo 'Ответы проверены. Посчитать баллы?';
             echo Html::a('Посчитать баллы', ['calculate-score', 'id' => $model->id], [
@@ -129,13 +131,11 @@ YiiAsset::register($this);
                     'response_body',
                     [
                         'attribute' => 'question_id',
-                        'value' => function($model){
-                            return $model->getQuestionBody();
-                        }
+                        'value' => 'question.question_body'
                     ],
                     [
                         'attribute' => 'Тип вопроса',
-                        'value' => function($model){
+                        'value' => function($model) {
                             return $model->getQuestionType();
                         }
                     ],
@@ -143,18 +143,20 @@ YiiAsset::register($this);
                         'attribute' => 'answer_flag',
                         'format' => 'raw',
                         'value' => function ($model) {
-                            return \common\helpers\AnswerHelper::answerFlagLable($model->answer_flag);
+                            return AnswerHelper::answerFlagLable($model->answer_flag);
                         },
 
                     ],
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{update}', // {delete}
+                        'template' => '{view} {update} {delete}',
+                        'controller' => 'user-response',
                         'buttons' => [
+
                             'update' => function ($url,$model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-pencil"></span>',
-                                    ['user-response/update', 'id' => $model['id']]);
+                                    ['user-response/update', 'id' => $model['id'], 'user_questionnaire_id' => $model['user_questionnaire_id']]);
                             },
                         ],
                     ],

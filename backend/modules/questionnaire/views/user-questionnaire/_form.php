@@ -1,5 +1,8 @@
 <?php
 
+use backend\modules\questionnaire\models\QuestionnaireCategory;
+use common\helpers\StatusHelper;
+use common\models\User;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -17,8 +20,11 @@ use kartik\depdrop\DepDrop;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($modelCategory, 'title')
-        ->dropDownList($modelCategory->getIdTitlesArr(),
+    <?= $form->field($modelCategory, 'title')->dropDownList(QuestionnaireCategory::find()
+        ->select(['title', 'id'])
+        ->where(['status' => '1'])
+        ->indexBy('id')
+        ->column(),
             [
                 'id' => 'cat-id',
                 'prompt' => 'Выберите'
@@ -39,7 +45,7 @@ use kartik\depdrop\DepDrop;
 
     <?= $form->field($model, 'user_id')->widget(Select2::class,
         [
-            'data' => \yii\helpers\ArrayHelper::map(\common\models\User::find()->all(),'id', 'username'),
+            'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => 'Выберите пользователя','class' => 'form-control'],
             'pluginOptions' => [
                 'placeholder' => 'Выберите',
@@ -49,7 +55,7 @@ use kartik\depdrop\DepDrop;
     ); ?>
 
     <?= $form->field($model, 'status')->dropDownList(
-        \common\helpers\StatusHelper::statusList(),
+        StatusHelper::statusList(),
         [
             'prompt' => 'Выберите'
         ]

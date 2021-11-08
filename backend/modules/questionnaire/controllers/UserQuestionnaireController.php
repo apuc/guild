@@ -4,6 +4,7 @@ namespace backend\modules\questionnaire\controllers;
 
 use backend\modules\questionnaire\models\Questionnaire;
 use backend\modules\questionnaire\models\QuestionnaireCategory;
+use common\helpers\ScoreCalculatorHelper;
 use Yii;
 use backend\modules\questionnaire\models\UserQuestionnaire;
 use backend\modules\questionnaire\models\UserQuestionnaireSearch;
@@ -11,7 +12,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\web\Response;
 
 
 /**
@@ -144,16 +145,22 @@ class UserQuestionnaireController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionQuestionnaire() {
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    public function actionQuestionnaire(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
         if (isset($_POST['depdrop_parents'])) {
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
                 $cat_id = $parents[0];
-                $categories = Questionnaire::getQuestionnaireByCategory($cat_id);
+                $categories = Questionnaire::questionnairesOfCategoryArr($cat_id);
 
-                return ['output'=>$categories, 'selected'=>''];
+                $formattedCatArr = array();
+                foreach ($categories as $key => $value){
+                    $formattedCatArr[] = array('id' => $key, 'name' => $value);
+                }
+
+                return ['output'=>$formattedCatArr, 'selected'=>''];
             }
         }
         return ['output'=>'', 'selected'=>''];
@@ -161,15 +168,16 @@ class UserQuestionnaireController extends Controller
 
     public function actionRateResponses($id)
     {
-        $model = $this->findModel($id);
-        $model->rateResponses();
+        $user_questionnaire = $this->findModel($id);
+        ScoreCalculatorHelper::rateResponses($user_questionnaire);
 
         return $this->actionView($id);
     }
+
     public function actionCalculateScore($id)
     {
-        $model = $this->findModel($id);
-        $model->getScore();
+        $user_questionnaire = $this->findModel($id);
+        ScoreCalculatorHelper::calculateScore($user_questionnaire);
 
         return $this->actionView($id);
     }

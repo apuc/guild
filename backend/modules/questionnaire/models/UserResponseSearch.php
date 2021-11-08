@@ -41,7 +41,7 @@ class UserResponseSearch extends UserResponse
      */
     public function search($params)
     {
-        $query = UserResponse::find();
+        $query = UserResponse::find()->with('user');
 
         // add conditions that should always apply here
 

@@ -40,7 +40,7 @@ class AnswerController extends Controller
             throw new NotFoundHttpException('Incorrect questionnaire ID');
         }
 
-        $answers = Answer::getActiveAnswers($question_id);
+        $answers = Answer::activeAnswers($question_id);
         if(empty($answers)) {
             throw new NotFoundHttpException('Active questionnaire not found');
         }

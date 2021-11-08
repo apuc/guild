@@ -62,11 +62,16 @@ class AnswerController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($question_id = null)
     {
         $model = new Answer();
+        $model->question_id = $question_id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($question_id !== null)
+            {
+                return $this->redirect(['question/view', 'id' => $question_id]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -82,11 +87,15 @@ class AnswerController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $question_id = null)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($question_id !== null)
+            {
+                return $this->redirect(['question/view', 'id' => $question_id]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -102,9 +111,13 @@ class AnswerController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $question_id = null)
     {
         $this->findModel($id)->delete();
+        if ($question_id !== null)
+        {
+            return $this->redirect(['question/view', 'id' => $question_id]);
+        }
 
         return $this->redirect(['index']);
     }

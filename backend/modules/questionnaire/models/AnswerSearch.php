@@ -40,7 +40,7 @@ class AnswerSearch extends Answer
      */
     public function search($params)
     {
-        $query = Answer::find();
+        $query = Answer::find()->with('question');
 
         // add conditions that should always apply here
 

@@ -1,7 +1,11 @@
 <?php
 
 use backend\modules\questionnaire\models\Questionnaire;
+use backend\modules\questionnaire\models\UserQuestionnaire;
+use common\helpers\AnswerHelper;
+use common\models\User;
 use kartik\depdrop\DepDrop;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -18,63 +22,31 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-responses-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Создать новый ответ пользователя', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-<!--    --><?php //$form = ActiveForm::begin(); ?>
-
-<!--   <?//= $form->field($model, 'user_id')->dropDownList(\yii\helpers\ArrayHelper::map(
-//        \common\models\User::find()->all(), 'id', 'username'),
-//        [
-//            'id'=>'user-id',
-//            'prompt' => 'Выберите пользователя'
-//        ]
-//    ) ?>
- -->
-
-<!--   <?//= $form->field($questionnaire, 'title')->widget(DepDrop::classname(), [
-//        'options'=>['id'=>'questionnaire-id'],
-//        'pluginOptions'=>[
-//            'depends'=>['user-id'],
-//            'placeholder'=>'Выберите...',
-//            'url' => Url::to(['/questionnaire/user-response/questionnaire'])
-//        ]
-//    ]);?>
- -->
-
-<!--    --><?php //ActiveForm::end(); ?>
-
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-//            'user_id',
             [
                 'attribute' => 'user_questionnaire_id',
+                'filter' => Questionnaire::find()->select(['title', 'id'])->indexBy('id')->column(),
                 'value' => function($model){
                     return  $model->getQuestionnaireTitle();
                 }
             ],
-//        'user_questionnaire_id',
-
             [
                 'attribute' => 'user_id',
-                'value' => function($model){
-                    return  $model->getUserName();
-                }
+                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+                'value' => 'user.username',
+
             ],
             [
                 'attribute' => 'question_id',
-                'value' => function($model){
-                    return $model->getQuestionBody();
-                }
+                'value' => 'question.question_body',
             ],
 
             'response_body',
@@ -86,15 +58,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'answer_flag',
+                'filter' => AnswerHelper::answerFlagsList(),
                 'format' => 'raw',
                 'value' => function ($model) {
-                    return \common\helpers\AnswerHelper::answerFlagLable($model->answer_flag);
+                    return AnswerHelper::answerFlagLable($model->answer_flag);
                 },
             ],
-
-//            'created_at',
-//            'updated_at',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

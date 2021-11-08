@@ -1,8 +1,10 @@
 <?php
 
+use common\helpers\AnswerHelper;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
-use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\questionnaire\models\UserResponse */
@@ -11,7 +13,7 @@ use yii\grid\GridView;
 $this->title =cut_title($model->response_body);
 $this->params['breadcrumbs'][] = ['label' => 'User Responses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 
 function cut_title($str)
 {
@@ -41,15 +43,11 @@ function cut_title($str)
             'id',
             [
                 'attribute' => 'Пользователь',
-                'value' => function($model){
-                    return  $model->getUserName();
-                }
+                'value' => ArrayHelper::getValue($model,'user.username'),
             ],
             [
                 'attribute' => 'Вопрос',
-                'value' => function($model){
-                    return $model->getQuestionBody();
-                }
+                'value' => ArrayHelper::getValue($model,'question.question_body'),
             ],
             'response_body',
             'created_at',
@@ -57,9 +55,7 @@ function cut_title($str)
             [
                 'attribute' => 'answer_flag',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    return \common\helpers\AnswerHelper::answerFlagLable($model->answer_flag);
-                },
+                'value' => AnswerHelper::answerFlagLable($model->answer_flag),
             ],
             'user_questionnaires_uuid',
         ],

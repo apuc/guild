@@ -1,7 +1,12 @@
 <?php
 
+use backend\modules\questionnaire\models\QuestionType;
+use common\helpers\StatusHelper;
+use common\helpers\TimeHelper;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -12,7 +17,7 @@ use yii\widgets\DetailView;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Questionnaires', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="questionnaire-view">
 
@@ -22,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить эту анкету?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -34,26 +39,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'attribute' => 'category_id',
-                'value' => function($model){
-                    return  $model->getCategoryTitle();
-                }
+                'value' => ArrayHelper::getValue($model,'category.title')
             ],
             'title',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    return \common\helpers\StatusHelper::statusLabel($model->status);
-                },
+                'value' => StatusHelper::statusLabel($model->status),
             ],
             'created_at',
             'updated_at',
             [
                 'attribute' => 'time_limit',
                 'format' => 'raw',
-                'value' => function($model){
-                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
-                }
+                'value' => TimeHelper::limitTime($model->time_limit),
             ],
         ],
     ]) ?>
@@ -64,56 +63,68 @@ $this->params['breadcrumbs'][] = $this->title;
         </h2>
     </div>
 
-    <?php
-
-    echo GridView::widget([
+    <?= GridView::widget([
         'dataProvider' => $questionDataProvider,
         'filterModel' => $questionSearchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            'question_body',
             [
                 'attribute' => 'question_type_id',
-                'filter' => \yii\helpers\ArrayHelper::map(\backend\modules\questionnaire\models\QuestionType::find()->all(), 'id', 'question_type'),
-                'value' => function($model){
-                    return  $model->getQuestionTitle();
-                }
+                'filter' => QuestionType::find()->select(['question_type', 'id'])->indexBy('id')->column(),
+                'value' => 'questionType.question_type'
             ],
-            'question_body',
+            'question_priority',
+            'next_question',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => \common\helpers\StatusHelper::statusList(),
-                'value' => function($model) {
-                    return \common\helpers\StatusHelper::statusLabel($model->status);
+                'filter' => StatusHelper::statusList(),
+                'value' => function ($model) {
+                    return StatusHelper::statusLabel($model->status);
                 },
             ],
             [
                 'attribute' => 'time_limit',
                 'format' => 'raw',
                 'value' => function($model){
-                    return \common\helpers\TimeHelper::limitTime($model->time_limit);
+                    return TimeHelper::limitTime($model->time_limit);
                 }
             ],
             'score',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update}', // {delete}
+                'template' => '{view} {update} {delete}',
+                'controller' => 'question',
                 'buttons' => [
-                    'view' => function ($url,$model) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-eye-open"></span>',
-                            ['question/view', 'id' => $model['id']]);
-                    },
+
                     'update' => function ($url,$model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
-                            ['question/update', 'id' => $model['id']]);
+                            ['question/update', 'id' => $model['id'], 'questionnaire_id' => $model['questionnaire_id']]);
+                    },
+                    'delete' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            [
+                                    'question/delete', 'id' => $model['id'], 'questionnaire_id' => $model['questionnaire_id']
+                            ],
+                            [
+                                    'data' => ['confirm' => 'Вы уверены, что хотите удалить этот вопрос?', 'method' => 'post']
+                            ]
+                        );
                     },
                 ],
             ],
         ],
+    ]); ?>
 
-    ]);
-    ?>
+    <p>
+        <?= Html::a(
+                'Добавить новый вопрос',
+                ['question/create', 'questionnaire_id' => $model->id],
+                ['class' => 'btn btn-primary']
+        ) ?>
+    </p>
 
 </div>

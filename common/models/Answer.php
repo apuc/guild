@@ -85,13 +85,7 @@ class Answer extends \yii\db\ActiveRecord
         return $this->hasOne(Question::className(), ['id' => 'question_id']);
     }
 
-
-    public function getQuestionBody()
-    {
-        return $this->getQuestion()->one()->question_body;
-    }
-
-    static function getCorrectAnswersNum($question_id)
+    static function numCorrectAnswers($question_id)
     {
         return Answer::find()
             ->where('question_id=:question_id', [':question_id' => $question_id])
@@ -100,7 +94,7 @@ class Answer extends \yii\db\ActiveRecord
             ->count();
     }
 
-    public static function getActiveAnswers($question_id): array
+    public static function activeAnswers($question_id): array
     {
         return self::find()->where(['question_id' => $question_id])
             ->andWhere(['status' => '1'])

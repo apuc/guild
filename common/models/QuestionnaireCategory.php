@@ -3,6 +3,7 @@
 namespace common\models;
 
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -71,16 +72,10 @@ class QuestionnaireCategory extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getQuestionnaires()
     {
         return $this->hasMany(Questionnaire::className(), ['category_id' => 'id']);
-    }
-
-    public function getIdTitlesArr()
-    {
-        $categories = self::find()->select(['id', 'title'])->where(['status' => '1'])->all();
-        return  ArrayHelper::map($categories,'id','title');
     }
 }

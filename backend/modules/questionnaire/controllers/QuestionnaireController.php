@@ -76,11 +76,16 @@ class QuestionnaireController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($category_id = null)
     {
         $model = new Questionnaire();
+        $model->category_id = $category_id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($category_id !== null)
+            {
+                return $this->redirect(['questionnaire-category/view', 'id' => $model->category_id]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -96,11 +101,15 @@ class QuestionnaireController extends Controller
      * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate(int $id)
+    public function actionUpdate(int $id,  $category_id = null)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($category_id !== null)
+            {
+                return $this->redirect(['questionnaire-category/view', 'id' => $category_id]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -116,9 +125,14 @@ class QuestionnaireController extends Controller
      * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete(int $id)
+    public function actionDelete(int $id, $category_id = null)
     {
         $this->findModel($id)->delete();
+
+        if ($category_id !== null)
+        {
+            return $this->redirect(['questionnaire-category/view', 'id' => $category_id]);
+        }
 
         return $this->redirect(['index']);
     }

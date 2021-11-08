@@ -3,7 +3,6 @@
 namespace backend\modules\questionnaire\controllers;
 
 use backend\modules\questionnaire\models\Questionnaire;
-use backend\modules\questionnaire\models\User;
 use backend\modules\questionnaire\models\UserQuestionnaire;
 use Yii;
 use backend\modules\questionnaire\models\UserResponse;
@@ -91,11 +90,16 @@ class UserResponseController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id, $user_questionnaire_id = null)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($user_questionnaire_id !== null)
+            {
+                return $this->redirect(['user-questionnaire/view', 'id' => $user_questionnaire_id]);
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
