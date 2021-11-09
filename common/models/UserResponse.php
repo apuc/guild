@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -18,8 +19,8 @@ use \backend\modules\questionnaire\models\UserQuestionnaire;
  * @property string $response_body
  * @property string $created_at
  * @property string $updated_at
- * @property int $user_questionnaire_id
  * @property double $answer_flag
+ * @property string $user_questionnaire_uuid
  *
  * @property UserQuestionnaire $userQuestionnaire
  * @property Question $question
@@ -53,11 +54,12 @@ class UserResponse extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'question_id', 'user_questionnaire_id'], 'integer'],
+            [['user_id', 'question_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['answer_flag'], 'number'],
             [['response_body'], 'string', 'max' => 255],
-            [['user_questionnaire_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserQuestionnaire::className(), 'targetAttribute' => ['user_questionnaire_id' => 'id']],
+            [['user_questionnaire_uuid'], 'string', 'max' => 36],
+            [['user_questionnaire_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => UserQuestionnaire::className(), 'targetAttribute' => ['user_questionnaire_uuid' => 'uuid']],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -76,7 +78,7 @@ class UserResponse extends ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'answer_flag' => 'Корректность',
-            'user_questionnaire_id' => 'Анкеты',
+            'user_questionnaire_uuid' => 'UUID анкеты',
         ];
     }
 
@@ -85,7 +87,7 @@ class UserResponse extends ActiveRecord
      */
     public function getUserQuestionnaire()
     {
-        return $this->hasOne(UserQuestionnaire::className(), ['id' => 'user_questionnaire_id']);
+        return $this->hasOne(UserQuestionnaire::className(), ['uuid' => 'user_questionnaire_uuid']);
     }
 
     /**
@@ -104,23 +106,28 @@ class UserResponse extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
+    public function getQuestionnaire()
+    {
+        return $this->hasOne(Questionnaire::className(), ['id' => 'questionnaire_id'])
+            ->viaTable('user_questionnaire', ['uuid' => 'user_questionnaire_uuid']);
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function getQuestionType()
+    {
+        return $this->hasOne(QuestionType::class, ['id' => 'question_type_id'])
+            ->viaTable('question', ['id' => 'question_id']);
+    }
+
     public function getCorrectAnswers()
     {
         return $this->hasMany(Answer::class, ['question_id' => 'question_id'])
             ->where(['answer_flag' => '1'])->all();
-    }
-
-    public function getQuestionnaireTitle()
-    {
-        $tmp = $this->hasOne(Questionnaire::className(), ['id' => 'questionnaire_id'])
-            ->viaTable('user_questionnaire', ['id' => 'user_questionnaire_id'])->one();
-        return ArrayHelper::getValue($tmp, 'title');
-    }
-
-    public function getQuestionType()
-    {
-        return ArrayHelper::getValue($this->hasOne(QuestionType::class, ['id' => 'question_type_id'])
-            ->viaTable('question', ['id' => 'question_id'])->one(), 'question_type');
     }
 
     public function getQuestionTypeValue()

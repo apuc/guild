@@ -41,7 +41,7 @@ class UserQuestionnaireSearch extends UserQuestionnaire
      */
     public function search($params)
     {
-        $query = UserQuestionnaire::find()->with('questionnaire')->joinWith('user');
+        $query = UserQuestionnaire::find()->with('questionnaire', 'user');
 
         // add conditions that should always apply here
 

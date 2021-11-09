@@ -20,9 +20,6 @@ use yii\helpers\ArrayHelper;
  */
 class QuestionnaireCategory extends \yii\db\ActiveRecord
 {
-    const STATUS_PASSIVE = 0;
-    const STATUS_ACTIVE = 1;
-
     /**
      * {@inheritdoc}
      */
@@ -53,7 +50,7 @@ class QuestionnaireCategory extends \yii\db\ActiveRecord
             [['status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'default', 'value' => true],
         ];
     }
 

@@ -3,8 +3,10 @@
 use backend\modules\questionnaire\models\Question;
 use common\helpers\AnswerHelper;
 use common\helpers\StatusHelper;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\questionnaire\models\AnswerSearch */
@@ -20,6 +22,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Создать новый ответ', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
+<!--    --><?php
+//
+//    echo Select2::widget([
+//        'model' => \backend\modules\questionnaire\models\Questionnaire::findOne()->where(['id'=>1]),
+//        'attribute' => 'state_2',
+//        'data' => 1,
+//        'options' => ['placeholder' => 'Select a state ...'],
+//        'pluginOptions' => [
+//            'allowClear' => true
+//        ],
+//    ]);
+//
+//    ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -37,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'filter' => AnswerHelper::answerFlagsList(),
                 'value' => function ($model) {
-                    return AnswerHelper::answerStatusLabel($model->answer_flag);
+                    return AnswerHelper::answerFlagLabel($model->answer_flag);
                 },
             ],
             [

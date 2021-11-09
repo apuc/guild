@@ -27,9 +27,6 @@ use yii\db\Expression;
  */
 class Question extends \yii\db\ActiveRecord
 {
-    const STATUS_PASSIVE = 0;
-    const STATUS_ACTIVE = 1;
-
     /**
      * {@inheritdoc}
      */

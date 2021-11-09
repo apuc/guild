@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\questionnaire\models\UserResponse */
 
-$this->title = 'Создать ответ пользователя';
+$this->title = 'Новый ответ пользователя';
 $this->params['breadcrumbs'][] = ['label' => 'User Responses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

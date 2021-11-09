@@ -22,7 +22,7 @@ class AnswerHelper
     /**
      * @throws Exception
      */
-    public static function answerStatusLabel($status): string
+    public static function answerFlagLabel($status): string
     {
         switch ($status) {
             case self::FLAG_FALSE:
@@ -40,7 +40,7 @@ class AnswerHelper
         ]);
     }
 
-    public static function answerFlagLable($answer_flag)
+    public static function answerStatusLabel($answer_flag): string
     {
         $class = 'label label-warning';
         $content = 'Не проверен';

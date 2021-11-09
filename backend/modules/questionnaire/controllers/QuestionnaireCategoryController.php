@@ -57,7 +57,7 @@ class QuestionnaireCategoryController extends Controller
         $model = $this->findModel($id);
         $questionnaireSearchModel = new QuestionnaireSearch();
         $questionnaireDataProvider = new ActiveDataProvider([
-            'query' => $model->getQuestionnaires(),
+            'query' => $model->getQuestionnaires()->with('category'),
             'pagination' => [
                 'pageSize' => 20,
             ],

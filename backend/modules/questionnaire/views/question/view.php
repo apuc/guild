@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'filter' => AnswerHelper::answerFlagsList(),
                 'value' => function ($model) {
-                    return AnswerHelper::answerStatusLabel($model->answer_flag);
+                    return AnswerHelper::answerFlagLabel($model->answer_flag);
                 },
             ],
             [

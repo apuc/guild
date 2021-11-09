@@ -51,7 +51,7 @@ class ScoreCalculatorHelper
 
     public static function calculateScore(UserQuestionnaire $userQuestionnaire)
     {
-        $responses_questions = $userQuestionnaire->hasMany(UserResponse::className(), ['user_questionnaire_id' => 'id'])
+        $responses_questions = $userQuestionnaire->hasMany(UserResponse::className(), ['user_questionnaire_uuid' => 'uuid'])
             ->joinWith('question')->asArray()->all();
 
         $score = null;

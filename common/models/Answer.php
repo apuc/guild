@@ -21,12 +21,6 @@ use yii\db\Expression;
  */
 class Answer extends \yii\db\ActiveRecord
 {
-    const STATUS_PASSIVE = 0;
-    const STATUS_ACTIVE = 1;
-
-    const FLAG_TRUE = 1;
-    const FLAG_FALSE = 0;
-
     /**
      * {@inheritdoc}
      */

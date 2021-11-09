@@ -41,9 +41,7 @@ YiiAsset::register($this);
                 'attribute' => 'status',
                 'format' => 'raw',
                 'filter' => StatusHelper::statusList(),
-                'value' => function($model) {
-                    return StatusHelper::statusLabel($model->status);
-                },
+                'value' =>  StatusHelper::statusLabel($model->status),
             ],
             'created_at',
             'updated_at',

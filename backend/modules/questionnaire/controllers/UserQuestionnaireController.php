@@ -60,7 +60,7 @@ class UserQuestionnaireController extends Controller
     {
         $model = $this->findModel($id);
         $responseDataProvider = new ActiveDataProvider([
-            'query' => $model->getUserResponses(),
+            'query' => $model->getUserResponses()->with('question', 'questionType'),
             'pagination' => [
                 'pageSize' => 20,
             ],

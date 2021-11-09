@@ -25,9 +25,6 @@ use yii\helpers\ArrayHelper;
  */
 class Questionnaire extends ActiveRecord
 {
-    const STATUS_PASSIVE = 0;
-    const STATUS_ACTIVE = 1;
-
     /**
      * {@inheritdoc}
      */
@@ -59,7 +56,7 @@ class Questionnaire extends ActiveRecord
             [['created_at', 'updated_at', 'time_limit'], 'safe'],
             ['title', 'unique'],
             [['title'], 'string', 'max' => 255],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'default', 'value' => true],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => QuestionnaireCategory::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
@@ -129,7 +126,6 @@ class Questionnaire extends ActiveRecord
     public static function questionnairesOfCategoryArr($category_id): array
     {
         $categories = self::find()->where(['category_id' => $category_id,   'status' => '1'])->all();
-
         return ArrayHelper::map($categories, 'id', 'title');
     }
 }

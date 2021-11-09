@@ -16,9 +16,9 @@ use yii\widgets\Pjax;
 /* @var $responseDataProvider yii\data\ActiveDataProvider */
 
 $user = $model->getUserName();
-$questionnaire = $model->getQuestionnaireTitle();
+$questionnaire_title = $model->getQuestionnaireTitle();
 
-$this->title = $user . ": " . $questionnaire;
+$this->title = $user . ": " . $questionnaire_title;
 $this->params['breadcrumbs'][] = ['label' => 'User Questionnaires', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
@@ -85,7 +85,7 @@ YiiAsset::register($this);
         <?= Html::a('Проверить ответы', ['rate-responses', 'id' => $model->id], [
             'class' => 'btn btn-primary',
             'data' => [
-                'confirm' => 'Проверка ответов пользователя: ' . $user . ". Категория: " . $questionnaire,
+                'confirm' => 'Проверка ответов пользователя: ' . $user . ". Категория: " . $questionnaire_title,
 //                'method' => 'post',
             ],
         ]) ?>
@@ -135,15 +135,13 @@ YiiAsset::register($this);
                     ],
                     [
                         'attribute' => 'Тип вопроса',
-                        'value' => function($model) {
-                            return $model->getQuestionType();
-                        }
+                        'value' => 'questionType.question_type',
                     ],
                     [
                         'attribute' => 'answer_flag',
                         'format' => 'raw',
                         'value' => function ($model) {
-                            return AnswerHelper::answerFlagLable($model->answer_flag);
+                            return AnswerHelper::answerStatusLabel($model->answer_flag);
                         },
 
                     ],
@@ -156,7 +154,14 @@ YiiAsset::register($this);
                             'update' => function ($url,$model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-pencil"></span>',
-                                    ['user-response/update', 'id' => $model['id'], 'user_questionnaire_id' => $model['user_questionnaire_id']]);
+                                    ['user-response/update', 'id' => $model['id'], 'user_questionnaire_uuid' => $model['user_questionnaire_uuid']]);
+                            },
+                            'delete' => function ($url,$model) {
+                                return Html::a(
+                                    '<span class="glyphicon glyphicon-trash"></span>',
+                                    ['user-response/delete', 'id' => $model['id'], 'user_questionnaire_uuid' => $model['user_questionnaire_uuid']],
+                                    ['data' => ['confirm' => 'Вы уверены, что хотите удалить этот вопрос?', 'method' => 'post']]
+                                );
                             },
                         ],
                     ],

@@ -7,6 +7,7 @@ use backend\modules\questionnaire\models\UserQuestionnaire;
 use Yii;
 use backend\modules\questionnaire\models\UserResponse;
 use backend\modules\questionnaire\models\UserResponseSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,18 +38,12 @@ class UserResponseController extends Controller
      */
     public function actionIndex()
     {
-        $questionnaire = new Questionnaire();
-        $model = new UserResponse();
-
         $searchModel = new UserResponseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-
-            'model' => $model,
-            'questionnaire' => $questionnaire
         ]);
     }
 
@@ -90,16 +85,15 @@ class UserResponseController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate(int $id, $user_questionnaire_id = null)
+    public function actionUpdate($id, $user_questionnaire_uuid = null)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($user_questionnaire_id !== null)
+            if ($user_questionnaire_uuid !== null)
             {
-                return $this->redirect(['user-questionnaire/view', 'id' => $user_questionnaire_id]);
+                return $this->redirect(['user-questionnaire/view', 'id' => $this->findQuestionnaireId($model),]);
             }
-
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -115,8 +109,18 @@ class UserResponseController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id,  $user_questionnaire_uuid = null)
     {
+        if ($user_questionnaire_uuid !== null)
+        {
+            $model = $this->findModel($id);
+            $questionnaireId = $this->findQuestionnaireId($model);
+
+            $model->delete();
+
+            return $this->redirect(['user-questionnaire/view', 'id' => $questionnaireId]);
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -138,27 +142,8 @@ class UserResponseController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionQuestionnaire()
+    protected function findQuestionnaireId($model)
     {
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-        if (isset($_POST['depdrop_parents'])) {
-            $parents = $_POST['depdrop_parents'];
-            if ($parents != null) {
-                $user_id = $parents[0];
-
-                $questionnairesArr = UserQuestionnaire::getQuestionnaireByUser($user_id);
-
-                return ['output'=>$questionnairesArr, 'selected'=>''];
-            }
-        }
-        return ['output'=>'', 'selected'=>''];
-    }
-
-    public function actionTest()
-    {
-        return $this->render('update', [
-            'model' => new UserQuestionnaire(),
-        ]);
+        return ArrayHelper::getValue($model, 'questionnaire.id');
     }
 }

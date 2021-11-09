@@ -48,7 +48,7 @@ function cut_title($str)
                 'attribute' => 'answer_flag',
                 'format' => 'raw',
                 'filter' => AnswerHelper::answerFlagsList(),
-                'value' => AnswerHelper::answerStatusLabel($model->answer_flag),
+                'value' => AnswerHelper::answerFlagLabel($model->answer_flag),
             ],
             [
                 'attribute' => 'status',

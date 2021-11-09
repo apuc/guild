@@ -2,9 +2,10 @@
 
 namespace common\models;
 
-//use Ramsey\Uuid\Uuid;
+use common\helpers\UUIDHelper;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use backend\modules\questionnaire\models\Question;
@@ -28,11 +29,8 @@ use \backend\modules\questionnaire\models\Answer;
  * @property User $user
  * @property UserResponse[] $userResponses
  */
-class UserQuestionnaire extends \yii\db\ActiveRecord
+class UserQuestionnaire extends ActiveRecord
 {
-    const STATUS_PASSIVE = 0;
-    const STATUS_ACTIVE = 1;
-
     /**
      * {@inheritdoc}
      */
@@ -71,15 +69,18 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
         ];
     }
 
-//    public function beforeSave($insert)
-//    {
-//        if (parent::beforeSave($insert)) {
-//            $this->uuid = Uuid::uuid4()->toString();
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if (empty($this->uuid))
+            {
+                $this->uuid = UUIDHelper::v4();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -120,7 +121,7 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
      */
     public function getUserResponses(): ActiveQuery
     {
-        return $this->hasMany(UserResponse::className(), ['user_questionnaire_id' => 'id']);
+        return $this->hasMany(UserResponse::className(), ['user_questionnaire_uuid' => 'uuid']);
     }
 
     public function getQuestionnaireTitle()
@@ -147,16 +148,16 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
         return $formatQuestionnaireArr;
     }
 
-    public function getQuestions(): ActiveQuery
+    public function getQuestions()
     {
         return $this->hasMany(Question::className(), ['id' => 'question_id'])
-            ->viaTable('user_response', ['user_questionnaire_id' => 'id']);
+            ->viaTable('user_response', ['user_questionnaire_uuid' => 'uuid']);
     }
 
     public function numCorrectAnswersWithoutOpenQuestions()
     {
         return $this->hasMany(Answer::className(), ['question_id' => 'question_id'])
-            ->viaTable('user_response', ['user_questionnaire_id' => 'id'])
+            ->viaTable('user_response', ['user_questionnaire_uuid' => 'uuid'])
             ->where(['answer_flag' => '1'])
             ->andWhere(['status' => '1'])
             ->count();
@@ -165,7 +166,7 @@ class UserQuestionnaire extends \yii\db\ActiveRecord
     public function numOpenQuestionsAnswers()
     {
         return $this->hasMany(Question::className(), ['id' => 'question_id'])
-            ->viaTable('user_response', ['user_questionnaire_id' => 'id'])
+            ->viaTable('user_response', ['user_questionnaire_uuid' => 'uuid'])
             ->where(['question_type_id' => '1'])
             ->count();
     }

@@ -25,11 +25,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'created_at') ?>
 
-    <?php // echo $form->field($model, 'answer_flag') ?>
-
     <?php // echo $form->field($model, 'updated_at') ?>
 
-    <?php // echo $form->field($model, 'user_questionnaire_id') ?>
+    <?php // echo $form->field($model, 'answer_flag') ?>
+
+    <?php // echo $form->field($model, 'user_questionnaire_uuid') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

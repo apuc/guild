@@ -17,8 +17,8 @@ class UserResponseSearch extends UserResponse
     public function rules()
     {
         return [
-            [['id', 'user_id', 'question_id', 'user_questionnaire_id'], 'integer'],
-            [['response_body', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'user_id', 'question_id'], 'integer'],
+            [['response_body', 'created_at', 'updated_at', 'user_questionnaire_uuid'], 'safe'],
             [['answer_flag'], 'number'],
         ];
     }
@@ -41,7 +41,7 @@ class UserResponseSearch extends UserResponse
      */
     public function search($params)
     {
-        $query = UserResponse::find()->with('user');
+        $query = UserResponse::find()->with(['user', 'question', 'questionnaire']);
 
         // add conditions that should always apply here
 
@@ -65,10 +65,10 @@ class UserResponseSearch extends UserResponse
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'answer_flag' => $this->answer_flag,
-            'user_questionnaire_id' => $this->user_questionnaire_id,
         ]);
 
-        $query->andFilterWhere(['like', 'response_body', $this->response_body]);
+        $query->andFilterWhere(['like', 'response_body', $this->response_body])
+            ->andFilterWhere(['like', 'user_questionnaire_uuid', $this->user_questionnaire_uuid]);
 
         return $dataProvider;
     }
