@@ -34,22 +34,22 @@ class AnswerController extends Controller
     public function actionGetAnswers(): array
     {
         $question_id = Yii::$app->request->get('question_id');
-
         if(empty($question_id) or !is_numeric($question_id))
         {
-            throw new NotFoundHttpException('Incorrect questionnaire ID');
+            throw new NotFoundHttpException('Incorrect question ID');
         }
 
         $answers = Answer::activeAnswers($question_id);
         if(empty($answers)) {
-            throw new NotFoundHttpException('Active questionnaire not found');
+            throw new NotFoundHttpException('Answers not found or question inactive');
         }
 
         array_walk( $answers, function(&$arr){
             unset(
                 $arr['created_at'],
                 $arr['updated_at'],
-                $arr['answer_flag']
+                $arr['answer_flag'],
+                $arr['status']
             );
         });
 

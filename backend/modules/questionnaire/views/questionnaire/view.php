@@ -65,7 +65,7 @@ YiiAsset::register($this);
 
     <?= GridView::widget([
         'dataProvider' => $questionDataProvider,
-        'filterModel' => $questionSearchModel,
+//        'filterModel' => $questionSearchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'question_body',

@@ -2,16 +2,15 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\Reports;
 use common\models\UserResponse;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\filters\auth\HttpBearerAuth;
-use yii\helpers\Url;
 use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
-class UserResponseController extends \yii\rest\ActiveController
+class UserResponseController extends ActiveController
 {
     public $modelClass = 'common\models\UserResponse';
 
@@ -29,8 +28,7 @@ class UserResponseController extends \yii\rest\ActiveController
     public function verbs(): array
     {
         return [
-//            'set-responses' => ['post'],
-            'create' => ['post'],
+            'set-response' => ['post'],
         ];
     }
 
@@ -41,16 +39,28 @@ class UserResponseController extends \yii\rest\ActiveController
         return $actions;
     }
 
-    public function actionCreate()
+    /**
+     * @throws InvalidConfigException
+     * @throws BadRequestHttpException
+     * @throws ServerErrorHttpException
+     */
+    public function actionSetResponse(): UserResponse
     {
         $model = new UserResponse();
 
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+
+        if(!$model->validate()){
+            throw new BadRequestHttpException(json_encode($model->errors));
+        }
+
+        if (empty($model->user_id) or empty($model->question_id) or empty($model->user_questionnaire_uuid)) {
+            throw new BadRequestHttpException(json_encode($model->errors));
+        }
+
         if ($model->save()) {
             $response = Yii::$app->getResponse();
             $response->setStatusCode(201);
-//            $id = implode(',', array_values($model->getPrimaryKey(true)));
-//            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
         } elseif (!$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }

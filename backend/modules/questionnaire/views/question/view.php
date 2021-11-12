@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $answerDataProvider,
-        'filterModel' => $answerSearchModel,
+//        'filterModel' => $answerSearchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'answer_body',

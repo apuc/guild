@@ -83,12 +83,10 @@ class QuestionController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            if ($questionnaire_id !== null )
-            {
+            if ($questionnaire_id !== null) {
                 return $this->redirect(['questionnaire/view', 'id' => $questionnaire_id]);
             }
-            elseif ($question_type_id !== null)
-            {
+            elseif ($question_type_id !== null) {
                 return $this->redirect(['question-type/view', 'id' => $question_type_id]);
             }
 
@@ -113,12 +111,10 @@ class QuestionController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            if ($questionnaire_id !== null)
-            {
+            if ($questionnaire_id !== null) {
                 return $this->redirect(['questionnaire/view', 'id' => $questionnaire_id]);
             }
-            elseif ($question_type_id !== null)
-            {
+            elseif ($question_type_id !== null) {
                 return $this->redirect(['question-type/view', 'id' => $question_type_id]);
             }
 
@@ -139,15 +135,12 @@ class QuestionController extends Controller
      */
     public function actionDelete(int $id, $questionnaire_id = null, $question_type_id = null)
     {
-
         $this->findModel($id)->delete();
 
-        if ($questionnaire_id !== null)
-        {
+        if ($questionnaire_id !== null) {
             return $this->redirect(['questionnaire/view', 'id' => $questionnaire_id]);
         }
-        elseif ($question_type_id !== null)
-        {
+        elseif ($question_type_id !== null) {
             return $this->redirect(['question-type/view', 'id' => $question_type_id]);
         }
 
@@ -169,4 +162,16 @@ class QuestionController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+//    protected function goToView($questionnaire_id = null, $question_type_id = null)
+//    {
+//        if ($questionnaire_id !== null)
+//        {
+//            return $this->redirect(['questionnaire/view', 'id' => $questionnaire_id]);
+//        }
+//        elseif ($question_type_id !== null)
+//        {
+//            return $this->redirect(['question-type/view', 'id' => $question_type_id]);
+//        }
+//    }
 }

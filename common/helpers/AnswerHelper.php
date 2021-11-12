@@ -45,21 +45,15 @@ class AnswerHelper
         $class = 'label label-warning';
         $content = 'Не проверен';
 
-        if ($answer_flag > 0)
-        {
+        if ($answer_flag > 0) {
             $class = 'label label-success';
             $answer_flag < 1 ? $content = $answer_flag *100 . '%' : $content = 'Верен';
         }
-        else if ($answer_flag === 0.0)
-        {
+        else if ($answer_flag === 0.0) {
             $class = 'label label-danger';
             $content = 'Не верен';
         }
 
-        return Html::tag('span', $content,
-            [
-                'class' => $class,
-            ]
-        );
+        return Html::tag('span', $content, ['class' => $class,]);
     }
 }

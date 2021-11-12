@@ -4,13 +4,14 @@ namespace backend\modules\questionnaire\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\questionnaire\models\Answer;
 
 /**
  * AnswerSearch represents the model behind the search form of `backend\modules\questionnaire\models\Answer`.
  */
 class AnswerSearch extends Answer
 {
+    public $questionnaire;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +19,7 @@ class AnswerSearch extends Answer
     {
         return [
             [['id', 'question_id', 'answer_flag', 'status'], 'integer'],
-            [['answer_body', 'created_at', 'updated_at'], 'safe'],
+            [['answer_body', 'questionnaire', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -40,13 +41,17 @@ class AnswerSearch extends Answer
      */
     public function search($params)
     {
-        $query = Answer::find()->with('question');
+        $query = Answer::find()->with('question')->joinWith('questionnaire');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        $dataProvider->sort->attributes['title'] = [
+            'asc' => ['questionnaire.title' => SORT_ASC],
+            'desc' => ['questionnaire.title' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -67,6 +72,10 @@ class AnswerSearch extends Answer
         ]);
 
         $query->andFilterWhere(['like', 'answer_body', $this->answer_body]);
+
+        $query->joinWith(['questionnaire' => function($q) {
+            $q->andFilterWhere(['like', 'questionnaire.id', $this->questionnaire]);
+        }]);
 
         return $dataProvider;
     }

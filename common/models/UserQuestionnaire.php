@@ -3,6 +3,8 @@
 namespace common\models;
 
 use common\helpers\UUIDHelper;
+use Exception;
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -134,26 +136,18 @@ class UserQuestionnaire extends ActiveRecord
         return $this->getUser()->one()->username;
     }
 
-    public static function getQuestionnaireByUser($id): array
-    {
-        $questionnaire = ArrayHelper::map(self::find()->where(['user_id' => $id])
-            ->with('questionnaire')->asArray()->all(),'id','questionnaire.title');
-
-
-        $formatQuestionnaireArr = array();
-        foreach ($questionnaire as $key => $value){
-            $formatQuestionnaireArr[] = array('id' => $key, 'name' => $value);
-        }
-
-        return $formatQuestionnaireArr;
-    }
-
+    /**
+     * @throws InvalidConfigException
+     */
     public function getQuestions()
     {
         return $this->hasMany(Question::className(), ['id' => 'question_id'])
             ->viaTable('user_response', ['user_questionnaire_uuid' => 'uuid']);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function numCorrectAnswersWithoutOpenQuestions()
     {
         return $this->hasMany(Answer::className(), ['question_id' => 'question_id'])
@@ -163,6 +157,9 @@ class UserQuestionnaire extends ActiveRecord
             ->count();
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function numOpenQuestionsAnswers()
     {
         return $this->hasMany(Question::className(), ['id' => 'question_id'])
@@ -171,7 +168,15 @@ class UserQuestionnaire extends ActiveRecord
             ->count();
     }
 
-    public static function findActiveUserQuestionnaires($user_id)
+    /**
+     * @throws Exception
+     */
+    public static function getQuestionnaireId($uuid)
+    {
+        return ArrayHelper::getValue(self::find()->where(['uuid' => $uuid])->one(), 'id');
+    }
+
+    public static function findActiveUserQuestionnaires($user_id): array
     {
         return self::find()->where(['user_id' => $user_id])
             ->andWhere(['status' => '1'])

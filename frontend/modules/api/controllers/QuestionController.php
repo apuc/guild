@@ -2,22 +2,22 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\helpers\UUIDHelper;
 use common\models\Question;
-use common\models\Questionnaire;
+use common\models\UserQuestionnaire;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
+use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 
-class QuestionController extends \yii\rest\Controller
+class QuestionController extends Controller
 {
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-
         $behaviors['authenticator']['authMethods'] = [
             HttpBearerAuth::className(),
         ];
-
         return $behaviors;
     }
 
@@ -30,19 +30,22 @@ class QuestionController extends \yii\rest\Controller
 
     /**
      * @throws NotFoundHttpException
+     * @throws \Exception
      */
-    public function actionGetQuestions()
+    public function actionGetQuestions(): array
     {
-        $questionnaire_id = Yii::$app->request->get('questionnaire_id');
+        $uuid = Yii::$app->request->get('uuid');
 
-        if(empty($questionnaire_id) or !is_numeric($questionnaire_id))
+        if(empty($uuid) or !UUIDHelper::is_valid($uuid))
         {
-            throw new NotFoundHttpException('Incorrect questionnaire ID');
+            throw new NotFoundHttpException('Incorrect questionnaire UUID');
         }
+
+        $questionnaire_id = UserQuestionnaire::getQuestionnaireId($uuid);
 
         $questions = Question::activeQuestions($questionnaire_id);
         if(empty($questions)) {
-            throw new NotFoundHttpException('Active questionnaire not found');
+            throw new NotFoundHttpException('Questions not found');
         }
 
         array_walk( $questions, function(&$arr){
@@ -51,6 +54,7 @@ class QuestionController extends \yii\rest\Controller
                 $arr['created_at'],
                 $arr['updated_at'],
                 $arr['status'],
+                $arr['questionnaire_id']
             );
         });
 

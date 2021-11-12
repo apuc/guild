@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
@@ -78,6 +79,20 @@ class Answer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Question::className(), ['id' => 'question_id']);
     }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function getQuestionnaire(): ActiveQuery
+    {
+        return $this->hasOne(Questionnaire::className(), ['id' => 'questionnaire_id'])
+            ->viaTable('question', ['id' => 'question_id']);
+    }
+
+//    public function getUserQuestionnaire()
+//    {
+//        return $this->hasOne(\backend\modules\questionnaire\models\UserQuestionnaire::className(), ['id'])
+//    }
 
     static function numCorrectAnswers($question_id)
     {

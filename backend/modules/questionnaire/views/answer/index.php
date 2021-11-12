@@ -1,12 +1,11 @@
 <?php
 
 use backend\modules\questionnaire\models\Question;
+use backend\modules\questionnaire\models\Questionnaire;
 use common\helpers\AnswerHelper;
 use common\helpers\StatusHelper;
-use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\questionnaire\models\AnswerSearch */
@@ -17,33 +16,32 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="answer-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Создать новый ответ', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-<!--    --><?php
-//
-//    echo Select2::widget([
-//        'model' => \backend\modules\questionnaire\models\Questionnaire::findOne()->where(['id'=>1]),
-//        'attribute' => 'state_2',
-//        'data' => 1,
-//        'options' => ['placeholder' => 'Select a state ...'],
-//        'pluginOptions' => [
-//            'allowClear' => true
-//        ],
-//    ]);
-//
-//    ?>
+    <?= $this->render('_search_by_questionnaire', [
+        'model' => $searchModel,
+    ]) ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+//            [
+//                'filter' => Questionnaire::find()->select(['title', 'id'])->indexBy('id')->column(),
+//                'label' => 'Анкета',
+//                'attribute' => 'questionnaire',
+//                'value' =>  'questionnaire.title'
+//            ],
             [
-                'filter' => Question::find()->select(['question_body', 'id'])->where(['!=', 'question_type_id', '1'])->indexBy('id')->column(),
+                'filter' => Question::find()->select(['question_body', 'id'])->where(['!=', 'question_type_id', '1'])
+                    ->andWhere(['questionnaire_id' => ''])
+                    ->indexBy('id')->column(),
+//                'filter' => function($model){
+//                    return \yii\helpers\ArrayHelper::getValue(Question::find()->where(['questionnaire_id' => $model->questionnaire_id]), ['id', 'title'])  ;
+//                },
                 'attribute' => 'question_id',
                 'value' => 'question.question_body'
             ],
@@ -68,3 +66,4 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+

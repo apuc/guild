@@ -20,6 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Создать вопрос', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+    <?= $this->render('_search_by_questionnaire', [
+        'model' => $searchModel,
+    ]) ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -31,11 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => QuestionType::find()->select(['question_type', 'id'])->indexBy('id')->column(),
                 'value' => 'questionType.question_type'
             ],
-            [
-                'attribute' => 'questionnaire_id',
-                'filter' => Questionnaire::find()->select(['title', 'id'])->indexBy('id')->column(),
-                'value' => 'questionnaire.title',
-            ],
+//            [
+//                'attribute' => 'questionnaire_id',
+//                'filter' => Questionnaire::find()->select(['title', 'id'])->indexBy('id')->column(),
+//                'value' => 'questionnaire.title',
+//            ],
             'question_priority',
             'next_question',
             [

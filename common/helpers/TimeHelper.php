@@ -10,8 +10,7 @@ class TimeHelper
 {
     public static function limitTime($time_limit)
     {
-        if ($time_limit === null)
-        {
+        if ($time_limit === null) {
             return 'Не ограничено';
         }
 

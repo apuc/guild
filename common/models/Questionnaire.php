@@ -123,7 +123,7 @@ class Questionnaire extends ActiveRecord
         return $this->hasMany(UserQuestionnaire::className(), ['questionnaire_id' => 'id']);
     }
 
-    public static function questionnairesOfCategoryArr($category_id): array
+    public static function questionnairesByCategoryArr($category_id): array
     {
         $categories = self::find()->where(['category_id' => $category_id,   'status' => '1'])->all();
         return ArrayHelper::map($categories, 'id', 'title');

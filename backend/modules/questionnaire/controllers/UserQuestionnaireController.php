@@ -153,7 +153,7 @@ class UserQuestionnaireController extends Controller
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
                 $cat_id = $parents[0];
-                $categories = Questionnaire::questionnairesOfCategoryArr($cat_id);
+                $categories = Questionnaire::questionnairesByCategoryArr($cat_id);
 
                 $formattedCatArr = array();
                 foreach ($categories as $key => $value){

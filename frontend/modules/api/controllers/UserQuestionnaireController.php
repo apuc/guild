@@ -47,11 +47,10 @@ class UserQuestionnaireController extends Controller
 
         array_walk( $userQuestionnaireModel, function(&$arr){
             unset(
-                $arr['uuid'],
+                $arr['questionnaire_id'],
                 $arr['created_at'],
                 $arr['updated_at'],
-                $arr['score'],
-                $arr['percent_correct_answers']
+                $arr['id'],
             );
         });
 

@@ -13,21 +13,17 @@ class ScoreCalculatorHelper
     {
         $responses = $user_questionnaire->getUserResponses()->all();
 
-        foreach ($responses as $response)
-        {
+        foreach ($responses as $response) {
             self::rateOneResponse($response);
         }
     }
 
     public static function rateOneResponse(UserResponse $response)
     {
-        if ($response->answer_flag === null && $response->getQuestionTypeValue() != 1)  // not open question
-        {
+        if ($response->getQuestionTypeValue() != 1) {  // not open question
             $correct_answers = $response->getCorrectAnswers();
-            foreach ($correct_answers as $correct_answer)
-            {
-                if ($response->response_body === $correct_answer['answer_body'])
-                {
+            foreach ($correct_answers as $correct_answer) {
+                if ($response->response_body === $correct_answer['answer_body']) {
                     $response->answer_flag = 1;
                     $response->save();
                     return;
@@ -41,8 +37,7 @@ class ScoreCalculatorHelper
     public static function checkAnswerFlagsForNull(UserQuestionnaire $userQuestionnaire): bool
     {
         $responses = $userQuestionnaire->getUserResponses()->AsArray()->all();
-        foreach ($responses as $response)
-        {
+        foreach ($responses as $response) {
             if (ArrayHelper::isIn(null, $response))
                 return false;
         }
@@ -56,13 +51,10 @@ class ScoreCalculatorHelper
 
         $score = null;
         $user_correct_answers_num = null;
-        foreach ($responses_questions as $response_question)
-        {
-            if(self::isCorrect($response_question['answer_flag']))
-            {
+        foreach ($responses_questions as $response_question) {
+            if(self::isCorrect($response_question['answer_flag'])) {
                 $user_correct_answers_num += 1;
-                switch ($response_question['question']['question_type_id'])
-                {
+                switch ($response_question['question']['question_type_id']) {
                     case '1':  // open question
                         $score += $response_question['answer_flag'] * $response_question['question']['score'];
                         break;
