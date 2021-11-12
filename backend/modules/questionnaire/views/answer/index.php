@@ -36,12 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'value' =>  'questionnaire.title'
 //            ],
             [
-                'filter' => Question::find()->select(['question_body', 'id'])->where(['!=', 'question_type_id', '1'])
+                'filter' => Question::find()->select(['question_body', 'id'])
                     ->andWhere(['questionnaire_id' => ''])
                     ->indexBy('id')->column(),
-//                'filter' => function($model){
-//                    return \yii\helpers\ArrayHelper::getValue(Question::find()->where(['questionnaire_id' => $model->questionnaire_id]), ['id', 'title'])  ;
-//                },
                 'attribute' => 'question_id',
                 'value' => 'question.question_body'
             ],
