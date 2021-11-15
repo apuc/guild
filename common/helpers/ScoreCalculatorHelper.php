@@ -64,6 +64,9 @@ class ScoreCalculatorHelper
                     case '3':  // multi answer
                         $score += $response_question['question']['score'] / self::correctAnswersNum($response_question['question']['id']);
                         break;
+                    case '4':  // istina-loz
+                        $score += $response_question['question']['score'];
+                        break;
                 }
             }
         }
