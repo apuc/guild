@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ],
             [
                 'filter' => Question::find()->select(['question_body', 'id'])
-                    ->andWhere(['questionnaire_id' => ''])
                     ->indexBy('id')->column(),
                 'attribute' => 'question_id',
                 'value' => 'question.question_body'

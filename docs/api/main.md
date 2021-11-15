@@ -757,10 +757,10 @@
 }
 ```
 
-### Ответ пользователя
+### Один ответ пользователя
 `https://guild.craft-group.xyz/api/user-response/set-response`
 <p>
-     Для добавления ответа на вопрос от пользователся необходимо сделать <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/user-response/set-response
+     Для добавления ответа на вопрос от пользователя необходимо сделать <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/user-response/set-response
 </p>
 
 <p>
@@ -827,6 +827,125 @@
   },
   "id": 90
 }
+```
+<p>
+    В случаии ошибки в запросе будет отправлено сообщение следующего вида:
+</p>
+
+```json5
+{
+  "name": "Bad Request",
+  "message": "{\"question_id\":[\"\В\о\п\р\о\с is invalid.\"]}",
+  "code": 0,
+  "status": 400,
+  "type": "yii\\web\\BadRequestHttpException"
+}
+```
+
+### Массив ответов пользователя
+`https://guild.craft-group.xyz/api/user-response/set-responses`
+<p>
+     Для добавления массива ответов на вопросы от пользователя необходимо сделать <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/user-response/set-responses
+</p>
+
+<p>
+    Тело запроса содержит JSON c массивом ответов со следующими параметрами:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            question_id
+        </td>
+        <td>
+             ID вопроса(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            response_body
+        </td>
+        <td>
+             Ответ пользователя(string 255)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            uuid
+        </td>
+        <td>
+             UUID анкеты назначенной пользователю(string 36)
+        </td>
+    </tr>
+</table>
+<p>
+    Пример тела запроса:
+</p>
+
+```json5
+{
+    "userResponses": [
+        {
+            "user_id": "1",
+            "question_id": "7",
+            "response_body": "oooooooooooo111111111",
+            "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5"
+        },
+        {
+            "user_id": "1",
+            "question_id": "4",
+            "response_body": "oooooooooooo2222222",
+            "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5"
+        }
+    ]
+}
+```
+
+<p>
+    Возвращает массив объектов <b>ОтветПользователя</b>. <br>
+    Пример:
+</p>
+
+```json5
+[
+  {
+    "user_id": "1",
+    "question_id": "7",
+    "response_body": "oooooooooooo111111111",
+    "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
+    "created_at": {
+      "expression": "NOW()",
+      "params": []
+    },
+    "updated_at": {
+      "expression": "NOW()",
+      "params": []
+    },
+    "id": 137
+  },
+  {
+    "user_id": "1",
+    "question_id": "4",
+    "response_body": "oooooooooooo2222222",
+    "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
+    "created_at": {
+      "expression": "NOW()",
+      "params": []
+    },
+    "updated_at": {
+      "expression": "NOW()",
+      "params": []
+    },
+    "id": 138
+  }
+]
 ```
 <p>
     В случаии ошибки в запросе будет отправлено сообщение следующего вида:

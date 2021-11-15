@@ -3,6 +3,7 @@
 namespace frontend\modules\api\controllers;
 
 use common\models\UserResponse;
+use Exception;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\filters\auth\HttpBearerAuth;
@@ -29,6 +30,7 @@ class UserResponseController extends ActiveController
     {
         return [
             'set-response' => ['post'],
+            'set-responses' => ['post'],
         ];
     }
 
@@ -44,27 +46,70 @@ class UserResponseController extends ActiveController
      * @throws BadRequestHttpException
      * @throws ServerErrorHttpException
      */
-    public function actionSetResponse(): UserResponse
+    public function actionSetResponse()
     {
+        $request = Yii::$app->getRequest()->getBodyParams();
+
         $model = new UserResponse();
+        $model->load($request, '');
 
-        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $this->validateResponseModel($model);
+        $this->saveModel($model);
 
-        if(!$model->validate()){
+        return $model;
+
+    }
+
+    /**
+     * @throws InvalidConfigException
+     * @throws ServerErrorHttpException
+     * @throws BadRequestHttpException
+     */
+    public function actionSetResponses(): array
+    {
+        $requests = Yii::$app->getRequest()->getBodyParams();
+
+        $responseModels = array();
+
+        foreach ($requests['userResponses'] as $request) {
+            $model = new UserResponse();
+            $model->load($request, '');
+            $this->validateResponseModel($model);
+
+            array_push($responseModels, $model);
+        }
+
+        foreach ($responseModels as $responseModel) {
+            $this->saveModel($responseModel);
+        }
+
+        return $responseModels;
+    }
+
+    /**
+     * @throws BadRequestHttpException
+     */
+    protected function validateResponseModel($model)
+    {
+        if(!$model->validate()) {
             throw new BadRequestHttpException(json_encode($model->errors));
         }
 
         if (empty($model->user_id) or empty($model->question_id) or empty($model->user_questionnaire_uuid)) {
             throw new BadRequestHttpException(json_encode($model->errors));
         }
+    }
 
+    /**
+     * @throws ServerErrorHttpException
+     */
+    protected function saveModel($model)
+    {
         if ($model->save()) {
             $response = Yii::$app->getResponse();
             $response->setStatusCode(201);
         } elseif (!$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }
-
-        return $model;
     }
 }
