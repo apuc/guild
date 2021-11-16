@@ -3,9 +3,9 @@
         <?php
 
         $userStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROFILE);
-        $menuItems = [['label' => 'Все', 'icon' => 'user', 'url' => ['/card/user-card']]];
+        $menuItems = [['label' => 'Все', 'icon' => 'id-card', 'url' => ['/card/user-card']]];
         foreach ($userStatuses as $key => $status) {
-            $menuItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
+            $menuItems[] = ['label' => $status, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
         }
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
         $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project']]];
@@ -29,8 +29,16 @@
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
-                        'label' => 'Профили', 'icon' => 'users', 'url' => '#', 'active' => \Yii::$app->controller->id == 'user-card',
+                        'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', 'active' => \Yii::$app->controller->id == 'user-card',
                         'items' => $menuItems,
+                    ],
+                    [
+                        'label' => 'Сотрудники', 'icon' => 'users', 'url' => '#',
+                        'items' => [
+                            ['label' => 'Менеджеры', 'icon' => 'user-circle-o', 'url' => ['/employee/manager'], 'active' => \Yii::$app->controller->id == 'manager'],
+                            ['label' => 'Работники', 'icon' => 'user', 'url' => ['/employee/manager-employee'], 'active' => \Yii::$app->controller->id == 'manager-employee'],
+                        ],
+//                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], 'active' => \Yii::$app->controller->id == 'project',
