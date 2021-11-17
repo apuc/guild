@@ -41,7 +41,7 @@ class Manager extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'Менеджер',
+            'user_id' => 'Пользователь',
         ];
     }
 

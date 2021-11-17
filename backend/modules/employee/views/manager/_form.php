@@ -16,7 +16,8 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'user_id')->widget(Select2::className(),
         [
-            'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+            'data' => User::find()->select(['username', 'user.id'])
+                ->joinWith('manager')->where(['manager.user_id' => null])->indexBy('user.id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true

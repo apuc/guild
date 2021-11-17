@@ -804,7 +804,7 @@
     Пример запроса:
 </p>
 
-`http://guild.loc/api/user-response/set-responses?user_id=1&user_questionnaire_id=1&question_id=7&response_body=user response string`
+`https://guild.craft-group.xyz/api/user-response/set-responses?user_id=1&user_questionnaire_id=1&question_id=7&response_body=user response string`
 
 <p>
     Возвращает объект <b>Ответа</b>. <br>
@@ -960,5 +960,287 @@
   "type": "yii\\web\\BadRequestHttpException"
 }
 ```
+## Менеджер
+### Список менеджеров
+`https://guild.craft-group.xyz/api/manager/get-manager-list`
+<p>
+    Для получения списка менеджеров необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/manager/get-manager-list
+</p>
 
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/manager/get-manager?manager_id=1`
+
+<p>
+    Возвращает список объектов <b>Менеджера</b>. <br>
+    Пример ответа:
+</p>
+
+```json5
+[
+  {
+    "username": "testUser",
+    "id": 1,
+    "email": "admin@admin.com"
+  },
+  {
+    "username": "workerTest22",
+    "id": 2,
+    "email": "awdsdse@njbhj.com"
+  }
+]
+```
+<p>
+    Передаваемые параметры объекта <b>Менеджер</b>:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            id
+        </td>
+        <td>
+             ID менеджера(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            username
+        </td>
+        <td>
+             Имя пользователя(логин)(varchar(255))
+        </td>
+    </tr>
+    <tr>
+        <td>
+            email
+        </td>
+        <td>
+             Почтовый адрес(string)
+        </td>
+    </tr>
+</table>
+<p>
+    Если менеджеры не найдены будет отправлено следующее сообщение:
+</p>
+
+```json5
+{
+  "name": "Not Found",
+  "message": "Managers are not assigned",
+  "code": 0,
+  "status": 404,
+  "type": "yii\\web\\NotFoundHttpException"
+}
+```
+### Список работников менеджера
+`https://guild.craft-group.xyz/api/manager/get-employees-manager`
+<p>
+    Для получения списка сотрудников менеджера необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/manager/get-employees-manager
+</p>
+
+<p>
+    Требуемые параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            manager_id
+        </td>
+        <td>
+             ID менеджера
+        </td>
+    </tr>
+</table>
+
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/manager/get-employees-manager?manager_id=3`
+
+<p>
+    Возвращает список объектов <b>Пользователь</b>. <br>
+    Ответ имеет такой вид:
+</p>
+
+```json5
+[
+  {
+    "id": 2,
+    "username": "workerTest",
+    "email": "testUseweewer@testUser.com",
+  },
+  {
+    "id": 4,
+    "username": "worker1",
+    "email": "sdfsdvdworker2",
+  },
+]
+```
+<p>
+    Передаваемые параметры объекта <b>Менеджер</b>:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            id
+        </td>
+        <td>
+             ID пользователя(работника)(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            username
+        </td>
+        <td>
+             Логин(varchar(255))
+        </td>
+    </tr>
+    <tr>
+        <td>
+            email
+        </td>
+        <td>
+             Почтовый адрес(string)
+        </td>
+    </tr>
+</table>
+<p>
+    Если менеджер не найден или у него нет сотрудников будет отправлено следующее сообщение:
+</p>
+
+```json5
+{
+  "name": "Not Found",
+  "message": "Managers are not assigned or employees are not assigned to him",
+  "code": 0,
+  "status": 404,
+  "type": "yii\\web\\NotFoundHttpException"
+}
+```
+### Данные менеджера
+`https://guild.craft-group.xyz/api/manager/get-manager`
+<p>
+    Для получения данных менеджера необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/manager/get-manager
+</p>
+
+<p>
+    Требуемые параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            manager_id
+        </td>
+        <td>
+             ID менеджера
+        </td>
+    </tr>
+</table>
+
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/manager/get-manager?manager_id=1`
+
+<p>
+    Возвращает объект <b>Менеджера</b>. <br>
+    Каждый объект <b>Менеджер</b> имеет такой вид:
+</p>
+
+```json5
+[
+  {
+    "id": 1,
+    "username": "testUser",
+    "email": "admin@admin.com",
+  }
+]
+```
+<p>
+    Передаваемые параметры объекта <b>Менеджер</b>:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            id
+        </td>
+        <td>
+             ID как пользователя(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            username
+        </td>
+        <td>
+             Логин(varchar(255))
+        </td>
+    </tr>
+    <tr>
+        <td>
+            email
+        </td>
+        <td>
+             Электронная почта(string)
+        </td>
+    </tr>
+</table>
+<p>
+    Если менеджер не найден будет отправлено следующее сообщение:
+</p>
+
+```json5
+{
+  "name": "Not Found",
+  "message": "Incorrect manager ID",
+  "code": 0,
+  "status": 404,
+  "type": "yii\\web\\NotFoundHttpException"
+}
+```
 
