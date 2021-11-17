@@ -38,7 +38,7 @@
                             ['label' => 'Менеджеры', 'icon' => 'user-circle-o', 'url' => ['/employee/manager'], 'active' => \Yii::$app->controller->id == 'manager'],
                             ['label' => 'Работники', 'icon' => 'user', 'url' => ['/employee/manager-employee'], 'active' => \Yii::$app->controller->id == 'manager-employee'],
                         ],
-                        'visible' => Yii::$app->user->can('confidential_information')
+//                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], 'active' => \Yii::$app->controller->id == 'project',
@@ -82,7 +82,7 @@
                             ['label' => 'Ответы пользователей', 'icon' => 'comments', 'url' => ['/questionnaire/user-response'], 'active' => \Yii::$app->controller->id == 'user-response'],
                         ],
 
-                        'visible' => Yii::$app->user->can('confidential_information')
+//                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
