@@ -54,14 +54,6 @@ class ManagerController extends Controller
      */
     public function actionView($id)
     {
-//        $model = $this->findModel($id);
-//        $questionSearchModel = new QuestionSearch();
-//        $questionDataProvider = new ActiveDataProvider([
-//            'query' => $model->getQuestions()->with('questionType'),
-//            'pagination' => [
-//                'pageSize' => 20,
-//            ],
-//        ]);
         $model = $this->findModel($id);
         $managerEmployeeSearchModel = new ManagerEmployeeSearch();
         $managerEmployeeDataProvider = new ActiveDataProvider([

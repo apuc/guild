@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "manager".
@@ -45,8 +46,16 @@ class Manager extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeDelete()
+    {
+        foreach ($this->managerEmployees as $employee){
+            $employee->delete();
+        }
+        return parent::beforeDelete();
+    }
+
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUser()
     {
@@ -54,7 +63,7 @@ class Manager extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getManagerEmployees()
     {

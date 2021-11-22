@@ -82,11 +82,15 @@ class ManagerEmployeeController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $manager_id = null)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($manager_id !== null)
+            {
+                return $this->redirect(['manager/view', 'id' => $manager_id]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -102,9 +106,14 @@ class ManagerEmployeeController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $manager_id = null)
     {
         $this->findModel($id)->delete();
+
+        if ($manager_id !== null)
+        {
+            return $this->redirect(['manager/view', 'id' => $manager_id]);
+        }
 
         return $this->redirect(['index']);
     }

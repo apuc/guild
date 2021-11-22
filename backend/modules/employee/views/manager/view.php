@@ -44,7 +44,6 @@ YiiAsset::register($this);
 
     <?= GridView::widget([
         'dataProvider' => $managerEmployeeDataProvider,
-//        'filterModel' => $managerEmployeeSearchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
@@ -52,7 +51,30 @@ YiiAsset::register($this);
                 'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
                 'value' => 'user.username',
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
+                'controller' => 'manager-employee',
+                'buttons' => [
+
+                    'update' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            ['manager-employee/update', 'id' => $model['id'], 'manager_id' => $model['manager_id']]);
+                    },
+                    'delete' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            [
+                                'manager-employee/delete', 'id' => $model['id'], 'manager_id' => $model['manager_id']
+                            ],
+                            [
+                                'data' => ['confirm' => 'Вы уверены, что хотите удалить этого сотрудника?', 'method' => 'post']
+                            ]
+                        );
+                    },
+                ],
+            ],
         ],
     ]); ?>
 
