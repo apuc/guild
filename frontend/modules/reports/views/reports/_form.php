@@ -8,6 +8,8 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\Reports */
 /* @var $form yii\widgets\ActiveForm */
+
+$this->registerCss('.list-cell__task{width:73%}')
 ?>
 
 <div class="reports-form">
@@ -48,7 +50,16 @@ use yii\widgets\ActiveForm;
                 'title' => 'Кол-во часов',
                 'options' => [
                     'type' => 'number',
-                    'style' => 'width:100px'
+                    'min' => '0'
+                ],
+            ],
+            [
+                'name'  => 'minutes_spent',
+                'title' => 'Кол-во минут',
+                'options' => [
+                    'type' => 'number',
+                    'min' => '0',
+                    'max' => '59'
                 ],
             ],
         ],
