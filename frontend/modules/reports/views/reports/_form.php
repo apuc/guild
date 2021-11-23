@@ -44,8 +44,6 @@ $this->registerCss('.list-cell__task{width:73%}')
             [
                 'name'  => 'task',
                 'title' => 'Задача',
-                'options' => [
-                ],
             ],
             [
                 'name'  => 'hours_spent',
