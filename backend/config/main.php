@@ -68,11 +68,14 @@ return [
         'employee' => [
             'class' => 'backend\modules\employee\Employee',
         ],
+        'task' => [
+            'class' => 'backend\modules\task\Task',
+        ],
     ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl' => '/secure',
+            'baseUrl' => '', //TODO /secure
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
                 'text/xml' => 'yii/web/XmlParser',
