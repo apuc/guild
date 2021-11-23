@@ -12,6 +12,7 @@
         foreach ($projectStatuses as $key => $status) {
             $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key]];
         }
+        $projectItems[] = ['label' => 'Сотрудники на проектах', 'icon' => 'cubes', 'url' => ['/project/project-user']];
         ?>
 
         <?= dmstr\widgets\Menu::widget(
