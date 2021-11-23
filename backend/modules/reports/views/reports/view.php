@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($model->task) {
                         $i = 1;
                         foreach ($model->task as $task) {
-                            $text .= "<p>$i. ($task->hours_spent ч.) $task->task</p>";
+                            $text .= "<p>$i. ($task->hours_spent ч., $task->minutes_spent мин.) $task->task</p>";
                             $i++;
                         }
                     }

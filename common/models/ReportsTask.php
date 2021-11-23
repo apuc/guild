@@ -12,6 +12,7 @@ use Yii;
  * @property string $task
  * @property int $created_at
  * @property int $status
+ * @property int $minutes_spent
  * @property float $hours_spent
  *
  * @property Reports $report
@@ -33,8 +34,9 @@ class ReportsTask extends \yii\db\ActiveRecord
     {
         return [
             [['report_id'], 'required'],
-            [['report_id', 'created_at', 'status'], 'integer'],
+            [['report_id', 'created_at', 'status', 'minutes_spent'], 'integer'],
             [['hours_spent'], 'number'],
+            ['minutes_spent', 'compare', 'compareValue' => 60, 'operator' => '<'],
             [['task'], 'string'],
             [['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'id']],
         ];

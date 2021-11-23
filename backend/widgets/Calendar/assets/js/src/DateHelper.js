@@ -68,7 +68,7 @@ class DateHelper {
     static dateToString(date) {
         let year = date.getFullYear()
         let day = this.intToDate(date.getDate())
-        let month = this.intToDate(this.isDecember(date) ? 0 : date.getMonth() + 1)
+        let month = this.intToDate(date.getMonth() + 1)
         return year + '-' + month + '-' + day
     }
 

@@ -102,6 +102,7 @@ class Reports extends \yii\db\ActiveRecord
                 $taskModel->report_id = $this->id;
                 $taskModel->task = $task['task'];
                 $taskModel->hours_spent = (float)$task['hours_spent'];
+                $taskModel->minutes_spent = (int) $task['minutes_spent'];
                 $taskModel->status = 1;
                 $taskModel->created_at = time();
                 $taskModel->save();
