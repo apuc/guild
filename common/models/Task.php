@@ -2,7 +2,11 @@
 
 namespace common\models;
 
+use phpDocumentor\Reflection\Types\This;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "task".
@@ -32,13 +36,25 @@ class Task extends \yii\db\ActiveRecord
         return 'task';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['project_id'], 'required'],
+            [['project_id', 'status', 'title', 'description', 'project_user_id'], 'required'],
             [['project_id', 'status', 'project_user_id', 'user_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
@@ -56,15 +72,23 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'project_id' => 'Project ID',
-            'title' => 'Title',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'project_user_id' => 'Project User ID',
-            'user_id' => 'User ID',
-            'description' => 'Description',
+            'project_id' => 'Проект',
+            'title' => 'Название задачи',
+            'status' => 'Статус',
+            'created_at' => 'Дата создания',
+            'updated_at' => 'Дата обновления',
+            'project_user_id' => 'Создатель',
+            'user_id' => 'Наблюдатель',
+            'description' => 'Описание',
         ];
+    }
+
+    public function beforeDelete()
+    {
+        foreach ($this->taskUsers as $taskUser){
+            $taskUser->delete();
+        }
+        return parent::beforeDelete();
     }
 
     /**
@@ -97,5 +121,11 @@ class Task extends \yii\db\ActiveRecord
     public function getTaskUsers()
     {
         return $this->hasMany(TaskUser::className(), ['task_id' => 'id']);
+    }
+
+    public static function usersByTaskArr($task_id): array
+    {
+        return ArrayHelper::map(
+            self::find()->joinWith(['user', 'project'])->where(['project_id' => $task_id])->all(), 'id', 'user.username');
     }
 }

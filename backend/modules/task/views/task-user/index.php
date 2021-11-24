@@ -1,5 +1,8 @@
 <?php
 
+use backend\modules\project\models\ProjectUser;
+use backend\modules\task\models\Task;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -7,16 +10,13 @@ use yii\grid\GridView;
 /* @var $searchModel backend\modules\task\models\TaskUserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Task Users';
+$this->title = 'Исполнители задачи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="task-user-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Create Task User', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Назначить сотрудника', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,9 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'task_id',
-            'project_user_id',
+            [
+                'attribute' => 'task_id',
+                'filter' => ArrayHelper::map(Task::find()->all(), 'id', 'title'),
+                'value' => 'task.title'
+            ],
+            [
+                'attribute' => 'project_user_id',
+                'filter' => ArrayHelper::map(ProjectUser::find()->joinWith('user')
+                    ->all(), 'id', 'user.username'),
+                'value' => 'projectUser.user.username'
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -86,7 +86,6 @@ YiiAsset::register($this);
             'class' => 'btn btn-primary',
             'data' => [
                 'confirm' => 'Проверка ответов пользователя: ' . $user . ". Категория: " . $questionnaire_title,
-//                'method' => 'post',
             ],
         ]) ?>
         <?php

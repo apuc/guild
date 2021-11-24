@@ -2,6 +2,8 @@
 
 namespace backend\modules\task\controllers;
 
+use backend\modules\project\models\ProjectUser;
+use yii\web\Response;
 use Yii;
 use backend\modules\task\models\TaskUser;
 use backend\modules\task\models\TaskUserSearch;
@@ -123,5 +125,26 @@ class TaskUserController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionExecutor()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $task_id = $parents[0];
+                $users = ProjectUser::usersByTaskArr($task_id);
+
+                $formattedUsersArr = array();
+                foreach ($users as $key => $value){
+                    $formattedUsersArr[] = array('id' => $key, 'name' => $value);
+                }
+
+                return ['output'=>$formattedUsersArr, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
     }
 }

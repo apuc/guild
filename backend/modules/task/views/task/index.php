@@ -1,5 +1,8 @@
 <?php
 
+use backend\modules\project\models\Project;
+use common\helpers\StatusHelper;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -7,16 +10,13 @@ use yii\grid\GridView;
 /* @var $searchModel backend\modules\task\models\TaskSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tasks';
+$this->title = 'Задачи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="task-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Create Task', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать задачу', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,15 +25,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'project_id',
+            [
+                'attribute' => 'project_id',
+                'filter' => ArrayHelper::map(Project::find()->all(), 'id', 'name'),
+                'value' => 'project.name'
+            ],
             'title',
-            'status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'filter' => StatusHelper::statusList(),
+                'value' => function ($model) {
+                    return StatusHelper::statusLabel($model->status);
+                },
+            ],
             'created_at',
-            //'updated_at',
-            //'project_user_id',
-            //'user_id',
-            //'description',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

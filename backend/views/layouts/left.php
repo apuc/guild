@@ -8,11 +8,11 @@
             $menuItems[] = ['label' => $status, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
         }
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
-        $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project']]];
+        $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project'], 'active' => \Yii::$app->controller->id == 'project']];
         foreach ($projectStatuses as $key => $status) {
-            $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key]];
+            $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key, 'active' => \Yii::$app->controller->id == 'project']];
         }
-        $projectItems[] = ['label' => 'Сотрудники на проектах', 'icon' => 'cubes', 'url' => ['/project/project-user']];
+        $projectItems[] = ['label' => 'Сотрудники на проектах', 'icon' => 'users', 'url' => ['/project/project-user'], 'active' => \Yii::$app->controller->id == 'project-user'];
         ?>
 
         <?= dmstr\widgets\Menu::widget(
@@ -42,7 +42,7 @@
                         // TODO visible 'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
-                        'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], 'active' => \Yii::$app->controller->id == 'project',
+                        'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], //'active' => \Yii::$app->controller->id == 'project',
                         'items' => $projectItems,
                         // TODO visible 'visible' => Yii::$app->user->can('confidential_information')
                     ],
@@ -50,7 +50,7 @@
                         'label' => 'Задачи', 'icon' => '', 'url' => '#',
                         'items' => [
                             ['label' => 'Задачи', 'icon' => '', 'url' => ['/task/task'], 'active' => \Yii::$app->controller->id == 'task'],
-                            ['label' => 'Сотруднике на задаче', 'icon' => '', 'url' => ['/task/task-user'], 'active' => \Yii::$app->controller->id == 'task-user'],
+                            ['label' => 'Исполнители задачи', 'icon' => '', 'url' => ['/task/task-user'], 'active' => \Yii::$app->controller->id == 'task-user'],
                         ],
 
                         // TODO visible  'visible' => Yii::$app->user->can('confidential_information')
@@ -92,7 +92,7 @@
                             ['label' => 'Ответы пользователей', 'icon' => 'comments', 'url' => ['/questionnaire/user-response'], 'active' => \Yii::$app->controller->id == 'user-response'],
                         ],
 
-                        'visible' => Yii::$app->user->can('confidential_information')
+                        // TODO visible    'visible' => Yii::$app->user->can('confidential_information')
                     ],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],

@@ -2,7 +2,8 @@
 
 namespace common\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "project_user".
@@ -52,7 +53,7 @@ class ProjectUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProject()
     {
@@ -60,7 +61,7 @@ class ProjectUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUser()
     {
@@ -70,16 +71,44 @@ class ProjectUser extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCard()
+    {
+        return $this->hasOne(UserCard::className(), ['id_user' => 'user_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
     public function getTasks()
     {
         return $this->hasMany(Task::className(), ['project_user_id' => 'id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     */
+    public function getTasksByProject()
+    {
+        return $this->hasMany(Task::className(), ['project_id' => 'project_id']);
+    }
+
+    /**
+     * @return ActiveQuery
      */
     public function getTaskUsers()
     {
         return $this->hasMany(TaskUser::className(), ['project_user_id' => 'id']);
+    }
+
+    public static function usersByProjectArr($project_id): array
+    {
+        return ArrayHelper::map(
+            self::find()->joinWith('user')->where(['project_id' => $project_id])->all(), 'id', 'user.username');
+    }
+
+    public static function usersByTaskArr($task_id): array
+    {
+        return ArrayHelper::map(
+            self::find()->joinWith(['tasksByProject', 'user'])->where(['task.id' => $task_id])->all(), 'id', 'user.username');
     }
 }
