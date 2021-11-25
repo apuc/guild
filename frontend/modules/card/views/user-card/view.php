@@ -67,7 +67,6 @@ $this->title = 'Профиль';
                     return $model->value;
                 }
             ],
-            'vc_text'
         ],
     ]); ?>
 
