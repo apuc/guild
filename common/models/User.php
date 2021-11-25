@@ -57,6 +57,17 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
+                $this->auth_key = Yii::$app->security->generateRandomString();
+            }
+            return true;
+        }
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -205,20 +216,18 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if ($this->isNewRecord) {
-                $this->auth_key = Yii::$app->security->generateRandomString();
-            }
-            return true;
-        }
-        return false;
-    }
-
     public function getUserCard()
     {
         return $this->hasOne(UserCard::class, ['id_user' => 'id']);
     }
 
+    public function getManager()
+    {
+        return $this->hasOne(Manager::class, ['user_id' => 'id']);
+    }
+
+    public function getManagerEmployee()
+    {
+        return $this->hasMany(ManagerEmployee::className(), ['employee_id' => 'id']);
+    }
 }

@@ -3,15 +3,16 @@
         <?php
 
         $userStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROFILE);
-        $menuItems = [['label' => 'Все', 'icon' => 'user', 'url' => ['/card/user-card']]];
+        $menuItems = [['label' => 'Все', 'icon' => 'id-card', 'url' => ['/card/user-card']]];
         foreach ($userStatuses as $key => $status) {
-            $menuItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
+            $menuItems[] = ['label' => $status, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
         }
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
-        $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project']]];
+        $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project'], 'active' => \Yii::$app->controller->id == 'project']];
         foreach ($projectStatuses as $key => $status) {
-            $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key]];
+            $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key, 'active' => \Yii::$app->controller->id == 'project']];
         }
+        $projectItems[] = ['label' => 'Сотрудники на проектах', 'icon' => 'users', 'url' => ['/project/project-user'], 'active' => \Yii::$app->controller->id == 'project-user'];
         ?>
 
         <?= dmstr\widgets\Menu::widget(
@@ -29,12 +30,29 @@
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
-                        'label' => 'Профили', 'icon' => 'users', 'url' => '#', 'active' => \Yii::$app->controller->id == 'user-card',
+                        'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', 'active' => \Yii::$app->controller->id == 'user-card',
                         'items' => $menuItems,
                     ],
                     [
-                        'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], 'active' => \Yii::$app->controller->id == 'project',
+                        'label' => 'Сотрудники', 'icon' => 'users', 'url' => '#',
+                        'items' => [
+                            ['label' => 'Менеджеры', 'icon' => 'user-circle-o', 'url' => ['/employee/manager'], 'active' => \Yii::$app->controller->id == 'manager'],
+                            ['label' => 'Работники', 'icon' => 'user', 'url' => ['/employee/manager-employee'], 'active' => \Yii::$app->controller->id == 'manager-employee'],
+                        ],
+                        'visible' => Yii::$app->user->can('confidential_information')
+                    ],
+                    [
+                        'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], //'active' => \Yii::$app->controller->id == 'project',
                         'items' => $projectItems,
+                        'visible' => Yii::$app->user->can('confidential_information')
+                    ],
+                    [
+                        'label' => 'Задачи', 'icon' => '', 'url' => '#',
+                        'items' => [
+                            ['label' => 'Задачи', 'icon' => '', 'url' => ['/task/task'], 'active' => \Yii::$app->controller->id == 'task'],
+                            ['label' => 'Исполнители задачи', 'icon' => '', 'url' => ['/task/task-user'], 'active' => \Yii::$app->controller->id == 'task-user'],
+                        ],
+
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     ['label' => 'Компании', 'icon' => 'building', 'url' => ['/company/company'], 'active' => \Yii::$app->controller->id == 'company', 'visible' => Yii::$app->user->can('confidential_information')],
@@ -73,8 +91,7 @@
                             ['label' => 'Анкеты пользователей', 'icon' => 'drivers-license', 'url' => ['/questionnaire/user-questionnaire'], 'active' => \Yii::$app->controller->id == 'user-questionnaire'],
                             ['label' => 'Ответы пользователей', 'icon' => 'comments', 'url' => ['/questionnaire/user-response'], 'active' => \Yii::$app->controller->id == 'user-response'],
                         ],
-
-//                        'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],

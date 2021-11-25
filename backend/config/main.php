@@ -65,23 +65,17 @@ return [
         'questionnaire' => [
             'class' => 'backend\modules\questionnaire\Questionnaire',
         ],
-        'api' => [
-            'components' => [
-                'user' => [
-                    'identityClass' => 'backend\modules\api\models\User',
-                    'enableAutoLogin' => true,
-                    'enableSession' => false,
-                    'class' => 'backend\modules\api\models\User',
-                    //'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
-                ],
-            ],
-            'class' => 'backend\modules\api\Api',
+        'employee' => [
+            'class' => 'backend\modules\employee\Employee',
+        ],
+        'task' => [
+            'class' => 'backend\modules\task\Task',
         ],
     ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl' => '/secure', // /secure
+            'baseUrl' => '/secure',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
                 'text/xml' => 'yii/web/XmlParser',

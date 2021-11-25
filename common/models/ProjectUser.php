@@ -2,17 +2,20 @@
 
 namespace common\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "project_user".
  *
  * @property int $id
- * @property int $card_id
  * @property int $project_id
+ * @property int $user_id
  *
  * @property Project $project
- * @property UserCard $card
+ * @property User $user
+ * @property Task[] $tasks
+ * @property TaskUser[] $taskUsers
  */
 class ProjectUser extends \yii\db\ActiveRecord
 {
@@ -30,10 +33,10 @@ class ProjectUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['card_id', 'project_id'], 'required'],
-            [['card_id', 'project_id'], 'integer'],
+            [['project_id', 'user_id'], 'required'],
+            [['project_id', 'user_id'], 'integer'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
-            [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['card_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -44,13 +47,13 @@ class ProjectUser extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'card_id' => 'Card ID',
-            'project_id' => 'Project ID',
+            'project_id' => 'Проект',
+            'user_id' => 'Сотрудник',
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProject()
     {
@@ -58,10 +61,54 @@ class ProjectUser extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getCard()
     {
-        return $this->hasOne(UserCard::className(), ['id' => 'card_id']);
+        return $this->hasOne(UserCard::className(), ['id_user' => 'user_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getTasks()
+    {
+        return $this->hasMany(Task::className(), ['project_user_id' => 'id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getTasksByProject()
+    {
+        return $this->hasMany(Task::className(), ['project_id' => 'project_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getTaskUsers()
+    {
+        return $this->hasMany(TaskUser::className(), ['project_user_id' => 'id']);
+    }
+
+    public static function usersByProjectArr($project_id): array
+    {
+        return ArrayHelper::map(
+            self::find()->joinWith('user')->where(['project_id' => $project_id])->all(), 'id', 'user.username');
+    }
+
+    public static function usersByTaskArr($task_id): array
+    {
+        return ArrayHelper::map(
+            self::find()->joinWith(['tasksByProject', 'user'])->where(['task.id' => $task_id])->all(), 'id', 'user.username');
     }
 }

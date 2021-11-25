@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= $this->render('_search_by_questionnaire', [
-        'model' => $searchModel,
+        'modelSearch' => $searchModel,
     ]) ?>
 
     <?= GridView::widget([

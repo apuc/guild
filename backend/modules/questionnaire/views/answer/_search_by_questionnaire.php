@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\questionnaire\models\AnswerSearch */
+/* @var $modelSearch backend\modules\questionnaire\models\AnswerSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'questionnaire')->widget(Select2::className(),[
+    <?= $form->field($modelSearch, 'questionnaire')->widget(Select2::className(),[
         'data' => Questionnaire::find()->select(['title', 'id'])->indexBy('id')->column(),
         'options' => ['placeholder' => 'Выберите анкету'],
         'pluginOptions' => [
