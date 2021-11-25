@@ -3,6 +3,8 @@
 namespace backend\modules\task\controllers;
 
 use backend\modules\project\models\ProjectUser;
+use backend\modules\task\models\TaskUser;
+use yii\data\ActiveDataProvider;
 use yii\web\Response;
 use Yii;
 use backend\modules\task\models\Task;
@@ -54,8 +56,17 @@ class TaskController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $taskDataProvider = new ActiveDataProvider([
+            'query' => $model->getTaskUsers()->with(['task', 'projectUser']),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'taskDataProvider' => $taskDataProvider,
         ]);
     }
 

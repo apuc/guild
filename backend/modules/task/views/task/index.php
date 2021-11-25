@@ -1,7 +1,9 @@
 <?php
 
 use backend\modules\project\models\Project;
+use backend\modules\project\models\ProjectUser;
 use common\helpers\StatusHelper;
+use common\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -32,6 +34,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'title',
             [
+                'attribute' => 'project_user_id',
+                'filter' => ProjectUser::find()->select(['username', 'project_user.id'])->joinWith('user')->indexBy('id')->column(),
+                'value' => 'projectUser.user.username'
+            ],
+            [
+                'attribute' => 'user_id',
+                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+                'value' => 'user.username'
+            ],
+            'description',
+            [
                 'attribute' => 'status',
                 'format' => 'raw',
                 'filter' => StatusHelper::statusList(),
@@ -40,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'created_at',
+            'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

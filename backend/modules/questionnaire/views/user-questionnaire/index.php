@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'user_id',
-                'filter' => ArrayHelper::map(User::find()->all(), 'id', 'username'),
+                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
                 'value' => 'user.username'
             ],
             'score',

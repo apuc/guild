@@ -1,7 +1,6 @@
 <?php
 
 use backend\modules\questionnaire\models\Questionnaire;
-use backend\modules\questionnaire\models\UserQuestionnaire;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;

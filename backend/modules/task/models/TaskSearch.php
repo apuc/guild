@@ -40,7 +40,7 @@ class TaskSearch extends Task
      */
     public function search($params)
     {
-        $query = Task::find();
+        $query = Task::find()->joinWith(['user', 'project', 'projectUser.user']);
 
         // add conditions that should always apply here
 

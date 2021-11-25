@@ -27,13 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'task_id',
-                'filter' => ArrayHelper::map(Task::find()->all(), 'id', 'title'),
+                'filter' => Task::find()->select(['title', 'id'])->indexBy('id')->column(),
                 'value' => 'task.title'
             ],
             [
                 'attribute' => 'project_user_id',
-                'filter' => ArrayHelper::map(ProjectUser::find()->joinWith('user')
-                    ->all(), 'id', 'user.username'),
+                'filter' => ProjectUser::find()->select(['user.username', 'project_user.id'])
+                    ->joinWith('user')->indexBy('project_user.id')->column(),
                 'value' => 'projectUser.user.username'
             ],
 

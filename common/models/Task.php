@@ -5,6 +5,7 @@ namespace common\models;
 use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -92,7 +93,7 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProject()
     {
@@ -100,7 +101,7 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProjectUser()
     {
@@ -108,7 +109,7 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUser()
     {
@@ -116,7 +117,7 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTaskUsers()
     {

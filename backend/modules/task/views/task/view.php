@@ -1,17 +1,20 @@
 <?php
 
 use common\helpers\StatusHelper;
+use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\task\models\Task */
+/* @var $taskDataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Задача: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="task-view">
 
@@ -54,5 +57,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'description',
         ],
     ]) ?>
+
+    <div>
+        <h2>
+            <?= 'Исполнители' ?>
+        </h2>
+    </div>
+
+    <?= GridView::widget([
+        'dataProvider' => $taskDataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            [
+                'attribute' => 'task_id', // ArrayHelper::map(Task::find()->all(), 'id', 'title'),
+                'value' => 'task.title'
+            ],
+            [
+                'attribute' => 'project_user_id',
+                'value' => 'projectUser.user.username'
+            ],
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 </div>

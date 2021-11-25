@@ -39,7 +39,7 @@ class TaskUserSearch extends TaskUser
      */
     public function search($params)
     {
-        $query = TaskUser::find();
+        $query = TaskUser::find()->joinWith(['task', 'projectUser']);
 
         // add conditions that should always apply here
 
