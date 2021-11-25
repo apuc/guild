@@ -51,6 +51,11 @@ class UserCardController extends Controller
         $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
         if($result) {
             $id = $result[0]['id'];
+            $model = $this->findModel($id);
+            if ($model->load(Yii::$app->request->post())) {
+                $model->updated_at = date('Y-m-d h:i:s');
+                $model->save();
+            }
             $dataProvider = new ActiveDataProvider([
                 'query' => FieldsValueNew::find()
                     ->where(['item_id' => $id, 'item_type' => FieldsValueNew::TYPE_PROFILE])
@@ -69,7 +74,7 @@ class UserCardController extends Controller
                 ->all();
 
             return $this->render('view', [
-                'model' => $this->findModel($id),
+                'model' => $model,
                 'modelFildValue' => $dataProvider,
                 'skills' => $skills,
                 'achievements' => $achievements,
