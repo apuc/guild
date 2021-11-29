@@ -1,7 +1,9 @@
 <?php
 
+use asmoday74\ckeditor5\EditorClassic;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -67,4 +69,15 @@ $this->title = 'Профиль';
             ],
         ],
     ]); ?>
+
+    <?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($model, 'vc_text')->widget(EditorClassic::className(), [
+        'clientOptions' => [
+            'language' => 'ru',
+        ]
+    ]); ?>
+    <div class="form-group">
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    </div>
+    <?php $form = ActiveForm::end(); ?>
 </div>
