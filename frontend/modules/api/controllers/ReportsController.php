@@ -49,7 +49,7 @@ class ReportsController extends Controller
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => [
-//                    HttpBearerAuth::class,
+                    HttpBearerAuth::class,
                 ],
             ]
         ];
