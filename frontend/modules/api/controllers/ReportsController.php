@@ -11,12 +11,11 @@ use Yii;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
-use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-class ReportsController extends Controller
+class ReportsController extends ApiController
 {
     public function init()
     {
@@ -25,26 +24,14 @@ class ReportsController extends Controller
 
     public function behaviors()
     {
-        return [
+        $parent = parent::behaviors();
+        $b = [
             [
                 'class' => ContentNegotiator::className(),
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
             ],
-//            'corsFilter' => [
-//                'class' => GsCors::class,
-//                'cors' => [
-//                    'Origin' => ['*'],
-//                    //'Access-Control-Allow-Credentials' => true,
-//                    'Access-Control-Allow-Headers' => [
-//                        'Content-Type',
-//                        'Access-Control-Allow-Headers',
-//                        'Authorization',
-//                        'X-Requested-With'
-//                    ],
-//                ]
-//            ],
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => [
@@ -52,6 +39,8 @@ class ReportsController extends Controller
                 ],
             ]
         ];
+
+        return array_merge($parent, $b);
     }
 
     public function actionIndex(): array

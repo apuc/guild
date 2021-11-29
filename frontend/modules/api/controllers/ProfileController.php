@@ -12,17 +12,20 @@ use kavalar\TelegramBotService;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
+use yii\filters\ContentNegotiator;
+use yii\web\Response;
 
-class ProfileController extends \yii\rest\Controller
+class ProfileController extends ApiController
 {
 
     public function behaviors()
     {
-        return [
+        $parent = parent::behaviors();
+        $b = [
             [
-                'class' => \yii\filters\ContentNegotiator::className(),
+                'class' => ContentNegotiator::className(),
                 'formats' => [
-                    'application/json' => \yii\web\Response::FORMAT_JSON,
+                    'application/json' => Response::FORMAT_JSON,
                 ],
             ],
             'authenticator' => [
@@ -31,20 +34,9 @@ class ProfileController extends \yii\rest\Controller
                     HttpBearerAuth::class,
                 ],
             ]
-//            'corsFilter' => [
-//                'class' => GsCors::class,
-//                'cors' => [
-//                    'Origin' => ['https://itguild.info'],
-//                    //'Access-Control-Allow-Credentials' => true,
-//                    'Access-Control-Allow-Headers' => [
-//                        'Content-Type',
-//                        'Access-Control-Allow-Headers',
-//                        'Authorization',
-//                        'X-Requested-With'
-//                    ],
-//                ]
-//            ]
         ];
+
+        return array_merge($parent, $b);
     }
 
     public function actionIndex($id = null)
