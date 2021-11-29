@@ -5,6 +5,7 @@ namespace frontend\modules\api\controllers;
 use common\behaviors\GsCors;
 use common\classes\Debug;
 use common\models\Reports;
+use common\models\ReportsTask;
 use frontend\modules\api\models\ReportSearchForm;
 use JsonException;
 use Yii;
@@ -48,7 +49,7 @@ class ReportsController extends Controller
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => [
-                    HttpBearerAuth::class,
+//                    HttpBearerAuth::class,
                 ],
             ]
         ];
@@ -67,20 +68,43 @@ class ReportsController extends Controller
         return $reportsModel->byParams();
     }
 
+    public function actionView($id): array{
+        $report = Reports::findOne($id);
+        return array_merge($report->toArray(), ['tasks' => $report->_task]);
+    }
+
     public function actionCreate()
     {
-        $reportsModel = new Reports();
-
         $params = Yii::$app->request->post();
+        if (!isset($params['tasks'])){
+            throw new BadRequestHttpException('Нет параметра tasks');
+        }
+
+        $reportsModel = new Reports();
         $reportsModel->attributes = $params;
 
         if(!$reportsModel->validate()){
             throw new BadRequestHttpException(json_encode($reportsModel->errors));
         }
 
-        $reportsModel->save();
+        $tasks = [];
+        foreach (json_decode($params['tasks'], true) as $jsonTask){
+            $task = new ReportsTask();
+            $task->scenario = ReportsTask::SCENARIO_WITHOUT_REPORT_ID;
+            $task->attributes = $jsonTask;
+            if (!$task->validate()) {
+                throw new BadRequestHttpException(json_encode($task->errors));
+            }
+            $tasks []= $task->attributes;
+        }
+        $attributes = $task->attributes();
 
-        return $reportsModel->toArray();
+        $reportsModel->save();
+        $tasks = array_map(function ($task)use($reportsModel){$task['report_id'] = $reportsModel->id; return $task;}, $tasks);
+
+        Yii::$app->db->createCommand()->batchInsert(ReportsTask::tableName(), $attributes, $tasks)->execute();
+
+        return array_merge($reportsModel->toArray(), ['tasks' => $tasks]);
     }
 
     public function actionDelete()
