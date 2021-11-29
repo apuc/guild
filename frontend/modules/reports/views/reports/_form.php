@@ -28,6 +28,7 @@ $this->registerCss('.list-cell__task{width:73%}')
     echo '<b>Дата заполнения отчета:</b>';
     echo DatePicker::widget([
         'model' => $model,
+        'language' => 'ru',
         'attribute' => 'created_at',
         'options' => [],
         'pluginOptions' => [
