@@ -70,7 +70,6 @@ class ProfileSearchForm extends Model
     {
         $model = UserCard::find();
 
-
         if ($this->skills) {
             $model->joinWith(['skillValues']);
             $this->skills = explode(',', $this->skills);
