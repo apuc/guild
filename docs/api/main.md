@@ -258,6 +258,39 @@
 
 `https://guild.craft-group.xyz/api/reports/index?fromDate=2021-08-01&toDate=2021-08-31&user_id=2limit=3&offset=2`
 
+### Один отчет
+`https://guild.craft-group.xyz/api/reports/{id}`
+<p>
+    Для получения отчета необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/reports/{id}
+</p>
+
+<p>
+    Параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>   
+        <td>
+            id*
+        </td>
+        <td>
+            ID отчета.
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса на просмотр отчета с ID 13:
+</p>
+
+`https://guild.craft-group.xyz/api/reports/13`
+
 ### Создать отчет
 `https://guild.craft-group.xyz/api/reports/create`
 
@@ -295,10 +328,19 @@
     </tr>
     <tr>
         <td>
-            today
+            tasks*
         </td>
         <td>
-            Сделанное сегодня. 
+            JSON массив содержащий объекты задач 
+<pre>
+[{ 
+    "task" : "Рефакторинг",
+    "created_at": 1638260728,
+    "status": 1,
+    "minutes_spent": 26,
+    "hours_spent" : 3
+}]
+</pre>
         </td>
     </tr>
     <tr>
