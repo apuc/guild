@@ -201,6 +201,11 @@ class UserCard extends \yii\db\ActiveRecord
         return $this->hasMany(CardSkill::class, ['card_id' => 'id'])->with('skill');
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'id_user']);
+    }
+
     public static function getNameSkills()
     {
         return ArrayHelper::map(Skill::find()->all(), 'id', 'name');
@@ -268,4 +273,6 @@ class UserCard extends \yii\db\ActiveRecord
         $user_card->id_user = $user_id;
         $user_card->save();
     }
+
+
 }

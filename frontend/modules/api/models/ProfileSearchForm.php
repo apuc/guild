@@ -32,6 +32,18 @@ class ProfileSearchForm extends Model
         ];
     }
 
+    public function exclude($arr)
+    {
+        $ex = ['fio', 'passport', 'resume', 'link_vk', 'link_telegram', 'email', 'salary'];
+        foreach ($ex as $remove) {
+            if (isset($arr[$remove])) {
+                unset($arr[$remove]);
+            }
+        }
+
+        return $arr;
+    }
+
 
     public function checkIsArray()
     {
@@ -43,12 +55,12 @@ class ProfileSearchForm extends Model
     public function byId()
     {
         if ($this->id) {
-            return UserCard::find()
+            return $this->exclude(UserCard::find()
                 ->where(['id' => $this->id])
                 ->with(['skillValues'])
                 ->with(['achievements'])
                 ->asArray()
-                ->one();
+                ->one());
         }
 
         return null;
@@ -59,13 +71,12 @@ class ProfileSearchForm extends Model
         $model = UserCard::find();
 
 
-        if($this->skills){
+        if ($this->skills) {
             $model->joinWith(['skillValues']);
             $this->skills = explode(',', $this->skills);
             $model->where(['card_skill.skill_id' => $this->skills]);
             $model->having('COUNT(DISTINCT skill_id) = ' . count($this->skills));
-        }
-        else{
+        } else {
             $model->joinWith('skillValues');
         }
 
@@ -78,8 +89,19 @@ class ProfileSearchForm extends Model
 
         $model->groupBy('card_skill.card_id');
 
-        return $model->limit($this->limit)
+        $res = $model->limit($this->limit)
             ->offset($this->offset)->orderBy('updated_at DESC')->asArray()->all();
+
+        if(!$res){
+            return [];
+        }
+
+        $resArr = [];
+        foreach ($res as $re){
+            $resArr[] = $this->exclude($re);
+        }
+
+        return $resArr;
     }
 
 }
