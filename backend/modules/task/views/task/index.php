@@ -29,14 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'project_id',
-                'filter' => ArrayHelper::map(Project::find()->all(), 'id', 'name'),
+                'filter' => Project::find()->select(['name', 'id'])->indexBy('id')->column(),
                 'value' => 'project.name'
             ],
             'title',
             [
-                'attribute' => 'project_user_id',
-                'filter' => ProjectUser::find()->select(['username', 'project_user.id'])->joinWith('user')->indexBy('id')->column(),
-                'value' => 'projectUser.user.username'
+                'attribute' => 'user_id_creator',
+                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+                'value' => 'userIdCreator.username'
             ],
             [
                 'attribute' => 'user_id',
@@ -48,12 +48,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'format' => 'raw',
                 'filter' => StatusHelper::statusList(),
-                'value' => function ($model) {
+                'value' => function($model){
                     return StatusHelper::statusLabel($model->status);
-                },
+                }
             ],
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'created_at',
+                'format' => ['datetime', 'php:d.m.Y H:i']
+            ],
+            [
+                'attribute' => 'updated_at',
+                'filter' => User::find()->select(['updated_at', 'updated_at'])->indexBy('updated_at')->column(),
+                'format' => ['datetime', 'php:d.m.Y H:i']
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

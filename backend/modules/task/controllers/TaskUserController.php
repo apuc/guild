@@ -64,16 +64,42 @@ class TaskUserController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($task_id = null)
     {
         $model = new TaskUser();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            if ($task_id !== null)
+            {
+                return $this->redirect(['task/view', 'id' => $task_id]);
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'task_id' => $task_id,
+        ]);
+    }
+
+    /**
+     * Creates a new TaskUser model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreateForCurrentTask($task_id = null)
+    {
+        $model = new TaskUser();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['task/view', 'id' => $task_id]);
+        }
+
+        return $this->render('create_for_current_task', [
+            'model' => $model,
+            'task_id' => $task_id,
         ]);
     }
 
@@ -84,16 +110,23 @@ class TaskUserController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $task_id = null)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            if ($task_id !== null)
+            {
+                return $this->redirect(['task/view', 'id' => $task_id]);
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'task_id' => $task_id === null ? $model->task_id: $task_id,
         ]);
     }
 
@@ -104,9 +137,14 @@ class TaskUserController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $task_id = null)
     {
         $this->findModel($id)->delete();
+
+        if ($task_id !== null)
+        {
+            return $this->redirect(['task/view', 'id' => $task_id]);
+        }
 
         return $this->redirect(['index']);
     }

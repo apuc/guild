@@ -11,6 +11,7 @@ use backend\modules\task\models\TaskUser;
  */
 class TaskUserSearch extends TaskUser
 {
+    public $projectId;
     /**
      * {@inheritdoc}
      */
@@ -18,6 +19,7 @@ class TaskUserSearch extends TaskUser
     {
         return [
             [['id', 'task_id', 'project_user_id'], 'integer'],
+            [['projectId'], 'safe']
         ];
     }
 
@@ -39,7 +41,7 @@ class TaskUserSearch extends TaskUser
      */
     public function search($params)
     {
-        $query = TaskUser::find()->joinWith(['task', 'projectUser']);
+        $query = TaskUser::find()->joinWith(['task', 'projectUser', 'projectUser.project']);
 
         // add conditions that should always apply here
 
@@ -59,8 +61,10 @@ class TaskUserSearch extends TaskUser
         $query->andFilterWhere([
             'id' => $this->id,
             'task_id' => $this->task_id,
-            'project_user_id' => $this->project_user_id,
+            'task_user.project_user_id' => $this->project_user_id,
         ]);
+
+        $query->andFilterWhere(['like', 'project.id', $this->projectId]);
 
         return $dataProvider;
     }

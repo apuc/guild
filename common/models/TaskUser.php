@@ -32,6 +32,7 @@ class TaskUser extends \yii\db\ActiveRecord
     {
         return [
             [['task_id', 'project_user_id'], 'integer'],
+            ['project_user_id', 'unique', 'targetAttribute' => ['task_id', 'project_user_id'], 'message'=>'Этот сотрудник уже назначен на эту задачу'],
             [['project_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectUser::className(), 'targetAttribute' => ['project_user_id' => 'id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
         ];

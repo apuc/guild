@@ -2,6 +2,7 @@
 
 namespace backend\modules\task\models;
 
+use backend\modules\project\models\ProjectUser;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\modules\task\models\Task;
@@ -17,7 +18,7 @@ class TaskSearch extends Task
     public function rules()
     {
         return [
-            [['id', 'project_id', 'status', 'project_user_id', 'user_id'], 'integer'],
+            [['id', 'project_id', 'status', 'user_id_creator', 'user_id'], 'integer'],
             [['title', 'created_at', 'updated_at', 'description'], 'safe'],
         ];
     }
@@ -40,7 +41,10 @@ class TaskSearch extends Task
      */
     public function search($params)
     {
-        $query = Task::find()->joinWith(['user', 'project', 'projectUser.user']);
+        $query = Task::find()->joinWith(['user', 'project']);
+//            => function($query){
+//            $query->from(ProjectUser::tableName() . ' pt');
+//            }]); //,
 
         // add conditions that should always apply here
 
@@ -59,16 +63,16 @@ class TaskSearch extends Task
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'project_id' => $this->project_id,
-            'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'project_user_id' => $this->project_user_id,
-            'user_id' => $this->user_id,
+            'task.project_id' => $this->project_id,
+            'task.status' => $this->status,
+            'task.created_at' => $this->created_at,
+            'task.updated_at' => $this->updated_at,
+            'user_id_creator' => $this->user_id_creator,
+            'task.user_id' => $this->user_id,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'description', $this->description]);
+            ->andFilterWhere(['like', 'task.description', $this->description]);
 
         return $dataProvider;
     }

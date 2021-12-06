@@ -70,16 +70,42 @@ YiiAsset::register($this);
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'attribute' => 'task_id', // ArrayHelper::map(Task::find()->all(), 'id', 'title'),
-                'value' => 'task.title'
-            ],
-            [
                 'attribute' => 'project_user_id',
                 'value' => 'projectUser.user.username'
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
+                'controller' => 'task-user',
+                'buttons' => [
+                    'update' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            ['task-user/update', 'id' => $model['id'], 'task_id' => $model['task_id']]);
+                    },
+                    'delete' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            [
+                                'task-user/delete', 'id' => $model['id'], 'task_id' => $model['task_id']
+                            ],
+                            [
+                                'data' => ['confirm' => 'Вы уверены, что хотите удалить этого сотрудника?', 'method' => 'post']
+                            ]
+                        );
+                    },
+                ],
+            ],
         ],
     ]); ?>
+
+    <p>
+        <?= Html::a(
+            'Назначить исполнителя',
+            ['task-user/create', 'task_id' => $model->id],
+            ['class' => 'btn btn-primary']
+        ) ?>
+    </p>
 
 </div>
