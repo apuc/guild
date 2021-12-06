@@ -3,6 +3,7 @@
 use backend\modules\project\models\Project;
 use backend\modules\project\models\ProjectUser;
 use common\helpers\StatusHelper;
+use common\models\User;
 use kartik\depdrop\DepDrop;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -21,20 +22,19 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'project_id')->dropDownList(Project::find()
         ->select(['name', 'id'])->indexBy('id')->column(),
         [
-            'id' => 'project-id',
             'prompt' => 'Выберите'
         ]
     );
     ?>
 
-    <?= $form->field($model, 'project_user_id')->widget(DepDrop::className(),
+    <?= $form->field($model, 'user_id_creator')->widget(Select2::class,
         [
-            'options' => ['id' => 'project-user-id'],
+            'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+            'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
-                'depends' => ['project-id'],
-                'placeholder' => 'Выберите',
-                'url' => Url::to(['/task/task/creator'])
-            ]
+                'allowClear' => true,
+                'prompt' => 'Выберите'
+            ],
         ]
     ); ?>
 
@@ -47,12 +47,21 @@ use yii\widgets\ActiveForm;
         ]
     ) ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'user_id')->widget(Select2::class,
+        [
+            'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+            'options' => ['placeholder' => '...','class' => 'form-control'],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'prompt' => 'Выберите'
+            ],
+        ]
+    ); ?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'description')->textarea(['rows' => '6']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Создать', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

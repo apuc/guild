@@ -2,7 +2,6 @@
 
 use backend\modules\project\models\ProjectUser;
 use backend\modules\task\models\Task;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -18,6 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Назначить сотрудника', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
+    <?= $this->render('_search_by_project', [
+        'model' => $searchModel,
+    ]) ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

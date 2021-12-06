@@ -1285,15 +1285,15 @@
 
 ```json5
 {
-  "id": 3,
+  "id": 14,
   "project_id": 2,
-  "title": "polkjhgbfv task",
-  "status": 1,
-  "created_at": "2021-11-24 11:53:11",
-  "updated_at": "2021-11-24 11:53:11",
-  "project_user_id": 1,
+  "title": "Пробная 2",
+  "status": 0,
+  "created_at": "2021-12-03 17:22:15",
+  "updated_at": "2021-12-03 17:22:15",
   "user_id": null,
-  "description": "dfvdfvfdvfd"
+  "description": "смасмс",
+  "user_id_creator": 1
 }
 ```
 <p>
@@ -1358,18 +1358,10 @@
     </tr>
     <tr>
         <td>
-            project_user_id
-        </td>
-        <td>
-             ID сотрудника на проекта(int)
-        </td>
-    </tr>
-    <tr>
-        <td>
             user_id
         </td>
         <td>
-             ID сотрудника(int)
+             ID наблюдателя проекта(int)
         </td>
     </tr>
     <tr>
@@ -1378,6 +1370,14 @@
         </td>
         <td>
              Описание задачи(string)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            user_id_creator
+        </td>
+        <td>
+             ID создателя задачи(int)
         </td>
     </tr>
     
@@ -1444,7 +1444,7 @@
     "status": 1,
     "created_at": "2021-11-24 11:53:11",
     "updated_at": "2021-11-24 11:53:11",
-    "project_user_id": 1,
+    "user_id_creator": 1,
     "user_id": null,
     "description": "dfvdfvfdvfd"
   },
@@ -1455,7 +1455,7 @@
     "status": 1,
     "created_at": "2021-11-24 14:55:01",
     "updated_at": "2021-11-24 14:55:01",
-    "project_user_id": 1,
+    "user_id_creator": 1,
     "user_id": null,
     "description": "dfvdfvfdvfdsddsfds"
   }
@@ -1523,10 +1523,10 @@
     </tr>
     <tr>
         <td>
-            project_user_id
+            user_id_creator
         </td>
         <td>
-             ID сотрудника на проекта(int)
+             ID создателя задачи(int)
         </td>
     </tr>
     <tr>
@@ -1534,7 +1534,7 @@
             user_id
         </td>
         <td>
-             ID сотрудника(int)
+             ID наблюдателя(int)
         </td>
     </tr>
     <tr>
@@ -1605,10 +1605,10 @@
     </tr>
     <tr>
         <td>
-            project_user_id
+            user_id_creator
         </td>
         <td>
-             ID сотрудника на проекта, создатель задачи(int)
+             ID сотрудника, создатель задачи(int)
         </td>
     </tr>
     <tr>
@@ -1638,7 +1638,7 @@
   "project_id": "2",
   "title": "polkjhgbfv taskdfsdfsd",
   "status": "1",
-  "project_user_id": "1",
+  "user_id_creator": "1",
   "description": "dfvdfvfdvfdsddsfds",
   "created_at": {
     "expression": "NOW()",
@@ -1659,7 +1659,7 @@
 ```json5
 {
   "name": "Bad Request",
-  "message": "{\"project_user_id\":[\"\С\о\з\д\а\т\е\л\ь cannot be blank.\"]}",
+  "message": "{\"user_id_creator\":[\"\С\о\з\д\а\т\е\л\ь cannot be blank.\"]}",
   "code": 0,
   "status": 400,
   "type": "yii\\web\\BadRequestHttpException"
@@ -1712,7 +1712,7 @@
   "status": 1,
   "created_at": "2021-11-24 14:40:25",
   "updated_at": "2021-11-25 11:44:30",
-  "project_user_id": 5,
+  "user_id_creator": 5,
   "user_id": 2,
   "description": "888"
 }
@@ -1779,10 +1779,10 @@
     </tr>
     <tr>
         <td>
-            project_user_id
+            user_id_creator
         </td>
         <td>
-             ID сотрудника на проекта(int)
+             ID сотрудника, создатель задачи(int)
         </td>
     </tr>
     <tr>

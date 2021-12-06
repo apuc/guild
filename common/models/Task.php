@@ -18,12 +18,12 @@ use yii\helpers\ArrayHelper;
  * @property int $status
  * @property string $created_at
  * @property string $updated_at
- * @property int $project_user_id
+ * @property int $user_id_creator
  * @property int $user_id
  * @property string $description
  *
  * @property Project $project
- * @property ProjectUser $projectUser
+ * @property User $userIdCreator
  * @property User $user
  * @property TaskUser[] $taskUsers
  */
@@ -55,13 +55,13 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['project_id', 'status', 'title', 'description', 'project_user_id'], 'required'],
-            [['project_id', 'status', 'project_user_id', 'user_id'], 'integer'],
+            [['project_id', 'status', 'title', 'description', 'user_id_creator',], 'required'],
+            [['project_id', 'status', 'user_id_creator', 'user_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['description'], 'string', 'max' => 500],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
-            [['project_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectUser::className(), 'targetAttribute' => ['project_user_id' => 'id']],
+            [['user_id_creator'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id_creator' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -78,7 +78,7 @@ class Task extends \yii\db\ActiveRecord
             'status' => 'Статус',
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
-            'project_user_id' => 'Создатель',
+            'user_id_creator' => 'Создатель задачи',
             'user_id' => 'Наблюдатель',
             'description' => 'Описание',
         ];
@@ -103,17 +103,14 @@ class Task extends \yii\db\ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getProjectUser()
-    {
-        return $this->hasOne(ProjectUser::className(), ['id' => 'project_user_id']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getUserIdCreator()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id_creator']);
     }
 
     /**

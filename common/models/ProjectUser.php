@@ -34,6 +34,7 @@ class ProjectUser extends \yii\db\ActiveRecord
     {
         return [
             [['project_id', 'user_id'], 'required'],
+            ['user_id', 'unique', 'targetAttribute' => ['user_id', 'project_id'], 'message'=>'Сотрудник уже занят на этом проекте'],
             [['project_id', 'user_id'], 'integer'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -69,7 +70,7 @@ class ProjectUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getCard()
     {
