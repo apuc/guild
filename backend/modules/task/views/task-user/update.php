@@ -1,9 +1,9 @@
 <?php
 
-use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\task\models\TaskUser */
+/* @var $task_id  */
 
 $this->title = 'Изменить назначение';
 $this->params['breadcrumbs'][] = ['label' => 'Task Users', 'url' => ['index']];
@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'task_id' => $task_id,
     ]) ?>
 
 </div>

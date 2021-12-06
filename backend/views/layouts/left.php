@@ -47,10 +47,10 @@
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
-                        'label' => 'Задачи', 'icon' => '', 'url' => '#',
+                        'label' => 'Задачи', 'icon' => 'tasks', 'url' => '#',
                         'items' => [
-                            ['label' => 'Задачи', 'icon' => '', 'url' => ['/task/task'], 'active' => \Yii::$app->controller->id == 'task'],
-                            ['label' => 'Исполнители задачи', 'icon' => '', 'url' => ['/task/task-user'], 'active' => \Yii::$app->controller->id == 'task-user'],
+                            ['label' => 'Задачи', 'icon' => 'minus', 'url' => ['/task/task'], 'active' => \Yii::$app->controller->id == 'task'],
+                            ['label' => 'Исполнители задачи', 'icon' => 'users', 'url' => ['/task/task-user'], 'active' => \Yii::$app->controller->id == 'task-user'],
                         ],
 
                         'visible' => Yii::$app->user->can('confidential_information')
@@ -62,7 +62,7 @@
                             ['label' => 'Компании', 'icon' => 'building', 'url' => ['/hh/hh'], 'active' => \Yii::$app->controller->id == 'hh'],
                             ['label' => 'Вакансии', 'icon' => 'user-md', 'url' => ['/hh/hh-job'], 'active' => \Yii::$app->controller->id == 'hh-job'],
                         ],
-                        'visible' => Yii::$app->user->can('confidential_information')
+                       'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balance/balance'], 'active' => \Yii::$app->controller->id == 'balance', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Отпуска', 'icon' => 'plane', 'url' => ['/holiday/holiday'], 'active' => \Yii::$app->controller->id == 'holiday', 'visible' => Yii::$app->user->can('confidential_information')],

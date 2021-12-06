@@ -230,4 +230,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(ManagerEmployee::className(), ['employee_id' => 'id']);
     }
+
+    public function getProjectUser()
+    {
+        return $this->hasMany(ProjectUser::className(), ['user_id' => 'id']);
+    }
 }
