@@ -30,7 +30,8 @@ use yii\widgets\ActiveForm;
             'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
-                'allowClear' => true
+                'allowClear' => true,
+                'multiple' => false,//true,
             ],
         ]
     ) ?>
