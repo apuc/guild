@@ -22,7 +22,7 @@ class DateHelper {
         if (this.isDayOff(date)) {
             return 42
         }
-        if (this.prevDay(this.nextMonth(date)).getDate() == 28) {
+        if (this.prevDay(this.nextMonth(date)).getDate() == 28 && new Date(date.getFullYear(), date.getMonth(), 0).getDay() === 0) {
             return 28;
         }
         return 35

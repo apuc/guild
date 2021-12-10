@@ -23,6 +23,10 @@ class Calendar extends Widget
 
     public $offDaysShow = 0;
 
+    public $failDay = 0;
+
+    public $fail;
+
     public $script = 'CalendarHelper.main()';
 
     public function init()
@@ -45,6 +49,10 @@ class Calendar extends Widget
 
     public function run()
     {
+        $this->view->registerCss('.warning {color:orange}');
+        if (!isset($this->colorClasses['fail']))
+            $this->colorClasses['fail'] = '';
+
         echo Html::beginTag('section', ['class' => 'calendar-contain']);
             echo Html::beginTag('aside', ['class' => 'calendar__sidebar']);
                 echo Html::beginTag('section', ['class' => 'title-bar']);
@@ -100,15 +108,18 @@ class Calendar extends Widget
             };
             
             CalendarHelper._getColor = function (date, dates = null) {
-            if ('.$this->offDaysShow.')
+                if ('.$this->offDaysShow.')
                     if ([6, 0].includes(date.getDay()))
                         return `'.$this->colorClasses['offDay'].'`;
-                        
                 for (let i = 0; i<dates.length; i++){
                     if (dates[i] == DateHelper.dateToString(date)){
                         return `'.$this->colorClasses['accept'].'`
                     }
                 }
+               if ('.$this->failDay.')
+                        if (new Date() > date)
+                            return `'.$this->colorClasses['fail'].'`;
+                                                    
                 
                 return `'.$this->colorClasses['default'].'`;
             }

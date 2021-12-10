@@ -24,7 +24,8 @@ $this->title = 'Календарь пользователя - ' . $fio;
         'url' => Url::base() . '/reports/ajax/get-reports-for-day-by-date',
         'data' => ['user_id' => $USER_ID]
         ],
-    'colorClasses' => ['accept' => 'success', 'default' => 'danger', 'offDay' => ''],
+    'colorClasses' => ['accept' => 'success', 'default' => 'warning', 'fail' => 'danger', 'offDay' => ''],
     'offDaysShow' => 1,
+    'failDay' => 1,
 
 ]) ?>
