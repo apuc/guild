@@ -13,6 +13,14 @@ echo GridView::widget([
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         [
+            'format' => 'raw',
+            'attribute' => 'user_card_id',
+            'value' => function ($model) {
+                return Html::a(Reports::getFio($model) . ' ' . Html::tag('i', null, ['class' => 'far fa-calendar-alt']),
+                    \yii\helpers\Url::base(true) . '/reports/reports/calendar?user_id=' . $model['user_card_id'], ['data-pjax' => 0]);
+            },
+        ],
+        [
             'attribute' => 'today',
             'format' => 'raw',
             'value' => function ($model) {
@@ -30,14 +38,6 @@ echo GridView::widget([
         ],
         'difficulties',
         'tomorrow',
-        [
-            'format' => 'raw',
-            'attribute' => 'user_card_id',
-            'value' => function ($model) {
-                return Html::a(Reports::getFio($model) . ' ' . Html::tag('i', null, ['class' => 'far fa-calendar-alt']),
-                    \yii\helpers\Url::base(true) . '/reports/reports/calendar?user_id=' . $model['user_card_id'], ['data-pjax' => 0]);
-            },
-        ],
         [
             'class' => 'yii\grid\ActionColumn',
             'urlCreator' => function ($action, $model, $key, $index) {
