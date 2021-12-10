@@ -19,7 +19,8 @@ $this->title = 'Профиль';
     <h3>Личная информация</h3>
     <?php
     echo Html::a('Изменить профиль', ['/card/user-card/update'], ['class' => 'btn btn-success'])
-    . '&nbsp' . Html::a('Изменить пароль', ['/card/user-card/password'], ['class' => 'btn btn-success']) . '<br><br>';
+    . '&nbsp' . Html::a('Изменить пароль', ['/card/user-card/password'], ['class' => 'btn btn-success'])
+    . '&nbsp' . Html::a('Изменить резюме', ['/card/user-card/resume'], ['class' => 'btn btn-success']). '<br><br>';
 
     echo  DetailView::widget([
         'model' => $model,
@@ -70,14 +71,4 @@ $this->title = 'Профиль';
         ],
     ]); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'vc_text')->widget(EditorClassic::className(), [
-        'clientOptions' => [
-            'language' => 'ru',
-        ]
-    ]); ?>
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
-    <?php $form = ActiveForm::end(); ?>
 </div>

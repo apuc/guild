@@ -112,6 +112,21 @@ class UserCardController extends Controller
         ]);
     }
 
+    public function actionResume()
+    {
+        $id_user = Yii::$app->user->id;
+        $result = UserCard::find()->where(['id_user' => $id_user])->asArray()->all();
+        if ($result) {
+            $id = $result[0]['id'];
+            $model = $this->findModel($id);
+            return $this->render('resume', [
+                'model' => $model
+            ]);
+        } else {
+            return $this->render('index', ['info' => '<h3>Ваши личные данные не заненсены в базу.</h3>']);
+        }
+    }
+
     /**
      * Finds the Product model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
