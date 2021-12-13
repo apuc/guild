@@ -50,25 +50,4 @@ $this->title = 'Профиль';
             <?= $achievement['achievement']->title; ?>
         </div>
     <?php endforeach; ?>
-
-    <h2>Дополнительные сведения</h2>
-
-    <?= GridView::widget([
-        'dataProvider' => $modelFildValue,
-        'layout' => "{items}",
-        'columns' => [
-            'field.name:text:Поле',
-            [
-                'attribute' => 'value',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    if ($model->type_file == 'file') {
-                        return $model->value . ' (' . Html::a('Скачать', $model->value, ['target' => '_blank', 'download' => 'download']) . ')';
-                    }
-                    return $model->value;
-                }
-            ],
-        ],
-    ]); ?>
-
 </div>
