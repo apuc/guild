@@ -12,8 +12,10 @@ class m211123_082634_add_foreign_key_from_project_user_to_user_table extends Mig
      */
     public function safeUp()
     {
-        $this->addColumn('project_user', 'user_id', $this->integer(11)->notNull());
+        $this->alterColumn('project_user', 'card_id', $this->integer()->defaultValue(null));
+        $this->addColumn('project_user', 'user_id', $this->integer(11)->notNull()->defaultValue(null));
         $this->addForeignKey('user_project_user', 'project_user', 'user_id', 'user', 'id');
+
     }
 
     /**
@@ -21,6 +23,7 @@ class m211123_082634_add_foreign_key_from_project_user_to_user_table extends Mig
      */
     public function safeDown()
     {
+        $this->alterColumn('project_user', 'card_id', $this->integer()->notNull());
         $this->dropForeignKey('user_project_user', 'project_user');
         $this->dropColumn('project_user', 'user_id');
 

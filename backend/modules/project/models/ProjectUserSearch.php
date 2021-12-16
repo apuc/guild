@@ -17,7 +17,7 @@ class ProjectUserSearch extends ProjectUser
     public function rules()
     {
         return [
-            [['id', 'project_id', 'user_id'], 'integer'],
+            [['id', 'project_id', 'user_id', 'card_id'], 'integer'],
         ];
     }
 
@@ -60,6 +60,7 @@ class ProjectUserSearch extends ProjectUser
             'id' => $this->id,
             'project_id' => $this->project_id,
             'user_id' => $this->user_id,
+            'card_id' => $this->card_id,
         ]);
 
         return $dataProvider;

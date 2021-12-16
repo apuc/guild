@@ -28,15 +28,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'project_user_id')->widget(DepDrop::className(),
         [
-            'type' => DepDrop::TYPE_SELECT2,
-            'options' => ['id' => 'project-user-id', 'allowClear' => true, 'multiple' => true], // , 'multiple' => true
-            'select2Options' => [
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'closeOnSelect' => false,
-                ],
-                'showToggleAll' => false,
-            ],
+            'options' => ['id' => 'project-user-id', 'allowClear' => true],
             'pluginOptions' => [
                 'depends' => ['task-id'],
                 'placeholder' => 'Выберите',

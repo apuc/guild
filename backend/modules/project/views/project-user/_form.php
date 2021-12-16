@@ -31,7 +31,7 @@ use yii\widgets\ActiveForm;
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true,
-                'multiple' => false,//true,
+                'multiple' => true,
             ],
         ]
     ) ?>

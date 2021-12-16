@@ -4,6 +4,7 @@ use backend\modules\project\models\Project;
 use backend\modules\project\models\ProjectUser;
 use common\helpers\StatusHelper;
 use common\models\User;
+use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -29,14 +30,34 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'project_id',
-                'filter' => Project::find()->select(['name', 'id'])->indexBy('id')->column(),
-                'value' => 'project.name'
+                'value' => 'project.name',
+                'filter' =>  Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'project_id',
+                    'data' => Project::find()->select(['name', 'id'])->indexBy('id')->column(),
+                    'value' => 'project.name',
+                    'options' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Выберите значение'
+                    ],
+                ])
             ],
             'title',
             [
                 'attribute' => 'user_id_creator',
-                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
-                'value' => 'userIdCreator.username'
+                 'value' => 'userIdCreator.username',
+                'filter' =>  Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'user_id_creator',
+                    'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+                    'value' => 'userIdCreator.username',
+                    'options' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Выберите значение'
+                    ],
+                ])
+               // 'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+
             ],
             [
                 'attribute' => 'user_id',

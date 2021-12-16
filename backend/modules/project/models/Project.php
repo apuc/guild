@@ -96,6 +96,7 @@ class Project extends \common\models\Project
                 $prUser = new ProjectUser();
                 $prUser->project_id = $this->id;
                 $prUser->card_id = $item;
+                $prUser->user_id = $prUser->card->user->id;
 
                 $prUser->save();
             }

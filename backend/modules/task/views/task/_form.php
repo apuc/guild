@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'user_id_creator')->widget(Select2::class,
         [
             'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
+            'options' => ['placeholder' => '...','class' => 'form-control',  'value' => Yii::$app->user->id],
             'pluginOptions' => [
                 'allowClear' => true,
                 'prompt' => 'Выберите'

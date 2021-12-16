@@ -2,12 +2,16 @@
 
 namespace backend\modules\project\controllers;
 
+use common\models\UserCard;
+use Exception;
 use Yii;
 use backend\modules\project\models\ProjectUser;
 use backend\modules\project\models\ProjectUserSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * ProjectUserController implements the CRUD actions for ProjectUser model.
@@ -60,16 +64,35 @@ class ProjectUserController extends Controller
     /**
      * Creates a new ProjectUser model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
+     * @throws Exception
      */
     public function actionCreate()
     {
-        $model = new ProjectUser();
+        $post = \Yii::$app->request->post('ProjectUser');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (!empty($post)) {
+            $user_id_arr = ArrayHelper::getValue($post, 'user_id');
+            $project_id = $post['project_id'];
+
+            foreach ($user_id_arr as $user_id) {
+                $emtModel = new ProjectUser();
+                $emtModel->project_id = $project_id;
+                $emtModel->user_id = $user_id;
+                $emtModel->card_id = UserCard::getIdByUserId($user_id);
+
+                $emtModel->save();
+
+//                if (!$emtModel->save()) {
+//                    return $this->render('create', [
+//                        'model' => $emtModel,
+//                    ]);
+//                }
+            }
+            return $this->redirect(['index']);
         }
 
+        $model = new ProjectUser();
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -123,5 +146,19 @@ class ProjectUserController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionSetUserFields(): Response
+    {
+        ProjectUser::setUsersByCardId();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionSetCardFields(): Response
+    {
+        ProjectUser::setCardsByUsersId();
+
+        return $this->redirect(['index']);
     }
 }
