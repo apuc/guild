@@ -2,6 +2,7 @@
 
 use backend\modules\project\models\Project;
 use backend\modules\project\models\ProjectUser;
+use backend\modules\task\models\Task;
 use common\helpers\StatusHelper;
 use common\models\User;
 use kartik\select2\Select2;
@@ -35,7 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'project_id',
                     'data' => Project::find()->select(['name', 'id'])->indexBy('id')->column(),
-                    'value' => 'project.name',
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '150px',
+                    ],
                     'options' => [
                         'class' => 'form-control',
                         'placeholder' => 'Выберите значение'
@@ -45,24 +49,37 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             [
                 'attribute' => 'user_id_creator',
-                 'value' => 'userIdCreator.username',
+                'value' => 'userIdCreator.username',
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'user_id_creator',
                     'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
-                    'value' => 'userIdCreator.username',
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '150px',
+                    ],
                     'options' => [
                         'class' => 'form-control',
                         'placeholder' => 'Выберите значение'
                     ],
                 ])
-               // 'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
-
             ],
             [
                 'attribute' => 'user_id',
-                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
-                'value' => 'user.username'
+                'value' => 'user.username',
+                'filter' =>  Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'user_id',
+                    'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '150px',
+                    ],
+                    'options' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Выберите значение'
+                    ],
+                ])
             ],
             'description',
             [
@@ -79,7 +96,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'updated_at',
-                'filter' => User::find()->select(['updated_at', 'updated_at'])->indexBy('updated_at')->column(),
                 'format' => ['datetime', 'php:d.m.Y H:i']
             ],
 

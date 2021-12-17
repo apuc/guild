@@ -38,7 +38,7 @@ class ProjectUser extends \yii\db\ActiveRecord
         return [
             [['user_id', 'project_id'], 'required'],
             ['user_id', 'unique', 'targetAttribute' => ['user_id', 'project_id'], 'message'=>'Сотрудник уже назначен на этот проект'],
-            [['card_id', 'project_id', 'user_id'], 'integer'],
+//            [['card_id', 'project_id', 'user_id'], 'integer'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
             [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['card_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -53,7 +53,7 @@ class ProjectUser extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'card_id' => 'Карточка',
-            'project_id' => 'Project ID',
+            'project_id' => 'Проект',
             'user_id' => 'Сотрудник',
         ];
     }

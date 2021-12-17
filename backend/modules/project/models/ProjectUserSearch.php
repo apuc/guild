@@ -39,7 +39,7 @@ class ProjectUserSearch extends ProjectUser
      */
     public function search($params)
     {
-        $query = ProjectUser::find()->joinWith(['project', 'user']);
+        $query = ProjectUser::find()->joinWith(['project', 'user', 'card']);
 
         // add conditions that should always apply here
 

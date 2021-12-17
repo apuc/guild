@@ -3,6 +3,7 @@
 use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
 use common\models\User;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -29,18 +30,54 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'project_id',
-                'filter' => Project::find()->select(['name', 'id'])->indexBy('id')->column(),
-                'value' => 'project.name'
+                'value' => 'project.name',
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'project_id',
+                    'data' => Project::find()->select(['name', 'id'])->indexBy('id')->column(),
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '250px',
+                    ],
+                    'options' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Выберите значение'
+                    ],
+                ])
             ],
             [
                 'attribute' => 'user_id',
-                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
-                'value' => 'user.username'
+                'value' => 'user.username',
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'user_id',
+                    'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '250px',
+                    ],
+                    'options' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Выберите значение'
+                    ],
+                ])
             ],
             [
                 'attribute' => 'card_id',
-                'filter' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
-                'value' => 'card.fio'
+                'value' => 'card.fio',
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'card_id',
+                    'data' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '250px',
+                    ],
+                    'options' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Выберите значение'
+                    ],
+                ])
             ],
 
             ['class' => 'yii\grid\ActionColumn'],
