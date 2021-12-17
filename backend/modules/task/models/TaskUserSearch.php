@@ -41,7 +41,7 @@ class TaskUserSearch extends TaskUser
      */
     public function search($params)
     {
-        $query = TaskUser::find()->joinWith(['task', 'projectUser', 'projectUser.project']);
+        $query = TaskUser::find()->joinWith(['task', 'projectUser', 'projectUser.project', 'projectUser.user']);
 
         // add conditions that should always apply here
 

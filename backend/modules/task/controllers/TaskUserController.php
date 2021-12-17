@@ -3,6 +3,8 @@
 namespace backend\modules\task\controllers;
 
 use backend\modules\project\models\ProjectUser;
+use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use Yii;
 use backend\modules\task\models\TaskUser;
@@ -63,41 +65,39 @@ class TaskUserController extends Controller
      * Creates a new TaskUser model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws \Exception
      */
     public function actionCreate($task_id = null)
     {
-        $model = new TaskUser();
+        $post = \Yii::$app->request->post('TaskUser');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (!empty($post)) {
+            $project_user_id_arr = ArrayHelper::getValue($post, 'project_user_id');
+
+            foreach ($project_user_id_arr as $project_user_id) {
+                $emtModel = new TaskUser();
+                $emtModel->task_id = $post['task_id'];
+                $emtModel->project_user_id = $project_user_id;
+
+                if (!$emtModel->save()) {
+                    return $this->render('create', [
+                        'model' => $emtModel,
+                        'task_id' => $task_id,
+                    ]);
+                }
+            }
 
             if ($task_id !== null)
             {
                 return $this->redirect(['task/view', 'id' => $task_id]);
             }
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-            'task_id' => $task_id,
-        ]);
-    }
 
-    /**
-     * Creates a new TaskUser model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreateForCurrentTask($task_id = null)
-    {
         $model = new TaskUser();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['task/view', 'id' => $task_id]);
-        }
-
-        return $this->render('create_for_current_task', [
+        return $this->render('create', [
             'model' => $model,
             'task_id' => $task_id,
         ]);
@@ -184,5 +184,10 @@ class TaskUserController extends Controller
             }
         }
         return ['output'=>'', 'selected'=>''];
+    }
+
+    public function actionDynamicProjectUser()
+    {
+        var_dump('hhh'); die;
     }
 }
