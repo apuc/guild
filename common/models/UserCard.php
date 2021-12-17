@@ -3,8 +3,11 @@
 namespace common\models;
 
 use common\classes\Debug;
+use Exception;
+use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -141,7 +144,7 @@ class UserCard extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFieldsValues()
     {
@@ -149,7 +152,7 @@ class UserCard extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProjectUsers()
     {
@@ -157,7 +160,7 @@ class UserCard extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getPosition()
     {
@@ -165,7 +168,7 @@ class UserCard extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getStatus0()
     {
@@ -173,9 +176,9 @@ class UserCard extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getAchievements(): \yii\db\ActiveQuery
+    public function getAchievements(): ActiveQuery
     {
         return $this->hasMany(AchievementUserCard::class, ['user_card_id' => 'id'])->with('achievement');
     }
@@ -201,14 +204,22 @@ class UserCard extends \yii\db\ActiveRecord
         return $this->hasMany(CardSkill::class, ['card_id' => 'id'])->with('skill');
     }
 
-    public function getUser()
+    public static function getNameSkills()
+    {
+        return ArrayHelper::map(Skill::find()->all(), 'id', 'name');
+    }
+
+    public function getUser(): ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'id_user']);
     }
 
-    public static function getNameSkills()
+    /**
+     * @throws Exception
+     */
+    public static function getIdByUserId($user_id)
     {
-        return ArrayHelper::map(Skill::find()->all(), 'id', 'name');
+        return ArrayHelper::getValue(self::find()->where(['id_user' => $user_id])->one(), 'id');
     }
 
     public static function getUserList()
@@ -274,5 +285,23 @@ class UserCard extends \yii\db\ActiveRecord
         $user_card->save();
     }
 
+    public static function getUserIdByCardId ($card_id)
+    {
+        $userCard = self::findOne(['id' => $card_id]);
+        if (empty($userCard)) {
+            return null;
+        }
+        return $userCard['id_user'];
+    }
+
+    public static function getCardIdByUserId ($user_id)
+    {
+        $userCard = self::findOne(['id_user' => $user_id]);
+        if (empty($userCard)) {
+            return null;
+        }
+        return $userCard['id'];
+
+    }
 
 }

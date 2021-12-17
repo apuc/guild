@@ -21,19 +21,27 @@ use yii\widgets\ActiveForm;
         'data' => Task::find()->select(['title', 'id'])->indexBy('id')->column(),
         'options' => ['placeholder' => 'Выберите проект', 'value' => $task_id, 'id' => 'task-id',],
         'pluginOptions' => [
-            'allowClear' => true,
+            'allowClear' => false,
         ],
     ]);
     ?>
 
     <?= $form->field($model, 'project_user_id')->widget(DepDrop::className(),
         [
-            'options' => ['id' => 'project-user-id'],
+            'type' => DepDrop::TYPE_SELECT2,
+            'options' => ['id' => 'project-user-id', 'allowClear' => true, 'multiple' => true], // , 'multiple' => true
+            'select2Options' => [
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'closeOnSelect' => false,
+                ],
+                'showToggleAll' => false,
+            ],
             'pluginOptions' => [
                 'depends' => ['task-id'],
                 'placeholder' => 'Выберите',
                 'initialize' => true,
-                'url' => Url::to(['/task/task-user/executor'])
+                'url' => Url::to(['/task/task-user/executor']),
             ]
         ]
     ); ?>
