@@ -2,10 +2,9 @@
 
 namespace common\models;
 
-use phpDocumentor\Reflection\Types\This;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -18,16 +17,16 @@ use yii\helpers\ArrayHelper;
  * @property int $status
  * @property string $created_at
  * @property string $updated_at
- * @property int $user_id_creator
- * @property int $user_id
+ * @property int $card_id_creator
+ * @property int $card_id
  * @property string $description
  *
  * @property Project $project
- * @property User $userIdCreator
- * @property User $user
+ * @property UserCard $card
+ * @property UserCard $cardIdCreator
  * @property TaskUser[] $taskUsers
  */
-class Task extends \yii\db\ActiveRecord
+class Task extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -55,14 +54,15 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['project_id', 'status', 'title', 'description', 'user_id_creator',], 'required'],
-            [['project_id', 'status', 'user_id_creator', 'user_id'], 'integer'],
+            [['project_id', 'status', 'title', 'description', 'card_id_creator',], 'required'],
+            [['project_id', 'status', 'card_id_creator', 'card_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
+            ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message'=>'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
             [['description'], 'string', 'max' => 500],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
-            [['user_id_creator'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id_creator' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['card_id' => 'id']],
+            [['card_id_creator'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['card_id_creator' => 'id']],
         ];
     }
 
@@ -78,9 +78,9 @@ class Task extends \yii\db\ActiveRecord
             'status' => 'Статус',
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
-            'user_id_creator' => 'Создатель задачи',
-            'user_id' => 'Наблюдатель',
             'description' => 'Описание',
+            'card_id_creator' => 'Создатель задачи',
+            'card_id' => 'Наблюдатель',
         ];
     }
 
@@ -108,9 +108,14 @@ class Task extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getUserIdCreator()
+    public function getUserCard()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id_creator']);
+        return $this->hasOne(UserCard::className(), ['id' => 'card_id']);
+    }
+
+    public function getUserCardCreator()
+    {
+        return $this->hasOne(UserCard::className(), ['id' => 'card_id_creator']);
     }
 
     /**

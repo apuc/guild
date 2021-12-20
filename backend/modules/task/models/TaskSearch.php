@@ -18,7 +18,7 @@ class TaskSearch extends Task
     public function rules()
     {
         return [
-            [['id', 'project_id', 'status', 'user_id_creator', 'user_id'], 'integer'],
+            [['id', 'project_id', 'status', 'card_id_creator', 'card_id'], 'integer'], // 'card_id_creator', 'card_id'
             [['title', 'created_at', 'updated_at', 'description'], 'safe'],
         ];
     }
@@ -41,10 +41,7 @@ class TaskSearch extends Task
      */
     public function search($params)
     {
-        $query = Task::find()->joinWith(['user', 'project']);
-//            => function($query){
-//            $query->from(ProjectUser::tableName() . ' pt');
-//            }]); //,
+        $query = Task::find();//->joinWith(['user_card', 'project']);
 
         // add conditions that should always apply here
 
@@ -67,8 +64,8 @@ class TaskSearch extends Task
             'task.status' => $this->status,
             'task.created_at' => $this->created_at,
             'task.updated_at' => $this->updated_at,
-            'user_id_creator' => $this->user_id_creator,
-            'task.user_id' => $this->user_id,
+            'task.card_id_creator' => $this->card_id_creator,
+            'task.card_id' => $this->card_id,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

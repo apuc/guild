@@ -1,5 +1,6 @@
 <?php
 
+use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
 use common\models\User;
 use kartik\select2\Select2;
@@ -25,9 +26,9 @@ use yii\widgets\ActiveForm;
         ]
     ) ?>
 
-    <?= $form->field($model, 'user_id')->widget(Select2::className(),
+    <?= $form->field($model, 'card_id')->widget(Select2::className(),
         [
-            'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+            'data' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true,

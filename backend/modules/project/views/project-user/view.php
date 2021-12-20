@@ -2,6 +2,7 @@
 
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -10,7 +11,7 @@ use yii\widgets\DetailView;
 $this->title = 'Сотрудник проекта: ' . $model->project->name;
 $this->params['breadcrumbs'][] = ['label' => 'Project Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="project-user-view">
 
@@ -37,6 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'user_id',
                 'value' => ArrayHelper::getValue($model, 'user.username' ),
+            ],
+            [
+                'attribute' => 'card_id',
+                'value' => ArrayHelper::getValue($model, 'card.fio' ),
             ],
         ],
     ]) ?>
