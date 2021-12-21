@@ -173,7 +173,7 @@ class TaskUserController extends Controller
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
                 $task_id = $parents[0];
-                $users = ProjectUser::usersByTaskArr($task_id);
+                $users = ProjectUser::userCardByTaskArr($task_id);
 
                 $formattedUsersArr = array();
                 foreach ($users as $key => $value){
@@ -184,10 +184,5 @@ class TaskUserController extends Controller
             }
         }
         return ['output'=>'', 'selected'=>''];
-    }
-
-    public function actionDynamicProjectUser()
-    {
-        var_dump('hhh'); die;
     }
 }

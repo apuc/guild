@@ -119,6 +119,12 @@ class ProjectUser extends \yii\db\ActiveRecord
             self::find()->joinWith(['tasksByProject', 'user'])->where(['task.id' => $task_id])->all(), 'id', 'user.username');
     }
 
+    public static function userCardByTaskArr($task_id): array
+    {
+        return ArrayHelper::map(
+            self::find()->joinWith(['tasksByProject', 'card'])->where(['task.id' => $task_id])->all(), 'id', 'card.fio');
+    }
+
     public static function setUsersByCardId()
     {
         $projectUserModels = self::findAll(['user_id' => null]);
