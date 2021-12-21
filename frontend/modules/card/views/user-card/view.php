@@ -1,7 +1,9 @@
 <?php
 
+use asmoday74\ckeditor5\EditorClassic;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -17,7 +19,8 @@ $this->title = 'Профиль';
     <h3>Личная информация</h3>
     <?php
     echo Html::a('Изменить профиль', ['/card/user-card/update'], ['class' => 'btn btn-success'])
-    . '&nbsp' . Html::a('Изменить пароль', ['/card/user-card/password'], ['class' => 'btn btn-success']) . '<br><br>';
+    . '&nbsp' . Html::a('Изменить пароль', ['/card/user-card/password'], ['class' => 'btn btn-success'])
+    . '&nbsp' . Html::a('Изменить резюме', ['/card/user-card/resume'], ['class' => 'btn btn-success']). '<br><br>';
 
     echo  DetailView::widget([
         'model' => $model,
@@ -67,4 +70,5 @@ $this->title = 'Профиль';
             ],
         ],
     ]); ?>
+
 </div>

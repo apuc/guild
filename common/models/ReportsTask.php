@@ -12,12 +12,22 @@ use Yii;
  * @property string $task
  * @property int $created_at
  * @property int $status
+ * @property int $minutes_spent
  * @property float $hours_spent
  *
  * @property Reports $report
  */
 class ReportsTask extends \yii\db\ActiveRecord
 {
+    const SCENARIO_WITHOUT_REPORT_ID = 'withoutReportID';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_WITHOUT_REPORT_ID] = self::attributes();
+        return $scenarios;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -32,9 +42,10 @@ class ReportsTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_id'], 'required'],
-            [['report_id', 'created_at', 'status'], 'integer'],
+            [['report_id'], 'required', 'on' => self::SCENARIO_DEFAULT],
+            [['report_id', 'created_at', 'status', 'minutes_spent'], 'integer'],
             [['hours_spent'], 'number'],
+            ['minutes_spent', 'compare', 'compareValue' => 60, 'operator' => '<'],
             [['task'], 'string'],
             [['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'id']],
         ];

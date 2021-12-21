@@ -36,19 +36,19 @@ class UserController extends ActiveController
 //                    HttpBearerAuth::class,
 //                ],
 //            ],
-//            'corsFilter' => [
-//                'class' => GsCors::class,
-//                'cors' => [
-//                    'Origin' => ['*'],
-//                    //'Access-Control-Allow-Credentials' => true,
-//                    'Access-Control-Allow-Headers' => [
-//                        'Content-Type',
-//                        'Access-Control-Allow-Headers',
-//                        'Authorization',
-//                        'X-Requested-With'
-//                    ],
-//                ]
-//            ]
+            'corsFilter' => [
+                'class' => GsCors::class,
+                'cors' => [
+                    'Origin' => ['*'],
+                    //'Access-Control-Allow-Credentials' => true,
+                    'Access-Control-Allow-Headers' => [
+                        'Content-Type',
+                        'Access-Control-Allow-Headers',
+                        'Authorization',
+                        'X-Requested-With'
+                    ],
+                ]
+            ]
         ]);
     }
 

@@ -296,4 +296,5 @@ class UserCard extends \yii\db\ActiveRecord
         return $userCard['id'];
 
     }
+
 }

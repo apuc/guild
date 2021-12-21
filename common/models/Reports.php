@@ -75,6 +75,7 @@ class Reports extends \yii\db\ActiveRecord
             foreach ($this->task as $task) {
                 $this->_task[$i]['task'] = $task->task;
                 $this->_task[$i]['hours_spent'] = $task->hours_spent;
+                $this->_task[$i]['minutes_spent'] = $task->minutes_spent;
                 $i++;
             }
         }
@@ -102,6 +103,7 @@ class Reports extends \yii\db\ActiveRecord
                 $taskModel->report_id = $this->id;
                 $taskModel->task = $task['task'];
                 $taskModel->hours_spent = (float)$task['hours_spent'];
+                $taskModel->minutes_spent = (int) $task['minutes_spent'];
                 $taskModel->status = 1;
                 $taskModel->created_at = time();
                 $taskModel->save();

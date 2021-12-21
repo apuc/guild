@@ -5,18 +5,19 @@ namespace frontend\modules\api\controllers;
 use common\behaviors\GsCors;
 use common\classes\Debug;
 use common\models\Reports;
+use common\models\ReportsTask;
+use common\models\UserCard;
 use frontend\modules\api\models\ReportSearchForm;
 use JsonException;
 use Yii;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
-use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-class ReportsController extends Controller
+class ReportsController extends ApiController
 {
     public function init()
     {
@@ -25,26 +26,14 @@ class ReportsController extends Controller
 
     public function behaviors()
     {
-        return [
+        $parent = parent::behaviors();
+        $b = [
             [
                 'class' => ContentNegotiator::className(),
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
             ],
-//            'corsFilter' => [
-//                'class' => GsCors::class,
-//                'cors' => [
-//                    'Origin' => ['*'],
-//                    //'Access-Control-Allow-Credentials' => true,
-//                    'Access-Control-Allow-Headers' => [
-//                        'Content-Type',
-//                        'Access-Control-Allow-Headers',
-//                        'Authorization',
-//                        'X-Requested-With'
-//                    ],
-//                ]
-//            ],
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => [
@@ -52,6 +41,8 @@ class ReportsController extends Controller
                 ],
             ]
         ];
+
+        return array_merge($parent, $b);
     }
 
     public function actionIndex(): array
@@ -59,6 +50,12 @@ class ReportsController extends Controller
         $reportsModel = new ReportSearchForm();
 
         $params = Yii::$app->request->get();
+        if(!isset($params['user_card_id'])){
+            $userCard = UserCard::find()->where(['id_user' => Yii::$app->user->id])->one();
+            if($userCard){
+                $params['user_card_id'] = $userCard->id;
+            }
+        }
         $reportsModel->attributes = $params;
 
         if(!$reportsModel->validate()){
@@ -67,12 +64,29 @@ class ReportsController extends Controller
         return $reportsModel->byParams();
     }
 
+    public function actionView($id): array{
+        $report = Reports::findOne($id);
+        return array_merge($report->toArray(), ['tasks' => $report->_task]);
+    }
+
     public function actionCreate()
     {
-        $reportsModel = new Reports();
-
         $params = Yii::$app->request->post();
+        if (!isset($params['tasks'])){
+            throw new BadRequestHttpException('Нет параметра tasks');
+        }
+
+        if(!isset($params['user_card_id'])){
+            $userCard = UserCard::find()->where(['id_user' => Yii::$app->user->id])->one();
+            if($userCard){
+                $params['user_card_id'] = $userCard->id;
+            }
+        }
+
+        $reportsModel = new Reports();
         $reportsModel->attributes = $params;
+
+        $params['tasks'] = (is_array($params['tasks'])) ? $params['tasks'] : json_decode($params['tasks']);
 
         if(!$reportsModel->validate()){
             throw new BadRequestHttpException(json_encode($reportsModel->errors));
@@ -80,7 +94,7 @@ class ReportsController extends Controller
 
         $reportsModel->save();
 
-        return $reportsModel->toArray();
+        return array_merge($reportsModel->toArray());
     }
 
     public function actionDelete()

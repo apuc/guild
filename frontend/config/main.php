@@ -84,6 +84,7 @@ return [
             'rules' => [
                 'site/index' => 'card/user-card/index',
                 'api/profile/<id:\d+>' => 'api/profile/index',
+                'api/reports/<id:\d+>' => 'api/reports/view',
                 '' => 'card/user-card/index',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'skills'],
             ],
