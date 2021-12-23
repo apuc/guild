@@ -36,9 +36,10 @@ class ProjectUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'project_id'], 'required'],
+            [['user_id', 'project_id', 'card_id'], 'required'],
             ['user_id', 'unique', 'targetAttribute' => ['user_id', 'project_id'], 'message'=>'Сотрудник уже назначен на этот проект'],
-//            [['card_id', 'project_id', 'user_id'], 'integer'],
+            ['card_id', 'unique', 'targetAttribute' => ['card_id', 'project_id'], 'message'=>'Сотрудник уже назначен на этот проект'],
+            [['card_id', 'project_id', 'user_id'], 'integer'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
             [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['card_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -116,6 +117,12 @@ class ProjectUser extends \yii\db\ActiveRecord
     {
         return ArrayHelper::map(
             self::find()->joinWith(['tasksByProject', 'user'])->where(['task.id' => $task_id])->all(), 'id', 'user.username');
+    }
+
+    public static function userCardByTaskArr($task_id): array
+    {
+        return ArrayHelper::map(
+            self::find()->joinWith(['tasksByProject', 'card'])->where(['task.id' => $task_id])->all(), 'id', 'card.fio');
     }
 
     public static function setUsersByCardId()

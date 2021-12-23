@@ -72,22 +72,20 @@ class ProjectUserController extends Controller
         $post = \Yii::$app->request->post('ProjectUser');
 
         if (!empty($post)) {
-            $user_id_arr = ArrayHelper::getValue($post, 'user_id');
+            $card_id_arr = ArrayHelper::getValue($post, 'card_id');
             $project_id = $post['project_id'];
 
-            foreach ($user_id_arr as $user_id) {
+            foreach ($card_id_arr as $card_id) {
                 $emtModel = new ProjectUser();
                 $emtModel->project_id = $project_id;
-                $emtModel->user_id = $user_id;
-                $emtModel->card_id = UserCard::getIdByUserId($user_id);
+                $emtModel->card_id = $card_id;
+                $emtModel->user_id = UserCard::getUserIdByCardId($card_id);
 
-                $emtModel->save();
-
-//                if (!$emtModel->save()) {
-//                    return $this->render('create', [
-//                        'model' => $emtModel,
-//                    ]);
-//                }
+                if (!$emtModel->save()) {
+                    return $this->render('create', [
+                        'model' => $emtModel,
+                    ]);
+                }
             }
             return $this->redirect(['index']);
         }
@@ -110,7 +108,7 @@ class ProjectUserController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) ) {
-            $model->card_id = UserCard::getIdByUserId($model->user_id);
+            $model->user_id = UserCard::getUserIdByCardId($model->card_id);//UserCard::getIdByUserId($model->user_id);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }

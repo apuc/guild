@@ -1,13 +1,10 @@
 <?php
 
+use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
-use backend\modules\project\models\ProjectUser;
 use common\helpers\StatusHelper;
-use common\models\User;
-use kartik\depdrop\DepDrop;
 use kartik\select2\Select2;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -27,9 +24,9 @@ use yii\widgets\ActiveForm;
     );
     ?>
 
-    <?= $form->field($model, 'user_id_creator')->widget(Select2::class,
+    <?= $form->field($model, 'card_id_creator')->widget(Select2::class,
         [
-            'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+            'data' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control',  'value' => Yii::$app->user->id],
             'pluginOptions' => [
                 'allowClear' => true,
@@ -47,9 +44,9 @@ use yii\widgets\ActiveForm;
         ]
     ) ?>
 
-    <?= $form->field($model, 'user_id')->widget(Select2::class,
+    <?= $form->field($model, 'card_id')->widget(Select2::class,
         [
-            'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+            'data' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true,

@@ -36,11 +36,11 @@ YiiAsset::register($this);
             'id',
             [
                 'attribute' => 'manager_id',
-                'value' => ArrayHelper::getValue($model,'manager.user.username'),
+                'value' => ArrayHelper::getValue($model,'manager.userCard.fio'),
             ],
             [
                 'attribute' => 'employee_id',
-                'value' => ArrayHelper::getValue($model,'user.username'),
+                'value' => ArrayHelper::getValue($model,'userCard.fio'),
             ],
         ],
     ]) ?>

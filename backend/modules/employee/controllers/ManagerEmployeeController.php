@@ -5,6 +5,7 @@ namespace backend\modules\employee\controllers;
 use Yii;
 use backend\modules\employee\models\ManagerEmployee;
 use backend\modules\employee\models\ManagerEmployeeSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -64,12 +65,31 @@ class ManagerEmployeeController extends Controller
      */
     public function actionCreate()
     {
-        $model = new ManagerEmployee();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+
+
+        $post = $post = \Yii::$app->request->post('ManagerEmployee');
+
+        if (!empty($post)) {
+            $user_card_id_arr = ArrayHelper::getValue($post,'user_card_id');
+
+            foreach ($user_card_id_arr as $user_card_id) {
+                $emtModel = new ManagerEmployee();
+                $emtModel->manager_id = $post['manager_id'];
+                $emtModel->user_card_id = $user_card_id;
+
+                if (!$emtModel->save()) {
+                    return $this->render('create', [
+                        'model' => $emtModel,
+                    ]);
+                }
+            }
+
+            return $this->redirect(['index']);
         }
 
+        $model = new ManagerEmployee();
         return $this->render('create', [
             'model' => $model,
         ]);

@@ -2,6 +2,7 @@
 
 use backend\modules\project\models\ProjectUser;
 use backend\modules\task\models\Task;
+use backend\modules\task\models\TaskUser;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -35,7 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'task_id',
-                    'data' => Task::find()->select(['title', 'id'])->indexBy('id')->column(),
+                    'data' => TaskUser::find()->joinWith('task')
+                        ->select(['task.title', 'task.id'])->indexBy('task.id')->column(),
                     'pluginOptions' => [
                         'allowClear' => true,
                         'width' => '250px',
@@ -48,12 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'project_user_id',
-                'value' => 'projectUser.user.username',
+                'value' => 'projectUser.card.fio',
                 'filter' => Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'project_user_id',
-                    'data' => ProjectUser::find()->select(['user.username', 'project_user.id'])
-                        ->joinWith('user')->indexBy('project_user.id')->column(),
+                    'data' => TaskUser::find()->joinWith('projectUser.card')
+                        ->select(['user_card.fio', 'task_user.id'])->column(),
                     'pluginOptions' => [
                         'allowClear' => true,
                         'width' => '250px',

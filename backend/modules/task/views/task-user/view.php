@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'project_user_id',
-                'value' => ArrayHelper::getValue($model, 'projectUser.user.username'),
+                'value' => ArrayHelper::getValue($model, 'projectUser.card.fio'),
             ],
         ],
     ]) ?>

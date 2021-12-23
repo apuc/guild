@@ -1,5 +1,6 @@
 <?php
 
+use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
 use backend\modules\project\models\ProjectUser;
 use backend\modules\task\models\Task;
@@ -35,7 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'project_id',
-                    'data' => Project::find()->select(['name', 'id'])->indexBy('id')->column(),
+                    'data' => Task::find()->joinWith('project')
+                        ->select(['project.name', 'project.id'])->indexBy('project.id')->column(),
                     'pluginOptions' => [
                         'allowClear' => true,
                         'width' => '150px',
@@ -48,12 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'title',
             [
-                'attribute' => 'user_id_creator',
-                'value' => 'userIdCreator.username',
+                'attribute' => 'card_id_creator',
+                'value' => 'userCardCreator.fio',
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
-                    'attribute' => 'user_id_creator',
-                    'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+                    'attribute' => 'card_id_creator',
+                    'data' => Task::find()->joinWith('userCardCreator')
+                        ->select(['user_card.fio', 'user_card.id'])->indexBy('user_card.id')->column(),
                     'pluginOptions' => [
                         'allowClear' => true,
                         'width' => '150px',
@@ -65,12 +68,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])
             ],
             [
-                'attribute' => 'user_id',
-                'value' => 'user.username',
+                'attribute' => 'card_id',
+                'value' => 'userCard.fio',
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
-                    'attribute' => 'user_id',
-                    'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+                    'attribute' => 'card_id',
+                    'data' => Task::find()->joinWith('userCard')
+                        ->select(['user_card.fio', 'user_card.id'])->indexBy('user_card.id')->column(),
                     'pluginOptions' => [
                         'allowClear' => true,
                         'width' => '150px',

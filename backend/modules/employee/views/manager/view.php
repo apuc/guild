@@ -1,5 +1,6 @@
 <?php
 
+use backend\modules\card\models\UserCard;
 use common\models\User;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
@@ -37,7 +38,7 @@ YiiAsset::register($this);
             'id',
             [
                 'attribute' => 'user_id',
-                'value' => ArrayHelper::getValue($model,'user.username'),
+                'value' => ArrayHelper::getValue($model,'userCard.fio'),
             ],
         ],
     ]) ?>
@@ -47,9 +48,9 @@ YiiAsset::register($this);
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-                'attribute' => 'user_id',
-                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
-                'value' => 'user.username',
+                'attribute' => 'user_card_id',
+                'filter' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
+                'value' => 'userCard.fio',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

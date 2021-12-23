@@ -47,12 +47,12 @@ YiiAsset::register($this);
             'created_at',
             'updated_at',
             [
-                'attribute' => 'project_user_id',
-                'value' => ArrayHelper::getValue($model, 'projectUser.user.username'),
+                'attribute' => 'card_id_creator',
+                'value' => ArrayHelper::getValue($model, 'userCardCreator.fio'),
             ],
             [
-                'attribute' => 'user_id',
-                'value' => ArrayHelper::getValue($model, 'user.username'),
+                'attribute' => 'card_id',
+                'value' => ArrayHelper::getValue($model, 'userCard.fio'),
             ],
             'description',
         ],
@@ -71,7 +71,7 @@ YiiAsset::register($this);
 
             [
                 'attribute' => 'project_user_id',
-                'value' => 'projectUser.user.username'
+                'value' => 'projectUser.card.fio'
             ],
 
             [

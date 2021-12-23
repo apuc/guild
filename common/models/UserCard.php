@@ -104,6 +104,7 @@ class UserCard extends \yii\db\ActiveRecord
             [['fio', 'status', 'gender', 'email', 'level', 'position_id'], 'required'],
             [['gender', 'status', 'position_id', 'id_user', 'level', 'years_of_exp'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at', 'vc_text', 'vc_text_short'], 'safe'],
+            ['email', 'unique', 'message'=>'Почтовый адрес уже используется'],
             [['fio', 'passport', 'photo', 'email', 'resume', 'city', 'link_vk', 'link_telegram', 'specification'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
             [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => Position::class, 'targetAttribute' => ['position_id' => 'id']],
@@ -214,17 +215,14 @@ class UserCard extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'id_user']);
     }
 
-    /**
-     * @throws Exception
-     */
-    public static function getIdByUserId($user_id)
-    {
-        return ArrayHelper::getValue(self::find()->where(['id_user' => $user_id])->one(), 'id');
-    }
-
     public static function getUserList()
     {
         return ArrayHelper::map(self::find()->all(), 'id', 'fio');
+    }
+
+    public function getManager()
+    {
+        return $this->hasOne(Manager::class, ['user_card_id' => 'id']);
     }
 
     public static function generateUserForUserCard($card_id = null)
