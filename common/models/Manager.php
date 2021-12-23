@@ -9,9 +9,9 @@ use yii\db\ActiveQuery;
  * This is the model class for table "manager".
  *
  * @property int $id
- * @property int $user_id
+ * @property int $user_card_id
  *
- * @property User $user
+ * @property UserCard $userCard
  * @property ManagerEmployee[] $managerEmployees
  */
 class Manager extends \yii\db\ActiveRecord
@@ -30,8 +30,10 @@ class Manager extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_card_id'], 'integer'],
+            [['user_card_id'], 'required'],
+            ['user_card_id', 'unique', 'message'=>'Уже является менеджером'],
+            [['user_card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['user_card_id' => 'id']],
         ];
     }
 
@@ -42,7 +44,7 @@ class Manager extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'Пользователь',
+            'user_card_id' => 'Карточка менеджера',
         ];
     }
 
@@ -57,9 +59,9 @@ class Manager extends \yii\db\ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getUser()
+    public function getUserCard()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(UserCard::className(), ['id' => 'user_card_id']);
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+use backend\modules\card\models\UserCard;
+use common\models\ManagerEmployee;
 use common\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -24,15 +26,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'manager_id',
-                'filter' => User::find()->select(['username', 'user.id'])
-                    ->joinWith('manager')->where(['not',['manager.user_id' => null]])->indexBy('user.id')->column(),
-                'value' => 'manager.user.username',
+                'filter' => UserCard::find()->select(['fio', 'user_card.id'])
+                    ->joinWith('manager')->where(['not',['manager.user_card_id' => null]])
+                    ->indexBy('user_card.id')->column(),
+                'value' => 'manager.userCard.fio',
             ],
             [
-                'attribute' => 'employee_id',
-                'filter' => User::find()->select(['username', 'user.id'])
-                    ->joinWith('manager')->where(['manager.user_id' => null])->indexBy('user.id')->column(),
-                'value' => 'user.username',
+                'attribute' => 'user_card_id',
+                'filter' => ManagerEmployee::find()->select(['fio', 'manager_employee.id'])
+                    ->joinWith('userCard')
+                    ->indexBy('manager_employee.id')->column(),
+                'value' => 'userCard.fio',
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],

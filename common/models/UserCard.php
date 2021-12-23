@@ -220,6 +220,11 @@ class UserCard extends \yii\db\ActiveRecord
         return ArrayHelper::map(self::find()->all(), 'id', 'fio');
     }
 
+    public function getManager()
+    {
+        return $this->hasOne(Manager::class, ['user_card_id' => 'id']);
+    }
+
     public static function generateUserForUserCard($card_id = null)
     {
         $userCardQuery = self::find();

@@ -1,7 +1,7 @@
 <?php
 
+use backend\modules\card\models\UserCard;
 use backend\modules\employee\models\Manager;
-use common\models\User;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -17,26 +17,27 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'manager_id')->widget(Select2::className(),
         [
-            'data' => Manager::find()->select(['username', 'manager.id'])
-                ->joinWith('user')->indexBy('manager.id')->column(),
+            'data' => Manager::find()->select(['fio', 'manager.id'])
+                ->joinWith('userCard')->indexBy('manager.id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true
             ],
         ]) ?>
 
-    <?= $form->field($model, 'employee_id')->widget(Select2::className(),
+    <?= $form->field($model, 'user_card_id')->widget(Select2::className(),
         [
-            'data' => User::find()->select(['username', 'user.id'])
-                ->joinWith('manager')->where(['manager.user_id' => null])->indexBy('user.id')->column(),
+            'data' => UserCard::find()->select(['fio', 'user_card.id'])
+                ->joinWith('manager')->where(['manager.user_card_id' => null])->indexBy('user_card.id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
-                'allowClear' => true
+                'allowClear' => true,
+                'multiple' => true,
             ],
         ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

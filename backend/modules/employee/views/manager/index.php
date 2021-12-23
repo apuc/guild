@@ -1,5 +1,6 @@
 <?php
 
+use backend\modules\card\models\UserCard;
 use common\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -23,9 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-                'attribute' => 'user_id',
-                'filter' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
-                'value' => 'user.username',
+                'attribute' => 'user_card_id',
+                'filter' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
+                'value' => 'userCard.fio',
 
             ],
 

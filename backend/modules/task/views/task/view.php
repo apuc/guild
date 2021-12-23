@@ -71,7 +71,7 @@ YiiAsset::register($this);
 
             [
                 'attribute' => 'project_user_id',
-                'value' => 'projectUser.user.username'
+                'value' => 'projectUser.card.fio'
             ],
 
             [

@@ -21,8 +21,9 @@ use yii\widgets\ActiveForm;
             ->where(['!=', 'question_type_id', '1'])
             ->indexBy('id')
             ->column(),
+        'options' => ['placeholder' => 'Выберите проект'],
         'pluginOptions' => [
-            'allowClear' => false
+            'allowClear' => false,
         ],
     ]) ?>
 

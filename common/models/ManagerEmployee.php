@@ -9,10 +9,10 @@ use yii\db\ActiveQuery;
  *
  * @property int $id
  * @property int $manager_id
- * @property int $employee_id
+ * @property int $user_card_id
  *
- * @property User $user
  * @property Manager $manager
+ * @property UserCard $userCard
  */
 class ManagerEmployee extends \yii\db\ActiveRecord
 {
@@ -30,9 +30,10 @@ class ManagerEmployee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['manager_id', 'employee_id'], 'required'],
-            [['manager_id', 'employee_id'], 'integer'],
-            [['employee_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['employee_id' => 'id']],
+            [['manager_id', 'user_card_id'], 'required'],
+            [['manager_id'], 'integer'],
+            ['user_card_id', 'unique', 'targetAttribute' => ['manager_id', 'user_card_id'], 'message'=>'Этот сотрудник уже закреплён за менеджером'],
+            [['user_card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['user_card_id' => 'id']],
             [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['manager_id' => 'id']],
         ];
     }
@@ -45,16 +46,16 @@ class ManagerEmployee extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'manager_id' => 'Менеджер',
-            'employee_id' => 'Работник',
+            'user_card_id' => 'Карточка работника',
         ];
     }
 
     /**
      * @return ActiveQuery
      */
-    public function getUser()
+    public function getUserCard(): ActiveQuery
     {
-        return $this->hasOne(User::className(), ['id' => 'employee_id']);
+        return $this->hasOne(UserCard::className(), ['id' => 'user_card_id']);
     }
 
     /**
