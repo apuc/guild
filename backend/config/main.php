@@ -71,11 +71,14 @@ return [
         'task' => [
             'class' => 'backend\modules\task\Task',
         ],
+        'document' => [
+            'class' => 'backend\modules\document\Document',
+        ],
     ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl' => '', // /secure
+            'baseUrl' => '/secure',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
                 'text/xml' => 'yii/web/XmlParser',
