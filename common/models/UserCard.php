@@ -225,6 +225,11 @@ class UserCard extends \yii\db\ActiveRecord
         return $this->hasOne(Manager::class, ['user_card_id' => 'id']);
     }
 
+    public function getManagerEmployee()
+    {
+        return $this->hasMany(ManagerEmployee::class, ['user_card_id' => 'id']);
+    }
+
     public static function generateUserForUserCard($card_id = null)
     {
         $userCardQuery = self::find();

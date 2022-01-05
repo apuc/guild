@@ -18,7 +18,7 @@ class TemplateSearch extends Template
     {
         return [
             [['id'], 'integer'],
-            [['title', 'created_at', 'updated_at'], 'safe'],
+            [['title', 'created_at', 'updated_at', 'template_file_name'], 'safe'],
         ];
     }
 
@@ -63,7 +63,8 @@ class TemplateSearch extends Template
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'template_file_name', $this->template_file_name]);
 
         return $dataProvider;
     }
