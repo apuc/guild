@@ -1,8 +1,9 @@
 <?php
 
 use backend\modules\document\models\DocumentField;
-use backend\modules\document\models\Template;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 
@@ -13,7 +14,7 @@ use yii\grid\GridView;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Templates', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="template-view">
 
@@ -31,13 +32,55 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
+
         'attributes' => [
             'id',
-            'title',
+            [
+                'attribute'=>'title',
+                'format'=>'raw',
+                'value' => function($model){
+                    return   $model->title . Html::a(
+                        '<i class="glyphicon glyphicon-pencil"></i>', ['update', 'id' => $model->id],
+                        [
+                            'title' => 'Update',
+                            'class' => 'pull-right detail-button',
+                        ]
+                    );
+                }
+            ],
             'created_at',
             'updated_at',
+
+            [
+                    'label'=>'template_file_name',
+                    'format'=>'raw',
+                    'value' => function($model){
+
+                        return   $model->template_file_name . Html::a('<i class="glyphicon glyphicon-pencil"></i>', Url::to(['actualizar', 'id' => $model->id]), [
+                                 'title' => 'Actualizar',
+//                                 'class' => 'pull-right detail-button',
+                             ]);
+                     }
+
+
+            ]
         ],
     ]) ?>
+
+    <?php
+    $button1 = Html::a('<i class="glyphicon glyphicon-trash"></i>', Url::to(['delete', 'id' => $model->id]), [
+        'title' => 'Eliminar',
+        'class' => 'pull-right detail-button',
+        'data' => [
+            'confirm' => '¿Realmente deseas eliminar este elemento?',
+            'method' => 'post',
+        ]
+    ]);
+    $button2 = Html::a('<i class="glyphicon glyphicon-pencil"></i>', Url::to(['actualizar', 'id' => $model->id]), [
+        'title' => 'Actualizar',
+        'class' => 'pull-right detail-button',
+    ]);
+    ?>
 
     <div>
         <h2>

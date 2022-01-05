@@ -2,9 +2,9 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\Manager;
 use common\models\ManagerEmployee;
 use common\models\User;
+use common\models\UserCard;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\helpers\ArrayHelper;
@@ -34,8 +34,8 @@ class ManagerController extends \yii\rest\Controller
 
     public function actionGetManagerList(): array
     {
-        $managers = User::find()->select(['username','manager.id' , 'email'])
-            ->joinWith('manager')->where(['NOT',['manager.user_id' => null]])->all();
+        $managers = UserCard::find()->select(['fio','manager.id' , 'email'])
+            ->joinWith('manager')->where(['NOT',['manager.user_card_id' => null]])->all();
 
         if(empty($managers)) {
             throw new NotFoundHttpException('Managers are not assigned');
@@ -55,7 +55,8 @@ class ManagerController extends \yii\rest\Controller
             throw new NotFoundHttpException('Incorrect manager ID');
         }
 
-        $users_list = User::find()->select(['user.id', 'user.username', 'user.email'])
+        $users_list = UserCard::find()
+            ->select(['manager_employee.id', 'user_card.fio', 'user_card.email'])
             ->joinWith('managerEmployee')
             ->where(['manager_employee.manager_id' => $manager_id])
             ->all();
@@ -78,8 +79,8 @@ class ManagerController extends \yii\rest\Controller
             throw new NotFoundHttpException('Incorrect manager ID');
         }
 
-        $manager = User::find()
-            ->select(['user.id', 'user.username', 'user.email'])
+        $manager = UserCard::find()
+            ->select(['manager.id', 'fio', 'email', 'photo', 'gender'])
             ->joinWith('manager')->where(['manager.id' => $manager_id])
             ->all();
 

@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'title',
+//            'template_path',
             'created_at',
             'updated_at',
 
