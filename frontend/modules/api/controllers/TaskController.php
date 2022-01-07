@@ -97,7 +97,7 @@ class TaskController extends Controller
         }
 
         if (empty($model->project_id)or empty($model->status)
-            or empty($model->description) or empty($model->title) or empty($model->user_id_creator)) {
+            or empty($model->description) or empty($model->title) or empty($model->card_id_creator)) {
             throw new BadRequestHttpException(json_encode($model->errors));
         }
     }

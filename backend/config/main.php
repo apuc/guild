@@ -71,6 +71,9 @@ return [
         'task' => [
             'class' => 'backend\modules\task\Task',
         ],
+        'document' => [
+            'class' => 'backend\modules\document\Document',
+        ],
     ],
     'components' => [
         'request' => [

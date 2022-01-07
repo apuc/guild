@@ -24,7 +24,7 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "kavalar/hhapi": "@dev",
         "mirocow/yii2-eav": "*",
-        "kartik-v/yii2-widget-fileinput": "^1.0",
+        "kartik-v/yii2-widget-fileinput": "dev-master",
         "2amigos/yii2-file-upload-widget": "~1.0",
         "kartik-v/yii2-grid": "dev-master",
         "edofre/yii2-fullcalendar-scheduler": "V1.1.12",

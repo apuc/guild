@@ -27,7 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'user_card_id',
                 'filter' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
                 'value' => 'userCard.fio',
-
             ],
 
             ['class' => 'yii\grid\ActionColumn'],

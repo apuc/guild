@@ -42,6 +42,23 @@
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
+                        'label' => 'Документы', 'icon' => 'archive', 'url' => '#',
+                        'items' => [
+                            ['label' => 'Документы', 'icon' => 'file-text', 'url' => ['/document/document'], 'active' => \Yii::$app->controller->id == 'document'],
+                            ['label' => 'Шаблоны', 'icon' => 'file', 'url' => ['/document/template'], 'active' => \Yii::$app->controller->id == 'template'],
+                            ['label' => 'Поля документов', 'icon' => 'file-text-o', 'url' => ['/document/document-field'], 'active' => \Yii::$app->controller->id == 'document-field'],
+                            [
+                                'label' => 'Сохранённые значения', 'icon' => 'info-circle', 'url' => '#',
+                                'items' => [
+                                    ['label' => 'Поля в шаблоне', 'icon' => 'file-text-o', 'url' => ['/document/template-document-field'], 'active' => \Yii::$app->controller->id == 'template-document-field'],
+                                    ['label' => 'Значения полей', 'icon' => 'bars', 'url' => ['/document/document-field-value'], 'active' => \Yii::$app->controller->id == 'document-field-value'],
+
+                                ]
+                            ]
+                        ],
+                        'visible' => Yii::$app->user->can('confidential_information')
+                    ],
+                    [
                         'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], //'active' => \Yii::$app->controller->id == 'project',
                         'items' => $projectItems,
                         'visible' => Yii::$app->user->can('confidential_information')

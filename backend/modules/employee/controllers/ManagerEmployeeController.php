@@ -65,10 +65,6 @@ class ManagerEmployeeController extends Controller
      */
     public function actionCreate()
     {
-
-
-
-
         $post = $post = \Yii::$app->request->post('ManagerEmployee');
 
         if (!empty($post)) {

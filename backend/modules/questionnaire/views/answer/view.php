@@ -47,13 +47,11 @@ function cut_title($str)
             [
                 'attribute' => 'answer_flag',
                 'format' => 'raw',
-                'filter' => AnswerHelper::answerFlagsList(),
                 'value' => AnswerHelper::answerFlagLabel($model->answer_flag),
             ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => StatusHelper::statusList(),
                 'value' => StatusHelper::statusLabel($model->status),
             ],
             'created_at',

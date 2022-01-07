@@ -1023,12 +1023,12 @@
 ```json5
 [
   {
-    "username": "testUser",
+    "fio": "testUser",
     "id": 1,
     "email": "admin@admin.com"
   },
   {
-    "username": "workerTest22",
+    "fio": "workerTest22",
     "id": 2,
     "email": "awdsdse@njbhj.com"
   }
@@ -1056,10 +1056,10 @@
     </tr>
     <tr>
         <td>
-            username
+            fio
         </td>
         <td>
-             Имя пользователя(логин)(varchar(255))
+             ФИО пользователя(varchar(255))
         </td>
     </tr>
     <tr>
@@ -1127,12 +1127,12 @@
 [
   {
     "id": 2,
-    "username": "workerTest",
+    "fio": "workerTest",
     "email": "testUseweewer@testUser.com",
   },
   {
     "id": 4,
-    "username": "worker1",
+    "fio": "worker1",
     "email": "sdfsdvdworker2",
   },
 ]
@@ -1154,15 +1154,15 @@
             id
         </td>
         <td>
-             ID пользователя(работника)(int)
+             ID пользователя(работника) у менеджера(int)
         </td>
     </tr>
     <tr>
         <td>
-            username
+            fio
         </td>
         <td>
-             Логин(varchar(255))
+             ФИО сотрудника(varchar(255))
         </td>
     </tr>
     <tr>
@@ -1229,9 +1229,11 @@
 ```json5
 [
   {
-    "id": 1,
-    "username": "testUser",
-    "email": "admin@admin.com",
+    "id": 5,
+    "fio": "Иванов Иван Иванович",
+    "email": "testmail@mail.com",
+    "photo": "",
+    "gender": 0
   }
 ]
 ```
@@ -1252,15 +1254,15 @@
             id
         </td>
         <td>
-             ID как пользователя(int)
+             ID пользователя(работника) у менеджера(int)
         </td>
     </tr>
     <tr>
         <td>
-            username
+            fio
         </td>
         <td>
-             Логин(varchar(255))
+             ФИО сотрудника(varchar(255))
         </td>
     </tr>
     <tr>
@@ -1268,7 +1270,7 @@
             email
         </td>
         <td>
-             Электронная почта(string)
+             Почтовый адрес(string)
         </td>
     </tr>
 </table>
