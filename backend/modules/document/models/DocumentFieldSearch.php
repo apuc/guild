@@ -18,7 +18,7 @@ class DocumentFieldSearch extends DocumentField
     {
         return [
             [['id'], 'integer'],
-            [['title'], 'safe'],
+            [['title', 'field_template'], 'safe'],
         ];
     }
 
@@ -61,7 +61,8 @@ class DocumentFieldSearch extends DocumentField
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'field_template', $this->field_template]);
 
         return $dataProvider;
     }

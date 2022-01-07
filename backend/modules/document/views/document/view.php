@@ -91,4 +91,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ) ?>
     </p>
 
+    <p>
+        <?= Html::a(
+            'Файл',
+            ['document/create-document', 'id' => $model->id],
+            ['class' => 'btn btn-primary']
+        ) ?>
+    </p>
+
 </div>

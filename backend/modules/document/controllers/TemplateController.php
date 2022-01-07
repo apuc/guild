@@ -83,21 +83,8 @@ class TemplateController extends Controller
     {
         $model = new Template();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->template = UploadedFile::getInstance($model, 'template');
-
-            if (!empty($model->template)) {
-                $pathToTemplates = Yii::getAlias('@templates');
-                $model->template_file_name = date('mdyHis') . '_' . $model->template->name;
-
-                if ($model->save()) {
-                    if (FileHelper::createDirectory($pathToTemplates, $mode = 0775, $recursive = true)) {
-                        $model->template->saveAs($pathToTemplates . '/' . $model->template_file_name);
-                    }
-                    return $this->redirect(['template-document-field/create', 'template_id' => $model->id]);
-                }
-                return $this->render('create', ['model' => $model]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['template-document-field/create', 'template_id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -115,34 +102,11 @@ class TemplateController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-//        $pathToFile = Yii::getAlias('@templates') . '/' . $model->template_file_name;
-
-//        if ($model->load(Yii::$app->request->post())) {
-//            $template = UploadedFile::getInstance($model, 'template');
-//
-//            if (!empty($template)) {
-//                $path = Yii::getAlias('@frontend') . '/web/upload/documents/templates';
-//
-//                $model->template = $template;
-//                $model->template_file_name = $model->template->name;
-//                $model->template_path = $path . '/' . $model->template->name;
-//
-//                if (!$model->template->saveAs($path . '/' . $model->template->name)) {
-//                    return $this->render('update', [
-//                        'model' => $model,
-//                    ]);
-//                }
-//            }
-//            if ($model->save()) {
-//                return $this->redirect(['view', 'id' => $model->id]);
-//            }
-//        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-       // $model->template = UploadedFile::getInstance($model, $pathToFile); // file($pathToFile);
         return $this->render('update', [
             'model' => $model,
         ]);

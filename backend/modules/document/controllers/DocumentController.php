@@ -2,6 +2,10 @@
 
 namespace backend\modules\document\controllers;
 
+use common\models\DocumentField;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Shared\ZipArchive;
+use PhpOffice\PhpWord\TemplateProcessor;
 use Yii;
 use backend\modules\document\models\Document;
 use backend\modules\document\models\DocumentSearch;
@@ -9,6 +13,8 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
+use common\services\DocumentService;
 
 /**
  * DocumentController implements the CRUD actions for Document model.
@@ -138,4 +144,70 @@ class DocumentController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    public function actionCreateDocument($id)
+    {
+        $model = Document::findOne($id);
+
+        $file_title = $model->title;
+        $template_title = $model->template->template_file_name;
+
+
+
+        $fieldaValueArr = $model->documentFieldValues;
+
+        foreach ($fieldaValueArr as $tmp) {
+            echo $tmp['value'];
+        }
+
+         die();
+
+
+//        var_dump($file_title);
+//        var_dump($template_title);
+//        var_dump($fieldsArray);
+//        die;
+//        //, $template_name, [] $fields
+
+
+        $documentService = new DocumentService($file_title, $template_title, $fieldsArray);
+        $documentService->save();
+
+
+//        $outputFile = 'review_full222.docx';
+//
+//
+//        $PhpWord = new \PhpOffice\PhpWord\PhpWord();
+//        $document = $PhpWord->loadTemplate('/var/www/guild.loc/backend/web/upload/templates/tets template.docx'); //шаблон
+//        $document->setValue('FIO', '8888888888' );
+//        $document->setValue('INN',  '999999999999999999');
+//
+//        $document->saveAs($outputFile);
+//
+//        // Имя скачиваемого файла
+//        $downloadFile = $outputFile;
+//
+//          // Контент-тип означающий скачивание
+//        header("Content-Type: application/octet-stream");
+//
+//        // Размер в байтах
+//        header("Accept-Ranges: bytes");
+//
+//        // Размер файла
+//        header("Content-Length: ".filesize($downloadFile));
+//
+//        // Расположение скачиваемого файла
+//        header("Content-Disposition: attachment; filename=".$downloadFile);
+//
+//        // Прочитать файл
+//        readfile($downloadFile);
+//
+//
+//
+//        unlink($outputFile);
+
+
+    }
+
 }

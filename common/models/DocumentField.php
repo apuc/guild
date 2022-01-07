@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\helpers\TransliteratorHelper;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -10,6 +11,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property int $id
  * @property string $title
+ * @property string $field_template
  *
  * @property DocumentFieldValue[] $documentFieldValues
  * @property TemplateDocumentField[] $templateDocumentFields
@@ -30,8 +32,14 @@ class DocumentField extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'string', 'max' => 255],
+            [['title', 'field_template'], 'string', 'max' => 255],
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        $this->field_template = TransliteratorHelper::transliterate($this->title);
+        return true;
     }
 
     /**
@@ -42,6 +50,7 @@ class DocumentField extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'title' => 'Название',
+            'field_template' => 'Шаблон поля',
         ];
     }
 

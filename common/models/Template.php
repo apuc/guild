@@ -3,7 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 
 /**
@@ -20,7 +22,7 @@ use yii\db\Expression;
  */
 class Template extends \yii\db\ActiveRecord
 {
-    public $template;
+//    public $template;
     /**
      * {@inheritdoc}
      */
@@ -50,9 +52,9 @@ class Template extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'unique'],
             [['template_file_name', 'title'], 'required'],
-            [['template'], 'required', 'message'=>'Укажите путь к файлу'],
-            [['template'], 'file', 'maxSize' => '10000'],
-            [['template'], 'file', 'skipOnEmpty' => false, 'extensions' => 'doc, docx, txt'],
+//            [['template'], 'required', 'message'=>'Укажите путь к файлу'],
+//            [['template'], 'file', 'maxSize' => '10000'],
+//            [['template'], 'file', 'skipOnEmpty' => false, 'extensions' => 'doc, docx, txt'],
             [['title', 'template_file_name'], 'string', 'max' => 255],
         ];
     }
@@ -78,7 +80,7 @@ class Template extends \yii\db\ActiveRecord
         }
 
         if (!empty($this->template_file_name)) {
-            $template_path = Yii::getAlias('@templates') . '/' . $this->template_file_name;
+            $template_path = Yii::getAlias('@templates') . $this->template_file_name;
 
             if(file_exists($template_path)) {
                 unlink($template_path);
@@ -88,7 +90,7 @@ class Template extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getDocuments()
     {
@@ -96,10 +98,27 @@ class Template extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTemplateDocumentFields()
     {
         return $this->hasMany(TemplateDocumentField::className(), ['template_id' => 'id']);
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+//TODO no need, delete
+    public function getDocumentFields()
+    {
+        $fieldsArray = [];
+
+        foreach ($this->templateDocumentFields as $templateDocField) {
+            $fieldsArray[] = $templateDocField->field;
+        }
+
+        return $fieldsArray;
     }
 }

@@ -12,8 +12,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="document-field-index">
 
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
     <p>
-        <?= Html::a('Создать поле документа', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать новое поле', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -23,6 +25,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'title',
+            [
+                'attribute' => 'field_template',
+                'value' => function($model) {
+                    return '${' . $model->field_template . '}';
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -3,6 +3,7 @@
 use backend\modules\questionnaire\models\QuestionnaireCategory;
 use common\helpers\StatusHelper;
 use common\helpers\TimeHelper;
+use common\helpers\TransliteratorHelper;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
