@@ -11,7 +11,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
-class TaskController extends Controller
+class TaskController extends ApiController
 {
     public function behaviors(): array
     {

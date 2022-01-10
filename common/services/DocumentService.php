@@ -67,8 +67,8 @@ class DocumentService
         // Расположение скачиваемого файла
         header("Content-Disposition: attachment; filename=".$downloadFile);
 
-        // Прочитать файл
+//         Прочитать файл
         readfile($downloadFile);
-        unlink($this->document);
+        unlink($this->file_title);
     }
 }

@@ -10,7 +10,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-class ManagerController extends \yii\rest\Controller
+class ManagerController extends ApiController
 {
     public function behaviors(): array
     {
