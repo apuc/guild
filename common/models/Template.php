@@ -91,7 +91,7 @@ class Template extends \yii\db\ActiveRecord
         }
 
         if (!empty($this->template_file_name)) {
-            $template_path = Yii::getAlias('@templates') . $this->template_file_name;
+            $template_path = Yii::getAlias('@templates') . '/' . $this->template_file_name;
 
             if(file_exists($template_path)) {
                 unlink($template_path);
