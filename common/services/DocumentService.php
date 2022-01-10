@@ -3,6 +3,7 @@
 namespace common\services;
 
 
+use common\models\Document;
 use PhpOffice\PhpWord\Exception\CopyFileException;
 use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -10,34 +11,64 @@ use Yii;
 
 class DocumentService
 {
-    private $file_title;
+    private $model;
     private $document;
-    private $template_title;
-    private [] $fields;
-
+    private $file_title;
+    private $documentFieldValuesArr;
 
     /**
      * @throws CopyFileException
      * @throws CreateTemporaryFileException
      */
-    public function __construct($file_title, $template_name, [] $fields)
+    public function __construct($modelID)
     {
-        $this->file_title = $file_title . 'docx';
-        $this->document = new TemplateProcessor(Yii::getAlias('@templates') . "/$template_name");
+        $this->model = Document::findOne($modelID);
+
+        $this->initDocument();
     }
 
-    public function setFields($fields )
+    /**
+     * @throws CopyFileException
+     * @throws CreateTemporaryFileException
+     */
+    private function initDocument()
     {
-        foreach ($fields as $field) {
-            $this->document->setValue('FIO', '8888888888' );
+        $this->file_title = $this->model->title . '.docx';
+
+        $template_title = $this->model->template->template_file_name;
+        $this->document = new TemplateProcessor(
+            Yii::getAlias('@templates') . "/$template_title");
+
+        $this->documentFieldValuesArr = $this->model->documentFieldValues;
+    }
+
+    public function setFields()
+    {
+        foreach ($this->documentFieldValuesArr as $docFieldValue) {
+            $this->document->setValue(
+                $docFieldValue->field->field_template,
+                $docFieldValue->value
+            );
         }
     }
 
-    public function save()
+    public function downloadDocument()
     {
         $this->document->saveAs($this->file_title);
-    }
 
-    public function creat3e()
-    {}
+        // Имя скачиваемого файла
+        $downloadFile = $this->file_title;
+        // Контент-тип означающий скачивание
+        header("Content-Type: application/octet-stream");
+        // Размер в байтах
+        header("Accept-Ranges: bytes");
+        // Размер файла
+        header("Content-Length: ".filesize($downloadFile));
+        // Расположение скачиваемого файла
+        header("Content-Disposition: attachment; filename=".$downloadFile);
+
+        // Прочитать файл
+        readfile($downloadFile);
+        unlink($this->document);
+    }
 }

@@ -29,7 +29,6 @@ function cut_title($str)
 
     <p>
         <?= Html::a('Список', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -44,7 +43,17 @@ function cut_title($str)
 
         'attributes' => [
             'id',
-            'title',
+            [
+                'label'=>'title',
+                'format'=>'raw',
+                'value' => function($model){
+                    return   $model->title . Html::a('    <i class="glyphicon glyphicon-pencil"></i>',
+                            Url::to(['template/update-title', 'id' => $model->id]), [
+                                'title' => 'update-title',
+//                              'class' => 'pull-right detail-button',
+                            ]);
+                }
+            ],
             'created_at',
             'updated_at',
             [
@@ -52,8 +61,8 @@ function cut_title($str)
                 'format'=>'raw',
                 'value' => function($model){
                     return   $model->template_file_name . Html::a('    <i class="glyphicon glyphicon-pencil"></i>',
-                            Url::to(['actualizar', 'id' => $model->id]), [
-                                'title' => 'Actualizar',
+                            Url::to(['template/update-file', 'id' => $model->id]), [
+                                'title' => 'update-file',
 //                              'class' => 'pull-right detail-button',
                             ]);
                 }

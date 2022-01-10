@@ -22,7 +22,10 @@ use yii\db\Expression;
  */
 class Template extends \yii\db\ActiveRecord
 {
-//    public $template;
+    const SCENARIO_UPDATE_TITLE = 'update';
+    const SCENARIO_UPDATE_FILE = 'update';
+
+    public $template;
     /**
      * {@inheritdoc}
      */
@@ -52,11 +55,19 @@ class Template extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'unique'],
             [['template_file_name', 'title'], 'required'],
-//            [['template'], 'required', 'message'=>'Укажите путь к файлу'],
-//            [['template'], 'file', 'maxSize' => '10000'],
-//            [['template'], 'file', 'skipOnEmpty' => false, 'extensions' => 'doc, docx, txt'],
+            [['template'], 'required', 'message'=>'Укажите путь к файлу'],
+            [['template'], 'file', 'maxSize' => '100000'],
+            [['template'], 'file', 'skipOnEmpty' => true, 'extensions' => 'docx'],
             [['title', 'template_file_name'], 'string', 'max' => 255],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[static::SCENARIO_UPDATE_TITLE] = ['created_at', 'updated_at', 'title', 'template_file_name'];
+        $scenarios[static::SCENARIO_UPDATE_FILE] = ['template'];
+        return $scenarios;
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace backend\modules\document\controllers;
 
-use backend\modules\document\models\TemplateDocumentField;
 use Yii;
 use backend\modules\document\models\Template;
 use backend\modules\document\models\TemplateSearch;
@@ -59,7 +58,6 @@ class TemplateController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $templateDocumentField = new TemplateDocumentField();
         $templateFieldDataProvider = new ActiveDataProvider([
             'query' => $model->getTemplateDocumentFields(),
             'pagination' => [
@@ -83,8 +81,21 @@ class TemplateController extends Controller
     {
         $model = new Template();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['template-document-field/create', 'template_id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->template = UploadedFile::getInstance($model, 'template');
+
+            if (!empty($model->template)) {
+                $pathToTemplates = Yii::getAlias('@templates');
+                $model->template_file_name = date('mdyHis') . '_' . $model->template->name;
+
+                if ($model->save()) {
+                    if (FileHelper::createDirectory($pathToTemplates, $mode = 0775, $recursive = true)) {
+                        $model->template->saveAs($pathToTemplates . '/' . $model->template_file_name);
+                    }
+                    return $this->redirect(['template-document-field/create', 'template_id' => $model->id]);
+                }
+                return $this->render('create', ['model' => $model]);
+            }
         }
 
         return $this->render('create', [
@@ -92,22 +103,66 @@ class TemplateController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Template model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+//    /**
+//     * Updates an existing Template model.
+//     * If update is successful, the browser will be redirected to the 'view' page.
+//     * @param integer $id
+//     * @return mixed
+//     * @throws NotFoundHttpException if the model cannot be found
+//     */
+//    public function actionUpdate($id)
+//    {
+//        $model = $this->findModel($id);
+//
+//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        }
+//
+//        return $this->render('update', [
+//            'model' => $model,
+//        ]);
+//    }
+
+    public function actionUpdateTitle($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = Template::SCENARIO_UPDATE_TITLE;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->render('_form_update_title', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionUpdateFile($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = Template::SCENARIO_UPDATE_FILE;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->template = UploadedFile::getInstance($model, 'template');
+
+            if (!empty($model->template)) {
+                $pathToTemplates = Yii::getAlias('@templates');
+
+                unlink($pathToTemplates . '/' . $model->template_file_name);
+
+                $model->template_file_name = date('mdyHis') . '_' . $model->template->name;
+
+                if ($model->save()) {
+                    if (FileHelper::createDirectory($pathToTemplates, $mode = 0775, $recursive = true)) {
+                        $model->template->saveAs($pathToTemplates . '/' . $model->template_file_name);
+                    }
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+                return $this->render('_form_update_file', ['model' => $model]);
+            }
+        }
+
+        return $this->render('_form_update_file', [
             'model' => $model,
         ]);
     }

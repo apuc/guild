@@ -69,11 +69,4 @@ class DocumentFieldValue extends \yii\db\ActiveRecord
     {
         return $this->hasOne(DocumentField::className(), ['id' => 'field_id']);
     }
-
-    public function getFieldsArray()
-    {
-        return '44';
-//            self::find()->select(['value', 'document_field.title', 'document_field.template'])
-//            ->joinWith('field')->asArray()->all();
-    }
 }
