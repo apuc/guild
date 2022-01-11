@@ -9,7 +9,7 @@ use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
-class TaskUserController extends ApiController
+class TaskUserController extends Controller
 {
     public function behaviors(): array
     {

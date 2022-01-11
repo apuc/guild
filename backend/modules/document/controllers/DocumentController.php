@@ -144,8 +144,11 @@ class DocumentController extends Controller
 
     public function actionCreateDocument($id)
     {
-        $documentService = new DocumentService($id);
-        $documentService->setFields();
-        $documentService->downloadDocument();
+        if(!empty($this->findModel($id)->template->template_file_name)){
+            $documentService = new DocumentService($id);
+            $documentService->setFields();
+            $documentService->downloadDocument();
+        }
+        return $this->redirect(['view', 'id' => $id]);
     }
 }

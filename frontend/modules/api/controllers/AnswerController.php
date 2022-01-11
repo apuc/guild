@@ -8,7 +8,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\web\NotFoundHttpException;
 use yii\rest\Controller;
 
-class AnswerController extends ApiController
+class AnswerController extends Controller
 {
     public function behaviors(): array
     {
