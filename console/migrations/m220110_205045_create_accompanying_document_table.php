@@ -14,7 +14,10 @@ class m220110_205045_create_accompanying_document_table extends Migration
     {
         $this->createTable('{{%accompanying_document}}', [
             'id' => $this->primaryKey(),
+            'document_id' => $this->integer(11),
+            'title' => $this->string()->notNull(),
         ]);
+        $this->addForeignKey('document_accompanying_document', 'accompanying_document', 'document_id', 'document', 'id');
     }
 
     /**
@@ -22,6 +25,7 @@ class m220110_205045_create_accompanying_document_table extends Migration
      */
     public function safeDown()
     {
+        $this->dropForeignKey('document_accompanying_document', 'accompanying_document');
         $this->dropTable('{{%accompanying_document}}');
     }
 }
