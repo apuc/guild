@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="document-view">
 
+<!--    --><?php // \common\models\Document::getDocumentWitchAndFieldValues(31); die?>
+
     <p>
         <?= Html::a('Список', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

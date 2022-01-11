@@ -51,8 +51,10 @@ class DocumentController extends Controller
         }
 
         $document = Document::find()
-            ->where(['document.id' => $document_id])
-            ->all();
+        ->joinWith(['documentFieldValues.field'])
+        ->where(['document.id' => $document_id])
+        ->asArray()
+        ->all();
 
         if(empty($document)) {
             throw new NotFoundHttpException('There is no such document');

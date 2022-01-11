@@ -2,12 +2,12 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\Document;
 use common\models\DocumentFieldValue;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\NotFoundHttpException;
 use yii\rest\Controller;
+use yii\web\ServerErrorHttpException;
 
 class DocumentFieldValueController extends Controller
 {
@@ -28,7 +28,7 @@ class DocumentFieldValueController extends Controller
 //            'get-task' => ['get'],
             'document-field-value-list' => ['get'],
 //            'create-task' => ['post'],
-//            'update-task' => ['put', 'patch'],
+            'update' => ['post'],
         ];
     }
 
@@ -49,5 +49,25 @@ class DocumentFieldValueController extends Controller
         }
 
         return $fieldValues;
+    }
+
+    public function actionUpdate()
+    {
+        $model = $this->findModelDocumentFieldValue(Yii::$app->request->post('document_field_value_id'));
+        if(empty($model)) {
+            throw new NotFoundHttpException('The document field value does not exist');
+        }
+
+        $model->load(Yii::$app->request->getBodyParams(), '');
+        if ($model->save() === false && !$model->hasErrors()) {
+            throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
+        }
+
+        return $model;
+    }
+
+    private function findModelDocumentFieldValue($document_field_value_id)
+    {
+        return DocumentFieldValue::findOne($document_field_value_id);
     }
 }
