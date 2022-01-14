@@ -7,8 +7,8 @@ use yii\helpers\ArrayHelper;
 
 class TemplateDocumentTypeHelper
 {
-    const STATUS_ACT = 0;
-    const STATUS_CONTRACT = 1;
+    const STATUS_ACT = 1;
+    const STATUS_CONTRACT = 2;
 
     public static function getDocumentTypeList() :array
     {

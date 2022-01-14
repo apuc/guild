@@ -1,5 +1,6 @@
 <?php
 
+use common\helpers\TemplateDocumentTypeHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -25,6 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             'created_at',
             'updated_at',
+            [
+                'attribute' => 'document_type',
+//                'format' => 'raw',
+                'filter' => TemplateDocumentTypeHelper::getDocumentTypeList(),
+                'value' => function($model){
+                    return TemplateDocumentTypeHelper::getDocumentType($model->document_type);
+                }
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
