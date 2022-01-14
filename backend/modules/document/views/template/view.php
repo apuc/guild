@@ -11,16 +11,24 @@ use yii\grid\GridView;
 /* @var $templateFieldDataProvider yii\data\ActiveDataProvider  */
 /* @var $model backend\modules\document\models\Template */
 
-$this->title = $model->title;
+$this->title = cut_title($model->title);
 $this->params['breadcrumbs'][] = ['label' => 'Templates', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
+
+function cut_title($str)
+{
+    if(strlen($str) > 35){
+        return mb_substr($str, 0, 35, 'UTF-8') . '...';
+    }
+    return $str;
+}
 ?>
+
 <div class="template-view">
 
     <p>
         <?= Html::a('Список', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -36,33 +44,28 @@ YiiAsset::register($this);
         'attributes' => [
             'id',
             [
-                'attribute'=>'title',
+                'label'=>'title',
                 'format'=>'raw',
                 'value' => function($model){
-                    return   $model->title . Html::a(
-                        '<i class="glyphicon glyphicon-pencil"></i>', ['update', 'id' => $model->id],
-                        [
-                            'title' => 'Update',
-                            'class' => 'pull-right detail-button',
-                        ]
-                    );
+                    return   $model->title . Html::a('    <i class="glyphicon glyphicon-pencil"></i>',
+                            Url::to(['template/update-title', 'id' => $model->id]), [
+                                'title' => 'update-title',
+//                              'class' => 'pull-right detail-button',
+                            ]);
                 }
             ],
             'created_at',
             'updated_at',
-
             [
-                    'label'=>'template_file_name',
-                    'format'=>'raw',
-                    'value' => function($model){
-
-                        return   $model->template_file_name . Html::a('<i class="glyphicon glyphicon-pencil"></i>', Url::to(['actualizar', 'id' => $model->id]), [
-                                 'title' => 'Actualizar',
-//                                 'class' => 'pull-right detail-button',
-                             ]);
-                     }
-
-
+                'label'=>'template_file_name',
+                'format'=>'raw',
+                'value' => function($model){
+                    return   $model->template_file_name . Html::a('    <i class="glyphicon glyphicon-pencil"></i>',
+                            Url::to(['template/update-file', 'id' => $model->id]), [
+                                'title' => 'update-file',
+//                              'class' => 'pull-right detail-button',
+                            ]);
+                }
             ]
         ],
     ]) ?>
@@ -95,9 +98,13 @@ YiiAsset::register($this);
 
             [
                 'attribute' => 'field_id',
-                'filter' => DocumentField::find()->select(['title', 'id'])->indexBy('id')->column(),
                 'value' => 'field.title',
             ],
+            [
+                'attribute' => 'field.field_template',
+                'value' => 'field.field_template',
+            ],
+
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}{delete}',

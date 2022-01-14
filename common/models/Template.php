@@ -3,7 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 
 /**
@@ -20,6 +22,9 @@ use yii\db\Expression;
  */
 class Template extends \yii\db\ActiveRecord
 {
+    const SCENARIO_UPDATE_TITLE = 'update';
+    const SCENARIO_UPDATE_FILE = 'update';
+
     public $template;
     /**
      * {@inheritdoc}
@@ -51,10 +56,18 @@ class Template extends \yii\db\ActiveRecord
             [['title'], 'unique'],
             [['template_file_name', 'title'], 'required'],
             [['template'], 'required', 'message'=>'Укажите путь к файлу'],
-            [['template'], 'file', 'maxSize' => '10000'],
-            [['template'], 'file', 'skipOnEmpty' => false, 'extensions' => 'doc, docx, txt'],
+            [['template'], 'file', 'maxSize' => '100000'],
+            [['template'], 'file', 'skipOnEmpty' => true, 'extensions' => 'docx'],
             [['title', 'template_file_name'], 'string', 'max' => 255],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[static::SCENARIO_UPDATE_TITLE] = ['created_at', 'updated_at', 'title', 'template_file_name'];
+        $scenarios[static::SCENARIO_UPDATE_FILE] = ['template'];
+        return $scenarios;
     }
 
     /**
@@ -88,7 +101,7 @@ class Template extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getDocuments()
     {
@@ -96,10 +109,15 @@ class Template extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTemplateDocumentFields()
     {
         return $this->hasMany(TemplateDocumentField::className(), ['template_id' => 'id']);
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

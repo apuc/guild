@@ -3,7 +3,6 @@
 namespace common\helpers;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 class TimeHelper

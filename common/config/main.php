@@ -28,6 +28,10 @@ return [
                     'path' => 'media/upload',
                     'name' => 'Изображения',
                 ],
+                [
+                    'basePath' => '@templates',
+                    'name' => 'Шаблоны документов' //перевод Yii::t($category, $message)
+                ],
             ],
             'watermark' => [
                 'source' => __DIR__ . '/logo.png', // Path to Water mark image

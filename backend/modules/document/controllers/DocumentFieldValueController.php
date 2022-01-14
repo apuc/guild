@@ -97,7 +97,10 @@ class DocumentFieldValueController extends Controller
         $documentFieldValues = [];
 
         if (empty($fieldsIdTitleList)) {
-            $documentFieldValues = [new DocumentFieldValue()];
+            return $this->redirect([
+                'document/view',
+                'id' => $document_id,
+            ]);
         }
         else {
             foreach ($fieldsIdTitleList as $fieldsIdTitle){

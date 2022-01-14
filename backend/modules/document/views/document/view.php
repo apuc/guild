@@ -1,6 +1,7 @@
 <?php
 
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -14,6 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="document-view">
+
+<!--    --><?php // \common\models\Document::getDocumentWitchAndFieldValues(31); die?>
 
     <p>
         <?= Html::a('Список', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -34,10 +37,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             'created_at',
             'updated_at',
-            'template_id',
-            'manager_id',
+            [
+                'attribute' => 'template_id',
+                'value' => ArrayHelper::getValue($model,'template.title'),
+            ],
+            [
+                'attribute' => 'manager_id',
+                'value' => ArrayHelper::getValue($model,'manager.userCard.fio')
+            ],
         ],
     ]) ?>
+
+    <p>
+        <?= Html::a(
+            'Скачать файл',
+            ['document/create-document', 'id' => $model->id],
+            ['class' => 'btn btn-primary']
+        ) ?>
+    </p>
 
     <div>
         <h2>

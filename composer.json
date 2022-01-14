@@ -24,7 +24,6 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "kavalar/hhapi": "@dev",
         "mirocow/yii2-eav": "*",
-        "kartik-v/yii2-widget-fileinput": "dev-master",
         "2amigos/yii2-file-upload-widget": "~1.0",
         "kartik-v/yii2-grid": "dev-master",
         "edofre/yii2-fullcalendar-scheduler": "V1.1.12",
@@ -33,7 +32,9 @@
         "kavalar/yii2-telegram-bot": "^0.1.0",
         "2amigos/yii2-transliterator-helper": "*",
         "ext-json": "*",
-        "kartik-v/yii2-widget-depdrop": "dev-master"
+        "kartik-v/yii2-widget-depdrop": "dev-master",
+        "phpoffice/phpword": "^0.18.2",
+        "kartik-v/yii2-widget-fileinput": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

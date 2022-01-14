@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveQuery;
+use yii\db\StaleObjectException;
 
 /**
  * This is the model class for table "manager".
@@ -48,6 +49,10 @@ class Manager extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @throws StaleObjectException
+     * @throws \Throwable
+     */
     public function beforeDelete()
     {
         foreach ($this->managerEmployees as $employee){

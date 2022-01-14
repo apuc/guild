@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'template')->widget(FileInput::classname(), [
         'options' => ['accept' => 'text/*'],
         'pluginOptions' => [
-                'allowedFileExtensions'=>['doc','docx','txt'],'showUpload' => true
+            'allowedFileExtensions'=>['docx'],'showUpload' => true
         ],
     ]);   ?>
 

@@ -56,7 +56,7 @@ class TemplateDocumentField extends \yii\db\ActiveRecord
      */
     public function getField()
     {
-        return $this->hasOne(DocumentField::className(), ['id' => 'field_id']);
+        return $this->hasOne(DocumentField::className(), ['id' => 'field_id'])->asArray();
     }
 
     /**

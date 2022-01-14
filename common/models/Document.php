@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\db\StaleObjectException;
 
@@ -87,7 +88,7 @@ class Document extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getManager()
     {
@@ -95,7 +96,7 @@ class Document extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTemplate()
     {
@@ -103,10 +104,19 @@ class Document extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getDocumentFieldValues()
+    public function getDocumentFieldValues(): ActiveQuery
     {
         return $this->hasMany(DocumentFieldValue::className(), ['document_id' => 'id']);
+    }
+
+    public static function getDocument($document_id)
+    {
+        return self::find()
+            ->joinWith(['documentFieldValues.field'])
+            ->where(['document.id' => $document_id])
+            ->asArray()
+            ->all();
     }
 }

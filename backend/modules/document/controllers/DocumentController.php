@@ -10,6 +10,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use common\services\DocumentService;
+
 /**
  * DocumentController implements the CRUD actions for Document model.
  */
@@ -137,5 +139,16 @@ class DocumentController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+
+    public function actionCreateDocument($id)
+    {
+        if(!empty($this->findModel($id)->template->template_file_name)){
+            $documentService = new DocumentService($id);
+            $documentService->setFields();
+            $documentService->downloadDocument();
+        }
+        return $this->redirect(['view', 'id' => $id]);
     }
 }
