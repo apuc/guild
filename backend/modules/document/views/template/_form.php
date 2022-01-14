@@ -1,5 +1,6 @@
 <?php
 
+use common\helpers\TemplateDocumentTypeHelper;
 use kartik\file\FileInput;
 use mihaildev\elfinder\InputFile;
 use yii\helpers\Html;
@@ -16,6 +17,13 @@ use yii\widgets\ActiveForm;
         'options' => ['enctype'=>'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'document_type')->dropDownList(
+        TemplateDocumentTypeHelper::getDocumentTypeList(),
+        [
+            'prompt' => 'Выберите'
+        ]
+    ) ?>
 
     <?= $form->field($model, 'template')->widget(FileInput::classname(), [
         'options' => ['accept' => 'text/*'],

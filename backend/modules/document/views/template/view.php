@@ -1,6 +1,7 @@
 <?php
 
 use backend\modules\document\models\DocumentField;
+use common\helpers\TemplateDocumentTypeHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\YiiAsset;
@@ -66,7 +67,12 @@ function cut_title($str)
 //                              'class' => 'pull-right detail-button',
                             ]);
                 }
-            ]
+            ],
+            [
+                'attribute' => 'document_type',
+                'format' => 'raw',
+                'value' => TemplateDocumentTypeHelper::getDocumentType($model->document_type),
+            ],
         ],
     ]) ?>
 
