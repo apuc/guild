@@ -26,7 +26,7 @@ class ProfileService
 
     private function isMyProfile()
     {
-        if ($this->id === $this->searcherID) {
+        if ($this->id == $this->searcherID) {
             return true;
         }
         return false;
@@ -38,7 +38,7 @@ class ProfileService
            return false;
        }
 
-       if ($this->findEmploee()) {
+       if ($this->isMyEmploee()) {
            return true;
        }
        return false;
@@ -46,16 +46,17 @@ class ProfileService
 
     private function amIManager()
     {
-        if (Manager::findOne($this->searcherID)) {
+        if (Manager::find()->where(['user_card_id' => $this->searcherID])->exists()) {
             return true;
         }
         return false;
     }
 
-    private function findEmploee()
+    private function isMyEmploee()
     {
+        $manager = Manager::find()->where(['user_card_id' => $this->searcherID])->one();
         $exist = ManagerEmployee::find()
-            ->where(['manager_id' => $this->searcherID, 'user_card_id' => $this->id])
+            ->where(['manager_id' => $manager->id, 'user_card_id' => $this->id])
             ->exists();
 
         if ($exist) {

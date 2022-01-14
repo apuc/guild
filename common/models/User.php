@@ -221,16 +221,6 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(UserCard::class, ['id_user' => 'id']);
     }
 
-//    public function getManager()
-//    {
-//        return $this->hasOne(Manager::class, ['user_id' => 'id']);
-//    }
-//
-//    public function getManagerEmployee()
-//    {
-//        return $this->hasMany(ManagerEmployee::className(), ['employee_id' => 'id']);
-//    }
-
     public function getProjectUser()
     {
         return $this->hasMany(ProjectUser::className(), ['user_id' => 'id']);
