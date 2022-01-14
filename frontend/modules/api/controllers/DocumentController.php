@@ -14,18 +14,8 @@ use yii\web\NotFoundHttpException;
 use yii\rest\Controller;
 use yii\web\ServerErrorHttpException;
 
-class DocumentController extends Controller
+class DocumentController extends ApiController
 {
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-
-        return $behaviors;
-    }
 
     public function verbs(): array
     {

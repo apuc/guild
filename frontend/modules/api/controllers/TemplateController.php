@@ -5,22 +5,14 @@ namespace frontend\modules\api\controllers;
 use common\models\Document;
 use common\models\Template;
 use Yii;
+use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
+use yii\filters\ContentNegotiator;
 use yii\web\NotFoundHttpException;
-use yii\rest\Controller;
+use yii\web\Response;
 
-class TemplateController extends Controller
+class TemplateController extends ApiController
 {
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-
-        return $behaviors;
-    }
 
     public function verbs(): array
     {
@@ -34,7 +26,7 @@ class TemplateController extends Controller
     {
         $template = Template::find()->asArray()->all();
 
-        if(empty($template)) {
+        if (empty($template)) {
             throw new NotFoundHttpException('Documents are not assigned');
         }
 
@@ -44,8 +36,7 @@ class TemplateController extends Controller
     public function actionGetTemplateFields(): array
     {
         $template_id = Yii::$app->request->get('template_id');
-        if(empty($template_id) or !is_numeric($template_id))
-        {
+        if (empty($template_id) or !is_numeric($template_id)) {
             throw new NotFoundHttpException('Incorrect template ID');
         }
 
@@ -55,7 +46,7 @@ class TemplateController extends Controller
             ->asArray()
             ->all();
 
-        if(empty($templates)) {
+        if (empty($templates)) {
             throw new NotFoundHttpException('Documents are not assigned');
         }
 
