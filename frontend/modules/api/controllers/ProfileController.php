@@ -6,6 +6,7 @@ use common\behaviors\GsCors;
 use common\classes\Debug;
 use common\models\InterviewRequest;
 use common\models\User;
+use common\services\ProfileService;
 use frontend\modules\api\models\ProfileSearchForm;
 use kavalar\BotNotificationTemplateProcessor;
 use kavalar\TelegramBotService;
@@ -13,6 +14,7 @@ use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\ContentNegotiator;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 class ProfileController extends ApiController
@@ -49,6 +51,27 @@ class ProfileController extends ApiController
         }
 
         return $searchModel->byParams();
+    }
+
+    public function actionProfileWithReportPermission($id, $searcherID)
+    {
+        $searchModel = new ProfileSearchForm();
+        $searchModel->attributes = \Yii::$app->request->get();
+
+        if ($id && $searcherID) {
+            $profile = $searchModel->byId();
+
+            $profileService = new ProfileService($searcherID, $id);
+            if($profileService->checkReportePermission()) {
+                $profile += ['report_permission' => '1'];
+            }
+            else {
+                $profile += ['report_permission' => '0'];
+            }
+            return $profile;
+        }
+
+        throw new BadRequestHttpException(json_encode('Missing required parameter'));
     }
 
     public function actionAddToInterview()

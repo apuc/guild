@@ -120,16 +120,4 @@ class Template extends \yii\db\ActiveRecord
     {
         return $this->title;
     }
-
-//TODO no need, delete
-    public function getDocumentFields()
-    {
-        $fieldsArray = [];
-
-        foreach ($this->templateDocumentFields as $templateDocField) {
-            $fieldsArray[] = $templateDocField->field;
-        }
-
-        return $fieldsArray;
-    }
 }
