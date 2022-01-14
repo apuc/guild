@@ -16,6 +16,7 @@ use yii\db\Expression;
  * @property string $created_at
  * @property string $updated_at
  * @property string $template_file_name
+ * @property int $document_type
  *
  * @property Document[] $documents
  * @property TemplateDocumentField[] $templateDocumentFields
@@ -54,7 +55,8 @@ class Template extends \yii\db\ActiveRecord
         return [
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'unique'],
-            [['template_file_name', 'title'], 'required'],
+            [['document_type'], 'integer'],
+            [['template_file_name', 'title', 'document_type'], 'required'],
             [['template'], 'required', 'message'=>'Укажите путь к файлу'],
             [['template'], 'file', 'maxSize' => '100000'],
             [['template'], 'file', 'skipOnEmpty' => true, 'extensions' => 'docx'],
@@ -81,6 +83,7 @@ class Template extends \yii\db\ActiveRecord
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата изменения',
             'template_file_name' => 'Файл шаблона',
+            'document_type' => 'Тип документа',
         ];
     }
 

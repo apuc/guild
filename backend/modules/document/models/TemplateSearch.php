@@ -17,8 +17,8 @@ class TemplateSearch extends Template
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['title', 'created_at', 'updated_at', 'template_file_name'], 'safe'],
+            [['id', 'document_type'], 'integer'],
+            [['title', 'document_type', 'created_at', 'updated_at', 'template_file_name'], 'safe'],
         ];
     }
 
@@ -64,7 +64,8 @@ class TemplateSearch extends Template
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'template_file_name', $this->template_file_name]);
+            ->andFilterWhere(['like', 'template_file_name', $this->template_file_name])
+            ->andFilterWhere(['like', 'document_type', $this->document_type]);
 
         return $dataProvider;
     }
