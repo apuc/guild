@@ -24,7 +24,14 @@ class TemplateController extends ApiController
 
     public function actionGetTemplateList(): array
     {
-        $template = Template::find()->asArray()->all();
+        $document_type = Yii::$app->request->get('document_type');
+
+        if (!empty($document_type)) {
+            $template = Template::find()->where(['document_type' => $document_type])->asArray()->all();
+        }
+        else {
+            $template = Template::find()->asArray()->all();
+        }
 
         if (empty($template)) {
             throw new NotFoundHttpException('Documents are not assigned');
