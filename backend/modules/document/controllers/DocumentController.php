@@ -2,6 +2,8 @@
 
 namespace backend\modules\document\controllers;
 
+use PhpOffice\PhpWord\Exception\CopyFileException;
+use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
 use Yii;
 use backend\modules\document\models\Document;
 use backend\modules\document\models\DocumentSearch;
@@ -10,7 +12,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use common\services\DocumentService;
+use common\services\DocumentFileService;
+use yii\web\Response;
 
 /**
  * DocumentController implements the CRUD actions for Document model.
@@ -142,10 +145,15 @@ class DocumentController extends Controller
     }
 
 
-    public function actionCreateDocument($id)
+    /**
+     * @throws CopyFileException
+     * @throws NotFoundHttpException
+     * @throws CreateTemporaryFileException
+     */
+    public function actionCreateDocument($id): Response
     {
         if(!empty($this->findModel($id)->template->template_file_name)){
-            $documentService = new DocumentService($id);
+            $documentService = new DocumentFileService($id);
             $documentService->setFields();
             $documentService->downloadDocument();
         }

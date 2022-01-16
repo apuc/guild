@@ -2,14 +2,8 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\Document;
-use common\models\Template;
-use Yii;
-use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBearerAuth;
-use yii\filters\ContentNegotiator;
+use common\services\TemplateService;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
 
 class TemplateController extends ApiController
 {
@@ -19,44 +13,57 @@ class TemplateController extends ApiController
         return [
             'get-template-list' => ['get'],
             'get-template-fields' => ['get'],
+            'get-template' => ['get'],
         ];
     }
 
-    public function actionGetTemplateList(): array
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionGetTemplateList($document_type = null): array
     {
-        $document_type = Yii::$app->request->get('document_type');
+        $templateList = TemplateService::getTemplateList($document_type);
 
-        if (!empty($document_type)) {
-            $template = Template::find()->where(['document_type' => $document_type])->asArray()->all();
-        }
-        else {
-            $template = Template::find()->asArray()->all();
+        if (empty($templateList)) {
+            throw new NotFoundHttpException('No templates found');
         }
 
-        if (empty($template)) {
-            throw new NotFoundHttpException('Documents are not assigned');
-        }
-
-        return $template;
+        return $templateList;
     }
 
-    public function actionGetTemplateFields(): array
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionGetTemplateFields($template_id): array
     {
-        $template_id = Yii::$app->request->get('template_id');
         if (empty($template_id) or !is_numeric($template_id)) {
             throw new NotFoundHttpException('Incorrect template ID');
         }
 
-        $templates = Template::find()
-            ->joinWith('templateDocumentFields.field')
-            ->where(['template.id' => $template_id])
-            ->asArray()
-            ->all();
+        $templateWithFields = TemplateService::getTemplateWithFields($template_id);
 
-        if (empty($templates)) {
-            throw new NotFoundHttpException('Documents are not assigned');
+        if (empty($templateWithFields)) {
+            throw new NotFoundHttpException('No template found');
         }
 
-        return $templates;
+        return $templateWithFields;
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionGetTemplate($template_id): array
+    {
+        if (empty($template_id) or !is_numeric($template_id)) {
+            throw new NotFoundHttpException('Incorrect template ID');
+        }
+
+        $template = TemplateService::getTemplate($template_id);
+
+        if (empty($template)) {
+            throw new NotFoundHttpException('No template found');
+        }
+
+        return $template;
     }
 }
