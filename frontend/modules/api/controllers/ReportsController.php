@@ -69,6 +69,27 @@ class ReportsController extends ApiController
         return array_merge($report->toArray(), ['tasks' => $report->_task]);
     }
 
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionFindByDate(): array
+    {
+        $reportsModel = new ReportSearchForm();
+
+        $params = Yii::$app->request->get();
+        if(!isset($params['user_card_id']) or !isset($params['date'])){
+            throw new NotFoundHttpException('Required parameter are missing!');
+        }
+
+        $reportsModel->attributes = $params;
+        $reportsModel->byDate = true;
+
+        if(!$reportsModel->validate()){
+            return $reportsModel->errors;
+        }
+        return $reportsModel->byParams();
+    }
+
     public function actionCreate()
     {
         $params = Yii::$app->request->post();
