@@ -63,7 +63,7 @@ class UserQuestionnaire extends ActiveRecord
             [['questionnaire_id', 'user_id', 'status'], 'required'],
             [['questionnaire_id', 'user_id', 'score', 'status'], 'integer'],
             [['percent_correct_answers'], 'number'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'testing_date'], 'safe'],
             [['uuid'], 'string', 'max' => 36],
             [['uuid'], 'unique'],
             [['questionnaire_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questionnaire::className(), 'targetAttribute' => ['questionnaire_id' => 'id']],
@@ -74,8 +74,7 @@ class UserQuestionnaire extends ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if (empty($this->uuid))
-            {
+            if (empty($this->uuid)) {
                 $this->uuid = UUIDHelper::v4();
             }
             return true;
@@ -98,6 +97,7 @@ class UserQuestionnaire extends ActiveRecord
             'status' => 'Статус',
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
+            'testing_date' => 'Дата тестирования',
             'percent_correct_answers' => 'Процент правильных ответов',
         ];
     }
@@ -178,8 +178,18 @@ class UserQuestionnaire extends ActiveRecord
 
     public static function findActiveUserQuestionnaires($user_id): array
     {
-        return self::find()->where(['user_id' => $user_id])
-            ->andWhere(['status' => '1'])
+        $models =  self::find()
+            ->where(['user_id' => $user_id])
+            ->andWhere(['user_questionnaire.status' => '1'])
             ->all();
+
+        $modelsArr = array();
+        foreach ($models as $model) {
+            $modelsArr[] = array_merge($model->toArray(), [
+                'questionnaire_title' => $model->getQuestionnaireTitle()
+            ]);
+        }
+
+        return $modelsArr;
     }
 }

@@ -31,7 +31,7 @@ class UserQuestionnaireController extends Controller
     /**
      * @throws NotFoundHttpException
      */
-    public function actionQuestionnairesList(): array
+    public function actionQuestionnairesList()//: array
     {
         $user_id = Yii::$app->request->get('user_id');
 
@@ -40,20 +40,20 @@ class UserQuestionnaireController extends Controller
             throw new NotFoundHttpException('Incorrect user ID');
         }
 
-        $userQuestionnaireModel = UserQuestionnaire::findActiveUserQuestionnaires($user_id);
-        if(empty($userQuestionnaireModel)) {
+        $userQuestionnaireModels = UserQuestionnaire::findActiveUserQuestionnaires($user_id);
+        if(empty($userQuestionnaireModels)) {
             throw new NotFoundHttpException('Active questionnaire not found');
         }
 
-        array_walk( $userQuestionnaireModel, function(&$arr){
+        array_walk( $userQuestionnaireModels, function(&$arr){
             unset(
                 $arr['questionnaire_id'],
-                $arr['created_at'],
-                $arr['updated_at'],
+//                $arr['created_at'],
+//                $arr['updated_at'],
                 $arr['id'],
             );
         });
 
-        return  $userQuestionnaireModel;
+        return  $userQuestionnaireModels;
     }
 }
