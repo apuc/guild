@@ -48,7 +48,7 @@ class UserController extends ActiveController
                         'X-Requested-With'
                     ],
                 ]
-            ]
+            ],
         ]);
     }
 

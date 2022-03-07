@@ -10,7 +10,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 
-class QuestionController extends Controller
+class QuestionController extends ApiController
 {
     public function behaviors()
     {

@@ -8,18 +8,18 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\web\NotFoundHttpException;
 use yii\rest\Controller;
 
-class AnswerController extends Controller
+class AnswerController extends ApiController
 {
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-
-        return $behaviors;
-    }
+//    public function behaviors(): array
+//    {
+//        $behaviors = parent::behaviors();
+//
+//        $behaviors['authenticator']['authMethods'] = [
+//            HttpBearerAuth::className(),
+//        ];
+//
+//        return $behaviors;
+//    }
 
     public function verbs(): array
     {

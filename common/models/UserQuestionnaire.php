@@ -173,7 +173,7 @@ class UserQuestionnaire extends ActiveRecord
      */
     public static function getQuestionnaireId($uuid)
     {
-        return ArrayHelper::getValue(self::find()->where(['uuid' => $uuid])->one(), 'id');
+        return ArrayHelper::getValue(self::find()->where(['uuid' => $uuid])->one(), 'questionnaire_id');
     }
 
     public static function findActiveUserQuestionnaires($user_id): array
