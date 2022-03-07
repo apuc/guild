@@ -88,7 +88,15 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'vc_text',
                 'format' => 'raw'
-            ]
+            ],
+            [
+                'attribute' => 'test_task_getting_date',
+                'format' => ['datetime', 'php:d.m.Y']
+            ],
+            [
+                'attribute' => 'test_task_complete_date',
+                'format' => ['datetime', 'php:d.m.Y']
+            ],
         ],
     ]) ?>
 
