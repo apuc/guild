@@ -151,7 +151,15 @@ class CalendarHelper {
     }
 
     static _getCalendarDay(dayNum, className = ``, color = ``) {
-        return `<div class="calendar__day ${className}">
+        let day = ''
+        if (color === 'danger' && className !== 'inactive') {
+            day = 'empty_day'
+        }
+        else if (color === 'success' && className !== 'inactive') {
+            day = 'fully_day'
+        }
+
+        return `<div class="calendar__day ${className} ${day} ">
                 <span class="calendar__date ${color}">${dayNum}</span>
             </div>`;
     }
