@@ -110,6 +110,8 @@
                         ],
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
+                    ['label' => 'Тестовые задания', 'icon' => 'file-text-o', 'url' => ['/test/test-task'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('confidential_information')],
+
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
