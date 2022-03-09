@@ -384,6 +384,14 @@
     cursor: pointer;
 }
 
+.fully_day {
+    background-color: #99ff99;
+}
+
+.empty_day {
+    background-color: #ff9999;
+}
+
 .active_day {
     background: #cdcfce;
 }

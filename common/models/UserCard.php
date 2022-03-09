@@ -36,6 +36,8 @@ use yii\helpers\ArrayHelper;
  * @property int $position_id
  * @property int $city
  * @property int $level
+ * @property string $test_task_getting_date
+ * @property string $test_task_complete_date
  *
  * @property FieldsValue[] $fieldsValues
  * @property ProjectUser[] $projectUsers
@@ -103,7 +105,7 @@ class UserCard extends \yii\db\ActiveRecord
         return [
             [['fio', 'status', 'gender', 'email', 'level', 'position_id'], 'required'],
             [['gender', 'status', 'position_id', 'id_user', 'level', 'years_of_exp'], 'integer'],
-            [['dob', 'created_at', 'updated_at', 'deleted_at', 'vc_text', 'vc_text_short'], 'safe'],
+            [['dob', 'created_at', 'updated_at', 'deleted_at', 'vc_text', 'vc_text_short', 'test_task_getting_date', 'test_task_complete_date'], 'safe'],
             ['email', 'unique', 'message'=>'Почтовый адрес уже используется'],
             [['fio', 'passport', 'photo', 'email', 'resume', 'city', 'link_vk', 'link_telegram', 'specification'], 'string', 'max' => 255],
             [['salary'], 'string', 'max' => 100],
@@ -140,7 +142,9 @@ class UserCard extends \yii\db\ActiveRecord
             'vc_text_short' => 'Резюме короткий текст',
             'level' => 'Уровень',
             'years_of_exp' => 'Лет опыта',
-            'specification' => 'Спецификация'
+            'specification' => 'Спецификация',
+            'test_task_getting_date' => 'Дата получения тестового',
+            'test_task_complete_date' => 'Дата выполнения тестового',
         ];
     }
 

@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-    <div class="row" style="padding-bottom: 15px">
+    <div class="row" style="padding-bottom: 15px">add_a_test_task_completion_date_to_ucer_card
         <div class="imgUpload col-xs-6">
             <div class="media__upload_img"><img src="<?= $model->photo; ?>" width="100px"/></div>
             <?php
@@ -176,6 +176,28 @@ use yii\widgets\ActiveForm;
             'language' => 'ru',
         ]
     ]); ?>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <?= $form->field($model, 'test_task_getting_date')->input(
+                'date',
+                [
+                    'language' => 'en',
+                    "data-format" => "DD MMMM YYYY",
+                ]
+            ) ?>
+        </div>
+        <div class="col-xs-6">
+            <?= $form->field($model, 'test_task_complete_date')->input(
+                'date',
+                [
+                    'language' => 'en',
+                    "data-format" => "DD MMMM YYYY",
+                ]
+            ) ?>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-xs-12">
             <?= $form->field($model, 'achievements')->widget(Select2::class,
