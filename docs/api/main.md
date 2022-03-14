@@ -576,6 +576,63 @@
   "type": "yii\\web\\NotFoundHttpException"
 }
 ```
+
+### Проверить ответы в анкете
+`https://guild.craft-group.xyz/api/question/get-questions`
+<p>
+    Для выполнения проверки анкеты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed
+</p>
+
+<p>
+    Требуемые параметры запроса:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначеной пользователю
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+
+<p>
+    Возвращает <b>массив</b> объектов <b>Вопросов</b>. <br>
+    Каждый объект <b>Вопрос</b> имеет такой вид:
+</p>
+
+```json5
+{
+  "id": 1,
+  "questionnaire_id": 1,
+  "user_id": 1,
+  "uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
+  "created_at": "2021-10-20 13:06:12",
+  "updated_at": {
+    "expression": "NOW()",
+    "params": []
+  },
+  "score": 4,
+  "status": 1,
+  "percent_correct_answers": 0.5,
+  "testing_date": null
+}
+```
+
 ### Вопросы анкеты
 `https://guild.craft-group.xyz/api/question/get-questions`
 <p>
