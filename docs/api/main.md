@@ -819,6 +819,14 @@
     </tr>
     <tr>
         <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя
+        </td>
+    </tr>
+     <tr>
+        <td>
             question_id
         </td>
         <td>
@@ -835,7 +843,7 @@
     </tr>
     <tr>
         <td>
-            uuid
+            user_questionnaire_uuid
         </td>
         <td>
              UUID анкеты назначенной пользователю(string 36)
@@ -843,10 +851,18 @@
     </tr>
 </table>
 <p>
-    Пример запроса:
+    Пример тела запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/user-response/set-responses?user_id=1&user_questionnaire_id=1&question_id=7&response_body=user response string`
+```json5
+{
+    "user_id": "1",
+    "question_id": "7",
+    "response_body": "oooooooooooo111111111",
+    "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5"
+}
+```
+`https://guild.craft-group.xyz/api/user-response/set-response`
 
 <p>
     Возвращает объект <b>Ответа</b>. <br>
@@ -855,21 +871,76 @@
 
 ```json5
 {
-  "user_id": "1",
-  "question_id": "7",
-  "response_body": "user response string",
-  "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
-  "created_at": {
-    "expression": "NOW()",
-    "params": []
-  },
-  "updated_at": {
-    "expression": "NOW()",
-    "params": []
-  },
-  "id": 90
+    "user_id": "1",
+    "question_id": "7",
+    "response_body": "oooooooooooo111111111",
+    "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
+    "created_at": {
+        "expression": "NOW()",
+        "params": []
+    },
+    "updated_at": {
+        "expression": "NOW()",
+        "params": []
+    },
+    "id": 191,
+    "answer_flag": 0
 }
 ```
+<p>
+    Ответ содержит:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя
+        </td>
+    </tr>
+     <tr>
+        <td>
+            question_id
+        </td>
+        <td>
+             ID вопроса(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            response_body
+        </td>
+        <td>
+             Ответ пользователя(string 255)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначенной пользователю(string 36)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            answer_flag
+        </td>
+        <td>
+            Флаг ответа(1 - верно, 0 - ложно)
+        </td>
+    </tr>
+</table>
+
 <p>
     В случаии ошибки в запросе будет отправлено сообщение следующего вида:
 </p>
@@ -902,6 +973,14 @@
             Значение
         </th>
     </tr>
+     <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя
+        </td>
+    </tr>
     <tr>
         <td>
             question_id
@@ -920,7 +999,7 @@
     </tr>
     <tr>
         <td>
-            uuid
+            user_questionnaire_uuid
         </td>
         <td>
              UUID анкеты назначенной пользователю(string 36)
@@ -970,12 +1049,13 @@
       "expression": "NOW()",
       "params": []
     },
-    "id": 137
+    "id": 192,
+    "answer_flag": 0
   },
   {
     "user_id": "1",
-    "question_id": "4",
-    "response_body": "oooooooooooo2222222",
+    "question_id": "7",
+    "response_body": "oooooooooooo111111111",
     "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
     "created_at": {
       "expression": "NOW()",
@@ -985,10 +1065,64 @@
       "expression": "NOW()",
       "params": []
     },
-    "id": 138
+    "id": 193,
+    "answer_flag": 0
   }
 ]
 ```
+<p>
+    Ответ содержит:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя
+        </td>
+    </tr>
+     <tr>
+        <td>
+            question_id
+        </td>
+        <td>
+             ID вопроса(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            response_body
+        </td>
+        <td>
+             Ответ пользователя(string 255)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначенной пользователю(string 36)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            answer_flag
+        </td>
+        <td>
+            Флаг ответа(1 - верно, 0 - ложно)
+        </td>
+    </tr>
+</table>
 <p>
     В случаии ошибки в запросе будет отправлено сообщение следующего вида:
 </p>

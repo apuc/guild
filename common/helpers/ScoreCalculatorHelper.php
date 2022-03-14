@@ -4,7 +4,7 @@ namespace common\helpers;
 
 use backend\modules\questionnaire\models\Answer;
 use backend\modules\questionnaire\models\UserQuestionnaire;
-use backend\modules\questionnaire\models\UserResponse;
+use common\models\UserResponse;
 use yii\helpers\ArrayHelper;
 
 class ScoreCalculatorHelper
