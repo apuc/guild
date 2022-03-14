@@ -11,7 +11,7 @@ use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
-class UserResponseController extends ActiveController
+class UserResponseController extends ApiController
 {
     public $modelClass = 'common\models\UserResponse';
 

@@ -21,7 +21,7 @@ class UserCardSearch extends UserCard
     {
         return [
             [['id', 'gender', 'status'], 'integer'],
-            [['fio', 'passport', 'photo', 'email', 'dob', 'created_at', 'updated_at', 'city'], 'safe'],
+            [['fio', 'passport', 'photo', 'email', 'dob', 'created_at', 'updated_at', 'city', 'test_task_getting_date', 'test_task_complete_date'], 'safe'],
             ['skills', 'each', 'rule' => ['integer']],
         ];
     }
@@ -83,6 +83,8 @@ class UserCardSearch extends UserCard
             'city' => $this->city,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'test_task_getting_date' => $this->test_task_getting_date,
+            'test_task_complete_date' => $this->test_task_complete_date,
         ]);
 
         $query->andFilterWhere(['like', 'fio', $this->fio])

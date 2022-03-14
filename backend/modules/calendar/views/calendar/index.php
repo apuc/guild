@@ -6,7 +6,7 @@ $this->title = 'Календарь ДР';
 ?>
 <?= \backend\widgets\Calendar::widget([
 
-    'css' => '.success{color: orange;}',
+    'css' => '.success{color: green;}',
 
     'button' => Html::a('<i class="fa fa-table" aria-hidden="true"></i> Таблица',
         ['table'], ['class' => 'btn btn-primary',]),
