@@ -3,27 +3,14 @@
 namespace frontend\modules\api\controllers;
 
 use common\models\Task;
+use common\services\TaskService;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\filters\auth\HttpBearerAuth;
-use yii\rest\Controller;
-use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
-class TaskController extends Controller
+class TaskController extends ApiController
 {
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-
-        return $behaviors;
-    }
-
     public function verbs(): array
     {
         return [
@@ -37,113 +24,79 @@ class TaskController extends Controller
     /**
      * @throws InvalidConfigException
      * @throws ServerErrorHttpException
-     * @throws NotFoundHttpException
-     */
-    public function actionUpdate(): ?Task
-    {
-        $model = $this->findModelTask(Yii::$app->request->post('task_id'));
-        if(empty($model)) {
-            throw new NotFoundHttpException('The task does not exist');
-        }
-
-        $model->load(Yii::$app->request->getBodyParams(), '');
-        if ($model->save() === false && !$model->hasErrors()) {
-            throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
-        }
-
-        return $model;
-    }
-
-
-
-    /**
-     * @throws InvalidConfigException
-     * @throws BadRequestHttpException
-     * @throws ServerErrorHttpException
      */
     public function actionCreateTask(): Task
     {
-        $task = Yii::$app->getRequest()->getBodyParams();
+        $taskModel = TaskService::createTask(Yii::$app->getRequest()->getBodyParams());
+        if ($taskModel->errors) {
+            throw new ServerErrorHttpException(json_encode($taskModel->errors));
+        }
 
-        $model = new Task();
-        $model->load($task, '');
-
-        $this->validateTaskModel($model);
-        $this->saveModel($model);
-
-        return $model;
+        return $taskModel;
     }
+
 
     /**
-     * @throws ServerErrorHttpException
+     * @throws NotFoundHttpException
      */
-    protected function saveModel($model)
+    public function actionGetTaskList($project_id  = null): array
     {
-        if ($model->save()) {
-            $task = Yii::$app->getResponse();
-            $task->setStatusCode(201);
-        } elseif (!$model->hasErrors()) {
-            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
-        }
-    }
-
-    /**
-     * @throws BadRequestHttpException
-     */
-    protected function validateTaskModel($model)
-    {
-        if(!$model->validate()) {
-            throw new BadRequestHttpException(json_encode($model->errors));
-        }
-
-        if (empty($model->project_id)or empty($model->status)
-            or empty($model->description) or empty($model->title) or empty($model->card_id_creator)) {
-            throw new BadRequestHttpException(json_encode($model->errors));
-        }
-    }
-
-    public function actionGetTaskList(): array
-    {
-        $project_id = Yii::$app->request->get('project_id');
-        if(empty($project_id) or !is_numeric($project_id))
+        $tasks = array();
+        if ($project_id)
         {
-            throw new NotFoundHttpException('Incorrect project ID');
+            if(empty($project_id) or !is_numeric($project_id))
+            {
+                throw new NotFoundHttpException('Incorrect project ID');
+            }
+            $tasks = TaskService::getTaskListByProject($project_id);
         }
-
-        $tasks = $this->findModelsById($project_id);
+        else
+        {
+            $tasks = TaskService::getTaskList($project_id);
+        }
 
         if(empty($tasks)) {
             throw new NotFoundHttpException('The project does not exist or there are no tasks for it');
         }
-
         return $tasks;
     }
 
-    public function actionGetTask(): Task
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionGetTask($task_id): Task
     {
-        $task_id = Yii::$app->request->get('task_id');
         if(empty($task_id) or !is_numeric($task_id))
         {
             throw new NotFoundHttpException('Incorrect task ID');
         }
 
-        $task = $this->findModelTask($task_id);
-
+        $task = TaskService::getTask($task_id);
         if(empty($task)) {
             throw new NotFoundHttpException('The task does not exist');
         }
 
         return $task;
-
     }
 
-    private function findModelTask($task_id): ?Task
+    /**
+     * @throws InvalidConfigException
+     * @throws ServerErrorHttpException
+     * @throws NotFoundHttpException
+     */
+    public function actionUpdate(): ?Task
     {
-        return Task::findOne($task_id);
-    }
+        $params = Yii::$app->request->getBodyParams();
+        if (empty ($params['task_id']) or !TaskService::taskExists($params['task_id']))
+        {
+            throw new NotFoundHttpException('The task does not exist');
+        }
 
-    private function findModelsById($project_id): array
-    {
-        return Task::find()->where(['project_id' => $project_id])->all();
+        $modelTask = TaskService::updateTask($params);
+        if (!empty($modelTask->hasErrors())) {
+            throw new ServerErrorHttpException(json_encode('Bad params'));
+        }
+
+        return $modelTask;
     }
 }

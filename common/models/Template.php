@@ -123,4 +123,10 @@ class Template extends \yii\db\ActiveRecord
     {
         return $this->title;
     }
+
+    public function getFields()
+    {
+        return $this->hasMany(DocumentField::className(), ['id' => 'field_id'])
+            ->via('templateDocumentFields');
+    }
 }

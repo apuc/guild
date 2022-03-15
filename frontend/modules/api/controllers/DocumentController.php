@@ -4,14 +4,10 @@ namespace frontend\modules\api\controllers;
 
 use common\models\Document;
 use common\models\DocumentFieldValue;
-use common\models\Template;
-use common\models\TemplateDocumentField;
-use Exception;
+use common\services\DocumentService;
 use Yii;
-use yii\filters\auth\HttpBearerAuth;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
-use yii\rest\Controller;
 use yii\web\ServerErrorHttpException;
 
 class DocumentController extends ApiController
@@ -20,33 +16,37 @@ class DocumentController extends ApiController
     public function verbs(): array
     {
         return [
-//            'get-task' => ['get'],
             'get-document-list' => ['get'],
+            'get-document' => ['get'],
             'create-document' => ['post'],
-//            'update-task' => ['put', 'patch'],
         ];
     }
 
-    public function actionGetDocumentList(): array
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionGetDocumentList($document_type = null): array
     {
-        $documents = Document::find()->select(['id','title', 'manager_id'])->all();
+        $documents = DocumentService::getDocumentList($document_type);
 
         if(empty($documents)) {
-            throw new NotFoundHttpException('Documents are not assigned');
+            throw new NotFoundHttpException('Documents not found');
         }
 
         return $documents;
     }
 
-    public function actionGetDocument(): array
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionGetDocument($document_id): array
     {
-        $document_id = Yii::$app->request->get('document_id');
         if(empty($document_id) or !is_numeric($document_id))
         {
             throw new NotFoundHttpException('Incorrect document ID');
         }
 
-        $document = Document::getDocument($document_id);
+        $document = DocumentService::getDocument($document_id);
 
         if(empty($document)) {
             throw new NotFoundHttpException('There is no such document');
@@ -58,10 +58,7 @@ class DocumentController extends ApiController
     public function actionCreateDocument()
     {
         $document = Yii::$app->getRequest()->getBodyParams();
-        $documentFieldValues = Yii::$app->getRequest()->getBodyParams()['documentFieldValues'];
-
-        $tmp =  TemplateDocumentField::find()->select('field_id')
-            ->where(['template_id' => 94])->asArray()->all();
+        $documentFieldValues = $document['documentFieldValues'];
 
         $modelDocument = new Document();
         if ($modelDocument->load($document, '') && $modelDocument->save()) {
@@ -79,7 +76,7 @@ class DocumentController extends ApiController
         }
 
         Yii::$app->getResponse()->setStatusCode(201);
-        return  Document::getDocument($modelDocument->id);
+        return  DocumentService::getDocument($modelDocument->id);
     }
 
     private function createDocimentFields($documentFieldValues , $document_id, $template_id)

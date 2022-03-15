@@ -4,7 +4,6 @@ namespace backend\modules\questionnaire\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\questionnaire\models\UserQuestionnaire;
 
 /**
  * UserQuestionnaireSearch represents the model behind the search form of `backend\modules\questionnaire\models\UserQuestionnaire`.
@@ -18,7 +17,7 @@ class UserQuestionnaireSearch extends UserQuestionnaire
     {
         return [
             [['id', 'questionnaire_id', 'user_id', 'score', 'status'], 'integer'],
-            [['uuid', 'created_at', 'updated_at'], 'safe'],
+            [['uuid', 'created_at', 'updated_at', 'testing_date'], 'safe'],
             [['percent_correct_answers'], 'number'],
         ];
     }
@@ -67,6 +66,7 @@ class UserQuestionnaireSearch extends UserQuestionnaire
             'score' => $this->score,
             'status' => $this->status,
             'percent_correct_answers' => $this->percent_correct_answers,
+            'testing_date' => $this->testing_date,
         ]);
 
         $query->andFilterWhere(['like', 'uuid', $this->uuid]);
