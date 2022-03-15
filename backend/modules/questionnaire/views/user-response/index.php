@@ -20,13 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Новый ответ пользователя', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
- <?php
- //echo $this->render('_search_by_questionnaire', [
-//        'model' => $searchModel,
-//    ])
- ?>
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

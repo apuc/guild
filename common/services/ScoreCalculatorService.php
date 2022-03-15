@@ -5,6 +5,7 @@ namespace common\services;
 use backend\modules\questionnaire\models\Answer;
 use common\models\UserQuestionnaire;
 use common\models\UserResponse;
+use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 
 class ScoreCalculatorService
@@ -44,6 +45,9 @@ class ScoreCalculatorService
         return true;
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public static function calculateScore(UserQuestionnaire $userQuestionnaire)
     {
         $responses_questions = $userQuestionnaire->hasMany(UserResponse::className(), ['user_questionnaire_uuid' => 'uuid'])
@@ -71,11 +75,9 @@ class ScoreCalculatorService
             }
         }
 
-//        if($score !== null) {
         self::setPercentCorrectAnswers($user_correct_answers_num, $userQuestionnaire);
         $userQuestionnaire->score = round($score);
         $userQuestionnaire->save();
-//        }
     }
 
     protected static function isCorrect($answer_flag): bool
@@ -91,6 +93,9 @@ class ScoreCalculatorService
         return Answer::numCorrectAnswers($question_id);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     protected static function setPercentCorrectAnswers($user_correct_answers_num, UserQuestionnaire $userQuestionnaire)
     {
         if($user_correct_answers_num !== null) {
