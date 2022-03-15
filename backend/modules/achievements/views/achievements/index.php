@@ -21,7 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-//            'id',
+
+            [
+                'attribute' => 'img',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::tag('img', null, ['src' => $model->img, 'width' => '100px']);
+                }
+            ],
             'title',
              'slug',
              'description',
