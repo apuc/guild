@@ -668,7 +668,7 @@
 ```
 
 ### Проверить ответы в анкете
-`https://guild.craft-group.xyz/api/question/get-questions`
+`https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed`
 <p>
     Для выполнения проверки анкеты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed
 </p>
