@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\helpers\ScoreCalculatorHelper;
 use common\models\UserResponse;
 use Exception;
 use Yii;
@@ -15,16 +16,16 @@ class UserResponseController extends ApiController
 {
     public $modelClass = 'common\models\UserResponse';
 
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-
-        return $behaviors;
-    }
+//    public function behaviors(): array
+//    {
+//        $behaviors = parent::behaviors();
+//
+//        $behaviors['authenticator']['authMethods'] = [
+//            HttpBearerAuth::className(),
+//        ];
+//
+//        return $behaviors;
+//    }
 
     public function verbs(): array
     {
@@ -34,12 +35,12 @@ class UserResponseController extends ApiController
         ];
     }
 
-    public function actions()
-    {
-        $actions = parent::actions();
-        unset($actions['create']);
-        return $actions;
-    }
+//    public function actions()
+//    {
+//        $actions = parent::actions();
+//        unset($actions['create']);
+//        return $actions;
+//    }
 
     /**
      * @throws InvalidConfigException
@@ -57,7 +58,6 @@ class UserResponseController extends ApiController
         $this->saveModel($model);
 
         return $model;
-
     }
 
     /**
@@ -106,6 +106,7 @@ class UserResponseController extends ApiController
     protected function saveModel($model)
     {
         if ($model->save()) {
+            ScoreCalculatorHelper::rateOneResponse($model);
             $response = Yii::$app->getResponse();
             $response->setStatusCode(201);
         } elseif (!$model->hasErrors()) {

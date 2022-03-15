@@ -3,8 +3,9 @@
 namespace common\helpers;
 
 use backend\modules\questionnaire\models\Answer;
-use backend\modules\questionnaire\models\UserQuestionnaire;
-use backend\modules\questionnaire\models\UserResponse;
+//use backend\modules\questionnaire\models\UserQuestionnaire;
+use common\models\UserQuestionnaire;
+use common\models\UserResponse;
 use yii\helpers\ArrayHelper;
 
 class ScoreCalculatorHelper
@@ -71,11 +72,11 @@ class ScoreCalculatorHelper
             }
         }
 
-        if($score !== null) {
+//        if($score !== null) {
             self::setPercentCorrectAnswers($user_correct_answers_num, $userQuestionnaire);
             $userQuestionnaire->score = round($score);
             $userQuestionnaire->save();
-        }
+//        }
     }
 
     protected static function isCorrect($answer_flag): bool
@@ -93,12 +94,16 @@ class ScoreCalculatorHelper
 
     protected static function setPercentCorrectAnswers($user_correct_answers_num, UserQuestionnaire $userQuestionnaire)
     {
-        $all_correct_answers_num = $userQuestionnaire->numCorrectAnswersWithoutOpenQuestions();
-        $all_correct_answers_num += $userQuestionnaire->numOpenQuestionsAnswers();
+        if($user_correct_answers_num !== null) {
+            $all_correct_answers_num = $userQuestionnaire->numCorrectAnswersWithoutOpenQuestions();
+            $all_correct_answers_num += $userQuestionnaire->numOpenQuestionsAnswers();
 
-        $percent = $user_correct_answers_num / $all_correct_answers_num;
-
-        $userQuestionnaire->percent_correct_answers = round($percent, 2);
+            $percent = $user_correct_answers_num / $all_correct_answers_num;
+            $userQuestionnaire->percent_correct_answers = round($percent, 2);
+        }
+        else {
+            $userQuestionnaire->percent_correct_answers = round($user_correct_answers_num, 2);
+        }
         $userQuestionnaire->save();
     }
 }

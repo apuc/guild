@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\helpers\ScoreCalculatorHelper;
 use common\models\UserQuestionnaire;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
@@ -25,6 +26,7 @@ class UserQuestionnaireController extends ApiController
     {
         return [
             'questionnaires-list' => ['get'],
+            'questionnaire-completed' => ['get'],
         ];
     }
 
@@ -55,5 +57,27 @@ class UserQuestionnaireController extends ApiController
         });
 
         return  $userQuestionnaireModels;
+    }
+
+    public function actionQuestionnaireCompleted()
+    {
+//        return Yii::$app->request;
+        $user_questionnaire_uuid = Yii::$app->request->get('user_questionnaire_uuid');
+
+        if(empty($user_questionnaire_uuid))
+        {
+            throw new NotFoundHttpException('Incorrect user ID');
+        }
+
+        $userQuestionnaireModel = UserQuestionnaire::findOne(['uuid' => $user_questionnaire_uuid]);
+
+        if(empty($userQuestionnaireModel)) {
+            throw new NotFoundHttpException('Active questionnaire not found');
+        }
+
+        ScoreCalculatorHelper::rateResponses($userQuestionnaireModel);
+        ScoreCalculatorHelper::calculateScore($userQuestionnaireModel);
+
+        return $userQuestionnaireModel;
     }
 }
