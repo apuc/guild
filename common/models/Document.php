@@ -110,13 +110,4 @@ class Document extends \yii\db\ActiveRecord
     {
         return $this->hasMany(DocumentFieldValue::className(), ['document_id' => 'id']);
     }
-
-    public static function getDocument($document_id)
-    {
-        return self::find()
-            ->joinWith(['documentFieldValues.field'])
-            ->where(['document.id' => $document_id])
-            ->asArray()
-            ->all();
-    }
 }

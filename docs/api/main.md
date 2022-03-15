@@ -27,7 +27,7 @@
     </tr>
     <tr>
         <td>
-            limit
+            get-document-list
         </td>
         <td>
             Количество профилей, которое вернет сервер при запросе. 
@@ -256,7 +256,7 @@
     Пример запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/reports/index?fromDate=2021-08-01&toDate=2021-08-31&user_id=2limit=3&offset=2`
+`https://guild.craft-group.xyz/api/reports/index?fromDate=2021-08-01&toDate=2021-08-31&user_id=2&limit=3&offset=2`
 
 ### Один отчет
 `https://guild.craft-group.xyz/api/reports/{id}`
@@ -290,6 +290,96 @@
 </p>
 
 `https://guild.craft-group.xyz/api/reports/13`
+
+### Отчёт по дате
+`https://guild.craft-group.xyz/api/reports/find-by-date`
+<p>
+    Для получения отчета необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/reports/find-by-date
+</p>
+
+<p>
+    Требуемые параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>   
+        <td>
+            user_card_id*
+        </td>
+        <td>
+            ID профиля пользователя
+        </td>
+    </tr>
+    <tr>   
+        <td>
+            date*
+        </td>
+        <td>
+            Дата в формате: Y-m-d
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса :
+</p>
+
+`https://guild.craft-group.xyz/api/reports/find-by-date?user_card_id=17&date=2022-02-14`
+
+<p>
+    Пример ответа:
+</p>
+
+```json5
+[
+  {
+    "id": "1",
+    "created_at": "2022-02-14",
+    "today": null,
+    "difficulties": "",
+    "tomorrow": "",
+    "status": null,
+    "user_card_id": "17",
+    "task": [
+      {
+        "id": "1",
+        "report_id": "1",
+        "task": "dfghjkl",
+        "hours_spent": "2",
+        "created_at": "1644842433",
+        "status": "1",
+        "minutes_spent": "4"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "created_at": "2022-02-14",
+    "today": "dxvxv",
+    "difficulties": "сложности возникли",
+    "tomorrow": "завтра",
+    "status": null,
+    "user_card_id": "17",
+    "task": [
+      {
+        "id": "2",
+        "report_id": "2",
+        "task": "54651513",
+        "hours_spent": "4",
+        "created_at": "1644842630",
+        "status": "1",
+        "minutes_spent": "2"
+      }
+    ]
+  }
+]
+```
 
 ### Создать отчет
 `https://guild.craft-group.xyz/api/reports/create`

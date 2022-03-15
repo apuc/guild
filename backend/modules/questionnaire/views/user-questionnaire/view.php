@@ -77,6 +77,7 @@ YiiAsset::register($this);
             ],
             'created_at',
             'updated_at',
+            'testing_date',
         ],
     ]) ?>
 
