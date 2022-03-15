@@ -2,26 +2,14 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\helpers\ScoreCalculatorHelper;
+use common\services\ScoreCalculatorService;
 use common\models\UserQuestionnaire;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
-use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 
 class UserQuestionnaireController extends ApiController
 {
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-
-        return $behaviors;
-    }
-
     public function verbs()
     {
         return [
@@ -75,8 +63,8 @@ class UserQuestionnaireController extends ApiController
             throw new NotFoundHttpException('Active questionnaire not found');
         }
 
-        ScoreCalculatorHelper::rateResponses($userQuestionnaireModel);
-        ScoreCalculatorHelper::calculateScore($userQuestionnaireModel);
+        ScoreCalculatorService::rateResponses($userQuestionnaireModel);
+        ScoreCalculatorService::calculateScore($userQuestionnaireModel);
 
         return $userQuestionnaireModel;
     }
