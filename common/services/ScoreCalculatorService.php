@@ -1,14 +1,13 @@
 <?php
 
-namespace common\helpers;
+namespace common\services;
 
 use backend\modules\questionnaire\models\Answer;
-//use backend\modules\questionnaire\models\UserQuestionnaire;
 use common\models\UserQuestionnaire;
 use common\models\UserResponse;
 use yii\helpers\ArrayHelper;
 
-class ScoreCalculatorHelper
+class ScoreCalculatorService
 {
     public static function rateResponses(UserQuestionnaire $user_questionnaire)
     {
@@ -73,9 +72,9 @@ class ScoreCalculatorHelper
         }
 
 //        if($score !== null) {
-            self::setPercentCorrectAnswers($user_correct_answers_num, $userQuestionnaire);
-            $userQuestionnaire->score = round($score);
-            $userQuestionnaire->save();
+        self::setPercentCorrectAnswers($user_correct_answers_num, $userQuestionnaire);
+        $userQuestionnaire->score = round($score);
+        $userQuestionnaire->save();
 //        }
     }
 
