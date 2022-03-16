@@ -20,13 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Новый ответ пользователя', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
- <?php
- //echo $this->render('_search_by_questionnaire', [
-//        'model' => $searchModel,
-//    ])
- ?>
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -50,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'filter' => AnswerHelper::answerFlagsList(),
                 'value' => function ($model) {
-                    return AnswerHelper::answerStatusLabel($model->answer_flag);
+                    return AnswerHelper::userResponseLabel($model->answer_flag);
                 },
             ],
             [

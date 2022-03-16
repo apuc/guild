@@ -4,7 +4,7 @@ namespace backend\modules\questionnaire\controllers;
 
 use backend\modules\questionnaire\models\Questionnaire;
 use backend\modules\questionnaire\models\QuestionnaireCategory;
-use common\helpers\ScoreCalculatorHelper;
+use common\services\ScoreCalculatorService;
 use Yii;
 use backend\modules\questionnaire\models\UserQuestionnaire;
 use backend\modules\questionnaire\models\UserQuestionnaireSearch;
@@ -169,7 +169,7 @@ class UserQuestionnaireController extends Controller
     public function actionRateResponses($id)
     {
         $user_questionnaire = $this->findModel($id);
-        ScoreCalculatorHelper::rateResponses($user_questionnaire);
+        ScoreCalculatorService::rateResponses($user_questionnaire);
 
         return $this->actionView($id);
     }
@@ -177,7 +177,7 @@ class UserQuestionnaireController extends Controller
     public function actionCalculateScore($id)
     {
         $user_questionnaire = $this->findModel($id);
-        ScoreCalculatorHelper::calculateScore($user_questionnaire);
+        ScoreCalculatorService::calculateScore($user_questionnaire);
 
         return $this->actionView($id);
     }

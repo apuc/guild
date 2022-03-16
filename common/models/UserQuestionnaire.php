@@ -150,8 +150,8 @@ class UserQuestionnaire extends ActiveRecord
      */
     public function numCorrectAnswersWithoutOpenQuestions()
     {
-        return $this->hasMany(Answer::className(), ['question_id' => 'question_id'])
-            ->viaTable('user_response', ['user_questionnaire_uuid' => 'uuid'])
+        return $this->hasMany(Answer::className(), ['question_id' => 'id'])
+            ->viaTable('question', ['questionnaire_id' => 'questionnaire_id'])
             ->where(['answer_flag' => '1'])
             ->andWhere(['status' => '1'])
             ->count();
@@ -162,9 +162,10 @@ class UserQuestionnaire extends ActiveRecord
      */
     public function numOpenQuestionsAnswers()
     {
-        return $this->hasMany(Question::className(), ['id' => 'question_id'])
-            ->viaTable('user_response', ['user_questionnaire_uuid' => 'uuid'])
+        return $this->hasMany(Question::className(), ['questionnaire_id' => 'id'])
+            ->viaTable('questionnaire', ['id' => 'questionnaire_id'])
             ->where(['question_type_id' => '1'])
+            ->andWhere(['status' => '1'])
             ->count();
     }
 

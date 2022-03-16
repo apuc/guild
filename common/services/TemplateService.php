@@ -19,11 +19,7 @@ class TemplateService
     public static function getTemplateWithFields($template_id): array
     {
         return Template::find()
-//            ->select('title')
             ->joinWith('templateDocumentFields.field')
-//            ->with([
-//                'fields' => function ($query) { $query->select(['id', 'title', 'field_template']); }
-//            ])
             ->where(['template.id' => $template_id])
             ->asArray()
             ->one();
