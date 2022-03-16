@@ -129,7 +129,7 @@ YiiAsset::register($this);
                         'attribute' => 'answer_flag',
                         'format' => 'raw',
                         'value' => function ($model) {
-                            return AnswerHelper::answerStatusLabel($model->answer_flag);
+                            return AnswerHelper::userResponseLabel($model->answer_flag);
                         },
 
                     ],

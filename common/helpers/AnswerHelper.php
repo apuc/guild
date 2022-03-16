@@ -10,14 +10,12 @@ class AnswerHelper
 {
     const FLAG_TRUE = 1;
     const FLAG_FALSE = 0;
-    const FLAG_NOT_VERIFIED = null;
 
     public static function answerFlagsList(): array
     {
         return [
             self::FLAG_TRUE => 'Верен',
             self::FLAG_FALSE => 'Ошибочный',
-            self::FLAG_NOT_VERIFIED => 'Не проверен',
         ];
     }
 
@@ -26,15 +24,15 @@ class AnswerHelper
      */
     public static function answerFlagLabel($status): string
     {
-        switch (true) {
-            case ($status === self::FLAG_FALSE):
+        switch ($status) {
+            case self::FLAG_FALSE:
                 $class = 'label label-danger';
                 break;
-            case ($status === self::FLAG_TRUE):
+            case self::FLAG_TRUE:
                 $class = 'label label-success';
                 break;
             default:
-                $class = 'label label-warning';
+                $class = 'label label-default';
         }
 
         return Html::tag('span', ArrayHelper::getValue(self::answerFlagsList(), $status), [
@@ -42,7 +40,7 @@ class AnswerHelper
         ]);
     }
 
-    public static function answerStatusLabel($answer_flag): string
+    public static function userResponseLabel($answer_flag): string
     {
         $class = 'label label-warning';
         $content = 'Не проверен';
