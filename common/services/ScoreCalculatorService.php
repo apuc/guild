@@ -77,6 +77,8 @@ class ScoreCalculatorService
 
         self::setPercentCorrectAnswers($user_correct_answers_num, $userQuestionnaire);
         $userQuestionnaire->score = round($score);
+        $userQuestionnaire->status = 2;
+        $userQuestionnaire->testing_date = date('Y:m:d H:i:s');
         $userQuestionnaire->save();
     }
 
@@ -108,6 +110,5 @@ class ScoreCalculatorService
         else {
             $userQuestionnaire->percent_correct_answers = round($user_correct_answers_num, 2);
         }
-        $userQuestionnaire->save();
     }
 }

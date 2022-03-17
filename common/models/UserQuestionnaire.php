@@ -181,7 +181,7 @@ class UserQuestionnaire extends ActiveRecord
     {
         $models =  self::find()
             ->where(['user_id' => $user_id])
-            ->andWhere(['user_questionnaire.status' => '1'])
+            ->andWhere(['not', ['user_questionnaire.status' => 0]])
             ->all();
 
         $modelsArr = array();
