@@ -1,8 +1,7 @@
 <?php
 
-use common\helpers\StatusHelper;
+use common\helpers\UserQuestionnaireStatusHelper;
 use common\models\User;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use backend\modules\questionnaire\models\Questionnaire;
@@ -46,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => StatusHelper::statusList(),
+                'filter' => UserQuestionnaireStatusHelper::statusList(),
                 'value' => function ($model) {
-                    return StatusHelper::statusLabel($model->status);
+                    return UserQuestionnaireStatusHelper::statusLabel($model->status);
                 },
             ],
             'created_at',

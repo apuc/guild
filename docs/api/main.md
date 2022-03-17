@@ -607,14 +607,85 @@
 </p>
 
 ```json5
-{
+ {
   "user_id": 1,
   "uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
-  "score": 20,
-  "status": 1,
-  "percent_correct_answers": 0.8
+  "score": 11,
+  "status": 2,
+  "percent_correct_answers": 0.25,
+  "testing_date": "2022-03-17 11:14:22",
+  "questionnaire_title": "Кат1 Анкета 1 активна"
 }
 ```
+
+<p>
+    Возвращаемые параметры объекта анкета:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            uuid
+        </td>
+        <td>
+             uuid анкеты пользователя
+        </td>
+    </tr>
+    <tr>
+        <td>
+            score
+        </td>
+        <td>
+             Полученные балы(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            status
+        </td>
+        <td>
+             Статус: 0 - не активен; 1 - активен; 2 - завершён; 3 - на проверке;
+        </td>
+    </tr>
+    <tr>
+        <td>
+            percent_correct_answers
+        </td>
+        <td>
+             Процент правильных ответов(float)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            testing_date
+        </td>
+        <td>
+            Дата тестирования
+        </td>
+    </tr><tr>
+        <td>
+            questionnaire_title
+        </td>
+        <td>
+            Название анкеты
+        </td>
+    </tr>
+</table>
 
 <p>
     Передаваемые параметры объекта вопроса:
@@ -720,6 +791,94 @@
   "status": 1,
   "percent_correct_answers": 0.5,
   "testing_date": null
+}
+```
+
+### Число балов в анкете
+`https://guild.craft-group.xyz/api/user-questionnaire/get-points-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+<p>
+    Для максимального числа  балов в анкеты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/get-points-number
+</p>
+
+<p>
+    Требуемые параметры запроса:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначеной пользователю
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/user-questionnaire/get-points-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+
+<p>
+    Возвращает максимально возможное число балов за анкету b>. <br>
+    Объект <b>Ответа</b> имеет такой вид:
+</p>
+
+```json5
+{
+  "sum_point": "61"
+}
+```
+
+### Число вопросов в анкете
+`https://guild.craft-group.xyz/api/user-questionnaire/get-question-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+<p>
+    Для числа вопросов в анкете необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/get-question-number
+</p>
+
+<p>
+    Требуемые параметры запроса:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначеной пользователю
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/user-questionnaire/get-question-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+
+<p>
+    Возвращает число вопросов в анкете b>. <br>
+    Объект <b>Ответа</b> имеет такой вид:
+</p>
+
+```json5
+{
+  "question_number": "7"
 }
 ```
 

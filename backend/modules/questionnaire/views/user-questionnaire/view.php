@@ -2,7 +2,7 @@
 
 use common\services\ScoreCalculatorService;
 use common\helpers\AnswerHelper;
-use common\helpers\StatusHelper;
+use common\helpers\UserQuestionnaireStatusHelper;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
@@ -61,7 +61,7 @@ YiiAsset::register($this);
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => StatusHelper::statusLabel($model->status),
+                'value' => UserQuestionnaireStatusHelper::statusLabel($model->status),
             ],
             'created_at',
             'updated_at',

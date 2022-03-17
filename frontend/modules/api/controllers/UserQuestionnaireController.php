@@ -43,4 +43,28 @@ class UserQuestionnaireController extends ApiController
         }
         return $userQuestionnaireModel;
     }
+
+    /**
+     * @throws ServerErrorHttpException
+     */
+    public function actionGetPointsNumber($user_questionnaire_uuid)
+    {
+        $questionPointsNumber = UserQuestionnaireService::getPointsNumber($user_questionnaire_uuid);
+        if (empty($questionPointsNumber)) {
+            throw new ServerErrorHttpException(json_encode('Question points not found!'));
+        }
+        return $questionPointsNumber;
+    }
+
+    /**
+     * @throws ServerErrorHttpException
+     */
+    public function actionGetQuestionNumber($user_questionnaire_uuid)
+    {
+        $questionNumber = UserQuestionnaireService::getQuestionNumber($user_questionnaire_uuid);
+        if (empty($questionNumber)) {
+            throw new ServerErrorHttpException(json_encode('Question number not found!'));
+        }
+        return $questionNumber;
+    }
 }
