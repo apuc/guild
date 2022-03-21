@@ -4,59 +4,101 @@ namespace common\services;
 
 use common\models\Manager;
 use common\models\ManagerEmployee;
+use common\models\UserCard;
+use frontend\modules\api\models\ProfileSearchForm;
+use Yii;
+use yii\web\BadRequestHttpException;
 
 class ProfileService
 {
-    private $searcherID;
-    private $id;
-
-    public function __construct($searcherID, $id)
+    /**
+     * @throws BadRequestHttpException
+     */
+    public static function getProfile($id, $request): ?array
     {
-        $this->searcherID = $searcherID;
-        $this->id = $id;
+        $searchModel = new ProfileSearchForm();
+        $searchModel->attributes = $request;
+
+        if ($id) {
+            return $searchModel->byId();
+        }
+        return $searchModel->byParams();
     }
 
-    public function checkReportePermission()
+    /**
+     * @throws BadRequestHttpException
+     */
+    public static function getProfileWithReportPermission($user_card_id): ?array
     {
-        if ($this->isMyProfile() or $this->isMyEmployee()) {
+        if (UserCard::find()->where(['id' => $user_card_id])->exists()) {
+
+            $searchModel = new ProfileSearchForm();
+            $searchModel->id = $user_card_id;
+            $profile = $searchModel->byId();
+
+            self::addPermission($profile, $user_card_id);
+            return $profile;
+        }
+        throw new BadRequestHttpException(json_encode('There is no user with this id'));
+    }
+
+    private static function addPermission(&$profile, $user_card_id)
+    {
+        $searcherCardID = self::getSearcherCardID(Yii::$app->user->getId());
+        if (self::checkReportPermission($user_card_id, $searcherCardID)) {
+            $profile += ['report_permission' => '1'];
+        } else {
+            $profile += ['report_permission' => '0'];
+        }
+    }
+
+    private static function getSearcherCardID($user_id): int
+    {
+        return UserCard::findOne(['id_user' => $user_id])->id;
+    }
+
+    private static function checkReportPermission($user_card_id, $searcherCardID): bool
+    {
+        if (self::isMyProfile($user_card_id, $searcherCardID)
+            or self::isMyEmployee($user_card_id, $searcherCardID)) {
             return true;
         }
         return false;
     }
 
-    private function isMyProfile()
+    private static function isMyProfile($user_card_id, $searcherCardID): bool
     {
-        if ($this->id == $this->searcherID) {
+        if ($user_card_id == $searcherCardID) {
             return true;
         }
         return false;
     }
 
-    private function isMyEmployee()
+    private static function isMyEmployee($user_card_id, $searcherCardID): bool
     {
-       if (!$this->amIManager()) {
-           return false;
-       }
+        if (!self::amIManager($searcherCardID)) {
+            return false;
+        }
 
-       if ($this->isMyEmploee()) {
-           return true;
-       }
-       return false;
-    }
-
-    private function amIManager()
-    {
-        if (Manager::find()->where(['user_card_id' => $this->searcherID])->exists()) {
+        if (self::isMyEmployer($user_card_id, $searcherCardID)) {
             return true;
         }
         return false;
     }
 
-    private function isMyEmploee()
+    private static function amIManager($searcherCardID): bool
     {
-        $manager = Manager::find()->where(['user_card_id' => $this->searcherID])->one();
+        if (Manager::find()->where(['user_card_id' => $searcherCardID])->exists()) {
+            return true;
+        }
+        return false;
+    }
+
+    private static function isMyEmployer($user_card_id, $searcherCardID): bool
+    {
+        $manager = Manager::find()->where(['user_card_id' => $searcherCardID])->one();
         $exist = ManagerEmployee::find()
-            ->where(['manager_id' => $manager->id, 'user_card_id' => $this->id])
+            ->where(['manager_id' => $manager->id, 'user_card_id' => $user_card_id])
             ->exists();
 
         if ($exist) {
@@ -64,7 +106,4 @@ class ProfileService
         }
         return false;
     }
-
-
-
 }
