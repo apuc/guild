@@ -8,13 +8,32 @@ use common\models\UserCard;
 use frontend\modules\api\models\ProfileSearchForm;
 use Yii;
 use yii\web\BadRequestHttpException;
+use yii\web\ServerErrorHttpException;
 
 class ProfileService
 {
     /**
+     * @throws ServerErrorHttpException
+     */
+    public static function getMainData($user_id): array
+    {
+        $userCard = UserCard::findOne(['id_user' => $user_id]);
+        if (empty($userCard)) {
+            throw new ServerErrorHttpException(json_encode($userCard->errors));
+        }
+        return array('fio' => $userCard->fio,
+            'photo' => $userCard->photo,
+            'gender' => $userCard->gender,
+            'level' => $userCard->level,
+            'years_of_exp' => $userCard->years_of_exp,
+            'specification' => $userCard->specification,
+            'position_name' => $userCard->position->name);
+    }
+
+    /**
      * @throws BadRequestHttpException
      */
-    public static function getProfile($id, $request): ?array
+    public static function getProfile($id, $request)//: ?array
     {
         $searchModel = new ProfileSearchForm();
         $searchModel->attributes = $request;

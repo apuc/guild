@@ -4,6 +4,7 @@ namespace frontend\modules\api\controllers;
 
 use common\services\ProfileService;
 use yii\web\BadRequestHttpException;
+use yii\web\ServerErrorHttpException;
 
 class ProfileController extends ApiController
 {
@@ -15,7 +16,7 @@ class ProfileController extends ApiController
         ];
     }
 
-    public function actionIndex($id = null)
+    public function actionIndex($id = null): ?array
     {
         return ProfileService::getProfile($id, \Yii::$app->request->get());
     }
@@ -26,5 +27,13 @@ class ProfileController extends ApiController
     public function actionProfileWithReportPermission($id): ?array
     {
         return ProfileService::getProfileWithReportPermission($id);
+    }
+
+    /**
+     * @throws ServerErrorHttpException
+     */
+    public function actionGetMainData($user_id): array
+    {
+        return ProfileService::getMainData($user_id);
     }
 }
