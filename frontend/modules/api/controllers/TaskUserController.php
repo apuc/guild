@@ -9,19 +9,8 @@ use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
-class TaskUserController extends Controller
+class TaskUserController extends ApiController
 {
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-
-        return $behaviors;
-    }
-
     public function verbs(): array
     {
         return [

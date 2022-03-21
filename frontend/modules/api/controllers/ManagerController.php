@@ -2,7 +2,6 @@
 
 namespace frontend\modules\api\controllers;
 
-
 use common\services\ManagerService;
 use yii\web\NotFoundHttpException;
 
@@ -24,7 +23,7 @@ class ManagerController extends ApiController
     {
         $managers = ManagerService::getManagerList();
 
-        if(empty($managers)) {
+        if (empty($managers)) {
             throw new NotFoundHttpException('Managers are not assigned');
         }
 
@@ -36,14 +35,13 @@ class ManagerController extends ApiController
      */
     public function actionGetManagerEmployeesList($manager_id): array
     {
-        if(empty($manager_id) or !is_numeric($manager_id))
-        {
+        if (empty($manager_id) or !is_numeric($manager_id)) {
             throw new NotFoundHttpException('Incorrect manager ID');
         }
 
         $managerEmployeesList = ManagerService::getManagerEmployeesList($manager_id);
 
-        if(empty($managerEmployeesList)) {
+        if (empty($managerEmployeesList)) {
             throw new NotFoundHttpException('Managers are not assigned or employees are not assigned to him');
         }
 
@@ -55,14 +53,13 @@ class ManagerController extends ApiController
      */
     public function actionGetManager($manager_id): array
     {
-        if(empty($manager_id) or !is_numeric($manager_id))
-        {
+        if (empty($manager_id) or !is_numeric($manager_id)) {
             throw new NotFoundHttpException('Incorrect manager ID');
         }
 
         $manager = ManagerService::getManager($manager_id);
 
-        if(empty($manager)) {
+        if (empty($manager)) {
             throw new NotFoundHttpException('There is no such manager');
         }
 
