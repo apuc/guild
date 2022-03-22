@@ -65,6 +65,8 @@ $this->registerCss('.list-cell__task{width:73%}')
                 ],
             ])->label('Какие задачаи были выполнены:'); ?>
 
+    <?= $form->field($model, 'today')->textarea(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'difficulties')->textarea(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tomorrow')->textarea(['maxlength' => true]) ?>

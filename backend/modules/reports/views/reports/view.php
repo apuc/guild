@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'id',
             'created_at',
             [
-                'attribute' => 'today',
+                'attribute' => 'Выполненые задачи',
                 'format' => 'raw',
                 'value' => function ($model) {
                     $text = '';
@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $text;
                 }
             ],
+            'today',
             'difficulties',
             'tomorrow',
 //            'user_card_id',

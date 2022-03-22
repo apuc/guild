@@ -43,6 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'format' => 'raw',
+                'attribute' => 'Что было сделано сегодня?',
+                'filter' => Html::activeTextInput($searchModel, 'today', ['class' => 'form-control']),
+                'value' => function ($data) { return '<div class="custom-text">'.$data->today.'</div>'; },
+            ],
+            [
+                'format' => 'raw',
                 'attribute' => 'Какие сложности возникли?',
                 'filter' => Html::activeTextInput($searchModel, 'difficulties', ['class' => 'form-control']),
                 'value' => function ($data) { return '<div class="custom-text">'.$data->difficulties.'</div>'; },
