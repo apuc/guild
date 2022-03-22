@@ -236,7 +236,7 @@
 }
 ```
 
-## Обновить документ
+## Обновить задачу
 
 `https://guild.craft-group.xyz/api/task/update`
 <p>

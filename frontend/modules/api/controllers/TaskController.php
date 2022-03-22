@@ -31,7 +31,6 @@ class TaskController extends ApiController
         if ($taskModel->errors) {
             throw new ServerErrorHttpException(json_encode($taskModel->errors));
         }
-
         return $taskModel;
     }
 
@@ -39,23 +38,19 @@ class TaskController extends ApiController
     /**
      * @throws NotFoundHttpException
      */
-    public function actionGetTaskList($project_id  = null): array
+    public function actionGetTaskList($project_id = null): array
     {
         $tasks = array();
-        if ($project_id)
-        {
-            if(empty($project_id) or !is_numeric($project_id))
-            {
+        if ($project_id) {
+            if (empty($project_id) or !is_numeric($project_id)) {
                 throw new NotFoundHttpException('Incorrect project ID');
             }
             $tasks = TaskService::getTaskListByProject($project_id);
-        }
-        else
-        {
+        } else {
             $tasks = TaskService::getTaskList($project_id);
         }
 
-        if(empty($tasks)) {
+        if (empty($tasks)) {
             throw new NotFoundHttpException('The project does not exist or there are no tasks for it');
         }
         return $tasks;
@@ -66,13 +61,12 @@ class TaskController extends ApiController
      */
     public function actionGetTask($task_id): Task
     {
-        if(empty($task_id) or !is_numeric($task_id))
-        {
+        if (empty($task_id) or !is_numeric($task_id)) {
             throw new NotFoundHttpException('Incorrect task ID');
         }
 
         $task = TaskService::getTask($task_id);
-        if(empty($task)) {
+        if (empty($task)) {
             throw new NotFoundHttpException('The task does not exist');
         }
 
@@ -87,8 +81,7 @@ class TaskController extends ApiController
     public function actionUpdate(): ?Task
     {
         $params = Yii::$app->request->getBodyParams();
-        if (empty ($params['task_id']) or !TaskService::taskExists($params['task_id']))
-        {
+        if (empty ($params['task_id']) or !TaskService::taskExists($params['task_id'])) {
             throw new NotFoundHttpException('The task does not exist');
         }
 
