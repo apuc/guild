@@ -2,24 +2,20 @@
 
 namespace backend\modules\card\controllers;
 
-use common\classes\Debug;
-use common\models\AchievementUserCard;
-use common\models\AdditionalFields;
-use common\models\CardSkill;
-use common\Models\ChangeHistory;
-use common\models\User;
-use common\models\FieldsValue;
-use common\models\FieldsValueNew;
-use common\models\Status;
-use Yii;
 use backend\modules\card\models\UserCard;
 use backend\modules\card\models\UserCardSearch;
+use common\models\AchievementUserCard;
+use common\models\CardSkill;
+use common\models\FieldsValueNew;
+use common\models\User;
+use kartik\mpdf\Pdf;
+use PhpOffice\PhpWord\PhpWord;
+use Yii;
 use yii\data\ActiveDataProvider;
-use yii\db\Expression;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * UserCardController implements the CRUD actions for UserCard model.
@@ -204,5 +200,57 @@ class UserCardController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionDownloadResume($id, $pdf = false)
+    {
+        $model = $this->findModel($id);
+
+        if ($pdf) {
+           self::getResumePdf($model);
+        }
+        self::getResumeDocx($model);
+    }
+
+    private function getResumePdf(UserCard $model)
+    {
+        $pdf = new Pdf(); // or new Pdf();
+        $mpdf = $pdf->api; // fetches mpdf api
+        $mpdf->SetHeader('Resume ' . $model->fio . '||Generated At: ' . date("d/m/Y")); // call methods or set any properties
+        $mpdf->SetFooter('{PAGENO}');
+        $mpdf->WriteHtml($model->vc_text); // call mpdf write html
+        echo $mpdf->Output("Resume - {$model->fio}", 'D'); // call the mpdf api output as needed
+    }
+
+    private function getResumeDocx(UserCard $model)
+    {
+        $phpWord = new  PhpWord();
+
+        $sectionStyle = array(
+            'orientation' => 'portrait',
+            'marginTop' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(10),
+            'marginLeft' => 600,
+            'marginRight' => 600,
+            'colsNum' => 1,
+            'pageNumberingStart' => 1,
+            'borderBottomSize'=>100,
+            'borderBottomColor'=>'C0C0C0'
+        );
+        $section = $phpWord->addSection($sectionStyle);
+        $text = $model->vc_text;
+        $fontStyle = array('name'=>'Times New Roman', 'size'=>14, 'color'=>'000000', 'bold'=>FALSE, 'italic'=>FALSE);
+        $parStyle = array('align'=>'both','spaceBefore'=>10);
+
+        $section->addText(htmlspecialchars($text), $fontStyle,$parStyle);
+
+        header("Content-Type: application/msword");
+        header("Content-Transfer-Encoding: binary");
+        header("Content-Disposition: attachment;filename=Resume - {$model->fio}.docx");
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        ob_clean();
+        $objWriter->save("php://output");
+        exit;
     }
 }
