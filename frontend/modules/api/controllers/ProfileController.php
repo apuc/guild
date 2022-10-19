@@ -10,13 +10,6 @@ use yii\web\ServerErrorHttpException;
 
 class ProfileController extends ApiController
 {
-//    public function verbs(): array
-//    {
-//        return [
-//            '' => ['get'],
-//            'profile-with-report-permission' => ['post', 'patch']
-//        ];
-//    }
 
     public function behaviors(): array
     {
@@ -38,11 +31,7 @@ class ProfileController extends ApiController
      */
     public function actionIndex($id = null): ?array
     {
-        $profiles =  ProfileService::getProfile($id, \Yii::$app->request->get());
-        if(empty($profiles)) {
-            throw new NotFoundHttpException('Profiles not found');
-        }
-        return $profiles;
+        return  ProfileService::getProfile($id, \Yii::$app->request->get());
     }
 
     /**
