@@ -3,17 +3,27 @@
 namespace frontend\modules\api\controllers;
 
 use common\services\UserQuestionnaireService;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 class UserQuestionnaireController extends ApiController
 {
-    public function verbs()
+
+    public function behaviors(): array
     {
-        return [
-            'questionnaires-list' => ['get'],
-            'questionnaire-completed' => ['get'],
-        ];
+        return ArrayHelper::merge(parent::behaviors(), [
+
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::class,
+                'actions' => [
+                    'questionnaires-list' => ['get'],
+                    'questionnaire-completed' => ['get'],
+                    'get-points-number' => ['get'],
+                    'get-question-number' => ['get'],
+                ],
+            ]
+        ]);
     }
 
     /**
@@ -39,7 +49,7 @@ class UserQuestionnaireController extends ApiController
     {
         $userQuestionnaireModel = UserQuestionnaireService::calculateScore($user_questionnaire_uuid);
         if ($userQuestionnaireModel->errors) {
-            throw new ServerErrorHttpException(json_encode($userQuestionnaireModel->errors));
+            throw new ServerErrorHttpException($userQuestionnaireModel->errors);
         }
         return $userQuestionnaireModel;
     }
@@ -51,7 +61,7 @@ class UserQuestionnaireController extends ApiController
     {
         $questionPointsNumber = UserQuestionnaireService::getPointsNumber($user_questionnaire_uuid);
         if (empty($questionPointsNumber)) {
-            throw new ServerErrorHttpException(json_encode('Question points not found!'));
+            throw new ServerErrorHttpException('Question points not found!');
         }
         return $questionPointsNumber;
     }
@@ -63,7 +73,7 @@ class UserQuestionnaireController extends ApiController
     {
         $questionNumber = UserQuestionnaireService::getQuestionNumber($user_questionnaire_uuid);
         if (empty($questionNumber)) {
-            throw new ServerErrorHttpException(json_encode('Question number not found!'));
+            throw new ServerErrorHttpException('Question number not found!');
         }
         return $questionNumber;
     }
