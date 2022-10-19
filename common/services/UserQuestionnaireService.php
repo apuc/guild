@@ -51,7 +51,7 @@ class UserQuestionnaireService
     {
         $userQuestionnaireModel = UserQuestionnaire::findOne(['uuid' => $user_questionnaire_uuid]);
         if (empty($userQuestionnaireModel)) {
-            throw new ServerErrorHttpException(json_encode('Not found UserQuestionnaire'));
+            throw new ServerErrorHttpException('Not found UserQuestionnaire');
         }
         $count = Question::find()
             ->where(['questionnaire_id' => $userQuestionnaireModel->questionnaire_id])
@@ -67,7 +67,7 @@ class UserQuestionnaireService
     {
         $userQuestionnaireModel = UserQuestionnaire::findOne(['uuid' => $user_questionnaire_uuid]);
         if (empty($userQuestionnaireModel)) {
-            throw new ServerErrorHttpException(json_encode('Not found UserQuestionnaire'));
+            throw new ServerErrorHttpException('Not found UserQuestionnaire');
         }
         $pointSum = Question::find()
             ->where(['questionnaire_id' => $userQuestionnaireModel->questionnaire_id])

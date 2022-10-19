@@ -16,11 +16,11 @@ class ProfileService
     /**
      * @throws ServerErrorHttpException
      */
-    public static function getMainData($user_id)//: array
+    public static function getMainData($user_id): array
     {
         $userCard = UserCard::findOne(['id_user' => $user_id]);
         if (empty($userCard)) {
-            throw new ServerErrorHttpException(json_encode('Profile not found!'));
+            throw new ServerErrorHttpException('Profile not found!');
         }
         return array('fio' => $userCard->fio,
             'photo' => $userCard->photo,
@@ -31,10 +31,7 @@ class ProfileService
             'position_name' => $userCard->position->name);
     }
 
-    /**
-     * @throws BadRequestHttpException
-     */
-    public static function getProfile($id, $request)//: ?array
+    public static function getProfile($id, $request): ?array
     {
         $searchModel = new ProfileSearchForm();
         $searchModel->attributes = $request;
@@ -46,7 +43,7 @@ class ProfileService
     }
 
     /**
-     * @throws BadRequestHttpException
+     * @throws ServerErrorHttpException
      */
     public static function getProfileWithReportPermission($user_card_id): ?array
     {
@@ -59,7 +56,7 @@ class ProfileService
             self::addPermission($profile, $user_card_id);
             return $profile;
         }
-        throw new BadRequestHttpException(json_encode('There is no user with this id'));
+        throw new ServerErrorHttpException('There is no user with this id');
     }
 
     private static function addPermission(&$profile, $user_card_id)
