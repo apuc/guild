@@ -2,6 +2,7 @@
 
 namespace common\services;
 
+use common\classes\Debug;
 use common\models\Manager;
 use common\models\ManagerEmployee;
 use common\models\UserCard;
@@ -15,11 +16,11 @@ class ProfileService
     /**
      * @throws ServerErrorHttpException
      */
-    public static function getMainData($user_id): array
+    public static function getMainData($user_id)//: array
     {
         $userCard = UserCard::findOne(['id_user' => $user_id]);
         if (empty($userCard)) {
-            throw new ServerErrorHttpException(json_encode($userCard->errors));
+            throw new ServerErrorHttpException(json_encode('Profile not found!'));
         }
         return array('fio' => $userCard->fio,
             'photo' => $userCard->photo,
