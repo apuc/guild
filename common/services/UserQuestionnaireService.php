@@ -18,7 +18,7 @@ class UserQuestionnaireService
                 $arr['questionnaire_id'],
                 $arr['created_at'],
                 $arr['updated_at'],
-                $arr['id'],
+                $arr['id']
             );
         });
         return $userQuestionnaireModels;
