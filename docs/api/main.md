@@ -7,191 +7,6 @@
     Чтобы получить популярные навыки нужно сделать <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/skills/skills-on-main-page
 </p>
 
-## Профиль
-### Список
-`https://guild.craft-group.xyz/api/profile`
-<p>
-    Для получения списка профилей необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/profile
-</p>
-<p>
-    Возможные параметры:
-</p>
-<table>
-    <tr>
-        <th>
-            Параметры
-        </th>
-        <th>
-            Значение
-        </th>
-    </tr>
-    <tr>
-        <td>
-            limit
-        </td>
-        <td>
-            Количество профилей, которое вернет сервер при запросе. 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            offset
-        </td>
-        <td>
-            Количество записей на которое нужно отступить в списке профилей. 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            skills
-        </td>
-        <td>
-            Идентификаторы навыков по которым нужно отфильтровать профили. 
-        </td>
-    </tr>
-</table>
-<p>
-    Пример запроса:
-</p>
-
-`https://guild.craft-group.xyz/api/profile?limit=5&offset=5&skills=1,2`
-
-<p>
-    Возвращает <b>массив</b> объектов <b>Профилей</b>. <br>
-    Каждый объект <b>Профиля</b> имеет такой вид:
-</p>
-
-```json5
-{
-  "id": "1",
-  "fio": "f23f",
-  "passport": "f23", 
-  "photo": "''", 
-  "email": "f", 
-  "gender": "1", 
-  "dob": "2021-09-17", 
-  "status": "2",
-  "created_at": "2021-09-08 16:30:34",
-  "updated_at": "2021-09-09 08:41:02",
-  "resume": "", 
-  "salary": "", 
-  "position_id": "1",
-  "deleted_at": null, 
-  "id_user": "1", 
-  "city": "", 
-  "link_vk": "",
-  "link_telegram": "",
-  "vc_text": "",
-  "level": "2", //
-  "vc_text_short": "",
-  "years_of_exp": "0",
-  "specification": "",
-  "skillValues": [ //Массив навыков привязанных к этому профилю
-    {
-      "id": "1",
-      "card_id": "1", //card_id из таблицы card_skill
-      "skill_id": "1",//skill_id из таблицы card_skill
-      "skill": {
-        "id": "1", //id из таблицы skill
-        "name": "SQL",
-        "category_id": "1"
-      }
-    },
-    //...
-  ],
-  "achievements": [ //Массив достижений привязанных к этому профилю
-    {
-      "id": "7",
-      "user_card_id": "1",//user_card_id из таблицы achievement_user_card
-      "achievement_id": "1",//achievement_id из таблицы achievement_user_card
-      "achievement": {
-        "id": "1", //id из таблицы achievement
-        "slug": "newguy",
-        "title": "Новичок",
-        "img": "",
-        "description": "Ты начал у нас работу",
-        "status": "1" // 1 - Активно, 2 - Неактивно
-      }
-    },
-    //...
-  ]
-}
-```
-
-
-### Одна запись
-`https://guild.craft-group.xyz/api/profile/{id}`
-
-<p>
-    Для того, чтобы получить данные одной записи необходимо отправить <b>GET</b> запрос
-    на URL https://guild.craft-group.xyz/api/profile/{id} , где <b>id</b> это идентификатор 
-    профиля.
-</p>
-<p> 
-    Пример запроса:
-</p>
-
-`https://guild.craft-group.xyz/api/profile/6`
-
-<p>
-    Возвращает объект <b>Профиля</b>. <br>
-    Как выглядит можно посмотреть выше.
-</p>
-
-
-### Пригласить на собеседование
-`https://guild.craft-group.xyz/api/profile/add-to-interview`
-
-<p>
-    Для того, отправить приглашение профилю на собеседование, необходимо сделать 
-    <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/profile/add-to-interview
-</p>
-<p>
-    Возможные параметры:
-</p>
-<table>
-    <tr>
-        <th>
-            Параметры
-        </th>
-        <th>
-            Значение
-        </th>
-    </tr>
-    <tr>
-        <td>
-            email*
-        </td>
-        <td>
-            Почта пользователя, который хочет пригласить на собеседование. 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            profile_id*
-        </td>
-        <td>
-            Идентификатор профиля. 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            phone
-        </td>
-        <td>
-            Телефон.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            comment
-        </td>
-        <td>
-            Дополнительные пожелания по собеседованию. 
-        </td>
-    </tr>
-</table>
-
 ## Отчет
 ### Список
 `https://guild.craft-group.xyz/api/reports`
@@ -256,7 +71,7 @@
     Пример запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/reports/index?fromDate=2021-08-01&toDate=2021-08-31&user_id=2limit=3&offset=2`
+`https://guild.craft-group.xyz/api/reports/index?fromDate=2021-08-01&toDate=2021-08-31&user_id=2&limit=3&offset=2`
 
 ### Один отчет
 `https://guild.craft-group.xyz/api/reports/{id}`
@@ -290,6 +105,96 @@
 </p>
 
 `https://guild.craft-group.xyz/api/reports/13`
+
+### Отчёт по дате
+`https://guild.craft-group.xyz/api/reports/find-by-date`
+<p>
+    Для получения отчета необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/reports/find-by-date
+</p>
+
+<p>
+    Требуемые параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>   
+        <td>
+            user_card_id*
+        </td>
+        <td>
+            ID профиля пользователя
+        </td>
+    </tr>
+    <tr>   
+        <td>
+            date*
+        </td>
+        <td>
+            Дата в формате: Y-m-d
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса :
+</p>
+
+`https://guild.craft-group.xyz/api/reports/find-by-date?user_card_id=17&date=2022-02-14`
+
+<p>
+    Пример ответа:
+</p>
+
+```json5
+[
+  {
+    "id": "1",
+    "created_at": "2022-02-14",
+    "today": null,
+    "difficulties": "",
+    "tomorrow": "",
+    "status": null,
+    "user_card_id": "17",
+    "task": [
+      {
+        "id": "1",
+        "report_id": "1",
+        "task": "dfghjkl",
+        "hours_spent": "2",
+        "created_at": "1644842433",
+        "status": "1",
+        "minutes_spent": "4"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "created_at": "2022-02-14",
+    "today": "dxvxv",
+    "difficulties": "сложности возникли",
+    "tomorrow": "завтра",
+    "status": null,
+    "user_card_id": "17",
+    "task": [
+      {
+        "id": "2",
+        "report_id": "2",
+        "task": "54651513",
+        "hours_spent": "4",
+        "created_at": "1644842630",
+        "status": "1",
+        "minutes_spent": "2"
+      }
+    ]
+  }
+]
+```
 
 ### Создать отчет
 `https://guild.craft-group.xyz/api/reports/create`
@@ -517,14 +422,85 @@
 </p>
 
 ```json5
-{
+ {
   "user_id": 1,
   "uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
-  "score": 20,
-  "status": 1,
-  "percent_correct_answers": 0.8
+  "score": 11,
+  "status": 2,
+  "percent_correct_answers": 0.25,
+  "testing_date": "2022-03-17 11:14:22",
+  "questionnaire_title": "Кат1 Анкета 1 активна"
 }
 ```
+
+<p>
+    Возвращаемые параметры объекта анкета:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            uuid
+        </td>
+        <td>
+             uuid анкеты пользователя
+        </td>
+    </tr>
+    <tr>
+        <td>
+            score
+        </td>
+        <td>
+             Полученные балы(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            status
+        </td>
+        <td>
+             Статус: 0 - не активен; 1 - активен; 2 - завершён; 3 - на проверке;
+        </td>
+    </tr>
+    <tr>
+        <td>
+            percent_correct_answers
+        </td>
+        <td>
+             Процент правильных ответов(float)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            testing_date
+        </td>
+        <td>
+            Дата тестирования
+        </td>
+    </tr><tr>
+        <td>
+            questionnaire_title
+        </td>
+        <td>
+            Название анкеты
+        </td>
+    </tr>
+</table>
 
 <p>
     Передаваемые параметры объекта вопроса:
@@ -576,6 +552,151 @@
   "type": "yii\\web\\NotFoundHttpException"
 }
 ```
+
+### Проверить ответы в анкете
+`https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed`
+<p>
+    Для выполнения проверки анкеты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed
+</p>
+
+<p>
+    Требуемые параметры запроса:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначеной пользователю
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+
+<p>
+    Возвращает <b>массив</b> объектов <b>Вопросов</b>. <br>
+    Каждый объект <b>Вопрос</b> имеет такой вид:
+</p>
+
+```json5
+{
+  "id": 1,
+  "questionnaire_id": 1,
+  "user_id": 1,
+  "uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
+  "created_at": "2021-10-20 13:06:12",
+  "updated_at": {
+    "expression": "NOW()",
+    "params": []
+  },
+  "score": 4,
+  "status": 1,
+  "percent_correct_answers": 0.5,
+  "testing_date": null
+}
+```
+
+### Число балов в анкете
+`https://guild.craft-group.xyz/api/user-questionnaire/get-points-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+<p>
+    Для максимального числа  балов в анкеты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/get-points-number
+</p>
+
+<p>
+    Требуемые параметры запроса:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначеной пользователю
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/user-questionnaire/get-points-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+
+<p>
+    Возвращает максимально возможное число балов за анкету b>. <br>
+    Объект <b>Ответа</b> имеет такой вид:
+</p>
+
+```json5
+{
+  "sum_point": "61"
+}
+```
+
+### Число вопросов в анкете
+`https://guild.craft-group.xyz/api/user-questionnaire/get-question-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+<p>
+    Для числа вопросов в анкете необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/get-question-number
+</p>
+
+<p>
+    Требуемые параметры запроса:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначеной пользователю
+        </td>
+    </tr>
+</table>
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/user-questionnaire/get-question-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+
+<p>
+    Возвращает число вопросов в анкете b>. <br>
+    Объект <b>Ответа</b> имеет такой вид:
+</p>
+
+```json5
+{
+  "question_number": "7"
+}
+```
+
 ### Вопросы анкеты
 `https://guild.craft-group.xyz/api/question/get-questions`
 <p>
@@ -819,6 +940,14 @@
     </tr>
     <tr>
         <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя
+        </td>
+    </tr>
+     <tr>
+        <td>
             question_id
         </td>
         <td>
@@ -835,7 +964,7 @@
     </tr>
     <tr>
         <td>
-            uuid
+            user_questionnaire_uuid
         </td>
         <td>
              UUID анкеты назначенной пользователю(string 36)
@@ -843,10 +972,18 @@
     </tr>
 </table>
 <p>
-    Пример запроса:
+    Пример тела запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/user-response/set-responses?user_id=1&user_questionnaire_id=1&question_id=7&response_body=user response string`
+```json5
+{
+    "user_id": "1",
+    "question_id": "7",
+    "response_body": "oooooooooooo111111111",
+    "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5"
+}
+```
+`https://guild.craft-group.xyz/api/user-response/set-response`
 
 <p>
     Возвращает объект <b>Ответа</b>. <br>
@@ -855,21 +992,76 @@
 
 ```json5
 {
-  "user_id": "1",
-  "question_id": "7",
-  "response_body": "user response string",
-  "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
-  "created_at": {
-    "expression": "NOW()",
-    "params": []
-  },
-  "updated_at": {
-    "expression": "NOW()",
-    "params": []
-  },
-  "id": 90
+    "user_id": "1",
+    "question_id": "7",
+    "response_body": "oooooooooooo111111111",
+    "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
+    "created_at": {
+        "expression": "NOW()",
+        "params": []
+    },
+    "updated_at": {
+        "expression": "NOW()",
+        "params": []
+    },
+    "id": 191,
+    "answer_flag": 0
 }
 ```
+<p>
+    Ответ содержит:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя
+        </td>
+    </tr>
+     <tr>
+        <td>
+            question_id
+        </td>
+        <td>
+             ID вопроса(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            response_body
+        </td>
+        <td>
+             Ответ пользователя(string 255)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначенной пользователю(string 36)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            answer_flag
+        </td>
+        <td>
+            Флаг ответа(1 - верно, 0 - ложно). Если отправлен ответ на открытый вопрос, флаг ответа не будет возвращаться до момента проверки в админ панели.
+        </td>
+    </tr>
+</table>
+
 <p>
     В случаии ошибки в запросе будет отправлено сообщение следующего вида:
 </p>
@@ -902,6 +1094,14 @@
             Значение
         </th>
     </tr>
+     <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя
+        </td>
+    </tr>
     <tr>
         <td>
             question_id
@@ -920,7 +1120,7 @@
     </tr>
     <tr>
         <td>
-            uuid
+            user_questionnaire_uuid
         </td>
         <td>
              UUID анкеты назначенной пользователю(string 36)
@@ -970,12 +1170,13 @@
       "expression": "NOW()",
       "params": []
     },
-    "id": 137
+    "id": 192,
+    "answer_flag": 0
   },
   {
     "user_id": "1",
-    "question_id": "4",
-    "response_body": "oooooooooooo2222222",
+    "question_id": "7",
+    "response_body": "oooooooooooo111111111",
     "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
     "created_at": {
       "expression": "NOW()",
@@ -985,10 +1186,64 @@
       "expression": "NOW()",
       "params": []
     },
-    "id": 138
+    "id": 193,
+    "answer_flag": 0
   }
 ]
 ```
+<p>
+    Ответ содержит:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+             ID пользователя
+        </td>
+    </tr>
+     <tr>
+        <td>
+            question_id
+        </td>
+        <td>
+             ID вопроса(int)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            response_body
+        </td>
+        <td>
+             Ответ пользователя(string 255)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            user_questionnaire_uuid
+        </td>
+        <td>
+             UUID анкеты назначенной пользователю(string 36)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            answer_flag
+        </td>
+        <td>
+            Флаг ответа(1 - верно, 0 - ложно)
+        </td>
+    </tr>
+</table>
 <p>
     В случаии ошибки в запросе будет отправлено сообщение следующего вида:
 </p>
@@ -1966,7 +2221,7 @@
 }
 ```
 ### Назначить сотрудника на задачу
-`https://guild.craft-group.xyz/api/task-user/get-task-users`
+`https://guild.craft-group.xyz/api/task-user/set-task-users`
 <p>
     Для назначения исполнителя необходимо отправить <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/task-user/set-task-user
 </p>

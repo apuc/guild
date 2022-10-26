@@ -18,6 +18,7 @@ class ReportSearchForm extends Model
      * @var false
      */
     public $byDate;
+    public $date;
 
     public function __construct($config = [])
     {
@@ -27,6 +28,7 @@ class ReportSearchForm extends Model
 
         $this->toDate = date('Y-m-d', time());
         $this->fromDate = date('Y-m-01', time());
+        $this->date = date('Y-m-d');
         $this->byDate = false;
 
         parent::__construct($config);
@@ -36,7 +38,7 @@ class ReportSearchForm extends Model
     {
         return [
             [['byDate'], 'safe'],
-            [['fromDate', 'toDate'], 'date', 'format' => 'php:Y-m-d'],
+            [['fromDate', 'toDate', 'date'], 'date', 'format' => 'php:Y-m-d'],
             [['limit', 'offset', 'user_id'], 'integer', 'min' => 0],
         ];
     }
@@ -47,7 +49,7 @@ class ReportSearchForm extends Model
             ->with('task');
 
         if ($this->byDate) {
-            $queryBuilder->andWhere(['reports.created_at' => $this->byDate]);
+            $queryBuilder->andWhere(['reports.created_at' => $this->date]);
         } else {
             $queryBuilder->andWhere(['between', 'reports.created_at', $this->fromDate, $this->toDate]);
         }

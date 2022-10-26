@@ -32,6 +32,7 @@
                     [
                         'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', 'active' => \Yii::$app->controller->id == 'user-card',
                         'items' => $menuItems,
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Сотрудники', 'icon' => 'users', 'url' => '#',
@@ -85,8 +86,8 @@
                     ['label' => 'Достижения', 'icon' => 'trophy', 'url' => ['/achievements/achievements'], 'active' => \Yii::$app->controller->id == 'achievements', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Доступы', 'icon' => 'key', 'url' => ['/accesses/accesses'], 'active' => \Yii::$app->controller->id == 'accesses', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Заметки', 'icon' => 'sticky-note', 'url' => ['/notes/notes'], 'active' => \Yii::$app->controller->id == 'notes', 'visible' => Yii::$app->user->can('confidential_information')],
-                    ['label' => 'Календарь ДР', 'icon' => 'calendar', 'url' => ['/calendar/calendar'], 'active' => \Yii::$app->controller->id == 'calendar', 'visible' => Yii::$app->user->can('confidential_information')],
-                    ['label' => 'Отчеты', 'icon' => 'list-alt', 'url' => ['/reports/reports'], 'active' => \Yii::$app->controller->id == 'reports', 'visible' => Yii::$app->user->can('confidential_information')],
+                    ['label' => 'Календарь ДР', 'icon' => 'calendar-check-o', 'url' => ['/calendar/calendar'], 'active' => \Yii::$app->controller->id == 'calendar', 'visible' => Yii::$app->user->can('confidential_information')],
+                    ['label' => 'Отчеты', 'icon' => 'calendar', 'url' => ['/reports/reports'], 'active' => \Yii::$app->controller->id == 'reports', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Опции', 'icon' => 'list-alt', 'url' => ['/options/options'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('confidential_information')],
                     [
                         'label' => 'Запрос интервью (' . \common\models\InterviewRequest::getNewCount() . ')',
@@ -109,6 +110,8 @@
                         ],
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
+                    ['label' => 'Тестовые задания', 'icon' => 'file-text-o', 'url' => ['/test/test-task'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('confidential_information')],
+
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],

@@ -44,7 +44,7 @@ YiiAsset::register($this);
             [
                 'attribute' => 'answer_flag',
                 'format' => 'raw',
-                'value' => AnswerHelper::answerFlagLabel($model->answer_flag),
+                'value' => AnswerHelper::userResponseLabel($model->answer_flag),
             ],
             'user_questionnaire_uuid',
         ],

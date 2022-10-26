@@ -86,7 +86,7 @@ class ProfileSearchForm extends Model
         $model->andWhere(['status' => [4, 12]]);
         $model->andWhere(['deleted_at' => null]);
 
-        $model->groupBy('card_skill.card_id');
+        //$model->groupBy('card_skill.card_id');
 
         $res = $model->limit($this->limit)
             ->offset($this->offset)->orderBy('updated_at DESC')->asArray()->all();

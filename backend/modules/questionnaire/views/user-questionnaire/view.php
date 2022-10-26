@@ -1,8 +1,8 @@
 <?php
 
-use common\helpers\ScoreCalculatorHelper;
+use common\services\ScoreCalculatorService;
 use common\helpers\AnswerHelper;
-use common\helpers\StatusHelper;
+use common\helpers\UserQuestionnaireStatusHelper;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
@@ -23,19 +23,7 @@ $this->params['breadcrumbs'][] = ['label' => 'User Questionnaires', 'url' => ['i
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
 ?>
-
-<?php
-//$this->registerJs(
-//    '$("document").ready(function(){
-//            $("#new_note").on("pjax:end", function() {
-//            $.pjax.reload({container:"#user_responses"});  //Reload GridView
-//        });
-//    });'
-//);
-?>
 <div class="user-questionnaire-view">
-
-<!--    --><?php //var_dump($model->setPercentCorrectAnswers(4)); die();?>
 
     <p>
         <?= Html::a('Список', ['index'], ['class' => 'btn btn-primary']) ?>
@@ -73,10 +61,11 @@ YiiAsset::register($this);
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'value' => StatusHelper::statusLabel($model->status),
+                'value' => UserQuestionnaireStatusHelper::statusLabel($model->status),
             ],
             'created_at',
             'updated_at',
+            'testing_date',
         ],
     ]) ?>
 
@@ -97,7 +86,7 @@ YiiAsset::register($this);
                 'class' => 'btn btn-success',
             ],
         ]);
-        if(ScoreCalculatorHelper::checkAnswerFlagsForNull($model))
+        if(ScoreCalculatorService::checkAnswerFlagsForNull($model))
         {
             echo 'Ответы проверены. Посчитать баллы?';
             echo Html::a('Посчитать баллы', ['calculate-score', 'id' => $model->id], [
@@ -140,7 +129,7 @@ YiiAsset::register($this);
                         'attribute' => 'answer_flag',
                         'format' => 'raw',
                         'value' => function ($model) {
-                            return AnswerHelper::answerStatusLabel($model->answer_flag);
+                            return AnswerHelper::userResponseLabel($model->answer_flag);
                         },
 
                     ],
@@ -168,5 +157,4 @@ YiiAsset::register($this);
             ]);
         ?>
     <?php Pjax::end(); ?>
-
 </div>

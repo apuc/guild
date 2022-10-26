@@ -1,13 +1,14 @@
 <?php
 
-namespace common\helpers;
+namespace common\services;
 
 use backend\modules\questionnaire\models\Answer;
-use backend\modules\questionnaire\models\UserQuestionnaire;
-use backend\modules\questionnaire\models\UserResponse;
+use common\models\UserQuestionnaire;
+use common\models\UserResponse;
+use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 
-class ScoreCalculatorHelper
+class ScoreCalculatorService
 {
     public static function rateResponses(UserQuestionnaire $user_questionnaire)
     {
@@ -44,6 +45,9 @@ class ScoreCalculatorHelper
         return true;
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public static function calculateScore(UserQuestionnaire $userQuestionnaire)
     {
         $responses_questions = $userQuestionnaire->hasMany(UserResponse::className(), ['user_questionnaire_uuid' => 'uuid'])
@@ -71,11 +75,11 @@ class ScoreCalculatorHelper
             }
         }
 
-        if($score !== null) {
-            self::setPercentCorrectAnswers($user_correct_answers_num, $userQuestionnaire);
-            $userQuestionnaire->score = round($score);
-            $userQuestionnaire->save();
-        }
+        self::setPercentCorrectAnswers($user_correct_answers_num, $userQuestionnaire);
+        $userQuestionnaire->score = round($score);
+        $userQuestionnaire->status = 2;
+        $userQuestionnaire->testing_date = date('Y:m:d H:i:s');
+        $userQuestionnaire->save();
     }
 
     protected static function isCorrect($answer_flag): bool
@@ -91,14 +95,20 @@ class ScoreCalculatorHelper
         return Answer::numCorrectAnswers($question_id);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     protected static function setPercentCorrectAnswers($user_correct_answers_num, UserQuestionnaire $userQuestionnaire)
     {
-        $all_correct_answers_num = $userQuestionnaire->numCorrectAnswersWithoutOpenQuestions();
-        $all_correct_answers_num += $userQuestionnaire->numOpenQuestionsAnswers();
+        if($user_correct_answers_num !== null) {
+            $all_correct_answers_num = $userQuestionnaire->numCorrectAnswersWithoutOpenQuestions();
+            $all_correct_answers_num += $userQuestionnaire->numOpenQuestionsAnswers();
 
-        $percent = $user_correct_answers_num / $all_correct_answers_num;
-
-        $userQuestionnaire->percent_correct_answers = round($percent, 2);
-        $userQuestionnaire->save();
+            $percent = $user_correct_answers_num / $all_correct_answers_num;
+            $userQuestionnaire->percent_correct_answers = round($percent, 2);
+        }
+        else {
+            $userQuestionnaire->percent_correct_answers = round($user_correct_answers_num, 2);
+        }
     }
 }

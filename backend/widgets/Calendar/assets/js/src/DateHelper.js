@@ -23,7 +23,7 @@ class DateHelper {
             return 42
         }
         if (this.prevDay(this.nextMonth(date)).getDate() == 28) {
-            return 28;
+            return 35;
         }
         return 35
 

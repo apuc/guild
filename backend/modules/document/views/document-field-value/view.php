@@ -33,11 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'attribute' => 'field_id',
-                'value' => ArrayHelper::getValue($model, 'field.title') // AnswerHelper::answerFlagLabel($model->answer_flag),
+                'value' => ArrayHelper::getValue($model, 'field.title')
             ],
             [
                 'attribute' => 'document_id',
-                'value' => ArrayHelper::getValue($model, 'document.title') // AnswerHelper::answerFlagLabel($model->answer_flag),
+                'value' => ArrayHelper::getValue($model, 'document.title')
             ],
             'value',
         ],

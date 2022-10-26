@@ -41,4 +41,9 @@ class Position extends \yii\db\ActiveRecord
             'name' => 'Название',
         ];
     }
+
+    public function getUserCard(): \yii\db\ActiveQuery
+    {
+        return $this->hasMany(UserCard::class, ['position_id' => 'id']);
+    }
 }

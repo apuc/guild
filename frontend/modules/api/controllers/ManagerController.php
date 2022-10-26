@@ -2,28 +2,11 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\ManagerEmployee;
-use common\models\User;
-use common\models\UserCard;
-use Yii;
-use yii\filters\auth\HttpBearerAuth;
-use yii\helpers\ArrayHelper;
+use common\services\ManagerService;
 use yii\web\NotFoundHttpException;
-use yii\rest\Controller;
 
-class ManagerController extends Controller
+class ManagerController extends ApiController
 {
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-
-        return $behaviors;
-    }
-
     public function verbs(): array
     {
         return [
@@ -33,12 +16,14 @@ class ManagerController extends Controller
         ];
     }
 
+    /**
+     * @throws NotFoundHttpException
+     */
     public function actionGetManagerList(): array
     {
-        $managers = UserCard::find()->select(['fio','manager.id' , 'email'])
-            ->joinWith('manager')->where(['NOT',['manager.user_card_id' => null]])->all();
+        $managers = ManagerService::getManagerList();
 
-        if(empty($managers)) {
+        if (empty($managers)) {
             throw new NotFoundHttpException('Managers are not assigned');
         }
 
@@ -48,45 +33,33 @@ class ManagerController extends Controller
     /**
      * @throws NotFoundHttpException
      */
-    public function actionGetEmployeesManager()
+    public function actionGetManagerEmployeesList($manager_id): array
     {
-        $manager_id = Yii::$app->request->get('manager_id');
-        if(empty($manager_id) or !is_numeric($manager_id))
-        {
+        if (empty($manager_id) or !is_numeric($manager_id)) {
             throw new NotFoundHttpException('Incorrect manager ID');
         }
 
-        $users_list = UserCard::find()
-            ->select(['manager_employee.id', 'user_card.fio', 'user_card.email'])
-            ->joinWith('managerEmployee')
-            ->where(['manager_employee.manager_id' => $manager_id])
-            ->all();
+        $managerEmployeesList = ManagerService::getManagerEmployeesList($manager_id);
 
-        if(empty($users_list)) {
+        if (empty($managerEmployeesList)) {
             throw new NotFoundHttpException('Managers are not assigned or employees are not assigned to him');
         }
 
-        return $users_list;
+        return $managerEmployeesList;
     }
 
     /**
      * @throws NotFoundHttpException
      */
-    public function actionGetManager(): array
+    public function actionGetManager($manager_id): array
     {
-        $manager_id = Yii::$app->request->get('manager_id');
-        if(empty($manager_id) or !is_numeric($manager_id))
-        {
+        if (empty($manager_id) or !is_numeric($manager_id)) {
             throw new NotFoundHttpException('Incorrect manager ID');
         }
 
-        $manager = UserCard::find()
-            ->select(['manager.id', 'fio', 'email', 'photo', 'gender'])
-            ->joinWith('manager')->where(['manager.id' => $manager_id])
-            ->all();
+        $manager = ManagerService::getManager($manager_id);
 
-
-        if(empty($manager)) {
+        if (empty($manager)) {
             throw new NotFoundHttpException('There is no such manager');
         }
 

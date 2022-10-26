@@ -40,7 +40,7 @@ class AnswerHelper
         ]);
     }
 
-    public static function answerStatusLabel($answer_flag): string
+    public static function userResponseLabel($answer_flag): string
     {
         $class = 'label label-warning';
         $content = 'Не проверен';

@@ -63,7 +63,7 @@ class UserQuestionnaire extends ActiveRecord
             [['questionnaire_id', 'user_id', 'status'], 'required'],
             [['questionnaire_id', 'user_id', 'score', 'status'], 'integer'],
             [['percent_correct_answers'], 'number'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'testing_date'], 'safe'],
             [['uuid'], 'string', 'max' => 36],
             [['uuid'], 'unique'],
             [['questionnaire_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questionnaire::className(), 'targetAttribute' => ['questionnaire_id' => 'id']],
@@ -74,8 +74,7 @@ class UserQuestionnaire extends ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if (empty($this->uuid))
-            {
+            if (empty($this->uuid)) {
                 $this->uuid = UUIDHelper::v4();
             }
             return true;
@@ -98,6 +97,7 @@ class UserQuestionnaire extends ActiveRecord
             'status' => 'Статус',
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
+            'testing_date' => 'Дата тестирования',
             'percent_correct_answers' => 'Процент правильных ответов',
         ];
     }
@@ -150,8 +150,8 @@ class UserQuestionnaire extends ActiveRecord
      */
     public function numCorrectAnswersWithoutOpenQuestions()
     {
-        return $this->hasMany(Answer::className(), ['question_id' => 'question_id'])
-            ->viaTable('user_response', ['user_questionnaire_uuid' => 'uuid'])
+        return $this->hasMany(Answer::className(), ['question_id' => 'id'])
+            ->viaTable('question', ['questionnaire_id' => 'questionnaire_id'])
             ->where(['answer_flag' => '1'])
             ->andWhere(['status' => '1'])
             ->count();
@@ -162,9 +162,10 @@ class UserQuestionnaire extends ActiveRecord
      */
     public function numOpenQuestionsAnswers()
     {
-        return $this->hasMany(Question::className(), ['id' => 'question_id'])
-            ->viaTable('user_response', ['user_questionnaire_uuid' => 'uuid'])
+        return $this->hasMany(Question::className(), ['questionnaire_id' => 'id'])
+            ->viaTable('questionnaire', ['id' => 'questionnaire_id'])
             ->where(['question_type_id' => '1'])
+            ->andWhere(['status' => '1'])
             ->count();
     }
 
@@ -178,8 +179,18 @@ class UserQuestionnaire extends ActiveRecord
 
     public static function findActiveUserQuestionnaires($user_id): array
     {
-        return self::find()->where(['user_id' => $user_id])
-            ->andWhere(['status' => '1'])
+        $models =  self::find()
+            ->where(['user_id' => $user_id])
+            ->andWhere(['not', ['user_questionnaire.status' => 0]])
             ->all();
+
+        $modelsArr = array();
+        foreach ($models as $model) {
+            $modelsArr[] = array_merge($model->toArray(), [
+                'questionnaire_title' => $model->getQuestionnaireTitle()
+            ]);
+        }
+
+        return $modelsArr;
     }
 }
