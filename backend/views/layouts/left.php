@@ -32,7 +32,7 @@
                     [
                         'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', 'active' => \Yii::$app->controller->id == 'user-card',
                         'items' => $menuItems,
-                        'visible' => Yii::$app->user->can('confidential_information')
+                        //'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Сотрудники', 'icon' => 'users', 'url' => '#',
