@@ -27,7 +27,7 @@
                             ['label' => 'Должность', 'icon' => 'spotify', 'url' => ['/settings/position'], 'active' => \Yii::$app->controller->id == 'position'],
                             ['label' => 'Навыки', 'icon' => 'flask', 'url' => ['/settings/skill'], 'active' => \Yii::$app->controller->id == 'skill'],
                         ],
-                        'visible' => Yii::$app->user->can('confidential_information')
+                        //'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', 'active' => \Yii::$app->controller->id == 'user-card',
