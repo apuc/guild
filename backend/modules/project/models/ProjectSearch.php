@@ -67,7 +67,7 @@ class ProjectSearch extends Project
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description]);
-        $query->orderBy('created_at DESC');
+        $query->orderBy('id DESC');
 
         return $dataProvider;
     }
