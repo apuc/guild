@@ -1,19 +1,18 @@
 <?php
 
-namespace backend\modules\employee\controllers;
+namespace backend\modules\card\controllers;
 
 use Yii;
-use backend\modules\employee\models\ManagerEmployee;
-use backend\modules\employee\models\ManagerEmployeeSearch;
-use yii\helpers\ArrayHelper;
+use backend\modules\card\models\ResumeTemplate;
+use backend\modules\card\models\ResumeTemplateSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ManagerEmployeeController implements the CRUD actions for ManagerEmployee model.
+ * ResumeTemplateController implements the CRUD actions for ResumeTemplate model.
  */
-class ManagerEmployeeController extends Controller
+class ResumeTemplateController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,12 +30,12 @@ class ManagerEmployeeController extends Controller
     }
 
     /**
-     * Lists all ManagerEmployee models.
+     * Lists all ResumeTemplate models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ManagerEmployeeSearch();
+        $searchModel = new ResumeTemplateSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +45,7 @@ class ManagerEmployeeController extends Controller
     }
 
     /**
-     * Displays a single ManagerEmployee model.
+     * Displays a single ResumeTemplate model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -59,54 +58,35 @@ class ManagerEmployeeController extends Controller
     }
 
     /**
-     * Creates a new ManagerEmployee model.
+     * Creates a new ResumeTemplate model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $post = \Yii::$app->request->post('ManagerEmployee');
+        $model = new ResumeTemplate();
 
-        if (!empty($post)) {
-            $user_card_id_arr = ArrayHelper::getValue($post,'user_card_id');
-
-            foreach ($user_card_id_arr as $user_card_id) {
-                $emtModel = new ManagerEmployee();
-                $emtModel->manager_id = $post['manager_id'];
-                $emtModel->user_card_id = $user_card_id;
-
-                if (!$emtModel->save()) {
-                    return $this->render('create', [
-                        'model' => $emtModel,
-                    ]);
-                }
-            }
-
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $model = new ManagerEmployee();
         return $this->render('create', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Updates an existing ManagerEmployee model.
+     * Updates an existing ResumeTemplate model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id, $manager_id = null)
+    public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($manager_id !== null)
-            {
-                return $this->redirect(['manager/view', 'id' => $manager_id]);
-            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -116,34 +96,29 @@ class ManagerEmployeeController extends Controller
     }
 
     /**
-     * Deletes an existing ManagerEmployee model.
+     * Deletes an existing ResumeTemplate model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id, $manager_id = null)
+    public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        if ($manager_id !== null)
-        {
-            return $this->redirect(['manager/view', 'id' => $manager_id]);
-        }
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the ManagerEmployee model based on its primary key value.
+     * Finds the ResumeTemplate model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return ManagerEmployee the loaded model
+     * @return ResumeTemplate the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ManagerEmployee::findOne($id)) !== null) {
+        if (($model = ResumeTemplate::findOne($id)) !== null) {
             return $model;
         }
 

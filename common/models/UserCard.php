@@ -38,6 +38,7 @@ use yii\helpers\ArrayHelper;
  * @property int $level
  * @property string $test_task_getting_date
  * @property string $test_task_complete_date
+ * @property string $resume_text
  *
  * @property FieldsValue[] $fieldsValues
  * @property ProjectUser[] $projectUsers
@@ -54,6 +55,11 @@ class UserCard extends \yii\db\ActiveRecord
     const LEVEL_MIDDLE = 2;
     const LEVEL_MIDDLE_PLUS = 3;
     const LEVEL_SENIOR = 4;
+
+    const SCENARIO_GENERATE_RESUME_TEXT = 'generate_resume_text';
+    const SCENARIO_UPDATE_RESUME_TEXT = 'update_resume_text';
+
+    public $resumeTemplateId;
 
     /**
      * @return string[]
@@ -111,6 +117,9 @@ class UserCard extends \yii\db\ActiveRecord
             [['salary'], 'string', 'max' => 100],
             [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => Position::class, 'targetAttribute' => ['position_id' => 'id']],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
+            ['resumeTemplateId', 'required', 'on' => self::SCENARIO_GENERATE_RESUME_TEXT],
+            ['resumeTemplateId', 'integer', 'on' => self::SCENARIO_GENERATE_RESUME_TEXT],
+            ['resume_text', 'required', 'on' => self::SCENARIO_UPDATE_RESUME_TEXT],
         ];
     }
 
@@ -145,6 +154,8 @@ class UserCard extends \yii\db\ActiveRecord
             'specification' => 'Спецификация',
             'test_task_getting_date' => 'Дата получения тестового',
             'test_task_complete_date' => 'Дата выполнения тестового',
+            'resumeTemplateId' => 'Шаблон резюме',
+            'resume_text' => 'Текст резюме'
         ];
     }
 
@@ -310,5 +321,4 @@ class UserCard extends \yii\db\ActiveRecord
         return $userCard['id'];
 
     }
-
 }

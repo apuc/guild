@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Список', ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Резюме', ['user-card/resume', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -100,11 +101,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
-
-    <p>
-        <?= Html::a('Resume pdf', ['download-resume', 'id' => $model->id, 'pdf' => true], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Resume docx', ['download-resume', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    </p>
 
     <h2>Навыки</h2>
     <?php foreach ($skills as $skill) : ?>

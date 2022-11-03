@@ -123,7 +123,7 @@ class UserCard extends \common\models\UserCard
                     $fieldsValue->save();
                 }
             }
-            if (is_array($post['fields'])) {
+            if (array_key_exists('fields', $post) && is_array($post['fields'])) {
                 CardSkill::deleteAll(['card_id' => $this->id]);
                 if (is_array($post['skill']))
                     foreach ($post['skill'] as $item) {
@@ -135,7 +135,7 @@ class UserCard extends \common\models\UserCard
                     }
             }
 
-            if(is_array($post['achievements'])){
+            if(array_key_exists('achievements', $post) && is_array($post['achievements'])){
                 AchievementUserCard::deleteAll(['user_card_id' => $this->id]);
 
                 foreach ($post['achievements'] as $item) {

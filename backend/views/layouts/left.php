@@ -7,6 +7,9 @@
         foreach ($userStatuses as $key => $status) {
             $menuItems[] = ['label' => $status, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
         }
+
+        $menuItems[] = ['label' => 'Шаблоны резюме', 'icon' => 'id-card', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template'];
+
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
         $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project'], 'active' => \Yii::$app->controller->id == 'project']];
         foreach ($projectStatuses as $key => $status) {
