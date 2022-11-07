@@ -65,7 +65,7 @@ class ManagerEmployeeController extends Controller
      */
     public function actionCreate()
     {
-        $post = $post = \Yii::$app->request->post('ManagerEmployee');
+        $post = \Yii::$app->request->post('ManagerEmployee');
 
         if (!empty($post)) {
             $user_card_id_arr = ArrayHelper::getValue($post,'user_card_id');

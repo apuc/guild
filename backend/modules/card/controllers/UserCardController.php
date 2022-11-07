@@ -2,14 +2,15 @@
 
 namespace backend\modules\card\controllers;
 
+use backend\modules\card\models\ResumeTemplate;
 use backend\modules\card\models\UserCard;
 use backend\modules\card\models\UserCardSearch;
+use backend\modules\settings\models\Skill;
 use common\models\AchievementUserCard;
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
 use common\models\User;
 use kartik\mpdf\Pdf;
-use PhpOffice\PhpWord\PhpWord;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -202,55 +203,109 @@ class UserCardController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionDownloadResume($id, $pdf = false)
+    public function actionResume($id): string
     {
-        $model = $this->findModel($id);
-
-        if ($pdf) {
-           self::getResumePdf($model);
-        }
-        self::getResumeDocx($model);
+        return $this->render('resume', [
+            'model' => UserCard::findOne($id)
+        ]);
     }
 
-    private function getResumePdf(UserCard $model)
+    /**
+     * @param integer $id
+     * @throws NotFoundHttpException
+     */
+    public function actionResumeTextByTemplate(int $id): string
     {
+        $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_GENERATE_RESUME_TEXT;
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $this->generateText($model);
+            $model->save(false);
+        }
+
+        return $this->render('resume', [
+            'model' => $model
+        ]);
+    }
+
+    /**
+     * @param integer $id
+     * @throws NotFoundHttpException
+     */
+    public function actionUpdateResumeText($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_UPDATE_RESUME_TEXT;
+
+        if ($model->load(Yii::$app->request->post())  && $model->validate()) {
+            $model->updated_at = date('Y-m-d h:i:s');
+            $model->save();
+        }
+
+        return $this->render('resume', [
+            'model' => $model
+        ]);
+    }
+
+    private function generateText(UserCard $userCard) {
+        $resumeTemplate = ResumeTemplate::findOne($userCard->resumeTemplateId);
+        $resumeText = $resumeTemplate->template_body;
+
+        foreach (ResumeTemplate::$fieldSignatureDbName as $fieldSignature => $fieldDbName ) {
+            if (str_contains($resumeText, $fieldSignature)) {
+                if($fieldDbName == 'position_id') {
+                    $fieldValue = $userCard->position->name;
+                } elseif ($fieldDbName == 'gender') {
+                    $fieldValue = $userCard->getGendersText();
+                } elseif ($fieldDbName == 'level') {
+                    $fieldValue = UserCard::getLevelLabel($userCard->level);
+                } elseif($fieldDbName == 'skills') {
+                    $skills = Skill::find()->select('name')
+                        ->joinWith('cardSkills')
+                        ->where(['card_skill.card_id' => $userCard->id])
+                        ->column();
+
+                    $fieldValue = implode(', ', $skills);
+                } else {
+                    $fieldValue = $userCard[$fieldDbName];
+                }
+                $resumeText = str_replace($fieldSignature, $fieldValue, $resumeText);
+            }
+        }
+        $userCard->resume_text = $resumeText;
+    }
+
+    public function actionDownloadResumePdf($id)
+    {
+        $model = UserCard::findOne($id);
+
         $pdf = new Pdf(); // or new Pdf();
         $mpdf = $pdf->api; // fetches mpdf api
         $mpdf->SetHeader('Resume ' . $model->fio . '||Generated At: ' . date("d/m/Y")); // call methods or set any properties
         $mpdf->SetFooter('{PAGENO}');
-        $mpdf->WriteHtml($model->vc_text); // call mpdf write html
+        $mpdf->WriteHtml($model->resume_text); // call mpdf write html
         echo $mpdf->Output("Resume - {$model->fio}", 'D'); // call the mpdf api output as needed
     }
 
-    private function getResumeDocx(UserCard $model)
+    public function actionDownloadResumeDocx($id)
     {
-        $phpWord = new  PhpWord();
+        $model = UserCard::findOne($id);
 
-        $sectionStyle = array(
-            'orientation' => 'portrait',
-            'marginTop' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(10),
-            'marginLeft' => 600,
-            'marginRight' => 600,
-            'colsNum' => 1,
-            'pageNumberingStart' => 1,
-            'borderBottomSize'=>100,
-            'borderBottomColor'=>'C0C0C0'
-        );
-        $section = $phpWord->addSection($sectionStyle);
-        $text = $model->vc_text;
-        $fontStyle = array('name'=>'Times New Roman', 'size'=>14, 'color'=>'000000', 'bold'=>FALSE, 'italic'=>FALSE);
-        $parStyle = array('align'=>'both','spaceBefore'=>10);
+        $pw = new \PhpOffice\PhpWord\PhpWord();
 
-        $section->addText(htmlspecialchars($text), $fontStyle,$parStyle);
+        // (B) ADD HTML CONTENT
+        $section = $pw->addSection();
+        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $model->resume_text, false, false);
 
-        header("Content-Type: application/msword");
-        header("Content-Transfer-Encoding: binary");
-        header("Content-Disposition: attachment;filename=Resume - {$model->fio}.docx");
-        header('Cache-Control: max-age=0');
+        // (C) SAVE TO DOCX ON SERVER
+        // $pw->save("convert.docx", "Word2007");
 
-        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        ob_clean();
+        // (D) OR FORCE DOWNLOAD
+        header("Content-Type: application/octet-stream");
+        header("Content-Disposition: attachment;filename=\"Resume-$model->fio.docx\"");
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($pw, "Word2007");
         $objWriter->save("php://output");
-        exit;
+        exit();
     }
 }
