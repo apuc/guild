@@ -107,7 +107,7 @@ use yii\widgets\ActiveForm;
                     </tr>
                     <tr class="info">
                         <td>Лет опыта</td>
-                        <td class="table-cell">${years_of_exp}/td>
+                        <td class="table-cell">${years_of_exp}</td>
                     </tr>
                     <tr class="info">
                         <td>Спецификация</td>
