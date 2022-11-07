@@ -41,7 +41,7 @@ use yii\widgets\ActiveForm;
     </div>
     <div class="col-md-4">
         <div class="table-responsive">
-            <table class="table">
+            <table class="table" id="fieldNameTable">
                 <thead>
                     <tr>
                         <th>Поле</th>
@@ -51,76 +51,94 @@ use yii\widgets\ActiveForm;
                 <tbody>
                     <tr class="info">
                         <td>ФИО</td>
-                        <td>${fio}</td>
+                        <td class="table-cell">${fio}</td>
                     </tr>
                     <tr class="info">
                         <td>Паспорт</td>
-                        <td>${passport}</td>
+                        <td class="table-cell">${passport}</td>
                     </tr>
                     <tr class="info">
                         <td>Электронная почта</td>
-                        <td>${email}</td>
+                        <td class="table-cell">${email}</td>
                     </tr>
                     <tr class="info">
                         <td>Пол</td>
-                        <td>${gender}</td>
+                        <td class="table-cell">${gender}</td>
                     </tr>
                     <tr class="info">
                         <td>Резюме</td>
-                        <td>${resume}</td>
+                        <td class="table-cell">${resume}</td>
                     </tr>
                     <tr class="info">
                         <td>Зароботная плата</td>
-                        <td>${salary}</td>
+                        <td class="table-cell">${salary}</td>
                     </tr>
                     <tr class="info">
                         <td>Позиция</td>
-                        <td>${position_id}</td>
+                        <td class="table-cell">${position_id}</td>
                     </tr>
                     <tr class="info">
                         <td>Город</td>
-                        <td>${city}</td>
+                        <td class="table-cell">${city}</td>
                     </tr>
                     <tr class="info">
                         <td>Ссылка ВК</td>
-                        <td>${link_vk}</td>
+                        <td class="table-cell">${link_vk}</td>
                     </tr>
                     <tr class="info">
                         <td>Ссылка Телграм</td>
-                        <td>${link_telegram}</td>
+                        <td class="table-cell">${link_telegram}</td>
                     </tr>
                     <tr class="info">
                         <td>Резюме текст</td>
-                        <td>${vc_text}</td>
+                        <td class="table-cell">${vc_text}</td>
                     </tr>
                     <tr class="info">
                         <td>Уровень</td>
-                        <td>${level}</td>
+                        <td class="table-cell">${level}</td>
                     </tr>
                     <tr class="info">
                         <td>Резюме текст</td>
-                        <td>${vc_text}</td>
+                        <td class="table-cell">${vc_text}</td>
                     </tr>
                     <tr class="info">
                         <td>Резюме короткий текст</td>
-                        <td>${vc_text_short}</td>
+                        <td class="table-cell">${vc_text_short}</td>
                     </tr>
                     <tr class="info">
                         <td>Лет опыта</td>
-                        <td>${years_of_exp}/td>
+                        <td class="table-cell">${years_of_exp}/td>
                     </tr>
                     <tr class="info">
                         <td>Спецификация</td>
-                        <td>${specification}</td>
+                        <td class="table-cell">${specification}</td>
                     </tr>
                     <tr class="info">
                         <td>Навыки</td>
-                        <td>${skills}</td>
+                        <td class="table-cell">${skills}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<!--<script>-->
+<!--    document.querySelectorAll(".table-cell").forEach(function(elm){-->
+<!--        elm.addEventListener("mouseover", function(e){-->
+<!--            e.target.style.backgroundColor = '#76d7c4';-->
+<!--            var copyText = e.target.textContent;-->
+<!--            const el = document.createElement('textarea');-->
+<!--            el.value = copyText;-->
+<!--            document.body.appendChild(el);-->
+<!--            el.select();-->
+<!--            document.execCommand('copy');-->
+<!--            document.body.removeChild(el);-->
+<!---->
+<!--            /* Alert the copied text */-->
+<!--            alert("Copied the text: " + el.value);-->
+<!--        });-->
+<!--    })-->
+<!--</script>-->
 
 

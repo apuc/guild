@@ -3,12 +3,11 @@
         <?php
 
         $userStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROFILE);
-        $menuItems = [['label' => 'Все', 'icon' => 'id-card', 'url' => ['/card/user-card']]];
+        $menuItems = [['label' => 'Все', 'icon' => 'id-card', 'url' => ['/card/user-card'], 'active' => \Yii::$app->controller->id == 'user-card',]];
         foreach ($userStatuses as $key => $status) {
-            $menuItems[] = ['label' => $status, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key]];
+            $menuItems[] = ['label' => $status, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key], 'active' => \Yii::$app->controller->id == 'user-card',];
         }
-
-        $menuItems[] = ['label' => 'Шаблоны резюме', 'icon' => 'id-card', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template'];
+        $menuItems[] = ['label' => 'Шаблоны резюме', 'icon' => 'file', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template'];
 
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
         $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project'], 'active' => \Yii::$app->controller->id == 'project']];
@@ -33,7 +32,7 @@
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
-                        'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', 'active' => \Yii::$app->controller->id == 'user-card',
+                        'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', //'active' => \Yii::$app->controller->id == 'user-card',
                         'items' => $menuItems,
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
