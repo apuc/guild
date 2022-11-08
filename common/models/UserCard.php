@@ -155,7 +155,7 @@ class UserCard extends \yii\db\ActiveRecord
             'test_task_getting_date' => 'Дата получения тестового',
             'test_task_complete_date' => 'Дата выполнения тестового',
             'resumeTemplateId' => 'Шаблон резюме',
-            'resume_text' => 'Текст резюме'
+            'resume_text' => 'Резюме сгенерированный текст'
         ];
     }
 

@@ -99,6 +99,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'test_task_complete_date',
                 'format' => ['datetime', 'php:d.m.Y']
             ],
+            [
+                'attribute' => 'resume_text',
+                'format' => 'raw'
+            ],
         ],
     ]) ?>
 
