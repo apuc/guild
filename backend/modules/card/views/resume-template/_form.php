@@ -50,95 +50,110 @@ use yii\widgets\ActiveForm;
                 </thead>
                 <tbody>
                     <tr class="info">
-                        <td>ФИО</td>
+                        <td class="table-cell">ФИО</td>
                         <td class="table-cell">${fio}</td>
                     </tr>
                     <tr class="info">
-                        <td>Паспорт</td>
+                        <td class="table-cell">Паспорт</td>
                         <td class="table-cell">${passport}</td>
                     </tr>
                     <tr class="info">
-                        <td>Электронная почта</td>
+                        <td class="table-cell">Электронная почта</td>
                         <td class="table-cell">${email}</td>
                     </tr>
                     <tr class="info">
-                        <td>Пол</td>
+                        <td class="table-cell">Пол</td>
                         <td class="table-cell">${gender}</td>
                     </tr>
                     <tr class="info">
-                        <td>Резюме</td>
+                        <td class="table-cell">Резюме</td>
                         <td class="table-cell">${resume}</td>
                     </tr>
                     <tr class="info">
-                        <td>Зароботная плата</td>
+                        <td class="table-cell">Зароботная плата</td>
                         <td class="table-cell">${salary}</td>
                     </tr>
                     <tr class="info">
-                        <td>Позиция</td>
+                        <td class="table-cell">Позиция</td>
                         <td class="table-cell">${position_id}</td>
                     </tr>
                     <tr class="info">
-                        <td>Город</td>
+                        <td class="table-cell">Город</td>
                         <td class="table-cell">${city}</td>
                     </tr>
                     <tr class="info">
-                        <td>Ссылка ВК</td>
+                        <td class="table-cell">Ссылка ВК</td>
                         <td class="table-cell">${link_vk}</td>
                     </tr>
                     <tr class="info">
-                        <td>Ссылка Телграм</td>
+                        <td class="table-cell">Ссылка Телграм</td>
                         <td class="table-cell">${link_telegram}</td>
                     </tr>
                     <tr class="info">
-                        <td>Резюме текст</td>
+                        <td class="table-cell">Резюме текст</td>
                         <td class="table-cell">${vc_text}</td>
                     </tr>
                     <tr class="info">
-                        <td>Уровень</td>
+                        <td class="table-cell">Уровень</td>
                         <td class="table-cell">${level}</td>
                     </tr>
                     <tr class="info">
-                        <td>Резюме текст</td>
+                        <td class="table-cell">Резюме текст</td>
                         <td class="table-cell">${vc_text}</td>
                     </tr>
                     <tr class="info">
-                        <td>Резюме короткий текст</td>
+                        <td class="table-cell">Резюме короткий текст</td>
                         <td class="table-cell">${vc_text_short}</td>
                     </tr>
                     <tr class="info">
-                        <td>Лет опыта</td>
+                        <td class="table-cell">Лет опыта</td>
                         <td class="table-cell">${years_of_exp}</td>
                     </tr>
                     <tr class="info">
-                        <td>Спецификация</td>
+                        <td class="table-cell">Спецификация</td>
                         <td class="table-cell">${specification}</td>
                     </tr>
                     <tr class="info">
-                        <td>Навыки</td>
+                        <td class="table-cell">Навыки</td>
                         <td class="table-cell">${skills}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <div>
+            <p>
+                Нажмите на ячейку чтобы скопировать содержимое
+            </p>
+        </div>
     </div>
 </div>
 
-<!--<script>-->
-<!--    document.querySelectorAll(".table-cell").forEach(function(elm){-->
-<!--        elm.addEventListener("mouseover", function(e){-->
-<!--            e.target.style.backgroundColor = '#76d7c4';-->
-<!--            var copyText = e.target.textContent;-->
-<!--            const el = document.createElement('textarea');-->
-<!--            el.value = copyText;-->
-<!--            document.body.appendChild(el);-->
-<!--            el.select();-->
-<!--            document.execCommand('copy');-->
-<!--            document.body.removeChild(el);-->
-<!---->
-<!--            /* Alert the copied text */-->
-<!--            alert("Copied the text: " + el.value);-->
-<!--        });-->
-<!--    })-->
-<!--</script>-->
+<script>
+    const popup = document.createElement('h4')
+    popup.textContent = 'Скопировано'
+    popup.style.cssText = `
+      background: #a6caf0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      `
+    document.querySelectorAll('.table-cell').forEach(function (elm) {
+        elm.style.position = 'relative'
+        elm.addEventListener('click', function (e) {
+            e.target.style.backgroundColor = '#76d7c4'
+            var copyText = e.target.textContent
+            const el = document.createElement('textarea')
+            el.value = copyText
+            document.body.appendChild(el)
+            el.select()
+            document.execCommand('copy')
+            document.body.removeChild(el)
+            elm.appendChild(popup)
+            setTimeout(() => {
+                elm.removeChild(popup)
+            }, 1000)
+        })
+    })
+</script>
 
 

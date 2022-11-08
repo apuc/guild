@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-    <div class="row" style="padding-bottom: 15px">add_a_test_task_completion_date_to_ucer_card
+    <div class="row" style="padding-bottom: 15px">
         <div class="imgUpload col-xs-6">
             <div class="media__upload_img"><img src="<?= $model->photo; ?>" width="100px"/></div>
             <?php
@@ -47,7 +47,6 @@ use yii\widgets\ActiveForm;
             ?>
         </div>
         <div class="col-xs-6">
-            <!--<div class="media__upload_img"><img src="<? /*= $model->photo; */ ?>" width="100px"/></div>-->
             <?php
             echo InputFile::widget([
                 'language' => 'ru',

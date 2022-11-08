@@ -296,7 +296,8 @@ class UserCardController extends Controller
 
         // (B) ADD HTML CONTENT
         $section = $pw->addSection();
-        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $model->resume_text, false, false);
+        $resumeText = str_replace(array('<br/>', '<br>', '</br>'), ' ', $model->resume_text);
+        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $resumeText, false, false);
 
         // (C) SAVE TO DOCX ON SERVER
         // $pw->save("convert.docx", "Word2007");

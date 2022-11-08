@@ -7,7 +7,6 @@
         foreach ($userStatuses as $key => $status) {
             $menuItems[] = ['label' => $status, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key], 'active' => \Yii::$app->controller->id == 'user-card',];
         }
-        $menuItems[] = ['label' => 'Шаблоны резюме', 'icon' => 'file', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template'];
 
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
         $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project'], 'active' => \Yii::$app->controller->id == 'project']];
@@ -28,13 +27,14 @@
                             ['label' => 'Доп. поля', 'icon' => 'file-text-o', 'url' => ['/settings/additional-fields'], 'active' => \Yii::$app->controller->id == 'additional-fields'],
                             ['label' => 'Должность', 'icon' => 'spotify', 'url' => ['/settings/position'], 'active' => \Yii::$app->controller->id == 'position'],
                             ['label' => 'Навыки', 'icon' => 'flask', 'url' => ['/settings/skill'], 'active' => \Yii::$app->controller->id == 'skill'],
+                            ['label' => 'Шаблоны резюме', 'icon' => 'file', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template']
                         ],
-                        //'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
-                        'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', //'active' => \Yii::$app->controller->id == 'user-card',
+                        'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#',
                         'items' => $menuItems,
-                        //'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Сотрудники', 'icon' => 'users', 'url' => '#',
@@ -62,7 +62,7 @@
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
-                        'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'], //'active' => \Yii::$app->controller->id == 'project',
+                        'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'],
                         'items' => $projectItems,
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],

@@ -16,6 +16,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = 'Резюме';
 ?>
 
+<div class="form-group">
+    <?= Html::a('Редактировать профиль', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+</div>
+
 <div class="resume-form">
     <?php $form = ActiveForm::begin([
         'id' => 'text-by-template-form',
