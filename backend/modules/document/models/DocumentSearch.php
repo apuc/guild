@@ -17,7 +17,8 @@ class DocumentSearch extends Document
     public function rules()
     {
         return [
-            [['id', 'company_id', 'contractor_company_id', 'manager_id', 'contractor_manager_id'], 'integer'],
+            [['id', 'company_id', 'contractor_company_id', 'manager_id', 'contractor_manager_id', 'template_id'], 'integer'],
+            [['title', 'body', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -62,7 +63,13 @@ class DocumentSearch extends Document
             'contractor_company_id' => $this->contractor_company_id,
             'manager_id' => $this->manager_id,
             'contractor_manager_id' => $this->contractor_manager_id,
+            'template_id' => $this->template_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'body', $this->body]);
 
         return $dataProvider;
     }

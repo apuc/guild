@@ -1,5 +1,6 @@
 <?php
 
+use common\helpers\StatusHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -13,11 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="document-template-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Список', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -31,7 +31,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-            'template_body:ntext',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => StatusHelper::statusLabel($model->status),
+            ],
+            'created_at',
+            'updated_at',
+            [
+                'attribute' => 'template_body',
+                'format' => 'raw'
+            ],
+            [
+                'attribute' => 'Переменные в шаблоне',
+                'value' => function($model){
+                    preg_match_all('/(\${\w+})/', $model->template_body,$out);
+                    return implode(",", $out[0]);
+                },
+            ],
         ],
     ]) ?>
 

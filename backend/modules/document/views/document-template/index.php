@@ -1,5 +1,6 @@
 <?php
 
+use common\helpers\StatusHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -7,16 +8,13 @@ use yii\grid\GridView;
 /* @var $searchModel backend\modules\document\models\DocumentTemplateSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Document Templates';
+$this->title = 'Шаблоны документов';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="document-template-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Create Document Template', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать шаблон', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,9 +23,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'title',
-            'template_body:ntext',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'filter' => StatusHelper::statusList(),
+                'value' => function($model){
+                    return StatusHelper::statusLabel($model->status);
+                }
+            ],
+
+            'created_at',
+            //'updated_at',
+//            'template_body:ntext',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

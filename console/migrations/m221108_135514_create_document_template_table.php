@@ -15,7 +15,10 @@ class m221108_135514_create_document_template_table extends Migration
         $this->createTable('{{%document_template}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(),
-            'template_body' => $this->text()
+            'template_body' => $this->text(),
+            'status' => $this->integer(),
+            'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime(),
         ]);
     }
 

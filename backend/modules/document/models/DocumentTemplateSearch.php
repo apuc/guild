@@ -17,8 +17,8 @@ class DocumentTemplateSearch extends DocumentTemplate
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['title', 'template_body'], 'safe'],
+            [['id', 'status'], 'integer'],
+            [['title', 'template_body', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -59,6 +59,9 @@ class DocumentTemplateSearch extends DocumentTemplate
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
