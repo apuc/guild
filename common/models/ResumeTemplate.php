@@ -16,6 +16,8 @@ use yii\helpers\ArrayHelper;
  * @property string $updated_at
  * @property int $status
  * @property string $template_body
+ * @property string $header_text
+ * @property string $header_image
  */
 class ResumeTemplate extends \yii\db\ActiveRecord
 {
@@ -87,7 +89,7 @@ class ResumeTemplate extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['status'], 'integer'],
             [['template_body'], 'string'],
-            [['title'], 'string', 'max' => 255],
+            [['title', 'header_text', 'header_image'], 'string', 'max' => 255],
         ];
     }
 
@@ -102,7 +104,9 @@ class ResumeTemplate extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'status' => 'Статус',
-            'template_body' => 'Template Body'
+            'template_body' => 'Template Body',
+            'header_text' => 'Текст в верхнем контикуле',
+            'header_image' => 'Картинка в верхнем контикуле',
         ];
     }
 }

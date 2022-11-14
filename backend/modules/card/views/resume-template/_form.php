@@ -1,7 +1,9 @@
 <?php
 
 use asmoday74\ckeditor5\EditorClassic;
+use backend\modules\card\models\ResumeTemplate;
 use common\helpers\StatusHelper;
+use mihaildev\elfinder\InputFile;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -31,6 +33,29 @@ use yii\widgets\ActiveForm;
                 ]
             ]); ?>
 
+            <?= $form->field($model, 'header_text')->textInput(['maxlength' => true]) ?>
+
+            <div class="imgUpload form-group">
+                <div class="media__upload_img" style="width: 0">
+                    <img src="<?= $model->header_image; ?>" width="100px"/>
+                </div>
+                <?php echo InputFile::widget([
+                        'language' => 'ru',
+                        'controller' => 'elfinder',
+                        // вставляем название контроллера, по умолчанию равен elfinder
+                        'filter' => 'image',
+                        // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-con..
+                        'name' => 'ResumeTemplate[header_image]',
+                        'id' => 'resumeTemplateHeader_img',
+                        'template' => '<label>Картинка в верхнем контикуле</label><div class="input-group">{input}<span class="span-btn">{button}</span></div>',
+                        'options' => ['class' => 'form-control itemImg', 'maxlength' => '255'],
+                        'buttonOptions' => ['class' => 'btn btn-primary'],
+                        'value' => $model->header_image,
+                        'buttonName' => 'Выбрать изображение',
+                    ]);
+                ?>
+            </div>
+
             <div class="form-group">
                 <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
             </div>
@@ -49,74 +74,16 @@ use yii\widgets\ActiveForm;
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="info">
-                        <td class="table-cell">ФИО</td>
-                        <td class="table-cell">${fio}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Паспорт</td>
-                        <td class="table-cell">${passport}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Электронная почта</td>
-                        <td class="table-cell">${email}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Пол</td>
-                        <td class="table-cell">${gender}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Резюме</td>
-                        <td class="table-cell">${resume}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Зароботная плата</td>
-                        <td class="table-cell">${salary}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Позиция</td>
-                        <td class="table-cell">${position_id}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Город</td>
-                        <td class="table-cell">${city}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Ссылка ВК</td>
-                        <td class="table-cell">${link_vk}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Ссылка Телграм</td>
-                        <td class="table-cell">${link_telegram}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Резюме текст</td>
-                        <td class="table-cell">${vc_text}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Уровень</td>
-                        <td class="table-cell">${level}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Резюме текст</td>
-                        <td class="table-cell">${vc_text}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Резюме короткий текст</td>
-                        <td class="table-cell">${vc_text_short}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Лет опыта</td>
-                        <td class="table-cell">${years_of_exp}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Спецификация</td>
-                        <td class="table-cell">${specification}</td>
-                    </tr>
-                    <tr class="info">
-                        <td class="table-cell">Навыки</td>
-                        <td class="table-cell">${skills}</td>
-                    </tr>
+                <?php
+                    foreach (ResumeTemplate::$fieldNamesAndSignature as $fieldNames => $signature) {
+                        echo "
+                                <tr class='info'>
+                                    <td class='table-cell'>$fieldNames</td>
+                                    <td class='table-cell'>$signature</td>
+                                </tr>
+                             ";
+                    }
+                ?>
                 </tbody>
             </table>
         </div>

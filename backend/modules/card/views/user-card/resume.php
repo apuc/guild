@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = 'Резюме';
     ?>
     <?= Html::hiddenInput('id', $model->id); ?>
 
-    <?= $form->field($model, 'resumeTemplateId')->dropDownList(
+    <?= $form->field($model, 'resume_template_id')->dropDownList(
         ResumeTemplate::find()->where(['status' => StatusHelper::STATUS_ACTIVE])->select(['title', 'id'])->indexBy('id')->column(),
         ['prompt' => 'Выберите'])
     ?>
