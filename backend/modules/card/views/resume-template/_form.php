@@ -36,7 +36,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'header_text')->textInput(['maxlength' => true]) ?>
 
             <div class="imgUpload form-group">
-                <div class="media__upload_img" style="width: 0">
+                <div class="media__upload_img">
                     <img src="<?= $model->header_image; ?>" width="100px"/>
                 </div>
                 <?php echo InputFile::widget([
