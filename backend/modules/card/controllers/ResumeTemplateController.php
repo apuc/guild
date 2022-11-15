@@ -2,6 +2,7 @@
 
 namespace backend\modules\card\controllers;
 
+use common\classes\Debug;
 use Yii;
 use backend\modules\card\models\ResumeTemplate;
 use backend\modules\card\models\ResumeTemplateSearch;

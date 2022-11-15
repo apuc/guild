@@ -33,6 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
+            'created_at',
+            'updated_at',
+
+            //'template_body:ntext',
+            //'header_text',
+            //'header_image',
+
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

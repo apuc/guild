@@ -40,7 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => StatusHelper::statusList(),
                 'value' =>  StatusHelper::statusLabel($model->status),
             ],
-            'template_body:ntext'
+            'header_text',
+            [
+                'attribute'=>'header_image',
+                'value'=>$model->header_image,
+                'format' => ['image',['width'=>'100','height'=>'100']],
+            ],
+            [
+                'attribute' => 'template_body',
+                'format' => 'raw'
+            ],
         ],
     ]) ?>
 
