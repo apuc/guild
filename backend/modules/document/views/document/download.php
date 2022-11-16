@@ -1,11 +1,10 @@
 <?php
 
 use asmoday74\ckeditor5\EditorClassic;
-//use backend\modules\card\models\ResumeTemplate;
-use common\helpers\StatusHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\document\models\Document */
@@ -19,9 +18,7 @@ $this->params['breadcrumbs'][] = 'Загрузить';
 <div class="form-group">
     <?= Html::a('Редактировать документ', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Просмотр документа', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-</div>
-
-
+</div
 
 <div class="resume-form">
 
@@ -42,11 +39,10 @@ $this->params['breadcrumbs'][] = 'Загрузить';
 
     <?php ActiveForm::end(); ?>
 
-</div>
-
-<div>
-    <p>
-        <?= Html::a('Скачать pdf', ['download-pdf', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Скачать docx', ['download-docx', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div>
+        <p>
+            <?= Html::a('Скачать pdf', ['download-pdf', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Скачать docx', ['download-docx', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+        </p>
+    </div>
 </div>

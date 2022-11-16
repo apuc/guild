@@ -78,7 +78,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl' => '', // TODO /secure
+            'baseUrl' => '/secure',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
                 'text/xml' => 'yii/web/XmlParser',

@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
@@ -28,8 +27,8 @@ use yii\db\Expression;
  */
 class Document extends \yii\db\ActiveRecord
 {
-    const SCENARIO_GENERATE_DOCUMENT_BODY = 'generate_document_body';
     const SCENARIO_UPDATE_DOCUMENT_BODY = 'update_document_body';
+    const SCENARIO_DOWNLOAD_DOCUMENT = 'download_document';
 
     /**
      * {@inheritdoc}
@@ -67,9 +66,14 @@ class Document extends \yii\db\ActiveRecord
             [['contractor_manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['contractor_manager_id' => 'id']],
             [['template_id'], 'exist', 'skipOnError' => true, 'targetClass' => DocumentTemplate::className(), 'targetAttribute' => ['template_id' => 'id']],
             [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['manager_id' => 'id']],
-//            ['resumeTemplateId', 'required', 'on' => self::SCENARIO_GENERATE_RESUME_TEXT],
-//            ['resumeTemplateId', 'integer', 'on' => self::SCENARIO_GENERATE_RESUME_TEXT],
             ['body', 'required', 'on' => self::SCENARIO_UPDATE_DOCUMENT_BODY],
+            ['body', function ($attribute, $params) {
+                    preg_match_all('/(\${\w+})/', $this->$attribute,$out);
+                    if (!empty($out[0])) {
+                        $this->addError('body', 'В теле документа все переменные должны бвть заменены!');
+                    }
+                },  'on' => self::SCENARIO_DOWNLOAD_DOCUMENT
+            ],
         ];
     }
 

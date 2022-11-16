@@ -27,15 +27,16 @@
                             ['label' => 'Доп. поля', 'icon' => 'file-text-o', 'url' => ['/settings/additional-fields'], 'active' => \Yii::$app->controller->id == 'additional-fields'],
                             ['label' => 'Должность', 'icon' => 'spotify', 'url' => ['/settings/position'], 'active' => \Yii::$app->controller->id == 'position'],
                             ['label' => 'Навыки', 'icon' => 'flask', 'url' => ['/settings/skill'], 'active' => \Yii::$app->controller->id == 'skill'],
-                            ['label' => 'Шаблоны резюме', 'icon' => 'file', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template'],
+                            ['label' => 'Шаблоны резюме', 'icon' => 'address-card ', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template'],
                             ['label' => 'Шаблоны документов', 'icon' => 'file', 'url' => ['/document/document-template'], 'active' => \Yii::$app->controller->id == 'document-template'],
+                            ['label' => 'Поля документов', 'icon' => 'file-text', 'url' => ['/document/document-field'], 'active' => \Yii::$app->controller->id == 'document-field'],
                         ],
-                        //'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', //'active' => \Yii::$app->controller->id == 'user-card',
                         'items' => $menuItems,
-                        //'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Сотрудники', 'icon' => 'users', 'url' => '#',
@@ -43,19 +44,13 @@
                             ['label' => 'Менеджеры', 'icon' => 'user-circle-o', 'url' => ['/employee/manager'], 'active' => \Yii::$app->controller->id == 'manager'],
                             ['label' => 'Работники', 'icon' => 'user', 'url' => ['/employee/manager-employee'], 'active' => \Yii::$app->controller->id == 'manager-employee'],
                         ],
-//                        'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
-                    [
-                        'label' => 'Документы', 'icon' => 'archive', 'url' => '#',
-                        'items' => [
-                            ['label' => 'Документы', 'icon' => 'file-text', 'url' => ['/document/document'], 'active' => \Yii::$app->controller->id == 'document'],
-                        ],
-//                        'visible' => Yii::$app->user->can('confidential_information')
-                    ],
+                    ['label' => 'Документы', 'icon' => 'archive', 'url' => ['/document/document'], 'active' => \Yii::$app->controller->id == 'document', 'visible' => Yii::$app->user->can('confidential_information')],
                     [
                         'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'],
                         'items' => $projectItems,
-//                        'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
                         'label' => 'Задачи', 'icon' => 'tasks', 'url' => '#',
@@ -63,7 +58,7 @@
                             ['label' => 'Задачи', 'icon' => 'minus', 'url' => ['/task/task'], 'active' => \Yii::$app->controller->id == 'task'],
                             ['label' => 'Исполнители задачи', 'icon' => 'users', 'url' => ['/task/task-user'], 'active' => \Yii::$app->controller->id == 'task-user'],
                         ],
-//                        'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     ['label' => 'Компании', 'icon' => 'building', 'url' => ['/company/company'], 'active' => \Yii::$app->controller->id == 'company', ], // 'visible' => Yii::$app->user->can('confidential_information')
                     [
@@ -72,7 +67,7 @@
                             ['label' => 'Компании', 'icon' => 'building', 'url' => ['/hh/hh'], 'active' => \Yii::$app->controller->id == 'hh'],
                             ['label' => 'Вакансии', 'icon' => 'user-md', 'url' => ['/hh/hh-job'], 'active' => \Yii::$app->controller->id == 'hh-job'],
                         ],
-//                        'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     ['label' => 'Баланс', 'icon' => 'dollar', 'url' => ['/balance/balance'], 'active' => \Yii::$app->controller->id == 'balance', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Отпуска', 'icon' => 'plane', 'url' => ['/holiday/holiday'], 'active' => \Yii::$app->controller->id == 'holiday', 'visible' => Yii::$app->user->can('confidential_information')],
@@ -101,7 +96,7 @@
                             ['label' => 'Анкеты пользователей', 'icon' => 'drivers-license', 'url' => ['/questionnaire/user-questionnaire'], 'active' => \Yii::$app->controller->id == 'user-questionnaire'],
                             ['label' => 'Ответы пользователей', 'icon' => 'comments', 'url' => ['/questionnaire/user-response'], 'active' => \Yii::$app->controller->id == 'user-response'],
                         ],
-//                        'visible' => Yii::$app->user->can('confidential_information')
+                        'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     ['label' => 'Тестовые задания', 'icon' => 'file-text-o', 'url' => ['/test/test-task'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('confidential_information')],
 

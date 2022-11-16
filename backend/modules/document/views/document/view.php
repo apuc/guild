@@ -1,5 +1,7 @@
 <?php
 
+use common\classes\Debug;
+use common\models\Document;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -53,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'body',
                 'format' => 'raw',
             ],
-//            'body:ntext',
+
             'created_at',
             'updated_at',
         ],

@@ -2,18 +2,17 @@
 
 namespace backend\modules\document\controllers;
 
-use backend\modules\document\models\Document;
-use backend\modules\document\models\DocumentSearch;
-use common\services\DocumentService;
 use Yii;
-use yii\filters\VerbFilter;
+use backend\modules\document\models\DocumentField;
+use backend\modules\document\models\DocumentFieldSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
- * DocumentController implements the CRUD actions for Document model.
+ * DocumentFieldController implements the CRUD actions for DocumentField model.
  */
-class DocumentController extends Controller
+class DocumentFieldController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,12 +30,12 @@ class DocumentController extends Controller
     }
 
     /**
-     * Lists all Document models.
+     * Lists all DocumentField models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new DocumentSearch();
+        $searchModel = new DocumentFieldSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +45,7 @@ class DocumentController extends Controller
     }
 
     /**
-     * Displays a single Document model.
+     * Displays a single DocumentField model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -59,17 +58,15 @@ class DocumentController extends Controller
     }
 
     /**
-     * Creates a new Document model.
+     * Creates a new DocumentField model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Document();
+        $model = new DocumentField();
 
-        if ($model->load(Yii::$app->request->post()) &&  $model->validate()) {
-            DocumentService::generateDocumentBody($model);
-            $model->save(false);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -79,7 +76,7 @@ class DocumentController extends Controller
     }
 
     /**
-     * Updates an existing Document model.
+     * Updates an existing DocumentField model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -99,7 +96,7 @@ class DocumentController extends Controller
     }
 
     /**
-     * Deletes an existing Document model.
+     * Deletes an existing DocumentField model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -113,74 +110,18 @@ class DocumentController extends Controller
     }
 
     /**
-     * Finds the Document model based on its primary key value.
+     * Finds the DocumentField model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Document the loaded model
+     * @return DocumentField the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Document::findOne($id)) !== null) {
+        if (($model = DocumentField::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionDownload($id): string
-    {
-        return $this->render('download', [
-            'model' => Document::findOne($id)
-        ]);
-    }
-
-    /**
-     * @param integer $id
-     * @throws NotFoundHttpException
-     */
-    public function actionUpdateDocumentBody($id): string
-    {
-        $model = $this->findModel($id);
-        $model->scenario = $model::SCENARIO_UPDATE_DOCUMENT_BODY;
-
-        if ($model->load(Yii::$app->request->post())  && $model->validate()) {
-            $model->updated_at = date('Y-m-d h:i:s');
-            $model->save();
-        }
-
-        return $this->render('download', [
-            'model' => $model
-        ]);
-    }
-
-    public function actionDownloadPdf($id): string
-    {
-        $model = $this->findModel($id);
-        $model->scenario = $model::SCENARIO_DOWNLOAD_DOCUMENT;
-
-        if ($model->validate()) {
-            DocumentService::downloadPdf($id);
-        }
-
-        Yii::$app->session->setFlash('error', $model->getFirstError('body'));
-        return $this->render('download', [
-            'model' => Document::findOne($id)
-        ]);
-    }
-
-    public function actionDownloadDocx($id): string
-    {
-        $model = $this->findModel($id);
-        $model->scenario = $model::SCENARIO_DOWNLOAD_DOCUMENT;
-
-        if ($model->validate()) {
-            DocumentService::downloadPdf($id);
-        }
-
-        Yii::$app->session->setFlash('error', $model->getFirstError('body'));
-        return $this->render('download', [
-            'model' => Document::findOne($id)
-        ]);
     }
 }

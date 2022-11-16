@@ -1,6 +1,7 @@
 <?php
 
 use asmoday74\ckeditor5\EditorClassic;
+use backend\modules\document\models\DocumentField;
 use common\helpers\StatusHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -31,14 +32,6 @@ use yii\widgets\ActiveForm;
                 ]
             ]); ?>
 
-<!--             composer require --prefer-dist stkevich/yii2-ckeditor5 "*"-->
-<!--            --><?//= $form->field($model, 'text')->widget(CKEditor::className(),[
-//                'editorOptions' => [ TODO
-//                    'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
-//                    'inline' => false, //по умолчанию false
-//                ],
-//            ]); ?>
-
             <div class="form-group">
                 <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
             </div>
@@ -47,14 +40,7 @@ use yii\widgets\ActiveForm;
 
         </div>
     </div>
-<!--    ['Акт', $time],-->
-<!--    ['Акт сверки', $time],-->
-<!--    ['Детализация', $time],-->
-<!--    ['Доверенность', $time],-->
-<!--    ['Договор', $time],-->
-<!--    ['Доп соглашение к договору', $time],-->
-<!--    ['Транспортная накладная', $time],-->
-<!--    ['Ценовой лист', $time],-->
+
     <div class="col-md-4">
         <div class="table-responsive">
             <table class="table" id="fieldNameTable">
@@ -65,63 +51,17 @@ use yii\widgets\ActiveForm;
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="info">
-                    <td class="table-cell">№ договора</td>
-                    <td class="table-cell">${contract_number}</td>
-                </tr>
-                <tr class="info">
-                    <td class="table-cell">Название</td>
-                    <td class="table-cell">${title}</td>
-                </tr>
-                <tr class="info">
-                    <td class="table-cell">Компания</td>
-                    <td class="table-cell">${company}</td>
-                </tr>
-                <tr class="info">
-                    <td class="table-cell">Представитель</td>
-                    <td class="table-cell">${manager}</td>
-                </tr>
-                <tr class="info">
-                    <td class="table-cell">Компания контрагент</td>
-                    <td class="table-cell">${contractor_company}</td>
-                </tr>
-                <tr class="info">
-                    <td class="table-cell">Представитель контрагента</td>
-                    <td class="table-cell">${contractor_manager}</td>
-                </tr>
-<!--                <tr class="info">-->
-<!--                    <td class="table-cell"></td>-->
-<!--                    <td class="table-cell"></td>-->
-<!--                </tr>-->
-<!--                <tr class="info">-->
-<!--                    <td class="table-cell">№ документа</td>-->
-<!--                    <td class="table-cell">${document_number}</td>-->
-<!--                </tr>-->
-<!--                <tr class="info">-->
-<!--                    <td class="table-cell">от </td>-->
-<!--                    <td class="table-cell">${from}</td>-->
-<!--                </tr>-->
-<!--                <tr class="info">-->
-<!--                    <td class="table-cell">сумма с НДС</td>-->
-<!--                    <td class="table-cell">${sum_with_NDS}</td>-->
-<!--                </tr>-->
-<!--                <tr class="info">-->
-<!--                    <td class="table-cell">НДС</td>-->
-<!--                    <td class="table-cell">${NDS}</td>-->
-<!--                </tr>-->
-<!--                <tr class="info">-->
-<!--                    <td class="table-cell">цена</td>-->
-<!--                    <td class="table-cell">${price}</td>-->
-<!--                </tr>-->
-<!--                <tr class="info">-->
-<!--                    <td class="table-cell">к договору</td>-->
-<!--                    <td class="table-cell">${to_the_contract}</td>-->
-<!--                </tr>-->
-<!--                <tr class="info">-->
-<!--                    <td class="table-cell">№</td>-->
-<!--                    <td class="table-cell">${number}</td>-->
-<!--                </tr>-->
-
+                <?php
+                foreach (DocumentField::getTitleFieldTemplateArr() as $fieldTitle => $fieldTemplate) {
+                    echo "
+                                <tr class='info'>
+                                    <td class='table-cell'>$fieldTitle</td>
+                                    <td class='table-cell'>$fieldTemplate</td>
+                                </tr>
+                             ";
+                }
+                ?>
+                </tbody>
             </table>
         </div>
         <div>

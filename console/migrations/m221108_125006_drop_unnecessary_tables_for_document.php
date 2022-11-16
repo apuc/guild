@@ -15,7 +15,6 @@ class m221108_125006_drop_unnecessary_tables_for_document extends Migration
         $this->dropTable('accompanying_document');
         $this->dropTable('document_field_value');
         $this->dropTable('template_document_field');
-        $this->dropTable('document_field');
         $this->dropTable('document');
         $this->dropTable('template');
     }
@@ -46,13 +45,6 @@ class m221108_125006_drop_unnecessary_tables_for_document extends Migration
         ]);
         $this->addForeignKey('document_template', 'document', 'template_id', 'template', 'id');
         $this->addForeignKey('document_manager', 'document', 'manager_id', 'manager', 'id');
-
-
-        $this->createTable('{{%document_field}}', [
-            'id' => $this->primaryKey(),
-            'title' => $this->string(),
-            'field_template' => $this->string(),
-        ]);
 
 
         $this->createTable('{{%template_document_field}}', [
