@@ -81,6 +81,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'visible' => Yii::$app->user->can('confidential_information')
             ],
             [
+                'attribute' => 'resume_tariff',
+                'visible' => Yii::$app->user->can('confidential_information')
+            ],
+            [
                 'attribute' => 'position_id',
                 'value' => (isset($model->position->name)) ? $model->position->name : 'Без должности',
             ],

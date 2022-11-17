@@ -120,6 +120,7 @@ use yii\widgets\ActiveForm;
         <?php if (Yii::$app->user->can('confidential_information')): ?>
             <div class="col-xs-6">
                 <?= $form->field($model, 'salary')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'resume_tariff')->textInput(['maxlength' => true]) ?>
             </div>
         <?php endif; ?>
         <div class="col-xs-6">

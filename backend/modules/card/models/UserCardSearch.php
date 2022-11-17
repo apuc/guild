@@ -85,6 +85,7 @@ class UserCardSearch extends UserCard
             'updated_at' => $this->updated_at,
             'test_task_getting_date' => $this->test_task_getting_date,
             'test_task_complete_date' => $this->test_task_complete_date,
+            'resume_tariff' => $this->resume_tariff,
         ]);
 
         $query->andFilterWhere(['like', 'fio', $this->fio])
