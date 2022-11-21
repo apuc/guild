@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = 'Резюме';
 
 </div>
 
-<div class="resume-form">
+<div>
     <p>
         <?= Html::a('Скачать pdf', ['download-resume', 'id' => $model->id, 'type' => 'pdf'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Скачать docx', ['download-resume', 'id' => $model->id, 'type' => 'docx'], ['class' => 'btn btn-success']) ?>

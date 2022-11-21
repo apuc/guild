@@ -2,18 +2,13 @@
 
 namespace backend\modules\document\controllers;
 
-use PhpOffice\PhpWord\Exception\CopyFileException;
-use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
-use Yii;
 use backend\modules\document\models\Document;
 use backend\modules\document\models\DocumentSearch;
-use yii\data\ActiveDataProvider;
+use common\services\DocumentService;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-
-use common\services\DocumentFileService;
-use yii\web\Response;
 
 /**
  * DocumentController implements the CRUD actions for Document model.
@@ -58,17 +53,8 @@ class DocumentController extends Controller
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-        $documentFieldValuesDataProvider = new ActiveDataProvider([
-            'query' => $model->getDocumentFieldValues(),//->with('questionType'),
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
-
         return $this->render('view', [
-            'model' => $model,
-            'documentFieldValuesDataProvider' => $documentFieldValuesDataProvider
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -81,12 +67,10 @@ class DocumentController extends Controller
     {
         $model = new Document();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect([
-                'document-field-value/create-multiple',
-                'document_id' => $model->id,
-                'template_id' => $model->template_id
-            ]);
+        if ($model->load(Yii::$app->request->post()) &&  $model->validate()) {
+            DocumentService::generateDocumentBody($model);
+            $model->save(false);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -144,19 +128,59 @@ class DocumentController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionDownload($id): string
+    {
+        return $this->render('download', [
+            'model' => Document::findOne($id)
+        ]);
+    }
 
     /**
-     * @throws CopyFileException
+     * @param integer $id
      * @throws NotFoundHttpException
-     * @throws CreateTemporaryFileException
      */
-    public function actionCreateDocument($id): Response
+    public function actionUpdateDocumentBody($id): string
     {
-        if(!empty($this->findModel($id)->template->template_file_name)){
-            $documentService = new DocumentFileService($id);
-            $documentService->setFields();
-            $documentService->downloadDocument();
+        $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_UPDATE_DOCUMENT_BODY;
+
+        if ($model->load(Yii::$app->request->post())  && $model->validate()) {
+            $model->updated_at = date('Y-m-d h:i:s');
+            $model->save();
         }
-        return $this->redirect(['view', 'id' => $id]);
+
+        return $this->render('download', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionDownloadPdf($id): string
+    {
+        $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_DOWNLOAD_DOCUMENT;
+
+        if ($model->validate()) {
+            DocumentService::downloadPdf($id);
+        }
+
+        Yii::$app->session->setFlash('error', $model->getFirstError('body'));
+        return $this->render('download', [
+            'model' => Document::findOne($id)
+        ]);
+    }
+
+    public function actionDownloadDocx($id): string
+    {
+        $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_DOWNLOAD_DOCUMENT;
+
+        if ($model->validate()) {
+            DocumentService::downloadPdf($id);
+        }
+
+        Yii::$app->session->setFlash('error', $model->getFirstError('body'));
+        return $this->render('download', [
+            'model' => Document::findOne($id)
+        ]);
     }
 }

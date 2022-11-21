@@ -17,8 +17,8 @@ class DocumentSearch extends Document
     public function rules()
     {
         return [
-            [['id', 'template_id', 'manager_id'], 'integer'],
-            [['title', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'company_id', 'contractor_company_id', 'manager_id', 'contractor_manager_id', 'template_id'], 'integer'],
+            [['title', 'body', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -59,13 +59,17 @@ class DocumentSearch extends Document
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'company_id' => $this->company_id,
+            'contractor_company_id' => $this->contractor_company_id,
+            'manager_id' => $this->manager_id,
+            'contractor_manager_id' => $this->contractor_manager_id,
+            'template_id' => $this->template_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'template_id' => $this->template_id,
-            'manager_id' => $this->manager_id,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'body', $this->body]);
 
         return $dataProvider;
     }

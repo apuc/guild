@@ -2,7 +2,6 @@
 
 namespace backend\modules\document\controllers;
 
-use common\helpers\TransliteratorHelper;
 use Yii;
 use backend\modules\document\models\DocumentField;
 use backend\modules\document\models\DocumentFieldSearch;

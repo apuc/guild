@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use common\helpers\TransliteratorHelper;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -12,9 +11,6 @@ use yii\helpers\ArrayHelper;
  * @property int $id
  * @property string $title
  * @property string $field_template
- *
- * @property DocumentFieldValue[] $documentFieldValues
- * @property TemplateDocumentField[] $templateDocumentFields
  */
 class DocumentField extends \yii\db\ActiveRecord
 {
@@ -36,12 +32,6 @@ class DocumentField extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert)
-    {
-        $this->field_template = TransliteratorHelper::transliterate($this->title);
-        return true;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -54,27 +44,8 @@ class DocumentField extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDocumentFieldValues()
+    public static function getTitleFieldTemplateArr(): array
     {
-        return $this->hasMany(DocumentFieldValue::className(), ['field_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTemplateDocumentFields()
-    {
-        return $this->hasMany(TemplateDocumentField::className(), ['field_id' => 'id']);
-    }
-
-    public static function getIdFieldsTitleList($template_id): array
-    {
-        return
-            self::find()->joinWith('templateDocumentFields')
-                ->where(['template_document_field.template_id' => $template_id])
-                ->asArray()->all();
+        return ArrayHelper::map(self::find()->all(), 'title', 'field_template');
     }
 }

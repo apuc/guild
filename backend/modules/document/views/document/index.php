@@ -1,8 +1,7 @@
 <?php
 
-use backend\modules\document\models\Document;
-use backend\modules\document\models\Template;
-use kartik\select2\Select2;
+use backend\modules\company\models\Company;
+use backend\modules\employee\models\Manager;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -25,64 +24,47 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+            'title',
+//            'body:ntext',
             [
-                'attribute' => 'title',
-                'filter' =>  Select2::widget([
-                    'model' => $searchModel,
-                    'attribute' => 'title',
-                    'data' => Document::find()
-                        ->select(['title', 'id'])->indexBy('id')->column(),
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'width' => '150px',
-                    ],
-                    'options' => [
-                        'class' => 'form-control',
-                        'placeholder' => 'Выберите значение'
-                    ],
-                ]),
-                'value' => 'title',
+                'attribute' => 'company_id',
+                'filter' => Company::find()->select(['name', 'id'])->indexBy('id')->column(),
+                'value' => 'company.name'
             ],
             [
-                'attribute' => 'template_id',
-                'filter' =>  Select2::widget([
-                    'model' => $searchModel,
-                    'attribute' => 'template_id',
-                    'data' => Template::find()->select(['title', 'id'])->indexBy('id')->column(),
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'width' => '150px',
-                    ],
-                    'options' => [
-                        'class' => 'form-control',
-                        'placeholder' => 'Выберите значение'
-                    ],
-                ]),
-                'value' => 'template.title'
+                'attribute' => 'contractor_company_id',
+                'filter' => Company::find()->select(['name', 'id'])->indexBy('id')->column(),
+                'value' => 'contractorCompany.name'
             ],
             [
                 'attribute' => 'manager_id',
-                'filter' =>  Select2::widget([
-                    'model' => $searchModel,
-                    'attribute' => 'manager_id',
-                    'data' => Document::find()
-                        ->joinWith(['manager', 'manager.userCard'])
-                        ->select(['user_card.fio', 'manager.id'])->indexBy('id')->column(),
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'width' => '150px',
-                    ],
-                    'options' => [
-                        'class' => 'form-control',
-                        'placeholder' => 'Выберите значение'
-                    ],
-                ]),
-                'value' => 'manager.userCard.fio',
+                'filter' => Manager::find()->select(['fio', 'manager.id'])
+                    ->joinWith('userCard')->indexBy('manager.id')->column(),
+                'value' => 'manager.userCard.fio'
             ],
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'contractor_manager_id',
+                'filter' => Manager::find()->select(['fio', 'manager.id'])
+                    ->joinWith('userCard')->indexBy('manager.id')->column(),
+                'value' => 'manager.userCard.fio'
+            ],
+            //'title',
+            //'body:ntext',
+            //'created_at',
+            //'updated_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {download}',
+                'buttons' => [
+                    'download' => function($url, $model) {
+                        return Html::a(
+                                '<span class="glyphicon glyphicon-download-alt"></span>',
+                                     ['document/download', 'id' => $model->id]
+                                );
+                    }
+                ]
+            ]
         ],
     ]); ?>
 </div>
