@@ -309,24 +309,39 @@ class UserCardController extends Controller
         $pdf = new Pdf();
         $mpdf = $pdf->api;
 
-        $mpdf->SetHTMLHeader("
-                <table width='100%' style='border-bottom: 1px solid #999; vertical-align: bottom; font-family: serif; font-size: 8pt; color:
-                #000000; font-weight: bold; font-style: italic;'><tr>
-                <td width='33%'><span style='font-weight: bold; font-style: italic;'><img src=$headerImagePath style='width: 100px; height: 40px; margin: 0; vertical-align: middle;'></span></td>
-                <td width='33%' align='center' style='font-weight: bold; font-style: italic;'>$headerText</td>
-                <td width='33%' style='text-align: right; '>{PAGENO}</td>
-                </tr></table>
-            ");
-        $mpdf->SetHTMLFooter("
-                <table width='100%' style='border-top: 1px solid #999; vertical-align: bottom; font-family: serif; font-size: 8pt; color:
-                #000000; font-weight: bold; font-style: italic;'><tr>
-                <td width='33%'><span style='font-weight: bold; font-style: italic;'><img src=$footerImg style='width: 100px; height: 40px; margin: 0; vertical-align: middle;'></span></td>
-                <td width='33%' align='center' style='font-weight: bold; font-style: italic;'>$footerText</td>
-                <td width='33%' style='text-align: right; '>{PAGENO}</td>
-                </tr></table>
-            ");
+        if (!pathinfo($resumeTemplate->header_image, PATHINFO_EXTENSION)) {
+            $mpdf->SetHeader($headerText);
+        } else {
+            $imagePath = Yii::getAlias('@frontend') . '/web' . $resumeTemplate->header_image;
+            $mpdf->setAutoTopMargin='stretch';
+            $mpdf->SetHTMLHeader(
+                "<div style='border-bottom: 1px solid #999;'>
+                    <p><img src=$imagePath style='width: 100px; height: 40px; margin: 0; vertical-align: middle;'/>$headerText</p>
+                </div>"
+            );
+        }
 
+
+//        $mpdf->SetHTMLHeader("
+//                <div><table style='width:100%; height:100%; border-bottom: 1px solid #999;  font-family: serif; font-size: 8pt; color:
+//                #000000; font-weight: bold; font-style: italic;'><tr>
+//                <td width='33%'><span style='font-weight: bold; font-style: italic;'><img src=$headerImagePath style='width: 100px; height: 40px; margin: 0; vertical-align: middle;'></span></td>
+//                <td width='33%' align='center' style='font-weight: bold; font-style: italic;'>$headerText</td>
+//                <td width='33%' style='text-align: right; '></td>
+//                </tr></table></div>
+//            ");
+
+//        $mpdf->SetHTMLFooter("
+//                <div><table width='100%' style='border-top: 1px solid #999; vertical-align: bottom; font-family: serif; font-size: 8pt; color:
+//                #000000; font-weight: bold; font-style: italic;'><tr>
+//                <td width='33%'><span style='font-weight: bold; font-style: italic;'><img src=$footerImg style='width: 100px; height: 40px; margin: 0; vertical-align: middle;'></span></td>
+//                <td width='33%' align='center' style='font-weight: bold; font-style: italic;'>$footerText</td>
+//                <td width='33%' style='text-align: right; '>{PAGENO}</td>
+//                </tr></table></div>
+//            ");
         $mpdf->WriteHTML("<div>$userCard->resume_text</div>");
+        $mpdf->SetFooter('{PAGENO}');
+
         $mpdf->Output("Resume - {$userCard->fio}", 'D'); // call the mpdf api output as needed
         exit;
     }
