@@ -61,6 +61,7 @@ class UserCard extends \yii\db\ActiveRecord
 
     const SCENARIO_GENERATE_RESUME_TEXT = 'generate_resume_text';
     const SCENARIO_UPDATE_RESUME_TEXT = 'update_resume_text';
+    const SCENARIO_DOWNLOAD_RESUME = 'download_resume_text';
 
 //    public $resumeTemplateId;
 
@@ -123,7 +124,7 @@ class UserCard extends \yii\db\ActiveRecord
             ['resume_template_id', 'required', 'on' => self::SCENARIO_GENERATE_RESUME_TEXT],
             ['resume_template_id', 'integer', 'on' => self::SCENARIO_GENERATE_RESUME_TEXT],
             ['resume_text', 'required', 'on' => self::SCENARIO_UPDATE_RESUME_TEXT],
-//            [['resume_template_id'], 'exist', 'skipOnError' => true, 'targetClass' => ResumeTemplate::className(), 'targetAttribute' => ['resume_template_id' => 'id'], 'on' => self::SCENARIO_GENERATE_RESUME_TEXT],
+            ['resume_template_id', 'required', 'on' => self::SCENARIO_DOWNLOAD_RESUME],
         ];
     }
 

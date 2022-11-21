@@ -31,6 +31,10 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'header_image') ?>
 
+    <?php // echo $form->field($model, 'footer_text') ?>
+
+    <?php // echo $form->field($model, 'footer_image') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>

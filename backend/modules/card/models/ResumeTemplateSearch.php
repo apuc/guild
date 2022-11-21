@@ -18,7 +18,7 @@ class ResumeTemplateSearch extends ResumeTemplate
     {
         return [
             [['id', 'status'], 'integer'],
-            [['title', 'created_at', 'updated_at', 'template_body', 'header_text', 'header_image'], 'safe'],
+            [['title', 'created_at', 'updated_at', 'template_body', 'header_text', 'header_image', 'footer_text', 'footer_image'], 'safe'],
         ];
     }
 
@@ -67,7 +67,10 @@ class ResumeTemplateSearch extends ResumeTemplate
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'template_body', $this->template_body])
             ->andFilterWhere(['like', 'header_text', $this->header_text])
-            ->andFilterWhere(['like', 'header_image', $this->header_image]);
+            ->andFilterWhere(['like', 'header_image', $this->header_image])
+            ->andFilterWhere(['like', 'footer_text', $this->footer_text])
+            ->andFilterWhere(['like', 'footer_image', $this->footer_image]);
+
         return $dataProvider;
     }
 }

@@ -18,6 +18,8 @@ use yii\helpers\ArrayHelper;
  * @property string $template_body
  * @property string $header_text
  * @property string $header_image
+ * @property string $footer_text
+ * @property string $footer_image
  */
 class ResumeTemplate extends \yii\db\ActiveRecord
 {
@@ -91,7 +93,7 @@ class ResumeTemplate extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['status'], 'integer'],
             [['template_body'], 'string'],
-            [['title', 'header_text', 'header_image'], 'string', 'max' => 255],
+            [['title', 'header_text', 'header_image', 'footer_text', 'footer_image'], 'string', 'max' => 255],
         ];
     }
 
@@ -109,6 +111,8 @@ class ResumeTemplate extends \yii\db\ActiveRecord
             'template_body' => 'Тело шаблона',
             'header_text' => 'Текст в верхнем контикуле',
             'header_image' => 'Картинка в верхнем контикуле',
+            'footer_text' => 'Текст в нижнем контикуле',
+            'footer_image' => 'Картинка в нижнем контикуле',
         ];
     }
 }
