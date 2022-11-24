@@ -332,8 +332,10 @@ class UserCardController extends Controller
             ");
         $mpdf->WriteHTML("<div>$userCard->resume_text</div>");
 
-        $mpdf->Output("Resume - {$userCard->fio}", 'D'); // call the mpdf api output as needed
-        exit;
+        $filename = "Resume - " . $userCard->fio . ".pdf";//You might be not adding the extension,
+
+        $mpdf->Output($filename, 'D'); // call the mpdf api output as needed
+        exit();
     }
 
     private function downloadResumeDocx(UserCard $model)
