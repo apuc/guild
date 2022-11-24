@@ -50,7 +50,7 @@ class ResumeTemplate extends \yii\db\ActiveRecord
         '${gender}'=> 'gender',
         '${resume}'=> 'resume',
         '${salary}' => 'salary',
-       '${resume_tariff}' => 'resume_tariff',
+        '${resume_tariff}' => 'resume_tariff',
         '${position_id}'=> 'position_id',
         '${city}'=> 'city',
         '${link_vk}' => 'link_vk',

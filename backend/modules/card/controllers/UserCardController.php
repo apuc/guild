@@ -6,6 +6,7 @@ use backend\modules\card\models\ResumeTemplate;
 use backend\modules\card\models\UserCard;
 use backend\modules\card\models\UserCardSearch;
 use backend\modules\settings\models\Skill;
+use common\classes\Debug;
 use common\models\AchievementUserCard;
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
@@ -267,6 +268,10 @@ class UserCardController extends Controller
                         ->column();
 
                     $fieldValue = implode(', ', $skills);
+                } elseif ($fieldDbName == 'vc_text') {
+                    $fieldValue = $userCard[$fieldDbName];
+                    $resumeText = str_replace('<p>' . $fieldSignature. '</p>', $fieldValue, $resumeText);
+                    continue;
                 } else {
                     $fieldValue = $userCard[$fieldDbName];
                 }
@@ -296,7 +301,6 @@ class UserCardController extends Controller
 
     private function downloadResumePdf(UserCard $userCard)
     {
-//        $userCard = UserCard::findOne($id);
         $resumeTemplate = ResumeTemplate::findOne($userCard->resume_template_id);
 
 
