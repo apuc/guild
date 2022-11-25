@@ -68,9 +68,9 @@ class Document extends \yii\db\ActiveRecord
             [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['manager_id' => 'id']],
             ['body', 'required', 'on' => self::SCENARIO_UPDATE_DOCUMENT_BODY],
             ['body', function ($attribute, $params) {
-                    preg_match_all('/(\${\w+})/', $this->$attribute,$out);
+                    preg_match_all('/(\${\w+|№|№+w})/', $this->$attribute,$out);
                     if (!empty($out[0])) {
-                        $this->addError('body', 'В теле документа все переменные должны бвть заменены!');
+                        $this->addError('body', 'В теле документа все переменные должны быть заменены!');
                     }
                 },  'on' => self::SCENARIO_DOWNLOAD_DOCUMENT
             ],
