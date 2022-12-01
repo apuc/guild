@@ -2,9 +2,10 @@
 
 use backend\modules\company\models\Company;
 use backend\modules\document\models\DocumentTemplate;
-use backend\modules\employee\models\Manager;
+use kartik\depdrop\DepDrop;
 use kartik\select2\Select2;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -16,48 +17,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'company_id')->widget(Select2::class,
-        [
-            'data' => Company::find()->select(['name', 'id'])->indexBy('id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]
-    ); ?>
-
-    <?= $form->field($model, 'manager_id')->widget(Select2::class,
-        [
-            'data' => Manager::find()->select(['fio', 'manager.id'])
-                ->joinWith('userCard')->indexBy('manager.id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]
-    ); ?>
-
-    <?= $form->field($model, 'contractor_company_id')->widget(Select2::class,
-        [
-            'data' => Company::find()->select(['name', 'id'])->indexBy('id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]
-    ); ?>
-
-    <?= $form->field($model, 'contractor_manager_id')->widget(Select2::class,
-        [
-            'data' => Manager::find()->select(['fio', 'manager.id'])
-                ->joinWith('userCard')->indexBy('manager.id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]
-    ); ?>
-
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'template_id')->widget(Select2::class,
@@ -67,6 +26,52 @@ use yii\widgets\ActiveForm;
             'pluginOptions' => [
                 'allowClear' => true
             ],
+        ]
+    ); ?>
+
+    <div>
+        <p>Не обязательные поля:</p>
+    </div>
+
+    <?= $form->field($model, 'company_id')->dropDownList(
+        Company::find()->select(['name', 'id'])->indexBy('id')->column(),
+        [
+            'id' => 'company-id',
+            'prompt' => 'Выберите'
+        ]
+    );
+    ?>
+
+    <?= $form->field($model, 'manager_id')->widget(DepDrop::className(),
+        [
+            'options' => ['id' => 'manager-id'],
+            'pluginOptions' => [
+                'depends' => ['company-id'],
+                'placeholder' => 'Выберите',
+                'url' => Url::to(['/document/document/managers'])
+            ]
+        ]
+    ); ?>
+
+    <?= $form->field($model, 'contractor_company_id')->widget(Select2::class,
+        [
+            'data' => Company::find()->select(['name', 'id'])->indexBy('id')->column(),
+            'options' => ['id' => 'contractor-company-id','placeholder' => '...','class' => 'form-control'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]
+    ); ?>
+
+    <?= $form->field($model, 'contractor_manager_id')->widget(DepDrop::className(),
+        [
+            'options' => ['id' => 'contractor-manager-id'],
+            'pluginOptions' => [
+                'depends' => ['contractor-company-id'],
+                'placeholder' => 'Выберите',
+                'url' => Url::to(['/document/document/managers']),
+                'params' => ['contractor-company-id']
+            ]
         ]
     ); ?>
 

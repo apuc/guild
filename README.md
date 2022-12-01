@@ -43,4 +43,5 @@ environments/            contains environment-based overrides
     php yii migrate --migrationPath=@yii/rbac/migrations <br>
 и выполнить консольный скрипт <br>
     php yii rbac/init <br>
+    php yii rbac/create-company-manager-role
 </p>

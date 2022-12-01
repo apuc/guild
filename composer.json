@@ -36,7 +36,8 @@
         "phpoffice/phpword": "^0.18.2",
         "kartik-v/yii2-widget-fileinput": "@dev",
         "kartik-v/yii2-mpdf": "dev-master",
-        "mihaildev/yii2-ckeditor": "*"
+        "mihaildev/yii2-ckeditor": "*",
+        "developeruz/yii2-db-rbac": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

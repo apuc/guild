@@ -21,9 +21,9 @@ use yii\db\Expression;
  *
  * @property Company $company
  * @property Company $contractorCompany
- * @property Manager $contractorManager
+ * @property CompanyManager $contractorManager
  * @property DocumentTemplate $template
- * @property Manager $manager
+ * @property CompanyManager $manager
  */
 class Document extends \yii\db\ActiveRecord
 {
@@ -56,19 +56,19 @@ class Document extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_id', 'contractor_company_id', 'manager_id', 'contractor_manager_id', 'title', 'template_id'], 'required'],
+            [['title', 'template_id'], 'required'],
             [['company_id', 'contractor_company_id', 'manager_id', 'contractor_manager_id', 'template_id'], 'integer'],
             [['body'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
             [['contractor_company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['contractor_company_id' => 'id']],
-            [['contractor_manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['contractor_manager_id' => 'id']],
+            [['contractor_manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => CompanyManager::className(), 'targetAttribute' => ['contractor_manager_id' => 'id']],
             [['template_id'], 'exist', 'skipOnError' => true, 'targetClass' => DocumentTemplate::className(), 'targetAttribute' => ['template_id' => 'id']],
-            [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['manager_id' => 'id']],
+            [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => CompanyManager::className(), 'targetAttribute' => ['manager_id' => 'id']],
             ['body', 'required', 'on' => self::SCENARIO_UPDATE_DOCUMENT_BODY],
             ['body', function ($attribute, $params) {
-                    preg_match_all('/(\${\w+|№|№+w})/', $this->$attribute,$out);
+                    preg_match_all('/\${(\w+|№|№+w)}/', $this->$attribute,$out);
                     if (!empty($out[0])) {
                         $this->addError('body', 'В теле документа все переменные должны быть заменены!');
                     }
@@ -125,7 +125,7 @@ class Document extends \yii\db\ActiveRecord
      */
     public function getContractorManager()
     {
-        return $this->hasOne(Manager::className(), ['id' => 'contractor_manager_id']);
+        return $this->hasOne(CompanyManager::className(), ['id' => 'contractor_manager_id']);
     }
 
     /**
@@ -133,6 +133,6 @@ class Document extends \yii\db\ActiveRecord
      */
     public function getManager()
     {
-        return $this->hasOne(Manager::className(), ['id' => 'manager_id']);
+        return $this->hasOne(CompanyManager::className(), ['id' => 'manager_id']);
     }
 }

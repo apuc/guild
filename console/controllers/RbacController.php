@@ -35,6 +35,20 @@ class RbacController extends Controller
         $auth->assign($admin, 1);
     }
 
+    /**
+     * Add company manager role
+     */
+    public function actionCreateCompanyManagerRole()
+    {
+        $auth = Yii::$app->getAuthManager();
+
+        $role = $auth->createRole('company_manager');
+        $role->description = 'Менеджер компании контр агента';
+        $auth->add($role);
+
+        $this->stdout('Done!' . PHP_EOL);
+    }
+
     public function actionCreateEditor()
     {
         $auth = Yii::$app->authManager;

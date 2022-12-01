@@ -1,6 +1,5 @@
 <?php
 
-use asmoday74\ckeditor5\EditorClassic;
 use backend\modules\document\models\DocumentField;
 use common\helpers\StatusHelper;
 use mihaildev\ckeditor\CKEditor;
@@ -27,12 +26,6 @@ use yii\widgets\ActiveForm;
                 ]
             ) ?>
 
-<!--            --><?//= $form->field($model, 'template_body')->widget(EditorClassic::className(), [
-//                'clientOptions' => [
-//                    'language' => 'ru',
-//                ]
-//            ]); ?>
-
             <?= $form->field($model, 'template_body')->widget(CKEditor::className(),[
                 'editorOptions' => [
                     'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
@@ -51,6 +44,7 @@ use yii\widgets\ActiveForm;
 
     <div class="col-md-4">
         <div class="table-responsive">
+            <h2>Поля договоров</h2>
             <table class="table" id="fieldNameTable">
                 <thead>
                 <tr>

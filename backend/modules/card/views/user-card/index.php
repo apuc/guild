@@ -1,9 +1,8 @@
 <?php
 
-use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\card\models\UserCardSearch */
@@ -84,7 +83,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{view}&nbsp;&nbsp;{update}&nbsp;&nbsp;{permit}&nbsp;&nbsp;{delete}',
+                'buttons' =>
+                    [
+                        'permit' => function ($url, $model) {
+                            return Html::a('<span class="glyphicon glyphicon-wrench"></span>', Url::to(['/permit/user/view', 'id' => $model->id_user]), [
+                                'title' => Yii::t('yii', 'Change user role')
+                            ]); },
+                    ]
+            ],
         ],
     ]);
     echo "<h3>Сумма зарплат: " . $searchModel->total . "</h3>";

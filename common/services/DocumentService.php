@@ -54,7 +54,6 @@ class DocumentService
 
         $pdf = new Pdf(); // or new Pdf();
         $mpdf = $pdf->api; // fetches mpdf api
-        $mpdf->SetFooter('{PAGENO}');
         $mpdf->WriteHtml($model->body); // call mpdf write html
         echo $mpdf->Output("{$model->title}", 'D'); // call the mpdf api output as needed
     }
@@ -67,11 +66,11 @@ class DocumentService
 
         // (B) ADD HTML CONTENT
         $section = $pw->addSection();
-        $documentText = str_replace(array('<br/>', '<br>', '</br>'), ' ', $model->body);
-        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $documentText, false, false);
 
-        // (C) SAVE TO DOCX ON SERVER
-        // $pw->save("convert.docx", "Word2007");
+        $html = str_replace(array('<br/>', '<br>', '</br>'), ' ', $model->body);
+        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html, false, false);
+
+        $section->setStyle();
 
         // (D) OR FORCE DOWNLOAD
         header("Content-Type: application/octet-stream");

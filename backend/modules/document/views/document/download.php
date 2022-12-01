@@ -1,6 +1,6 @@
 <?php
 
-use asmoday74\ckeditor5\EditorClassic;
+use mihaildev\ckeditor\CKEditor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -27,11 +27,13 @@ $this->params['breadcrumbs'][] = 'Загрузить';
         'action' => Url::to(['document/update-document-body', 'id' => $model->id]),
         'options' => ['method' => 'post']])
     ?>
-        <?= $form->field($model, 'body')->widget(EditorClassic::className(), [
-            'clientOptions' => [
-                'language' => 'ru',
-            ]
-        ]); ?>
+
+    <?= $form->field($model, 'body')->widget(CKEditor::className(),[
+        'editorOptions' => [
+            'preset' => 'full',
+            'inline' => false,
+        ],
+    ]); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохраниить изменения', ['class' => 'btn btn-primary']) ?>
