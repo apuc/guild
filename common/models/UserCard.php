@@ -63,7 +63,6 @@ class UserCard extends \yii\db\ActiveRecord
     const SCENARIO_UPDATE_RESUME_TEXT = 'update_resume_text';
     const SCENARIO_DOWNLOAD_RESUME = 'download_resume_text';
 
-//    public $resumeTemplateId;
 
     /**
      * @return string[]
@@ -251,6 +250,14 @@ class UserCard extends \yii\db\ActiveRecord
         return $this->hasMany(ManagerEmployee::class, ['user_card_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanyManagers()
+    {
+        return $this->hasMany(CompanyManager::className(), ['user_card_id' => 'id']);
+    }
+
     public static function generateUserForUserCard($card_id = null)
     {
         $userCardQuery = self::find();
@@ -326,5 +333,13 @@ class UserCard extends \yii\db\ActiveRecord
         }
         return $userCard['id'];
 
+    }
+
+    public static function getCardByUserRole($role): array
+    {
+        $auth = Yii::$app->authManager;
+        $usersId = $auth->getUserIdsByRole($role);
+
+        return UserCard::find()->where([ 'IN', 'id_user', $usersId])->all();
     }
 }

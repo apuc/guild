@@ -2,6 +2,7 @@
 
 namespace backend\modules\document\controllers;
 
+use backend\modules\company\models\CompanyManager;
 use backend\modules\document\models\Document;
 use backend\modules\document\models\DocumentSearch;
 use common\services\DocumentService;
@@ -9,6 +10,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * DocumentController implements the CRUD actions for Document model.
@@ -175,12 +177,34 @@ class DocumentController extends Controller
         $model->scenario = $model::SCENARIO_DOWNLOAD_DOCUMENT;
 
         if ($model->validate()) {
-            DocumentService::downloadPdf($id);
+            DocumentService::downloadDocx($id);
         }
 
         Yii::$app->session->setFlash('error', $model->getFirstError('body'));
         return $this->render('download', [
             'model' => Document::findOne($id)
         ]);
+    }
+
+    public function actionManagers(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $company_id = $parents[0];
+                /** @var CompanyManager[] $managers */
+                $managers = CompanyManager::getManagersByCompany($company_id);
+
+                $formattedManagersArr = array();
+                foreach ($managers as $manager){
+                    $formattedManagersArr[] = array('id' => $manager->id, 'name' => $manager->userCard->fio);
+                }
+
+                return ['output'=>$formattedManagersArr, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
     }
 }

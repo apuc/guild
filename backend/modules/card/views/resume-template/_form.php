@@ -1,8 +1,8 @@
 <?php
 
-use asmoday74\ckeditor5\EditorClassic;
 use backend\modules\card\models\ResumeTemplate;
 use common\helpers\StatusHelper;
+use mihaildev\ckeditor\CKEditor;
 use mihaildev\elfinder\InputFile;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -27,10 +27,11 @@ use yii\widgets\ActiveForm;
                 ]
             ) ?>
 
-            <?= $form->field($model, 'template_body')->widget(EditorClassic::className(), [
-                'clientOptions' => [
-                    'language' => 'ru',
-                ]
+            <?= $form->field($model, 'template_body')->widget(CKEditor::className(),[
+                'editorOptions' => [
+                    'preset' => 'full',
+                    'inline' => false,
+                ],
             ]); ?>
 
             <?= $form->field($model, 'header_text')->textInput(['maxlength' => true]) ?>

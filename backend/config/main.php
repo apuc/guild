@@ -14,6 +14,12 @@ return [
     'bootstrap' => ['log'],
 
     'modules' => [
+        'permit' => [
+            'class' => 'developeruz\db_rbac\Yii2DbRbac',
+            'params' => [
+                'userClass' => 'common\models\User'
+            ]
+        ],
         'accesses' => [
             'class' => 'backend\modules\accesses\Accesses',
         ],
@@ -129,6 +135,8 @@ return [
                     'controller' => 'user-questionnaire',
                     'except' => ['delete', 'update'],
                 ],
+                '<module:\w+>/<controller:\w+>/<action:(\w|-)+>' => '<module>/<controller>/<action>',
+                '<module:\w+>/<controller:\w+>/<action:(\w|-)+>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
 
