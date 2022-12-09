@@ -27,39 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-
     </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'title',
-            [
-                'attribute' => 'company_id',
-                'value' => ArrayHelper::getValue($model, 'company.name'),
-            ],
-            [
-                'attribute' => 'manager_id',
-                'value' => ArrayHelper::getValue($model, 'manager.userCard.fio'),
-            ],
-            [
-                'attribute' => 'contractor_company_id',
-                'value' => ArrayHelper::getValue($model, 'contractorCompany.name'),
-            ],
-            [
-                'attribute' => 'contractor_manager_id',
-                'value' => ArrayHelper::getValue($model, 'contractorManager.userCard.fio'),
-            ],
-            [
-                'attribute' => 'body',
-                'format' => 'raw',
-            ],
-
-            'created_at',
-            'updated_at',
-        ],
-    ]) ?>
 
     <div>
         <h2>
@@ -93,5 +61,42 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+    <div>
+        <h2>
+            <?= 'Документ:'?>
+        </h2>
+    </div>
+
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'id',
+            'title',
+            [
+                'attribute' => 'company_id',
+                'value' => ArrayHelper::getValue($model, 'company.name'),
+            ],
+            [
+                'attribute' => 'manager_id',
+                'value' => ArrayHelper::getValue($model, 'manager.userCard.fio'),
+            ],
+            [
+                'attribute' => 'contractor_company_id',
+                'value' => ArrayHelper::getValue($model, 'contractorCompany.name'),
+            ],
+            [
+                'attribute' => 'contractor_manager_id',
+                'value' => ArrayHelper::getValue($model, 'contractorManager.userCard.fio'),
+            ],
+            [
+                'attribute' => 'body',
+                'format' => 'raw',
+            ],
+
+            'created_at',
+            'updated_at',
+        ],
+    ]) ?>
 
 </div>
