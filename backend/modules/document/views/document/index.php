@@ -1,6 +1,7 @@
 <?php
 
 use backend\modules\company\models\Company;
+use backend\modules\company\models\CompanyManager;
 use backend\modules\employee\models\Manager;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -25,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'title',
-//            'body:ntext',
             [
                 'attribute' => 'company_id',
                 'filter' => Company::find()->select(['name', 'id'])->indexBy('id')->column(),
@@ -38,24 +38,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'manager_id',
-                'filter' => Manager::find()->select(['fio', 'manager.id'])
-                    ->joinWith('userCard')->indexBy('manager.id')->column(),
+                'filter' => false,
                 'value' => 'manager.userCard.fio'
             ],
             [
                 'attribute' => 'contractor_manager_id',
-                'filter' => Manager::find()->select(['fio', 'manager.id'])
-                    ->joinWith('userCard')->indexBy('manager.id')->column(),
+                'filter' => false,
                 'value' => 'manager.userCard.fio'
             ],
-            //'title',
-            //'body:ntext',
-            //'created_at',
-            //'updated_at',
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {download}',
+                'template' => '{view} {update} {download} {delete}',
                 'buttons' => [
                     'download' => function($url, $model) {
                         return Html::a(
@@ -67,4 +61,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
         ],
     ]); ?>
+
 </div>

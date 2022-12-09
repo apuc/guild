@@ -4,9 +4,11 @@ namespace backend\modules\document\controllers;
 
 use backend\modules\company\models\CompanyManager;
 use backend\modules\document\models\Document;
+use backend\modules\document\models\DocumentFieldValue;
 use backend\modules\document\models\DocumentSearch;
 use common\services\DocumentService;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -55,8 +57,17 @@ class DocumentController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $documentFieldValuesDataProvider = new ActiveDataProvider([
+            'query' => $model->getDocumentFieldValues(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'documentFieldValuesDataProvider' => $documentFieldValuesDataProvider
         ]);
     }
 
@@ -68,11 +79,24 @@ class DocumentController extends Controller
     public function actionCreate()
     {
         $model = new Document();
+        $model->scenario = Document::SCENARIO_PARTICIPANTS_OF_THE_TRANSACTION;
 
-        if ($model->load(Yii::$app->request->post()) &&  $model->validate()) {
+        if ($model->load(Yii::$app->request->post())) {
             DocumentService::generateDocumentBody($model);
-            $model->save(false);
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            if ($model->validate()) {
+                $model->save(false);
+
+                if (!$model->getBlankFields()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+
+                return $this->redirect([
+                    'document-field-value/create-multiple',
+                    'document_id' => $model->id,
+                    'fieldNames' => $model->getBlankFields(),
+                ]);
+            }
         }
 
         return $this->render('create', [
@@ -90,9 +114,24 @@ class DocumentController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = Document::SCENARIO_PARTICIPANTS_OF_THE_TRANSACTION;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->isAttributeChanged('template_id', false)) {
+                DocumentService::generateDocumentBody($model);
+            }
+
+            if ($model->save()) {
+                if (!$model->getBlankFields()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+
+                return $this->redirect([
+                    'document-field-value/create-multiple',
+                    'document_id' => $model->id,
+                    'fieldNames' => $model->getBlankFields(),
+                ]);
+            }
         }
 
         return $this->render('update', [
@@ -130,54 +169,20 @@ class DocumentController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionDownload($id): string
-    {
-        return $this->render('download', [
-            'model' => Document::findOne($id)
-        ]);
-    }
-
-    /**
-     * @param integer $id
-     * @throws NotFoundHttpException
-     */
-    public function actionUpdateDocumentBody($id): string
-    {
-        $model = $this->findModel($id);
-        $model->scenario = $model::SCENARIO_UPDATE_DOCUMENT_BODY;
-
-        if ($model->load(Yii::$app->request->post())  && $model->validate()) {
-            $model->updated_at = date('Y-m-d h:i:s');
-            $model->save();
-        }
-
-        return $this->render('download', [
-            'model' => $model
-        ]);
-    }
-
-    public function actionDownloadPdf($id): string
+    public function actionDownload($id, $fileType = null): string
     {
         $model = $this->findModel($id);
         $model->scenario = $model::SCENARIO_DOWNLOAD_DOCUMENT;
 
-        if ($model->validate()) {
-            DocumentService::downloadPdf($id);
-        }
-
-        Yii::$app->session->setFlash('error', $model->getFirstError('body'));
-        return $this->render('download', [
-            'model' => Document::findOne($id)
-        ]);
-    }
-
-    public function actionDownloadDocx($id): string
-    {
-        $model = $this->findModel($id);
-        $model->scenario = $model::SCENARIO_DOWNLOAD_DOCUMENT;
-
-        if ($model->validate()) {
-            DocumentService::downloadDocx($id);
+        if ($fileType && $model->validate()) {
+            switch ($fileType) {
+                case 'pdf':
+                    DocumentService::downloadPdf($id);
+                    break;
+                case 'docx':
+                    DocumentService::downloadDocx($id);
+                    break;
+            }
         }
 
         Yii::$app->session->setFlash('error', $model->getFirstError('body'));
@@ -206,5 +211,37 @@ class DocumentController extends Controller
             }
         }
         return ['output'=>'', 'selected'=>''];
+    }
+
+    public function actionWriteFields($id)
+    {
+        $model = $this->findModel($id);
+
+        /** @var DocumentFieldValue[] $documentFieldsValue */
+        $documentFieldsValue = $model->getDocumentFieldValues()->all();
+
+        foreach ($documentFieldsValue as $fieldValue) {
+            $model->body = str_replace($fieldValue->documentField->field_template, $fieldValue->value, $model->body);
+        }
+
+        $model->save(false);
+
+        return $this->redirect([
+            'document/view',
+            'id' => $id,
+        ]);
+    }
+
+    public function actionUpdateBody($documentId, $oldValue, $newValue)
+    {
+        $model = $this->findModel($documentId);
+
+        $model->body = str_replace($oldValue, $newValue, $model->body);
+        $model->save(false);
+
+        return $this->redirect([
+            'document/view',
+            'id' => $documentId,
+        ]);
     }
 }

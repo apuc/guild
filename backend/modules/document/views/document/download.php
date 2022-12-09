@@ -24,7 +24,6 @@ $this->params['breadcrumbs'][] = 'Загрузить';
 
     <?php $form = ActiveForm::begin([
         'id' => 'update-resume-text-form',
-        'action' => Url::to(['document/update-document-body', 'id' => $model->id]),
         'options' => ['method' => 'post']])
     ?>
 
@@ -35,16 +34,12 @@ $this->params['breadcrumbs'][] = 'Загрузить';
         ],
     ]); ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Сохраниить изменения', ['class' => 'btn btn-primary']) ?>
-    </div>
-
     <?php ActiveForm::end(); ?>
 
     <div>
         <p>
-            <?= Html::a('Скачать pdf', ['download-pdf', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-            <?= Html::a('Скачать docx', ['download-docx', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Скачать pdf', ['download', 'id' => $model->id, 'fileType' => 'docx'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Скачать docx', ['download', 'id' => $model->id, 'fileType' => 'pdf'], ['class' => 'btn btn-success']) ?>
         </p>
     </div>
 </div>

@@ -83,10 +83,10 @@ class DocumentService
     public static function generateDocumentBody(Document $model)
     {
         $templateModel = DocumentTemplate::findOne($model->template_id);
-        preg_match_all('/(\${\w+})/', $templateModel->template_body,$out);
+        $fields = $templateModel->getFields();
 
         $document = $templateModel->template_body;;
-        foreach ($out[0] as $field) {
+        foreach ($fields as $field) {
             if (str_contains($document, $field)) {
                 switch ($field)
                 {
@@ -97,22 +97,27 @@ class DocumentService
                         $fieldValue = $model->title;
                         break;
                     case '${company}':
-                        $fieldValue = $model->company->name;
+                        $fieldValue = $model->company->name ?? $field;
                         break;
                     case '${manager}':
-                        $fieldValue = $model->manager->userCard->fio;
+                        $fieldValue = $model->manager->userCard->fio ?? $field;
                         break;
                     case '${contractor_company}':
-                        $fieldValue = $model->contractorCompany->name;
+                        $fieldValue = $model->contractorCompany->name ?? $field;
                         break;
                     case '${contractor_manager}':
-                        $fieldValue = $model->contractorManager->userCard->fio;
+                        $fieldValue = $model->contractorManager->userCard->fio ?? $field;
                         break;
                     default:
                         $fieldValue = $field;
                         break;
                 }
-                $document = str_replace($field, $fieldValue, $document);
+
+                if ($fieldValue == $field) {
+                    continue;
+                } else {
+                    $document = str_replace($field, $fieldValue, $document);
+                }
             }
         }
         $model->body = $document;

@@ -53,15 +53,14 @@ use yii\widgets\ActiveForm;
         ]
     ); ?>
 
-    <?= $form->field($model, 'contractor_company_id')->widget(Select2::class,
+    <?= $form->field($model, 'contractor_company_id')->dropDownList(
+        Company::find()->select(['name', 'id'])->indexBy('id')->column(),
         [
-            'data' => Company::find()->select(['name', 'id'])->indexBy('id')->column(),
-            'options' => ['id' => 'contractor-company-id','placeholder' => '...','class' => 'form-control'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
+            'id' => 'contractor-company-id',
+            'prompt' => 'Выберите'
         ]
-    ); ?>
+    );
+    ?>
 
     <?= $form->field($model, 'contractor_manager_id')->widget(DepDrop::className(),
         [

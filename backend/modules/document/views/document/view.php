@@ -1,13 +1,13 @@
 <?php
 
-use common\classes\Debug;
-use common\models\Document;
+use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\document\models\Document */
+/* @var $documentFieldValuesDataProvider yii\data\ActiveDataProvider */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Documents', 'url' => ['index']];
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'contractor_manager_id',
-                'value' => ArrayHelper::getValue($model, 'manager.userCard.fio'),
+                'value' => ArrayHelper::getValue($model, 'contractorManager.userCard.fio'),
             ],
             [
                 'attribute' => 'body',
@@ -60,5 +60,38 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
         ],
     ]) ?>
+
+    <div>
+        <h2>
+            <?= 'Поля документа:'?>
+        </h2>
+    </div>
+
+    <?= GridView::widget([
+        'dataProvider' => $documentFieldValuesDataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            [
+                'attribute' => 'document_field_id',
+                'value' => 'documentField.title'
+            ],
+            'attribute' => 'value',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update}',//'{view} {update} {delete}',
+                'controller' => 'document-field-value',
+                'buttons' => [
+
+                    'update' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            ['document-field-value/update', 'id' => $model['id'], 'fromDocument' => true]);
+                    },
+                ],
+            ],
+        ],
+    ]); ?>
 
 </div>
