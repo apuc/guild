@@ -18,6 +18,8 @@ use yii\db\Expression;
  */
 class DocumentTemplate extends \yii\db\ActiveRecord
 {
+    private $fieldPattern = '/\${(№?\s*\w*|(\w*\s?)*)}/';
+
     /**
      * {@inheritdoc}
      */
@@ -65,5 +67,11 @@ class DocumentTemplate extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getFields()
+    {
+        preg_match_all($this->fieldPattern, $this->template_body,$out);
+        return $out[0];
     }
 }

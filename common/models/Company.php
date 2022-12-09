@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
@@ -103,5 +102,10 @@ class Company extends \yii\db\ActiveRecord
     public function getProject()
     {
         return $this->hasOne(Project::class, ['company_id' => 'id']);
+    }
+
+    public static function getTitle($id)
+    {
+        return self::findOne($id)->name;
     }
 }

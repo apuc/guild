@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -29,6 +28,7 @@ class DocumentField extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'field_template'], 'string', 'max' => 255],
+            ['field_template', 'string', 'max' => 255],
         ];
     }
 

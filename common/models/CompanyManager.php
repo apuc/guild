@@ -2,9 +2,6 @@
 
 namespace common\models;
 
-use Yii;
-use yii\helpers\ArrayHelper;
-
 /**
  * This is the model class for table "company_manager".
  *
@@ -70,5 +67,10 @@ class CompanyManager extends \yii\db\ActiveRecord
     public static function getManagersByCompany($company_id): array
     {
         return self::find()->where(['company_id' => $company_id])->all();
+    }
+
+    public static function getName($id)
+    {
+        return self::findOne($id)->userCard->fio;
     }
 }

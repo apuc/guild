@@ -1,5 +1,6 @@
 <?php
 
+use backend\modules\document\models\DocumentTemplate;
 use common\helpers\StatusHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -44,9 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'Переменные в шаблоне',
-                'value' => function($model){
-                    preg_match_all('/(\${\w+})/', $model->template_body,$out);
-                    return implode(",", $out[0]);
+                'value' => function(DocumentTemplate $model){
+                    return implode(", ", $model->getFields());
                 },
             ],
         ],

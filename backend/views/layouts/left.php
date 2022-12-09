@@ -41,7 +41,7 @@
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
                     [
-                        'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#', //'active' => \Yii::$app->controller->id == 'user-card',
+                        'label' => 'Профили', 'icon' => 'address-book-o', 'url' => '#',
                         'items' => $menuItems,
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
