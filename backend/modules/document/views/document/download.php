@@ -38,8 +38,8 @@ $this->params['breadcrumbs'][] = 'Загрузить';
 
     <div>
         <p>
-            <?= Html::a('Скачать pdf', ['download', 'id' => $model->id, 'fileType' => 'docx'], ['class' => 'btn btn-success']) ?>
-            <?= Html::a('Скачать docx', ['download', 'id' => $model->id, 'fileType' => 'pdf'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Скачать pdf', ['download', 'id' => $model->id, 'fileType' => 'pdf'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Скачать docx', ['download', 'id' => $model->id, 'fileType' => 'docx'], ['class' => 'btn btn-success']) ?>
         </p>
     </div>
 </div>
