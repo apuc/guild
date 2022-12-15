@@ -5,3 +5,4 @@ Yii::setAlias('@backend', dirname(dirname(__DIR__)) . '/backend');
 Yii::setAlias('@console', dirname(dirname(__DIR__)) . '/console');
 Yii::setAlias('@templates', dirname(dirname(__DIR__)) . '/backend/web/upload/templates');
 Yii::setAlias('@documents', dirname(dirname(__DIR__)) . '/backend/web/upload/documents');
+Yii::setAlias('@helpDocument', dirname(dirname(__DIR__)) . '/docs/help');
