@@ -251,7 +251,7 @@
 `https://guild.craft-group.xyz/api/reports/create`
 
 <p>
-    Для того, отправить приглашение профилю на собеседование, необходимо сделать 
+    Для создания отчёта, необходимо сделать 
     <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/reports/create
 </p>
 <p>
