@@ -10,9 +10,11 @@ use common\models\UserCard;
 use frontend\modules\api\models\ReportSearchForm;
 use JsonException;
 use Yii;
+use yii\db\Expression;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
+use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -98,24 +100,37 @@ class ReportsController extends ApiController
         }
 
         if(!isset($params['user_card_id'])){
+            /** @var UserCard $userCard */
             $userCard = UserCard::find()->where(['id_user' => Yii::$app->user->id])->one();
+
             if($userCard){
-                $params['user_card_id'] = $userCard->id;
+                $userCardId = $userCard->id;
+            } else {
+                throw new BadRequestHttpException('User not found!');
             }
+        } else {
+            $userCardId = $params['user_card_id'];
         }
 
-        $reportsModel = new Reports();
-        $reportsModel->attributes = $params;
 
-        $params['tasks'] = (is_array($params['tasks'])) ? $params['tasks'] : json_decode($params['tasks']);
+        $reports = [];
+        foreach ($params['tasks'] as $task) {
+            $report = new Reports();
+            $report->load($task);
+            $report->difficulties = $report->difficulties ?? $params['difficulties'];
+            $report->tomorrow = $report->difficulties ?? $params['tomorrow'];
+            $report->today = $report->today ?? $params['today'];
+            $report->user_card_id = $report->user_card_id ?? $userCardId;
+            $report->created_at = date('Y-m-d');
 
-        if(!$reportsModel->validate()){
-            throw new BadRequestHttpException(json_encode($reportsModel->errors));
+            if ($report->validate() && !$report->save()) {
+                throw new BadRequestHttpException(json_encode($report->errors));
+            }
+
+            $reports[] = $report;
         }
 
-        $reportsModel->save();
-
-        return array_merge($reportsModel->toArray());
+        return array_merge($reports);
     }
 
     public function actionDelete()
