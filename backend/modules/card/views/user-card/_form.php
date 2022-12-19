@@ -149,6 +149,17 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-xs-6">
+            <?= $form->field($model, 'at_project')->dropDownList(
+                $model->getBusyness(),
+                [
+                    'prompt' => 'Выберите'
+                ]
+            ) ?>
+        </div>
+    </div>
+
 
     <div class="row">
         <div class="col-xs-12">

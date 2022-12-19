@@ -41,6 +41,7 @@ use yii\helpers\ArrayHelper;
  * @property string $resume_text
  * @property int $resume_template_id
  * @property int $resume_tariff
+ * @property int $at_project
  *
  * @property FieldsValue[] $fieldsValues
  * @property ProjectUser[] $projectUsers
@@ -62,6 +63,9 @@ class UserCard extends \yii\db\ActiveRecord
     const SCENARIO_GENERATE_RESUME_TEXT = 'generate_resume_text';
     const SCENARIO_UPDATE_RESUME_TEXT = 'update_resume_text';
     const SCENARIO_DOWNLOAD_RESUME = 'download_resume_text';
+
+    const AT_PROJECT_BUSY = 1;
+    const AT_PROJECT_FREE = 0;
 
 
     /**
@@ -113,7 +117,7 @@ class UserCard extends \yii\db\ActiveRecord
     {
         return [
             [['fio', 'status', 'gender', 'email', 'level', 'position_id'], 'required'],
-            [['gender', 'status', 'position_id', 'id_user', 'level', 'years_of_exp', 'resume_tariff'], 'integer'],
+            [['gender', 'status', 'position_id', 'id_user', 'level', 'years_of_exp', 'resume_tariff', 'at_project'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at', 'vc_text', 'vc_text_short', 'test_task_getting_date', 'test_task_complete_date'], 'safe'],
             ['email', 'unique', 'message'=>'Почтовый адрес уже используется'],
             [['fio', 'passport', 'photo', 'email', 'resume', 'city', 'link_vk', 'link_telegram', 'specification'], 'string', 'max' => 255],
@@ -160,7 +164,8 @@ class UserCard extends \yii\db\ActiveRecord
             'test_task_complete_date' => 'Дата выполнения тестового',
             'resume_template_id' => 'Шаблон резюме',
             'resume_text' => 'Резюме сгенерированный текст',
-            'resume_tariff' => 'Ставка для резюме'
+            'resume_tariff' => 'Ставка для резюме',
+            'at_project' => 'Занят на проекте'
         ];
     }
 
@@ -210,6 +215,22 @@ class UserCard extends \yii\db\ActiveRecord
             self::GENDER_M => 'Мужчина',
             self::GENDER_W => 'Женщина'
         ];
+    }
+
+    public static function getBusyness()
+    {
+        return [
+            self::AT_PROJECT_BUSY => 'На проекте',
+            self::AT_PROJECT_FREE => 'Не занят'
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getBusynessForUser($key)
+    {
+        return ArrayHelper::getValue($this->getBusyness(), $key);
     }
 
     /**

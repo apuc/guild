@@ -8,6 +8,10 @@
             $menuItems[] = ['label' => $status, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[status]=' . $key], 'active' => \Yii::$app->controller->id == 'user-card',];
         }
 
+        $busynessArr = \common\models\UserCard::getBusyness();
+        foreach ($busynessArr as $key => $busyness) {
+            $menuItems[] = ['label' => $busyness, 'icon' => 'id-card', 'url' => ['/card/user-card?UserCardSearch[at_project]=' . $key], 'active' => \Yii::$app->controller->id == 'user-card'];
+        }
         $projectStatuses = \common\models\Status::getStatusesArray(\common\models\UseStatus::USE_PROJECT);
         $projectItems = [['label' => 'Все', 'icon' => 'cubes', 'url' => ['/project/project'], 'active' => \Yii::$app->controller->id == 'project']];
         foreach ($projectStatuses as $key => $status) {

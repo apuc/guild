@@ -59,6 +59,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
             ],
+            [
+                'attribute' => 'at_project',
+                'value' => function ($model) {
+                    return $model->getBusynessForUser($model->at_project);
+                },
+                'filter' => \common\models\UserCard::getBusyness(),
+            ],
             //'created_at',
             //'updated_at',
             [

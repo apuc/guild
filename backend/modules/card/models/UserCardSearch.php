@@ -20,7 +20,7 @@ class UserCardSearch extends UserCard
     public function rules()
     {
         return [
-            [['id', 'gender', 'status'], 'integer'],
+            [['id', 'gender', 'status', 'at_project'], 'integer'],
             [['fio', 'passport', 'photo', 'email', 'dob', 'created_at', 'updated_at', 'city', 'test_task_getting_date', 'test_task_complete_date'], 'safe'],
             ['skills', 'each', 'rule' => ['integer']],
         ];
@@ -86,6 +86,7 @@ class UserCardSearch extends UserCard
             'test_task_getting_date' => $this->test_task_getting_date,
             'test_task_complete_date' => $this->test_task_complete_date,
             'resume_tariff' => $this->resume_tariff,
+            'at_project' => $this->at_project,
         ]);
 
         $query->andFilterWhere(['like', 'fio', $this->fio])
