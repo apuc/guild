@@ -123,4 +123,17 @@ class Reports extends \yii\db\ActiveRecord
         $user_card = UserCard::findOne(['id' => $data->user_card_id]);
         return $user_card->fio;
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReportsTask()
+    {
+        return $this->hasMany(ReportsTask::className(), ['report_id' => 'id']);
+    }
+
+    public function calculateOrderTime()
+    {
+        return ReportsTask::find()->where(['report_id' => $this->id])->sum('hours_spent');
+    }
 }

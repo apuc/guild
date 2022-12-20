@@ -5,12 +5,14 @@ namespace frontend\modules\api\controllers;
 use common\models\Reports;
 use common\models\ReportsTask;
 use common\models\UserCard;
+use DateTime;
 use frontend\modules\api\models\ReportSearchForm;
 use JsonException;
 use Yii;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
+use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -163,6 +165,50 @@ class ReportsController extends ApiController
         $reportsModel->save();
 
         return $reportsModel->toArray();
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionReportsByDate($fromDate, $toDate, $user_id = null)
+    {
+        if (!$this->checkDate($fromDate) || !$this->checkDate($toDate)) {
+            throw new BadRequestHttpException('Wrong date format');
+        }
+
+        $params = Yii::$app->request->get();
+        $userId = $user_id ?? Yii::$app->user->id;
+        /** @var UserCard $userCard */
+        $userCard = UserCard::find()->where(['id_user' => $userId])->one();
+
+        if (!$userCard) {
+            throw new NotFoundHttpException('User not found');
+        }
+
+        $reportsModel = new ReportSearchForm();
+        $reportsModel->attributes = $params;
+        $reportsModel->user_id = $userCard->id;
+
+        $reports = $reportsModel->findByDate();
+        return ArrayHelper::toArray($reports , [
+            'common\models\Reports' => [
+                'date' => 'created_at',
+                'id',
+                'spendTime' => function (Reports $report) {
+                    return $report->calculateOrderTime();
+                },
+            ],
+        ]);
+    }
+
+    private function checkDate($date): bool
+    {
+        $checkedDate = DateTime::createFromFormat('Y-m-d', $date);
+        $date_errors = DateTime::getLastErrors();
+        if (!empty($date_errors['warning_count']) || !empty($date_errors['error_count'])) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -57,6 +57,14 @@
             Изменить отчёт
         </td>
     </tr>
+    <tr>
+        <td>
+            reports-by-date
+        </td>
+        <td>
+            Отчёты по датам
+        </td>
+    </tr>
 </table>
 
 ### Список
@@ -432,3 +440,122 @@
 </p>
 
 `https://guild.craft-group.xyz/api/reports/update?id=18&created_at=2021-09-17&today=0&difficulties=diff&tomorrow=new task&status=1`
+
+### Отчёты по датам
+
+`https://guild.craft-group.xyz/api/reports/reports-by-date`
+
+<p>
+    Для получения списка дат за которые есть отчёты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/reports/reports-by-date
+</p>
+
+<p>
+    Параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+        <th>
+            Обязательный
+        </th>
+    </tr>
+    <tr>
+        <td>
+            fromDate
+        </td>
+        <td>
+            Дата начала периода
+        </td>
+        <th>
+            Да
+        </th>
+    </tr>
+    <tr>
+        <td>
+            toDate
+        </td>
+        <td>
+            Дата конца периода
+        </td>
+        <th>
+            Да
+        </th>
+    </tr>
+    <tr>
+        <td>
+            user_id
+        </td>
+        <td>
+            Id пользователя. По умолчанию будет выведен список для текущего пользователя,
+            при передаче параметра будет выведен список для заданного пользователя
+        </td>
+        <th>
+            Нет
+        </th>
+    </tr>
+</table>
+<p>
+    Пример запроса:
+</p>
+
+`http://guild.loc/api/reports/reports-by-date?fromDate=2022-12-1&toDate=2022-12-31&user_id=1 task&status=1`
+
+<p>
+    Возвращаемые параметры: id - идентификатор отчёта, date - дата отчёта, 
+spendTime - время затраченое на все задачи в отчёте
+</p>
+
+```json5
+[
+  {
+    "date": "2022-12-16",
+    "id": 50,
+    "spendTime": 8
+  },
+  {
+    "date": "2022-12-16",
+    "id": 51,
+    "spendTime": 8
+  },
+  {
+    "date": "2022-12-16",
+    "id": 52,
+    "spendTime": 8
+  },
+  {
+    "date": "2022-12-01",
+    "id": 53,
+    "spendTime": null
+  },
+  {
+    "date": "2022-12-10",
+    "id": 54,
+    "spendTime": null
+  },
+  {
+    "date": "2022-12-16",
+    "id": 55,
+    "spendTime": null
+  },
+  {
+    "date": "2022-12-31",
+    "id": 56,
+    "spendTime": null
+  },
+  {
+    "date": "2022-12-31",
+    "id": 57,
+    "spendTime": null
+  },
+  {
+    "date": "2022-12-31",
+    "id": 58,
+    "spendTime": null
+  }
+]
+```

@@ -4,7 +4,7 @@
 namespace frontend\modules\api\models;
 
 use common\models\Reports;
-use frontend\modules\card\models\UserCard;
+use common\models\ReportsTask;
 use yii\base\Model;
 
 class ReportSearchForm extends Model
@@ -64,5 +64,12 @@ class ReportSearchForm extends Model
         $data = $queryBuilder->asArray()->all();
 
         return $data;
+    }
+
+    public function findByDate(): array
+    {
+        return Reports::find()
+            ->where(['between', 'reports.created_at', $this->fromDate, $this->toDate])
+            ->all();
     }
 }
