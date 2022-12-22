@@ -59,6 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
             ],
+            'link_telegram',
             [
                 'attribute' => 'at_project',
                 'value' => function ($model) {
