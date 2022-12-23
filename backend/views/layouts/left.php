@@ -93,7 +93,7 @@
                     ['label' => 'Доступы', 'icon' => 'key', 'url' => ['/accesses/accesses'], 'active' => \Yii::$app->controller->id == 'accesses', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Заметки', 'icon' => 'sticky-note', 'url' => ['/notes/notes'], 'active' => \Yii::$app->controller->id == 'notes', 'visible' => Yii::$app->user->can('confidential_information')],
                     ['label' => 'Календарь ДР', 'icon' => 'calendar-check-o', 'url' => ['/calendar/calendar'], 'active' => \Yii::$app->controller->id == 'calendar', 'visible' => Yii::$app->user->can('confidential_information')],
-                    ['label' => 'Отчеты', 'icon' => 'calendar', 'url' => ['/reports/reports'], 'active' => \Yii::$app->controller->id == 'reports', 'visible' => Yii::$app->user->can('confidential_information')],
+                    ['label' => 'Отчеты', 'icon' => 'calendar', 'url' => ['/reports/reports'], 'active' => \Yii::$app->controller->id == 'reports', ], // 'visible' => Yii::$app->user->can('confidential_information')
                     ['label' => 'Опции', 'icon' => 'list-alt', 'url' => ['/options/options'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('confidential_information')],
                     [
                         'label' => 'Запрос интервью (' . \common\models\InterviewRequest::getNewCount() . ')',

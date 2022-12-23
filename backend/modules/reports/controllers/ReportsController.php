@@ -23,21 +23,24 @@ class ReportsController extends Controller
     public function behaviors()
     {
         return [
+            'as AccessBehavior' => [
+                'class' => \developeruz\db_rbac\behaviors\AccessBehavior::className(),
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                ],
-            ],
+//            'access' => [
+//                'class' => AccessControl::className(),
+//                'rules' => [
+//                    [
+//                        'allow' => true,
+//                        'roles' => ['admin'],
+//                    ],
+//                ],
+//            ],
         ];
     }
 
