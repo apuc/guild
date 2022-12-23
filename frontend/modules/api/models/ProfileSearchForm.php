@@ -34,7 +34,7 @@ class ProfileSearchForm extends Model
 
     public function exclude($arr)
     {
-        $ex = ['fio', 'passport', 'resume', 'link_vk', 'link_telegram', 'email', 'salary'];
+        $ex = ['passport', 'resume', 'link_vk', 'link_telegram', 'email', 'salary'];
         foreach ($ex as $remove) {
             if (isset($arr[$remove])) {
                 unset($arr[$remove]);

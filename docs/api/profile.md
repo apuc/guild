@@ -11,7 +11,7 @@
     </tr>
     <tr>
         <td>
-            api/profile
+            profile
         </td>
         <td>
             Возвращает список профилей 
@@ -19,7 +19,7 @@
     </tr>
     <tr>
         <td>
-            api/profile/{id}
+            profile/{id}
         </td>
         <td>
             Возвращает один профиль 
@@ -170,8 +170,49 @@
 
 <p>
     Возвращает объект <b>Профиля</b>. <br>
-    Как выглядит можно посмотреть выше.
 </p>
+
+```json5
+{
+    "id": 1,
+    "fio": "йцукенг дльпдрьап",
+    "photo": "",
+    "gender": 0,
+    "dob": null,
+    "status": 3,
+    "created_at": null,
+    "updated_at": "2022-12-23 01:01:34",
+    "salary": null,
+    "position_id": 1,
+    "deleted_at": null,
+    "id_user": 1,
+    "city": "",
+    "vc_text": "<h3><strong>Itguild</strong></h3><h4>Стек – Yii2, MySQL, Adminlte, PHPWord, Widgets – Kartik, Yii2-mpdf</h4><p>Разработка модулей:</p><p>Тестирования кандидатов. Обеспечивает: подготовку тестовых анкет с различными типами вопросов(открытый вопрос; несколько вариантов ответа; истина — ложь и т. д.); проведения тестирования; автоматическое оценивание результата.</p><p>Управление сотрудниками. Обеспечивает: менеджмент сотрудников; контроль распределения и выполнения задч.</p><p>Документы. Обеспечивает: создание шаблонов документов и генирацию файлов на их основе в формате DOCX и PDF.</p><p>Доработка иеющихся функциональных модулей, тестирование, разработка апи, ведение документации проекта.</p><p>&nbsp;</p><h3><strong>keepminingstrong</strong></h3><h4>Стек – Yii2, swiftmailer, HTML, CSS</h4><p>Многоязычного сайта-визитка, с возможностью обратной связи для пользователей по средствам электронных сообщений.</p><p>&nbsp;</p><h3><strong>PeopleControl</strong></h3>",
+    "level": 1,
+    "vc_text_short": "<br><br><br><br><h3>dfghjk uuu@mail.com <br/<br/<br/<br/Женщина dfghj Middlejjkbd</h3><p>&nbsp;br</p><p>&nbsp;<i><br><strong> dcdvcds</strong></br></i></p><h4>kdsmc</h4><p>kjnd</p><p>&nbsp;</p><ul><li>djnj &nbsp;&nbsp;</li></ul><ol><li>dknckn &nbsp;</li></ol>",
+    "years_of_exp": null,
+    "specification": "",
+    "test_task_getting_date": null,
+    "test_task_complete_date": null,
+    "resume_text": "<h3><strong>Itguild</strong></h3>\n        <h4>Стек – Yii2, MySQL, Adminlte, PHPWord, Widgets – Kartik, Yii2-mpdf</h4>\n        <p>Разработка модулей:</p>\n        <p>Тестирования кандидатов. Обеспечивает: подготовку тестовых анкет с различными типами вопросов(открытый вопрос; несколько вариантов ответа; истина — ложь и т. д.); проведения тестирования; автоматическое оценивание результата.</p>\n        <p>Управление сотрудниками. Обеспечивает: менеджмент сотрудников; контроль распределения и выполнения задч.</p>\n        <p>Документы. Обеспечивает: создание шаблонов документов и генирацию файлов на их основе в формате DOCX и PDF.</p>\n        <p>Доработка иеющихся функциональных модулей, тестирование, разработка апи, ведение документации проекта.</p>\n        <p>&nbsp;</p>\n        <h3><strong>keepminingstrong</strong></h3>\n        <h4>Стек – Yii2, swiftmailer, HTML, CSS</h4>\n        <p>Многоязычного сайта-визитка, с возможностью обратной связи для пользователей по средствам электронных сообщений.</p>\n        <p>&nbsp;</p>\n        <h3><strong>PeopleControl</strong></h3>",
+    "resume_template_id": 4,
+    "resume_tariff": null,
+    "at_project": null,
+    "skillValues": [
+        {
+            "id": 1,
+            "card_id": 1,
+            "skill_id": 1,
+            "skill": {
+                "id": 1,
+                "name": "JS",
+                "category_id": 1
+            }
+        }
+    ],
+    "achievements": []
+}
+```
 
 ### Получить профиль с флагом прав на просмотр отчётов этого пользователя
 `https://guild.craft-group.xyz/api/profile/profile-with-report-permission`
