@@ -47,7 +47,6 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            //return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
             if ($this->getUser()) {
                 $access_token = $this->_user->generateAccessToken();
                 $this->_user->access_token_expired_at = date('Y-m-d', time() + static::EXPIRE_TIME);
@@ -59,7 +58,7 @@ class LoginForm extends Model
         return false;
     }
 
-    public function getUser()
+    public function getUser(): ?User
     {
         if ($this->_user === null) {
             $this->_user = User::findByUsername($this->username);

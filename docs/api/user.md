@@ -13,24 +13,23 @@
     </tr>
     <tr>
         <td>
-            get-user-card
+            login
         </td>
         <td>
-            Данные пользователя 
+            Аторизация пользователя 
         </td>
     </tr>
 </table>
 
-## Данные пользователя
+## Аторизация пользователя
 
-`https://guild.craft-group.xyz/api/user-card/get-user-card?user_id=1`
-<p>
-    Параметры:
-</p>
+POST: `https://guild.craft-group.xyz/api/user/login`
+
 <table>
     <tr>
         <th>
-            Параметры
+            Параметры <br> 
+            * - обязательные
         </th>
         <th>
             Значение
@@ -38,33 +37,37 @@
     </tr>
     <tr>
         <td>
-            user_id
+            username*
         </td>
         <td>
-            Id пользователя
+            Логин пользователя(адресс электронной почты пользователя)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            password*
+        </td>
+        <td>
+            Пароль пользователя
         </td>
     </tr>
 </table>
 
 <p>
-    Возвращает объект <b>Пользователь</b>. <br>
-    Каждый объект <b>Пользователь</b> имеет такой вид:
+    Пример возвращаемых данных:
 </p>
 
 ```json5
 {
-  "fio": "Тест менеджер для апи запроса",
-  "photo": null,
-  "gender": 1,
-  "level": 2,
-  "years_of_exp": null,
-  "specification": null,
-  "position_name": "Должность 1"
+  "access_token": "RKZIA06yVbIkcbzdD7szVE5nnbRuxISV",
+  "access_token_expired_at": "2022-12-30",
+  "user_id": 1,
+  "card_id": 1
 }
 ```
 
 <p>
-    Параметры:
+    Возвращаемые параметры:
 </p>
 <table>
     <tr>
@@ -77,50 +80,34 @@
     </tr>
     <tr>
         <td>
-            fio
+            access_token
         </td>
         <td>
-            ФИО
-        </td>
-    </tr>
-    <tr>
-        <td>
-            photo
-        </td>
-        <td>
-            Ссылка на фото
+            токен доступа
         </td>
     </tr>
     <tr>
         <td>
-            gender
+            access_token_expired_at
         </td>
         <td>
-            Пол
-        </td>
-    </tr>
-    <tr>
-        <td>
-            level
-        </td>
-        <td>
-            Уровень
+            дата истечения срока действия токена доступа
         </td>
     </tr>
     <tr>
         <td>
-            years_of_exp
+            id
         </td>
         <td>
-            Лет опыта
+            id пользователя
         </td>
     </tr>
     <tr>
         <td>
-            position_name
+            card_id
         </td>
         <td>
-            Должность
+            id профиля пользователя (при отсутствии профиля будет возвращено NULL)
         </td>
     </tr>
 </table>
