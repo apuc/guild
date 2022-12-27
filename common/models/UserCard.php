@@ -271,6 +271,11 @@ class UserCard extends \yii\db\ActiveRecord
         return $this->hasMany(ManagerEmployee::class, ['user_card_id' => 'id']);
     }
 
+    public function getUserCardPortfolioProjects()
+    {
+        return $this->hasMany(UserCardPortfolioProjects::className(), ['card_id' => 'id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

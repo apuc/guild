@@ -2,16 +2,11 @@
 
 namespace backend\modules\card\models;
 
-use backend\modules\achievements\models\Achievement;
-use Common\Behaviors\LogBehavior;
 use common\models\AchievementUserCard;
-use Yii;
-use backend\modules\settings\models\Skill;
-use common\classes\Debug;
 use common\models\CardSkill;
-use common\models\User;
-use common\models\FieldsValue;
 use common\models\FieldsValueNew;
+use common\models\UserCardPortfolioProjects;
+use Yii;
 use yii\helpers\ArrayHelper;
 
 class UserCard extends \common\models\UserCard
@@ -19,6 +14,7 @@ class UserCard extends \common\models\UserCard
     public $fields;
     public $skill;
     public $achievements;
+    public $portfolioProjects;
 
     public function init()
     {
@@ -79,6 +75,40 @@ class UserCard extends \common\models\UserCard
         if (!empty($achievements)) {
             $this->achievements = $achievements;
         }
+
+        /** @var UserCardPortfolioProjects[] $portfolioProjects */
+        $portfolioProjects = UserCardPortfolioProjects::find()
+            ->where(['card_id' => \Yii::$app->request->get('id')])
+            ->all();
+
+        $array = [];
+        if (!empty($portfolioProjects)) {
+            foreach ($portfolioProjects as $item) {
+                array_push(
+                    $array,
+                    [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'description' => $item->description,
+                        'main_stack' => $item->main_stack,
+                        'additional_stack' => $item->additional_stack,
+                        'link' => $item->link
+                    ]
+                );
+            }
+            $this->portfolioProjects = $array;
+        } else {
+            $this->portfolioProjects = [
+                [
+                    'id' => null,
+                    'title' => null,
+                    'description' => null,
+                    'main_stack' => null,
+                    'additional_stack' => null,
+                    'link' => null
+                ]
+            ];
+        }
     }
 
     public function behaviors()
@@ -133,6 +163,22 @@ class UserCard extends \common\models\UserCard
 
                         $skill->save();
                     }
+            }
+
+            if(array_key_exists('portfolioProjects', $post) && is_array($post['portfolioProjects'])){
+                UserCardPortfolioProjects::deleteAll(['card_id' => $this->id]);
+
+                foreach ($post['portfolioProjects'] as $item) {
+                    $portfolioProject = new UserCardPortfolioProjects();
+                    $portfolioProject->card_id = $this->id;
+                    $portfolioProject->title = $item['title'];
+                    $portfolioProject->description = $item['description'];
+                    $portfolioProject->main_stack = $item['main_stack'];
+                    $portfolioProject->additional_stack = $item['additional_stack'];
+                    $portfolioProject->link = $item['link'];
+
+                    $portfolioProject->save();
+                }
             }
 
             if(array_key_exists('achievements', $post) && is_array($post['achievements'])){

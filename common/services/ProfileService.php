@@ -2,17 +2,42 @@
 
 namespace common\services;
 
-use common\classes\Debug;
 use common\models\Manager;
 use common\models\ManagerEmployee;
 use common\models\UserCard;
+use common\models\UserCardPortfolioProjects;
 use frontend\modules\api\models\ProfileSearchForm;
 use Yii;
-use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
 class ProfileService
 {
+    public static function getPortfolioProjects($card_id)
+    {
+        /** @var UserCardPortfolioProjects[] $portfolioProjects */
+        $portfolioProjects = UserCardPortfolioProjects::find()
+            ->where(['card_id' => $card_id])
+            ->all();
+
+        $array = [];
+        if (!empty($portfolioProjects)) {
+            foreach ($portfolioProjects as $project) {
+                array_push(
+                    $array,
+                    [
+                        'id' => $project->id,
+                        'title' => $project->title,
+                        'description' => $project->description,
+                        'main_stack' => $project->skill->name,
+                        'additional_stack' => $project->additional_stack,
+                        'link' => $project->link
+                    ]
+                );
+            }
+        }
+        return $array;
+    }
+
     /**
      * @throws ServerErrorHttpException
      */

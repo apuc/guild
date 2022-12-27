@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
 
@@ -14,6 +13,7 @@ use yii\widgets\DetailView;
 /* @var $achievement \common\models\Achievement */
 /* @var $modelFieldValue yii\data\ActiveDataProvider */
 /* @var $changeDataProvider yii\data\ActiveDataProvider */
+/* @var $portfolioProjects yii\data\ActiveDataProvider */
 
 $this->title = $model->fio;
 $this->params['breadcrumbs'][] = ['label' => 'Профили', 'url' => ['index']];
@@ -126,6 +126,22 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $achievement['achievement']->title; ?>
         </a>
     <?php endforeach; ?>
+
+    <h2>Проекты в портфолио</h2>
+    <?= GridView::widget([
+        'dataProvider' => $portfolioProjects,
+        'layout' => "{items}",
+        'columns' => [
+                'title',
+                'description',
+                [
+                    'attribute' => 'main_stack',
+                    'value' => 'skill.name'
+                ],
+                'additional_stack',
+                'link:url',
+        ],
+    ]); ?>
 
     <h2>Дополнительные сведения</h2>
 

@@ -225,6 +225,60 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-xs-12">
+            <?= $form->field($model, 'portfolioProjects')->widget(MultipleInput::class, [
+                'cloneButton' => true,
+                'columns' => [
+                    [
+                        'name' => 'title',
+                        'type' => 'textInput',
+                        'title' => 'Название',
+                        'defaultValue' => null,
+                        'options' => ['prompt' => 'Заполните']
+                    ],
+                    [
+                        'name' => 'description',
+                        'type' => 'textarea',
+                        'title' => 'Описание',
+                        'defaultValue' => null,
+                        'options' => [
+                            'prompt' => 'Заполните',
+                            'rows' => '3'
+                        ]
+                    ],
+                    [
+                        'name' => 'main_stack',
+                        'type' => 'dropDownList',
+                        'title' => 'Основная технология',
+                        'defaultValue' => null,
+                        'items' => \yii\helpers\ArrayHelper::map(
+                            \backend\modules\settings\models\Skill::find()->all(),
+                            'id',
+                            'name'
+                        ),
+                        'options' => ['prompt' => 'Выберите']
+                    ],
+                    [
+                        'name' => 'additional_stack',
+                        'type' => 'textInput',
+                        'title' => 'Используемые технологии',
+                        'defaultValue' => null,
+                        'options' => ['prompt' => 'Заполните']
+                    ],
+                    [
+                        'name' => 'link',
+                        'type' => 'textInput',
+                        'title' => 'Ссылка',
+                        'defaultValue' => null,
+                        'options' => ['prompt' => 'Заполните']
+                    ],
+                ],
+            ])->label('Проекты в портфолио');
+            ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
             <?= $form->field($model, 'fields')->widget(MultipleInput::class, [
                 'cloneButton' => true,
                 'columns' => [

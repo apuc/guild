@@ -41,6 +41,14 @@
             Получить получить основные данные профиля 
         </td>
     </tr>
+    <tr>
+        <td>
+            profile/portfolio-projects
+        </td>
+        <td>
+            Массив проектов в портфолио(для страницы мой код) 
+        </td>
+    </tr>
 </table>
 
 ### Список
@@ -343,6 +351,119 @@
         </td>
         <td>
             Должность
+        </td>
+    </tr>
+</table>
+
+## Массив проектов в портфолио(для страницы мой код)
+
+`https://guild.craft-group.xyz/api/profile/profile/portfolio-projects?card_id=9`
+<p>
+    Требуемые параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            card_id
+        </td>
+        <td>
+            Id профиля пользователя
+        </td>
+    </tr>
+</table>
+
+<p>
+    Возвращает массив объектов <b>Проект в портфолио</b>. <br>
+    Ответ имеет следующий вид:
+</p>
+
+```json5
+[
+  {
+    "id": 11,
+    "title": "yguyyyyy",
+    "description": "пппппппппппп",
+    "main_stack": "JS",
+    "additional_stack": "jnvbklfbmklfdv",
+    "link": "11111"
+  },
+  {
+    "id": 12,
+    "title": "smclksdmk",
+    "description": "ссссссссссс",
+    "main_stack": "JS",
+    "additional_stack": "ksdlkcmskl",
+    "link": "kwemfdkflefmkl"
+  }
+]
+```
+
+<p>
+    Возвращаемые параметры:
+</p>
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            id
+        </td>
+        <td>
+            Id
+        </td>
+    </tr>
+    <tr>
+        <td>
+            title
+        </td>
+        <td>
+            название
+        </td>
+    </tr>
+    <tr>
+        <td>
+            description
+        </td>
+        <td>
+            описание
+        </td>
+    </tr>
+    <tr>
+        <td>
+            main_stack
+        </td>
+        <td>
+            основной язык проекта
+        </td>
+    </tr>
+    <tr>
+        <td>
+            additional_stack
+        </td>
+        <td>
+            используемые технологии
+        </td>
+    </tr>
+    <tr>
+        <td>
+            link
+        </td>
+        <td>
+            ссылка на репозиторий
         </td>
     </tr>
 </table>
