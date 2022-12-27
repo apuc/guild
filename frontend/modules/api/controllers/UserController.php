@@ -42,21 +42,20 @@ class UserController extends ActiveController
         ]);
     }
 
-    public function actions(): array
+    public function actions()
     {
         $actions = parent::actions();
         unset($actions['index']);
         unset($actions['create']);
         unset($actions['update']);
         unset($actions['delete']);
-        return $actions;
     }
 
-    protected function verbs(){
-        return [
-            'login' => ['POST']
-        ];
-    }
+//    protected function verbs(){
+//        return [
+//            'login' => ['POST']
+//        ];
+//    }
 
     public function actionLogin()
     {
