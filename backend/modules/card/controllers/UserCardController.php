@@ -36,14 +36,8 @@ class UserCardController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['admin', 'profileEditor'],
-                    ],
-                ],
+            'as AccessBehavior' => [
+                'class' => \developeruz\db_rbac\behaviors\AccessBehavior::className(),
             ],
         ];
     }

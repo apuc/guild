@@ -21,6 +21,9 @@ class CompanyManagerController extends Controller
     public function behaviors()
     {
         return [
+            'as AccessBehavior' => [
+                'class' => \developeruz\db_rbac\behaviors\AccessBehavior::className(),
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -135,7 +138,6 @@ class CompanyManagerController extends Controller
      */
     public function actionDismiss($id)
     {
-//        Debug::dd('fff');
         $model = $this->findModel($id);
         $model->company_id = null;
         $model->update(false);
