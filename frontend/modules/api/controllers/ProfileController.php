@@ -49,4 +49,9 @@ class ProfileController extends ApiController
     {
         return ProfileService::getMainData($user_id);
     }
+
+    public function actionPortfolioProjects($card_id): array
+    {
+        return ProfileService::getPortfolioProjects($card_id);
+    }
 }

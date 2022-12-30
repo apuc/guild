@@ -6,11 +6,11 @@ use backend\modules\card\models\ResumeTemplate;
 use backend\modules\card\models\UserCard;
 use backend\modules\card\models\UserCardSearch;
 use backend\modules\settings\models\Skill;
-use common\classes\Debug;
 use common\models\AchievementUserCard;
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
 use common\models\User;
+use common\models\UserCardPortfolioProjects;
 use kartik\mpdf\Pdf;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -118,6 +118,13 @@ class UserCardController extends Controller
             ]
         ]);
 
+        $portfolioProjects = new ActiveDataProvider([
+            'query' => UserCardPortfolioProjects::find()->where(['card_id' => $id]),
+            'pagination' => [
+                'pageSize' => 200,
+            ]
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'modelFieldValue' => $dataProvider,
@@ -125,6 +132,7 @@ class UserCardController extends Controller
             'achievements' => $achievements,
             'userData' => User::findOne($id_current_user),
             'changeDataProvider' => $changeDataProvider,
+            'portfolioProjects' => $portfolioProjects
         ]);
     }
 
