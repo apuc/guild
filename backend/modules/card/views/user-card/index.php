@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'permit' => function ($url, $model) {
                             return Html::a('<span class="glyphicon glyphicon-wrench"></span>', Url::to(['/permit/user/view', 'id' => $model->id_user]), [
-                                'title' => Yii::t('yii', 'Change user role')
+                                'title' => Yii::t('yii', 'Изменить роль пользователя')
                             ]); },
                     ]
             ],

@@ -54,7 +54,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'download' => function($url, $model) {
                         return Html::a(
                                 '<span class="glyphicon glyphicon-download-alt"></span>',
-                                     ['document/download', 'id' => $model->id]
+                                    ['document/download', 'id' => $model->id],
+                                    ['title' => Yii::t('yii', 'Загрузить документ')]
                                 );
                     }
                 ]

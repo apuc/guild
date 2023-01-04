@@ -116,7 +116,8 @@
                         ],
                         'visible' => Yii::$app->user->can('confidential_information')
                     ],
-                    ['label' => 'Тестовые задания', 'icon' => 'file-text-o', 'url' => ['/test/test-task'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('confidential_information')],
+                    ['label' => 'Тестовые задания', 'icon' => 'file-text-o', 'url' => ['/test/test-task'], 'active' => \Yii::$app->controller->id == 'options', ], // 'visible' => Yii::$app->user->can('confidential_information')
+                    ['label' => 'Справка', 'icon' => 'question-circle', 'url' => ['/help/help'], 'active' => \Yii::$app->controller->id == 'options'], // , 'visible' => Yii::$app->user->can('confidential_information')
 
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],

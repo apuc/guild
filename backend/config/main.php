@@ -20,6 +20,9 @@ return [
                 'userClass' => 'common\models\User'
             ]
         ],
+        'markdown' => [
+            'class' => 'kartik\markdown\Module',
+        ],
         'accesses' => [
             'class' => 'backend\modules\accesses\Accesses',
         ],
@@ -79,6 +82,9 @@ return [
         ],
         'document' => [
             'class' => 'backend\modules\document\Document',
+        ],
+        'help' => [
+            'class' => 'backend\modules\help\Help',
         ],
     ],
     'components' => [
