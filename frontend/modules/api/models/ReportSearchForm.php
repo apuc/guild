@@ -70,6 +70,7 @@ class ReportSearchForm extends Model
     {
         return Reports::find()
             ->where(['between', 'reports.created_at', $this->fromDate, $this->toDate])
+            ->andWhere(['user_card_id' => $this->user_id])
             ->all();
     }
 }
