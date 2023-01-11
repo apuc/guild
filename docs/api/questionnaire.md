@@ -13,34 +13,18 @@
     </tr>
     <tr>
         <td>
-            questionnaire/questionnaires-list
+            user-questionnaire/questionnaires-list
         </td>
         <td>
-            Возвращает список анкет 
+            Cписок анкет 
         </td>
     </tr>
     <tr>
         <td>
-            questionnaire/questionnaire-completed
+            user-questionnaire/questionnaire-completed
         </td>
         <td>
             Завершение прохождение анкеты, проверка ответов 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            questionnaire/get-points-number
-        </td>
-        <td>
-            Число балов в анкете
-        </td>
-    </tr>
-    <tr>
-        <td>
-            questionnaire/get-question-number
-        </td>
-        <td>
-            Число вопросов в анкете 
         </td>
     </tr>
     <tr>
@@ -75,25 +59,12 @@
             Сохранить массив ответов пользователя
         </td>
     </tr>
-    <tr>
-        <td>
-            get
-        </td>
-        <td>
-            Возвращает менеджера 
-        </td>
-    </tr>
 </table>
 
 ### Список анкет
 
-`https://guild.craft-group.xyz/api/user-questionnaire/questionnaires-list`
 <p>
-    Для получения списка анкет необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/questionnaires-list
-</p>
-
-<p>
-    Требуемые параметры запроса:
+    Возможные параметры:
 </p>
 <table>
     <tr>
@@ -109,7 +80,15 @@
             user_id
         </td>
         <td>
-             ID пользователя(int)
+             ID пользователя(int), без этого параметра будет возвращён список анкет для текущего пользователя
+        </td>
+    </tr>
+    <tr>
+        <td>
+            expand(вывод дополнительных полей)
+        </td>
+        <td>
+            принимаемые значения: question_number(количество вопросов),points_number(количество балов в анкете)
         </td>
     </tr>
 </table>
@@ -117,27 +96,41 @@
     Пример запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/user-questionnaire/questionnaires-list?user_id=1`
+`GET https://guild.craft-group.xyz/api/user-questionnaire/questionnaires-list?user_id=10&expand=question_number,points_number`
 
 <p>
-    Возвращает <b>массив</b> объектов записи <b>Назначенная анкета</b>. <br>
-    Каждый объектимеет такой вид:
+    Возвращает <b>массив</b> объектов <b>Назначенная анкета</b>. <br>
 </p>
 
 ```json5
- {
-  "user_id": 1,
-  "uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
-  "score": 11,
-  "status": 2,
-  "percent_correct_answers": 0.25,
-  "testing_date": "2022-03-17 11:14:22",
-  "questionnaire_title": "Кат1 Анкета 1 активна"
-}
+[
+  {
+    "questionnaire_title": "всыв",
+    "uuid": "051900d9-be83-4b8a-8536-7cf3e2754263",
+    "created_at": "2023-01-10 19:58:53",
+    "score": null,
+    "status": 1,
+    "percent_correct_answers": null,
+    "testing_date": null,
+    "question_number": 3,
+    "points_number": "116"
+  },
+  {
+    "questionnaire_title": "всыв",
+    "uuid": "4a1eb766-6076-4b27-a82a-766bb4269cb8",
+    "created_at": "2023-01-10 20:12:27",
+    "score": null,
+    "status": 1,
+    "percent_correct_answers": null,
+    "testing_date": null,
+    "question_number": 3,
+    "points_number": "116"
+  }
+]
 ```
 
 <p>
-    Возвращаемые параметры объекта анкета:
+    Возвращаемые параметры:
 </p>
 <table>
     <tr>
@@ -150,10 +143,10 @@
     </tr>
     <tr>
         <td>
-            user_id
+            questionnaire_title
         </td>
         <td>
-             ID пользователя(int)
+            Название анкеты
         </td>
     </tr>
     <tr>
@@ -195,53 +188,25 @@
         <td>
             Дата тестирования
         </td>
-    </tr><tr>
+    </tr>
+    <tr>
         <td>
-            questionnaire_title
+            question_number
         </td>
         <td>
-            Название анкеты
+            количество вопросов
+        </td>
+    </tr>
+    <tr>
+        <td>
+            points_number
+        </td>
+        <td>
+            количество балов за все вопросы в анкете
         </td>
     </tr>
 </table>
 
-<p>
-    Передаваемые параметры объекта вопроса:
-</p>
-<table>
-    <tr>
-        <th>
-            Параметры
-        </th>
-        <th>
-            Значение
-        </th>
-    </tr>
-    <tr>
-        <td>
-            user_id
-        </td>
-        <td>
-             ID пользователя(int)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            score
-        </td>
-        <td>
-             Полученные балы(int)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            percent_correct_answers
-        </td>
-        <td>
-             Процент правильных ответов(float)
-        </td>
-    </tr>
-</table>
 <p>
     Если пользователь не найден или у пользователя нет активных анкет будет отправлено следующее сообщение:
 </p>
@@ -257,12 +222,6 @@
 ```
 
 ### Проверить ответы в анкете
-
-`https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed`
-<p>
-    Для выполнения проверки анкеты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed
-</p>
-
 <p>
     Требуемые параметры запроса:
 </p>
@@ -277,10 +236,18 @@
     </tr>
     <tr>
         <td>
-            user_questionnaire_uuid
+            uuid
         </td>
         <td>
              UUID анкеты назначеной пользователю
+        </td>
+    </tr>
+    <tr>
+        <td>
+            expand(вывод дополнительных полей)
+        </td>
+        <td>
+            принимаемые значения: question_number(количество вопросов),points_number(количество балов в анкете)
         </td>
     </tr>
 </table>
@@ -288,127 +255,27 @@
     Пример запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
+`GET https://guild.craft-group.xyz/api/user-questionnaire/questionnaire-completed?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
 
 <p>
-    Возвращает <b>массив</b> объектов <b>Вопросов</b>. <br>
-    Каждый объект <b>Вопрос</b> имеет такой вид:
+    Возвращает <b>объект Анкета</b> с заполнеными полями <b>баллы</b> и <b>процент правильных ответов</b>. <br>
 </p>
 
 ```json5
 {
-  "id": 1,
-  "questionnaire_id": 1,
-  "user_id": 1,
-  "uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",
-  "created_at": "2021-10-20 13:06:12",
-  "updated_at": {
-    "expression": "NOW()",
-    "params": []
-  },
-  "score": 4,
-  "status": 1,
-  "percent_correct_answers": 0.5,
-  "testing_date": null
-}
-```
-
-### Число балов в анкете
-
-`https://guild.craft-group.xyz/api/user-questionnaire/get-points-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
-<p>
-    Для максимального числа  балов в анкеты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/get-points-number
-</p>
-
-<p>
-    Требуемые параметры запроса:
-</p>
-<table>
-    <tr>
-        <th>
-            Параметры
-        </th>
-        <th>
-            Значение
-        </th>
-    </tr>
-    <tr>
-        <td>
-            user_questionnaire_uuid
-        </td>
-        <td>
-             UUID анкеты назначеной пользователю
-        </td>
-    </tr>
-</table>
-<p>
-    Пример запроса:
-</p>
-
-`https://guild.craft-group.xyz/api/user-questionnaire/get-points-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
-
-<p>
-    Возвращает максимально возможное число балов за анкету b>. <br>
-    Объект <b>Ответа</b> имеет такой вид:
-</p>
-
-```json5
-{
-  "sum_point": "61"
-}
-```
-
-### Число вопросов в анкете
-
-`https://guild.craft-group.xyz/api/user-questionnaire/get-question-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
-<p>
-    Для числа вопросов в анкете необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/user-questionnaire/get-question-number
-</p>
-
-<p>
-    Требуемые параметры запроса:
-</p>
-<table>
-    <tr>
-        <th>
-            Параметры
-        </th>
-        <th>
-            Значение
-        </th>
-    </tr>
-    <tr>
-        <td>
-            user_questionnaire_uuid
-        </td>
-        <td>
-             UUID анкеты назначеной пользователю
-        </td>
-    </tr>
-</table>
-<p>
-    Пример запроса:
-</p>
-
-`https://guild.craft-group.xyz/api/user-questionnaire/get-question-number?user_questionnaire_uuid=d222f858-60fd-47fb-8731-dc9d5fc384c5`
-
-<p>
-    Возвращает число вопросов в анкете b>. <br>
-    Объект <b>Ответа</b> имеет такой вид:
-</p>
-
-```json5
-{
-  "question_number": "7"
+  "questionnaire_title": "всыв",
+  "uuid": "f8e15715-18e4-4369-9c8c-3968a0c54129",
+  "created_at": "2022-12-15 20:43:41",
+  "score": 0,
+  "status": 2,
+  "percent_correct_answers": 0,
+  "testing_date": "2023:01:10 18:33:26",
+  "question_number": 3,
+  "points_number": "116"
 }
 ```
 
 ### Вопросы анкеты
-
-`https://guild.craft-group.xyz/api/question/get-questions`
-<p>
-    Для получения вопросов анкеты необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/question/get-questions
-</p>
 
 <p>
     Требуемые параметры запроса:
@@ -443,14 +310,32 @@
 </p>
 
 ```json5
-{
-  "id": "4",
-  "question_type_id": "2",
-  "question_body": "Один ответ1",
-  "question_priority": null,
-  "next_question": null,
-  "time_limit": "00:22:00"
-}
+[
+  {
+    "id": 1,
+    "question_type_id": 1,
+    "question_body": "фывф",
+    "question_priority": 1,
+    "next_question": 2,
+    "time_limit": null
+  },
+  {
+    "id": 2,
+    "question_type_id": 1,
+    "question_body": "ьбьььььь",
+    "question_priority": null,
+    "next_question": null,
+    "time_limit": null
+  },
+  {
+    "id": 3,
+    "question_type_id": 1,
+    "question_body": "ждьждьлд",
+    "question_priority": 1,
+    "next_question": 2,
+    "time_limit": null
+  }
+]
 ```
 
 <p>
@@ -478,7 +363,8 @@
             question_type_id
         </td>
         <td>
-             ID типа вопроса(int)
+             ID типа вопроса(int): 1 - открытый вопрос; 2 - один правильный ответ; 3 - 	несколько вариантов ответа;
+            4 - истина или ложь;
         </td>
     </tr>
     <tr>
@@ -530,11 +416,6 @@
 
 ### Ответы на вопрос
 
-`https://guild.craft-group.xyz/api/answer/get-answers`
-<p>
-     Для получения вариантов ответов на вопрос анкеты нужно сделать <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/answer/get-answers
-</p>
-
 <p>
     Требуемые параметры:
 </p>
@@ -561,7 +442,7 @@
     Пример запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/answer/get-answers?question_id=7`
+`GET https://guild.craft-group.xyz/api/answer/get-answers?question_id=7`
 
 <p>
     Возвращает <b>массив</b> объектов <b>Ответов</b>. <br>

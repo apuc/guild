@@ -129,11 +129,10 @@ class Question extends \yii\db\ActiveRecord
         return $this->hasMany(UserResponse::className(), ['question_id' => 'id']);
     }
 
-    public static function activeQuestions($questionnaire_id)
+    public static function activeQuestions($questionnaire_id): array
     {
         return self::find()->where(['questionnaire_id' => $questionnaire_id])
             ->andWhere(['status' => '1'])
-            ->AsArray()
             ->all();
     }
 }

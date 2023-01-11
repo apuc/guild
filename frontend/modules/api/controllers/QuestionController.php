@@ -3,29 +3,25 @@
 namespace frontend\modules\api\controllers;
 
 use common\helpers\UUIDHelper;
-use common\models\Question;
 use common\models\UserQuestionnaire;
+use frontend\modules\api\models\Question;
 use Yii;
-use yii\filters\auth\HttpBearerAuth;
-use yii\rest\Controller;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 class QuestionController extends ApiController
 {
-    public function behaviors()
+    public function behaviors(): array
     {
-        $behaviors = parent::behaviors();
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-        return $behaviors;
-    }
+        return ArrayHelper::merge(parent::behaviors(), [
 
-    public function verbs()
-    {
-        return [
-            'get-questions' => ['get'],
-        ];
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::class,
+                'actions' => [
+                    'get-questions' => ['get'],
+                ],
+            ]
+        ]);
     }
 
     /**
@@ -47,16 +43,6 @@ class QuestionController extends ApiController
         if(empty($questions)) {
             throw new NotFoundHttpException('Questions not found');
         }
-
-        array_walk( $questions, function(&$arr){
-            unset(
-                $arr['score'],
-                $arr['created_at'],
-                $arr['updated_at'],
-                $arr['status'],
-                $arr['questionnaire_id']
-            );
-        });
 
         return  $questions;
     }

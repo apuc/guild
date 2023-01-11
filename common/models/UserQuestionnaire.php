@@ -10,8 +10,7 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
-use backend\modules\questionnaire\models\Question;
-use backend\modules\questionnaire\models\UserResponse;
+use common\models\UserResponse;
 use \backend\modules\questionnaire\models\Answer;
 
 /**
@@ -179,18 +178,9 @@ class UserQuestionnaire extends ActiveRecord
 
     public static function findActiveUserQuestionnaires($user_id): array
     {
-        $models =  self::find()
+        return self::find()
             ->where(['user_id' => $user_id])
             ->andWhere(['not', ['user_questionnaire.status' => 0]])
             ->all();
-
-        $modelsArr = array();
-        foreach ($models as $model) {
-            $modelsArr[] = array_merge($model->toArray(), [
-                'questionnaire_title' => $model->getQuestionnaireTitle()
-            ]);
-        }
-
-        return $modelsArr;
     }
 }

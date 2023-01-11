@@ -120,11 +120,15 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <p>
-        <?= Html::a(
-            'Добавить новый ответ',
-            ['answer/create', 'question_id' => $model->id],
-            ['class' => 'btn btn-primary']
-        ) ?>
+        <?php
+            if ($model->question_type_id != 1) {
+                echo Html::a(
+                    'Добавить новый ответ',
+                    ['answer/create', 'question_id' => $model->id],
+                    ['class' => 'btn btn-primary']
+                );
+            }
+        ?>
     </p>
 
 </div>
