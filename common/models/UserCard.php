@@ -2,14 +2,13 @@
 
 namespace common\models;
 
-use common\classes\Debug;
 use Exception;
 use phpDocumentor\Reflection\Types\This;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -49,6 +48,7 @@ use yii\helpers\ArrayHelper;
  * @property Position $position
  * @property Status $status0
  * @property Achievement[] $achievements
+// * @property Skill[] $skills
  */
 class UserCard extends \yii\db\ActiveRecord
 {
@@ -244,6 +244,24 @@ class UserCard extends \yii\db\ActiveRecord
     public function getSkillValues()
     {
         return $this->hasMany(CardSkill::class, ['card_id' => 'id'])->with('skill');
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function getSkills(): ActiveQuery
+    {
+        return $this->hasMany(Skill::class,['id' => 'skill_id'])
+            ->viaTable('card_skill', ['card_id' => 'id']);
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    public function getAchieve(): ActiveQuery
+    {
+        return $this->hasMany(Achievement::class, ['id' => 'achievement_id'])
+            ->viaTable('achievement_user_card', ['user_card_id' => 'id']);
     }
 
     public static function getNameSkills()

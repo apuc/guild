@@ -61,9 +61,7 @@ class ReportSearchForm extends Model
             $queryBuilder->andWhere(['user_card_id' => $this->user_id]);
         }
 
-        $data = $queryBuilder->asArray()->all();
-
-        return $data;
+        return $queryBuilder->asArray()->all();
     }
 
     public function findByDate(): array

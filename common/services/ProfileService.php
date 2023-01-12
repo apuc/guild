@@ -5,63 +5,27 @@ namespace common\services;
 use common\models\Manager;
 use common\models\ManagerEmployee;
 use common\models\UserCard;
-use common\models\UserCardPortfolioProjects;
 use frontend\modules\api\models\ProfileSearchForm;
+use frontend\modules\api\models\UserCardPortfolioProjects;
 use Yii;
 use yii\web\ServerErrorHttpException;
 
 class ProfileService
 {
-    public static function getPortfolioProjects($card_id)
+    public static function getPortfolioProjects($card_id): array
     {
         /** @var UserCardPortfolioProjects[] $portfolioProjects */
-        $portfolioProjects = UserCardPortfolioProjects::find()
+        return UserCardPortfolioProjects::find()
             ->where(['card_id' => $card_id])
             ->all();
-
-        $array = [];
-        if (!empty($portfolioProjects)) {
-            foreach ($portfolioProjects as $project) {
-                array_push(
-                    $array,
-                    [
-                        'id' => $project->id,
-                        'title' => $project->title,
-                        'description' => $project->description,
-                        'main_stack' => $project->skill->name,
-                        'additional_stack' => $project->additional_stack,
-                        'link' => $project->link
-                    ]
-                );
-            }
-        }
-        return $array;
     }
 
-    /**
-     * @throws ServerErrorHttpException
-     */
-    public static function getMainData($user_id): array
-    {
-        $userCard = UserCard::findOne(['id_user' => $user_id]);
-        if (empty($userCard)) {
-            throw new ServerErrorHttpException('Profile not found!');
-        }
-        return array('fio' => $userCard->fio,
-            'photo' => $userCard->photo,
-            'gender' => $userCard->gender,
-            'level' => $userCard->level,
-            'years_of_exp' => $userCard->years_of_exp,
-            'specification' => $userCard->specification,
-            'position_name' => $userCard->position->name);
-    }
-
-    public static function getProfile($id, $request): ?array
+    public static function getProfile($card_id, $request)
     {
         $searchModel = new ProfileSearchForm();
         $searchModel->attributes = $request;
 
-        if ($id) {
+        if ($searchModel->card_id) {
             return $searchModel->byId();
         }
         return $searchModel->byParams();
@@ -70,18 +34,17 @@ class ProfileService
     /**
      * @throws ServerErrorHttpException
      */
-    public static function getProfileWithReportPermission($user_card_id): ?array
+    public static function getProfileWithReportPermission($card_id): ?array
     {
-        if (UserCard::find()->where(['id' => $user_card_id])->exists()) {
-
+        if (UserCard::find()->where(['id' => $card_id])->exists()) {
             $searchModel = new ProfileSearchForm();
-            $searchModel->id = $user_card_id;
-            $profile = $searchModel->byId();
+            $searchModel->card_id = $card_id;
+            $profile = $searchModel->byId()->toArray();
 
-            self::addPermission($profile, $user_card_id);
+            self::addPermission($profile, $card_id);
             return $profile;
         }
-        throw new ServerErrorHttpException('There is no user with this id');
+        throw new ServerErrorHttpException('There is no profile with this card_id');
     }
 
     private static function addPermission(&$profile, $user_card_id)

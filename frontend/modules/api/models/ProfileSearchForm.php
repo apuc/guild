@@ -4,15 +4,13 @@
 namespace frontend\modules\api\models;
 
 
-use backend\modules\card\models\UserCard;
-use common\classes\Debug;
 use yii\base\Model;
 
 /**
  * Class ProfileSearchForm
  * @property integer $limit
  * @property integer $offset
- * @property integer $id
+ * @property integer $card_id
  * @package frontend\modules\api\models
  */
 class ProfileSearchForm extends Model
@@ -22,28 +20,15 @@ class ProfileSearchForm extends Model
     public $skills;
 
     public $position_id;
-    public $id;
+    public $card_id;
 
     public function rules()
     {
         return [
-            [['id', 'limit', 'offset', 'position_id'], 'safe'],
+            [['card_id', 'limit', 'offset', 'position_id'], 'safe'],
             [['skills'], 'checkIsArray'],
         ];
     }
-
-    public function exclude($arr)
-    {
-        $ex = ['passport', 'resume', 'link_vk', 'link_telegram', 'email', 'salary'];
-        foreach ($ex as $remove) {
-            if (isset($arr[$remove])) {
-                unset($arr[$remove]);
-            }
-        }
-
-        return $arr;
-    }
-
 
     public function checkIsArray()
     {
@@ -54,53 +39,27 @@ class ProfileSearchForm extends Model
 
     public function byId()
     {
-        if ($this->id) {
-            return $this->exclude(UserCard::find()
-                ->where(['id' => $this->id])
-                ->with(['skillValues'])
-                ->with(['achievements'])
-                ->asArray()
-                ->one());
-        }
-
-        return null;
+        return UserCard::find()
+            ->where(['id' => $this->card_id])
+            ->one();
     }
 
     public function byParams()
     {
-        $model = UserCard::find();
+        $model = UserCard::find()
+            ->filterWhere(['position_id' => $this->position_id])
+            ->where(['status' => [4, 12]])
+            ->andWhere(['deleted_at' => null]);
 
         if ($this->skills) {
             $model->joinWith(['skillValues']);
             $this->skills = explode(',', $this->skills);
             $model->where(['card_skill.skill_id' => $this->skills]);
             $model->having('COUNT(DISTINCT skill_id) = ' . count($this->skills));
-        } else {
-            $model->joinWith('skillValues');
+            $model->groupBy('card_skill.card_id');
         }
 
-        $model->joinWith('achievements');
-
-        $model->andFilterWhere(['position_id' => $this->position_id]);
-
-        $model->andWhere(['status' => [4, 12]]);
-        $model->andWhere(['deleted_at' => null]);
-
-        //$model->groupBy('card_skill.card_id');
-
-        $res = $model->limit($this->limit)
-            ->offset($this->offset)->orderBy('updated_at DESC')->asArray()->all();
-
-        if(!$res){
-            return [];
-        }
-
-        $resArr = [];
-        foreach ($res as $re){
-            $resArr[] = $this->exclude($re);
-        }
-
-        return $resArr;
+        return $model->limit($this->limit)
+            ->offset($this->offset)->orderBy('updated_at DESC')->all();
     }
-
 }
