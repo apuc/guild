@@ -22,7 +22,7 @@ class ApiController extends Controller
                     //'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Allow-Headers' => [
                         'Content-Type',
-                        'Access-Control-Allow-Headers',
+                        'Access-Control-Headers-Origin',
                         'Authorization',
                         'X-Requested-With'
                     ],
