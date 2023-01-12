@@ -11,11 +11,9 @@ use yii\web\ServerErrorHttpException;
 
 class UserQuestionnaireController extends ApiController
 {
-
     public function behaviors(): array
     {
         return ArrayHelper::merge(parent::behaviors(), [
-
             'verbs' => [
                 'class' => \yii\filters\VerbFilter::class,
                 'actions' => [

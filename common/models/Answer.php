@@ -107,7 +107,6 @@ class Answer extends \yii\db\ActiveRecord
     {
         return self::find()->where(['question_id' => $question_id])
             ->andWhere(['status' => '1'])
-            ->AsArray()
             ->all();
     }
 }
