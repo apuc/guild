@@ -18,7 +18,7 @@ class ProfileController extends ApiController
             'verbs' => [
                 'class' => \yii\filters\VerbFilter::class,
                 'actions' => [
-                    '' => ['get'],
+                    '' => ['GET', 'HEAD', 'OPTIONS'],
                     'profile-with-report-permission' => ['post', 'patch'],
                     'get-main-data' => ['get']
                 ],
