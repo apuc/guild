@@ -8,19 +8,11 @@ use common\models\UserCard;
 use frontend\modules\api\models\ProfileSearchForm;
 use frontend\modules\api\models\UserCardPortfolioProjects;
 use Yii;
-use yii\web\ServerErrorHttpException;
+use yii\db\ActiveQuery;
 
 class ProfileService
 {
-    public static function getPortfolioProjects($card_id): array
-    {
-        /** @var UserCardPortfolioProjects[] $portfolioProjects */
-        return UserCardPortfolioProjects::find()
-            ->where(['card_id' => $card_id])
-            ->all();
-    }
-
-    public static function getProfile($card_id, $request)
+    public static function getProfile( $request): ActiveQuery
     {
         $searchModel = new ProfileSearchForm();
         $searchModel->attributes = $request;
@@ -31,30 +23,21 @@ class ProfileService
         return $searchModel->byParams();
     }
 
-    /**
-     * @throws ServerErrorHttpException
-     */
-    public static function getProfileWithReportPermission($card_id): ?array
+    public static function getPortfolioProjects($card_id): array
     {
-        if (UserCard::find()->where(['id' => $card_id])->exists()) {
-            $searchModel = new ProfileSearchForm();
-            $searchModel->card_id = $card_id;
-            $profile = $searchModel->byId()->toArray();
-
-            self::addPermission($profile, $card_id);
-            return $profile;
-        }
-        throw new ServerErrorHttpException('There is no profile with this card_id');
+        /** @var UserCardPortfolioProjects[] $portfolioProjects */
+        return UserCardPortfolioProjects::find()
+            ->where(['card_id' => $card_id])
+            ->all();
     }
 
-    private static function addPermission(&$profile, $user_card_id)
+    public static function checkPermissionToViewReports($user_card_id): bool //&$profile,
     {
         $searcherCardID = self::getSearcherCardID(Yii::$app->user->getId());
         if (self::checkReportPermission($user_card_id, $searcherCardID)) {
-            $profile += ['report_permission' => '1'];
-        } else {
-            $profile += ['report_permission' => '0'];
+            return true;
         }
+        return false;
     }
 
     private static function getSearcherCardID($user_id): int

@@ -2,15 +2,19 @@
 
 namespace frontend\modules\api\models;
 
-class UserCard extends \common\models\UserCard
+use common\services\ProfileService;
+use yii\helpers\Url;
+use yii\web\Link;
+use yii\web\Linkable;
+
+class UserCard extends \common\models\UserCard implements Linkable
 {
-    public function fields()
+    public function fields(): array
     {
         return [
             'fio',
             'photo',
             'gender',
-            'status',
             'position_id',
             'city',
             'vc_text',
@@ -19,19 +23,29 @@ class UserCard extends \common\models\UserCard
             'years_of_exp',
             'specification',
             'resume_text',
-            'at_project',
+            'at_project'
         ];
     }
 
-    public function extraFields()
+    public function extraFields(): array
     {
         return [
+            'permission_view_reports' => function () {
+                return ProfileService::checkPermissionToViewReports($this->id);
+            },
             'skills' => function() {
                 return $this->getSkills()->all();
             },
             'achievements' => function() {
                 return $this->getAchieve()->all();
             }
+        ];
+    }
+
+    public function getLinks(): array
+    {
+        return [
+            Link::REL_SELF => Url::to(['index', 'card_id' => $this->id], true),
         ];
     }
 }

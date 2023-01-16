@@ -5,6 +5,9 @@ namespace frontend\modules\api\models;
 
 
 use yii\base\Model;
+use yii\helpers\Url;
+use yii\web\Link;
+use yii\web\Linkable;
 
 /**
  * Class ProfileSearchForm
@@ -13,7 +16,7 @@ use yii\base\Model;
  * @property integer $card_id
  * @package frontend\modules\api\models
  */
-class ProfileSearchForm extends Model
+class ProfileSearchForm extends Model implements Linkable
 {
     public $limit = 10;
     public $offset = 0;
@@ -30,6 +33,13 @@ class ProfileSearchForm extends Model
         ];
     }
 
+    public function getLinks()
+    {
+        return [
+            Link::REL_SELF => Url::to(['index', 'card_id' => $this->id], true),
+        ];
+    }
+
     public function checkIsArray()
     {
         if (!is_array($this->_task)) {
@@ -40,8 +50,7 @@ class ProfileSearchForm extends Model
     public function byId()
     {
         return UserCard::find()
-            ->where(['id' => $this->card_id])
-            ->one();
+            ->where(['id' => $this->card_id]);
     }
 
     public function byParams()
@@ -59,7 +68,6 @@ class ProfileSearchForm extends Model
             $model->groupBy('card_skill.card_id');
         }
 
-        return $model->limit($this->limit)
-            ->offset($this->offset)->orderBy('updated_at DESC')->all();
+        return $model->orderBy('updated_at DESC');
     }
 }

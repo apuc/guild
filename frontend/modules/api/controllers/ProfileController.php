@@ -3,12 +3,16 @@
 namespace frontend\modules\api\controllers;
 
 use common\services\ProfileService;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
-use yii\web\ServerErrorHttpException;
 
 class ProfileController extends ApiController
 {
+    public $modelClass = 'frontend\modules\api\models\UserCard';
+    public $serializer = [
+        'class' => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'profiles',
+    ];
 
     public function behaviors(): array
     {
@@ -16,31 +20,18 @@ class ProfileController extends ApiController
             'verbs' => [
                 'class' => \yii\filters\VerbFilter::class,
                 'actions' => [
-                    'index' => ['get'],
+                    'index' => ['get', 'options'],
                     'profile-with-report-permission' => ['get'],
                 ],
             ]
         ]);
     }
 
-    /**
-     * @throws NotFoundHttpException
-     */
-    public function actionIndex($card_id = null)
+    public function actionIndex(): ActiveDataProvider
     {
-        $profiles =  ProfileService::getProfile($card_id, \Yii::$app->request->get());
-        if(empty($profiles)) {
-            throw new NotFoundHttpException('Profiles not found');
-        }
-        return $profiles;
-    }
-
-    /**
-     * @throws ServerErrorHttpException
-     */
-    public function actionProfileWithReportPermission($card_id): ?array
-    {
-        return ProfileService::getProfileWithReportPermission($card_id);
+        return new ActiveDataProvider([
+            'query' => ProfileService::getProfile(\Yii::$app->request->get()),
+        ]);
     }
 
     public function actionPortfolioProjects($card_id): array
