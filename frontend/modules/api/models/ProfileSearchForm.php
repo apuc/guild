@@ -68,6 +68,10 @@ class ProfileSearchForm extends Model implements Linkable
             $model->groupBy('card_skill.card_id');
         }
 
+        if ($this->position_id) {
+            $model->andFilterWhere(['position_id' => $this->position_id]);
+        }
+
         return $model->orderBy('updated_at DESC');
     }
 }

@@ -65,6 +65,14 @@
     </tr>
     <tr>
         <td>
+            position_id
+        </td>
+        <td>
+            Id позиции
+        </td>
+    </tr>
+    <tr>
+        <td>
             expand(...&expand=skills,achievements,permission_view_reports)
         </td>
         <td>
@@ -78,7 +86,7 @@
     Пример запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/profile?skills=1,2&expand=skills,achievements,permission_view_reports`
+`https://guild.craft-group.xyz/api/profile?position_id=1&skills=1,2&expand=skills,achievements,permission_view_reports`
 
 
 <p>
