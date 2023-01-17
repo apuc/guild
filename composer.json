@@ -29,7 +29,6 @@
         "edofre/yii2-fullcalendar-scheduler": "V1.1.12",
         "asmoday74/yii2-ckeditor5": "*",
         "kavalar/telegram_bot": "^0.2.0",
-        "kavalar/yii2-telegram-bot": "^0.1.0",
         "2amigos/yii2-transliterator-helper": "*",
         "ext-json": "*",
         "kartik-v/yii2-widget-depdrop": "dev-master",
@@ -43,8 +42,8 @@
         "yiisoft/yii2-debug": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
-        "codeception/base": "^2.2.3",
-        "codeception/verify": "~0.3.1"
+        "codeception/verify": "~0.3.1",
+        "codeception/module-yii2": "^1.1"
     },
     "config": {
         "process-timeout": 1800,
