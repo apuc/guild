@@ -5,7 +5,7 @@ namespace backend\modules\notes\models;
 use Yii;
 use common\models\FieldsValueNew;
 
-class kNote extends \common\models\Note
+class Note extends \common\models\Note
 {
 
     public $fields;

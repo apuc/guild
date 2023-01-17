@@ -27,14 +27,8 @@ class HolidayController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                ],
+            'as AccessBehavior' => [
+                'class' => \developeruz\db_rbac\behaviors\AccessBehavior::className(),
             ],
         ];
     }
