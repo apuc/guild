@@ -103,6 +103,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]);
-    echo "<h3>Сумма зарплат: " . $searchModel->total . "</h3>";
+    if ( Yii::$app->user->can('confidential_information')) {
+        echo "<h3>Сумма зарплат: " . $searchModel->total . "</h3>";
+    }
     ?>
 </div>
