@@ -7,7 +7,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use Yii;
-use backend\modules\task\models\TaskUser;
+use backend\modules\task\models\ProjectTaskUser;
 use backend\modules\task\models\TaskUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -78,7 +78,7 @@ class TaskUserController extends Controller
             $project_user_id_arr = ArrayHelper::getValue($post, 'project_user_id');
 
             foreach ($project_user_id_arr as $project_user_id) {
-                $emtModel = new TaskUser();
+                $emtModel = new ProjectTaskUser();
                 $emtModel->task_id = $post['task_id'];
                 $emtModel->project_user_id = $project_user_id;
 
@@ -99,7 +99,7 @@ class TaskUserController extends Controller
         }
 
 
-        $model = new TaskUser();
+        $model = new ProjectTaskUser();
         return $this->render('create', [
             'model' => $model,
             'task_id' => $task_id,
@@ -156,12 +156,12 @@ class TaskUserController extends Controller
      * Finds the TaskUser model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return TaskUser the loaded model
+     * @return ProjectTaskUser the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = TaskUser::findOne($id)) !== null) {
+        if (($model = ProjectTaskUser::findOne($id)) !== null) {
             return $model;
         }
 

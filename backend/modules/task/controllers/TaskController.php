@@ -3,11 +3,11 @@
 namespace backend\modules\task\controllers;
 
 use backend\modules\project\models\ProjectUser;
-use backend\modules\task\models\TaskUser;
+use backend\modules\task\models\ProjectTaskUser;
 use yii\data\ActiveDataProvider;
 use yii\web\Response;
 use Yii;
-use backend\modules\task\models\Task;
+use backend\modules\task\models\ProjectTask;
 use backend\modules\task\models\TaskSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -80,7 +80,7 @@ class TaskController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Task();
+        $model = new ProjectTask();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -129,12 +129,12 @@ class TaskController extends Controller
      * Finds the Task model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Task the loaded model
+     * @return ProjectTask the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Task::findOne($id)) !== null) {
+        if (($model = ProjectTask::findOne($id)) !== null) {
             return $model;
         }
 
