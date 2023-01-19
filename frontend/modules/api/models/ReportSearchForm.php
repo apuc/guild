@@ -69,6 +69,8 @@ class ReportSearchForm extends Model
     public function findByDate(): array
     {
         return Reports::find()
+//            ->joinWith('task')
+            ->with('task')
             ->where(['user_card_id' => $this->user_card_id])
             ->andWhere(['created_at' => $this->date])
             ->all();
