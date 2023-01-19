@@ -4,21 +4,18 @@
 namespace frontend\modules\api\models;
 
 use common\models\Reports;
-use common\models\ReportsTask;
 use yii\base\Model;
 
+/**  */
 class ReportSearchForm extends Model
 {
+    public $user_card_id;
     public $limit;
     public $offset;
+    /** @var string  */
+    public $date;
     public $fromDate;
     public $toDate;
-    public $user_card_id;
-    /**
-     * @var false
-     */
-    public $byDate;
-    public $date;
 
     public function __construct($config = [])
     {
@@ -26,10 +23,9 @@ class ReportSearchForm extends Model
         $this->offset = 0;
         $this->user_card_id = null;
 
-        $this->toDate = date('Y-m-d', time());
-        $this->fromDate = date('Y-m-d', time());
+        $this->toDate = date('Y-m-d');
+        $this->fromDate = date('Y-m-d');
         $this->date = date('Y-m-d');
-        $this->byDate = false;
 
         parent::__construct($config);
     }
@@ -38,41 +34,44 @@ class ReportSearchForm extends Model
     {
         return [
             [['byDate'], 'safe'],
-//            [['fromDate', 'toDate', 'date'], 'date', 'format' => 'Y-m-d'],
-            [['limit', 'offset', 'user_card_id'], 'integer', 'min' => 0],
+            [['fromDate', 'toDate', 'date'], 'string'],
+//            [['fromDate', 'toDate', 'date'], 'date', 'format' => 'php:Y-m-d'],
+            [[ 'user_card_id'], 'integer', 'min' => 0],
         ];
     }
 
     public function byParams()
     {
-        $queryBuilder = Reports::find()
-            ->with('task');
+        $queryBuilder = Reports::find()->with('task');
 
-        if ($this->byDate) {
-            $queryBuilder->andWhere(['reports.created_at' => $this->date]);
-        } else {
+        if ($this->fromDate && $this->toDate) {
             $queryBuilder->andWhere(['between', 'reports.created_at', $this->fromDate, $this->toDate]);
+        }
+
+        if (isset($this->user_card_id)) {
+            $queryBuilder->andWhere(['reports.user_card_id' => $this->user_card_id]);
         }
 
         $queryBuilder->limit($this->limit)
             ->offset($this->offset);
 
-        if (isset($this->user_card_id)) {
-            $queryBuilder->andWhere(['user_card_id' => $this->user_card_id]);
-        }
-
-        $data = $queryBuilder->asArray()->all();
-
-        return $data;
+        return $queryBuilder->asArray()->all();
     }
 
-    public function findByDate(): array
+    public function findByDate()
     {
-        return Reports::find()
-//            ->joinWith('task')
-            ->with('task')
-            ->where(['user_card_id' => $this->user_card_id])
-            ->andWhere(['created_at' => $this->date])
-            ->all();
+        return Reports::find()->with('task')
+            ->where(['reports.user_card_id' => $this->user_card_id])
+//            ->where(['between', 'reports.created_at', $this->fromDate, $this->toDate])
+            ->andWhere(['reports.created_at' => $this->date])
+            ->asArray()->all();
+    }
+
+    public function reportsByDate()
+    {
+        return Reports::find()->with('task')
+            ->where(['reports.user_card_id' => $this->user_card_id])
+            ->where(['between', 'reports.created_at', $this->fromDate, $this->toDate])
+            ->asArray()->all();
     }
 }
