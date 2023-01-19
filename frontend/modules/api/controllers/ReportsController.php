@@ -137,27 +137,19 @@ class ReportsController extends ApiController
     /**
      * @throws NotFoundHttpException
      */
-    public function actionReportsByDate($fromDate, $toDate, $user_card_id = null)
+    public function actionReportsByDate($fromDate, $toDate, $user_card_id)
     {
         if (!$this->checkDate($fromDate) || !$this->checkDate($toDate)) {
             throw new BadRequestHttpException('Wrong date format');
         }
 
         $params = Yii::$app->request->get();
-        $userId = $user_card_id ?? Yii::$app->user->id;
-        /** @var UserCard $userCard */
-        $userCard = UserCard::find()->where(['id_user' => $userId])->one();
-
-        if (!$userCard) {
-            throw new NotFoundHttpException('User not found');
-        }
 
         $reportsModel = new ReportSearchForm();
         $reportsModel->attributes = $params;
-        $reportsModel->user_card_id = $userCard->id;
+        $reportsModel->user_card_id = $user_card_id;
 
         $reports = $reportsModel->reportsByDate();
-        return $reportsModel;
         return ArrayHelper::toArray($reports , [
             'common\models\Reports' => [
                 'date' => 'created_at',
