@@ -72,7 +72,7 @@ class ReportsController extends ApiController
     /**
      * @throws NotFoundHttpException
      */
-    public function actionFindByDate(): array
+    public function actionFindByDate()//: array
     {
         $reportsModel = new ReportSearchForm();
 
@@ -82,11 +82,19 @@ class ReportsController extends ApiController
         }
 
         $reportsModel->attributes = $params;
-        $reportsModel->byDate = true;
+        $reportsModel->date = $params['date'];
+
+        if (!$this->checkDate($reportsModel->date)) {
+            throw new BadRequestHttpException('Wrong date format');
+        }
+
+//        return $reportsModel->date;
+//        return $reportsModel->user_card_id;
 
         if(!$reportsModel->validate()){
             return $reportsModel->errors;
         }
+
         return $reportsModel->findByDate();
     }
 
@@ -170,14 +178,14 @@ class ReportsController extends ApiController
     /**
      * @throws NotFoundHttpException
      */
-    public function actionReportsByDate($fromDate, $toDate, $user_id = null)
+    public function actionReportsByDate($fromDate, $toDate, $user_card_id = null)
     {
         if (!$this->checkDate($fromDate) || !$this->checkDate($toDate)) {
             throw new BadRequestHttpException('Wrong date format');
         }
 
         $params = Yii::$app->request->get();
-        $userId = $user_id ?? Yii::$app->user->id;
+        $userId = $user_card_id ?? Yii::$app->user->id;
         /** @var UserCard $userCard */
         $userCard = UserCard::find()->where(['id_user' => $userId])->one();
 
@@ -187,7 +195,7 @@ class ReportsController extends ApiController
 
         $reportsModel = new ReportSearchForm();
         $reportsModel->attributes = $params;
-        $reportsModel->user_id = $userCard->id;
+        $reportsModel->user_card_id = $userCard->id;
 
         $reports = $reportsModel->findByDate();
         return ArrayHelper::toArray($reports , [

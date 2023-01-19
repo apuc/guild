@@ -13,7 +13,7 @@ class ReportSearchForm extends Model
     public $offset;
     public $fromDate;
     public $toDate;
-    public $user_id;
+    public $user_card_id;
     /**
      * @var false
      */
@@ -24,10 +24,10 @@ class ReportSearchForm extends Model
     {
         $this->limit = 10;
         $this->offset = 0;
-        $this->user_id = null;
+        $this->user_card_id = null;
 
         $this->toDate = date('Y-m-d', time());
-        $this->fromDate = date('Y-m-01', time());
+        $this->fromDate = date('Y-m-d', time());
         $this->date = date('Y-m-d');
         $this->byDate = false;
 
@@ -38,8 +38,8 @@ class ReportSearchForm extends Model
     {
         return [
             [['byDate'], 'safe'],
-            [['fromDate', 'toDate', 'date'], 'date', 'format' => 'php:Y-m-d'],
-            [['limit', 'offset', 'user_id'], 'integer', 'min' => 0],
+//            [['fromDate', 'toDate', 'date'], 'date', 'format' => 'Y-m-d'],
+            [['limit', 'offset', 'user_card_id'], 'integer', 'min' => 0],
         ];
     }
 
@@ -57,8 +57,8 @@ class ReportSearchForm extends Model
         $queryBuilder->limit($this->limit)
             ->offset($this->offset);
 
-        if (isset($this->user_id)) {
-            $queryBuilder->andWhere(['user_card_id' => $this->user_id]);
+        if (isset($this->user_card_id)) {
+            $queryBuilder->andWhere(['user_card_id' => $this->user_card_id]);
         }
 
         $data = $queryBuilder->asArray()->all();
@@ -69,8 +69,8 @@ class ReportSearchForm extends Model
     public function findByDate(): array
     {
         return Reports::find()
-            ->where(['between', 'reports.created_at', $this->fromDate, $this->toDate])
-            ->andWhere(['user_card_id' => $this->user_id])
+            ->where(['user_card_id' => $this->user_card_id])
+            ->andWhere(['created_at' => $this->date])
             ->all();
     }
 }
