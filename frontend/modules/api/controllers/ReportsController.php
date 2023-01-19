@@ -87,7 +87,7 @@ class ReportsController extends ApiController
         if(!$reportsModel->validate()){
             return $reportsModel->errors;
         }
-        return $reportsModel->byParams();
+        return $reportsModel->findByDate();
     }
 
     public function actionCreate()
