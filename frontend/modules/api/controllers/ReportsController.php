@@ -156,10 +156,8 @@ class ReportsController extends ApiController
         $reportsModel->attributes = $params;
         $reportsModel->user_card_id = $userCard->id;
 
-//        return $reportsModel;
-
         $reports = $reportsModel->reportsByDate();
-        return $reports;
+        return $reportsModel;
         return ArrayHelper::toArray($reports , [
             'common\models\Reports' => [
                 'date' => 'created_at',
