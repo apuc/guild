@@ -62,7 +62,7 @@ class ReportSearchForm extends Model
     {
         return Reports::find()->with('task')
             ->where(['reports.user_card_id' => $this->user_card_id])
-            ->andWhere(['reports.created_at', 'reports.created_at', $this->fromDate, $this->toDate])
+            ->andWhere(['reports.created_at' => $this->date])
             ->asArray()->all();
     }
 
@@ -70,7 +70,7 @@ class ReportSearchForm extends Model
     {
         return Reports::find()->with('task')
             ->where(['reports.user_card_id' => $this->user_card_id])
-            ->andWhere(['reports.created_at' => $this->date])
+            ->andWhere(['between', 'reports.created_at', $this->fromDate, $this->toDate])
             ->asArray()->all();
     }
 }
