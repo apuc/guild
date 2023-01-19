@@ -159,6 +159,7 @@ class ReportsController extends ApiController
 //        return $reportsModel;
 
         $reports = $reportsModel->reportsByDate();
+        return $reports;
         return ArrayHelper::toArray($reports , [
             'common\models\Reports' => [
                 'date' => 'created_at',

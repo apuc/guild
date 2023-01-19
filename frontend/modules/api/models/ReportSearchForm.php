@@ -71,8 +71,7 @@ class ReportSearchForm extends Model
     {
         return Reports::find()->with('task')
             ->where(['reports.user_card_id' => $this->user_card_id])
-            ->where(['reports.user_card_id' => $this->user_card_id])
-            ->where(['between', 'reports.created_at', $this->fromDate, $this->toDate])
+            ->andWhere(['between', 'reports.created_at', $this->fromDate, $this->toDate])
             ->asArray()->all();
     }
 }
