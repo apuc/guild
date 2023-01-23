@@ -68,6 +68,7 @@
                         'items' => [
                             ['label' => 'Задачи', 'icon' => 'minus', 'url' => ['/task/task'], 'active' => \Yii::$app->controller->id == 'task'],
                             ['label' => 'Исполнители задачи', 'icon' => 'users', 'url' => ['/task/task-user'], 'active' => \Yii::$app->controller->id == 'task-user'],
+                            ['label' => 'Категории задач', 'icon' => 'users', 'url' => ['/task/project-task-category'], 'active' => \Yii::$app->controller->id == 'project-task-category'],
                         ],
                         'visible' => Yii::$app->user->can('task')
                     ],

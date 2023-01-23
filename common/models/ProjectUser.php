@@ -150,4 +150,15 @@ class ProjectUser extends \yii\db\ActiveRecord
             }
         }
     }
+
+    public static function getUsersNotOnProject($project_id): array
+    {
+        $usersIdList = ProjectUser::find()->where(['project_id' => $project_id])->select('card_id')->column();
+
+        $userCards = UserCard::find()
+            ->where(['not in', 'id', $usersIdList])
+            ->andWhere(['not', ['id_user' => null]])
+            ->all();
+        return ArrayHelper::map($userCards, 'id', 'fio');
+    }
 }

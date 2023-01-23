@@ -1,10 +1,9 @@
 <?php
 
-use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
-use common\models\User;
-use kartik\select2\Select2;
+use kartik\depdrop\DepDrop;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -16,26 +15,42 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'project_id')->widget(Select2::className(),
+    <?= $form->field($model, 'project_id')->dropDownList(
+            Project::find()->select(['name', 'id'])->indexBy('id')->column(),
         [
-            'data' => Project::find()->select(['name', 'id'])->indexBy('id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
+            'id' => 'project-id',
+            'prompt' => 'Выберите'
         ]
-    ) ?>
+    );
+    ?>
 
-    <?= $form->field($model, 'card_id')->widget(Select2::className(),
+    <?= $form->field($model, 'card_id')->widget(DepDrop::className(),
         [
-            'data' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
+            'options' => ['id' => 'card_id'],
             'pluginOptions' => [
-                'allowClear' => true,
-                'multiple' => true,
+                'depends' => ['project-id'],
+                'placeholder' => 'Выберите',
+                'url' => Url::to(['/project/project-user/users-not-on-project'])
+                ,'initialize' => false,
+            ],
+
+        'type' => DepDrop::TYPE_SELECT2,
+            'select2Options' => [
+                'hideSearch' => false,
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'closeOnSelect' => false,
+                    'multiple' => true,
+                    'hideSearch' => false
+                ],
+                'showToggleAll' => false,
             ],
         ]
-    ) ?>
+    );
+    echo "<p>
+        * в списке отображаются только пользователи у которых присудствует запись в таблице user (в user_card есть id_user)
+    </p>";
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
