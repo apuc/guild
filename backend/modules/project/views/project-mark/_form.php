@@ -1,17 +1,17 @@
 <?php
 
 use backend\modules\project\models\Project;
+use yii\helpers\Url;
 use kartik\depdrop\DepDrop;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\project\models\ProjectUser */
+/* @var $model backend\modules\project\models\ProjectMark */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="project-user-form">
+<div class="project-mark-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -19,39 +19,38 @@ use yii\widgets\ActiveForm;
         Project::find()->select(['name', 'id'])->indexBy('id')->column(),
         [
             'id' => 'project-id',
+            'placeholder' => 'Выберите',
             'prompt' => 'Выберите'
         ]
-    );
-    ?>
+    ) ?>
 
-    <?= $form->field($model, 'card_id')->widget(DepDrop::className(),
+    <?= $form->field($model, 'mark_id')->widget(DepDrop::className(),
         [
-            'options' => ['id' => 'card_id'],
+            'options' => ['id' => 'mark_id'],
             'pluginOptions' => [
                 'depends' => ['project-id'],
-                'url' => Url::to(['/project/project-user/users-not-on-project'])
+                'url' => Url::to(['/project/project-mark/users-not-on-project'])
                 ,'initialize' => false,
             ],
 
-        'type' => DepDrop::TYPE_SELECT2,
+            'type' => DepDrop::TYPE_SELECT2,
             'select2Options' => [
+                'hideSearch' => false,
                 'pluginOptions' => [
-                    'placeholder' => 'Вводите фио',
+                    'placeholder' => 'Вводите название метки',
                     'allowClear' => true,
                     'closeOnSelect' => false,
                     'multiple' => true,
+                    'hideSearch' => false
                 ],
                 'showToggleAll' => true,
             ],
         ]
     );
-    echo "<p>
-        * в списке отображаются только пользователи у которых присудствует запись в таблице user (в user_card есть id_user)
-    </p>";
     ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

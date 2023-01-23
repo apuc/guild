@@ -18,6 +18,7 @@
             $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key, 'active' => \Yii::$app->controller->id == 'project']];
         }
         $projectItems[] = ['label' => 'Сотрудники на проектах', 'icon' => 'users', 'url' => ['/project/project-user'], 'active' => \Yii::$app->controller->id == 'project-user'];
+        $projectItems[] = ['label' => 'метки проектов', 'icon' => 'tags', 'url' => ['/project/project-mark'], 'active' => \Yii::$app->controller->id == 'project-mark'];
         ?>
 
         <?= dmstr\widgets\Menu::widget(
@@ -31,6 +32,7 @@
                             ['label' => 'Доп. поля', 'icon' => 'file-text-o', 'url' => ['/settings/additional-fields'], 'active' => \Yii::$app->controller->id == 'additional-fields', 'visible' => Yii::$app->user->can('settings')],
                             ['label' => 'Должность', 'icon' => 'spotify', 'url' => ['/settings/position'], 'active' => \Yii::$app->controller->id == 'position', 'visible' => Yii::$app->user->can('settings')],
                             ['label' => 'Навыки', 'icon' => 'flask', 'url' => ['/settings/skill'], 'active' => \Yii::$app->controller->id == 'skill', 'visible' => Yii::$app->user->can('settings/skill')],
+                            ['label' => 'Метки', 'icon' => 'tag', 'url' => ['/settings/mark'], 'active' => \Yii::$app->controller->id == 'mark', 'visible' => Yii::$app->user->can('settings/mark')],
                             ['label' => 'Шаблоны резюме', 'icon' => 'address-card ', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template', 'visible' => Yii::$app->user->can('card')],
                             ['label' => 'Шаблоны документов', 'icon' => 'file', 'url' => ['/document/document-template'], 'active' => \Yii::$app->controller->id == 'document-template', 'visible' => Yii::$app->user->can('document')],
                             ['label' => 'Поля документов', 'icon' => 'file-text', 'url' => ['/document/document-field'], 'active' => \Yii::$app->controller->id == 'document-field', 'visible' => Yii::$app->user->can('document')],
