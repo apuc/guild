@@ -52,6 +52,7 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['name', 'unique'],
             [['name', 'status'], 'required'],
             [['description'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
