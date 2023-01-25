@@ -37,6 +37,30 @@
     </tr>
     <tr>
         <td>
+            project task category list
+        </td>
+        <td>
+            список категорий задач проекта
+        </td>
+    </tr>
+    <tr>
+        <td>
+            create project category task
+        </td>
+        <td>
+            создать категорию задач проекта
+        </td>
+    </tr>
+    <tr>
+        <td>
+            update project category task
+        </td>
+        <td>
+            изменить категорию задач проекта
+        </td>
+    </tr>
+    <tr>
+        <td>
             create
         </td>
         <td>
@@ -255,6 +279,178 @@
     "name": "проект статус 2"
   }
 ]
+```
+
+### Список категорий задач проекта
+`https://guild.craft-group.xyz/api/project/project-task-category-list`
+<p>
+    Для получения списка категорий задач проекта необходимо отправить <b>GET</b> запрос на URL https://guild.craft-group.xyz/api/project/project-task-category-list
+</p>
+
+<p>
+    Требуемые параметры:
+</p>
+
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            project_id
+        </td>
+        <td>
+            ID проекта
+        </td>
+    </tr>
+</table>
+
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/project/project-task-category-list?project_id=1`
+
+<p>
+    Возвращает массив категорий задач проекта имеющий такой вид:
+</p>
+
+```json5
+[
+  {
+    "id": 1,
+    "title": "mlkmld",
+    "project_id": 1
+  },
+  {
+    "id": 2,
+    "title": "тест",
+    "project_id": 1
+  }
+]
+```
+
+### Создать категорию задач проекта
+`https://guild.craft-group.xyz/api/project/create-project-task-category`
+<p>
+    Для для создания категории задач проекта необходимо отправить <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/project/create-project-task-category
+</p>
+
+<p>
+    Требуемые параметры:
+</p>
+
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            project_id
+        </td>
+        <td>
+            ID проекта
+        </td>
+    </tr>
+    <tr>
+        <td>
+            title
+        </td>
+        <td>
+            название категории
+        </td>
+    </tr>
+</table>
+
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/project/create-project-task-category`
+
+<p>
+    Возвращает категорию задач проекта имеющий такой вид:
+</p>
+
+```json5
+{
+  "project_id": "1",
+  "title": "test333",
+  "id": 4
+}
+```
+
+### Изменить категорию задач проекта
+`https://guild.craft-group.xyz/api/project/update-project-task-category`
+<p>
+    Для для создания категории задач проекта необходимо отправить <b>POST</b> запрос на URL https://guild.craft-group.xyz/api/project/update-project-task-category
+</p>
+
+<p>
+    Возможные параметры:
+</p>
+
+<table>
+    <tr>
+        <th>
+            Параметры
+        </th>
+        <th>
+            Значение
+        </th>
+    </tr>
+    <tr>
+        <td>
+            project_id
+        </td>
+        <td>
+            ID проекта
+        </td>
+    </tr>
+    <tr>
+        <td>
+            title
+        </td>
+        <td>
+            название категории
+        </td>
+    </tr>
+    <tr>
+        <td>
+            new_title
+        </td>
+        <td>
+            новое название категории
+        </td>
+    </tr>
+</table>
+
+<p>
+    Пример запроса:
+</p>
+
+`https://guild.craft-group.xyz/api/project/update-project-task-category`
+
+<p>
+    Возвращает категорию задач проекта имеющий такой вид:
+</p>
+
+```json5
+{
+  "id": 1,
+  "title": "hfbvhdfbv3",
+  "project_id": 1
+}
 ```
 
 ### Создать проект

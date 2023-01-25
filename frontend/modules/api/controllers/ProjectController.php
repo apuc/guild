@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\models\ProjectTaskCategory;
 use common\models\ProjectUser;
 use common\models\Status;
 use common\models\UseStatus;
@@ -29,6 +30,7 @@ class ProjectController extends ApiController
                     'get-project' => ['GET', 'OPTIONS'],
                     'project-list' => ['GET', 'OPTIONS'],
                     'status-list' => ['GET', 'OPTIONS'],
+                    'project-task-category-list' => ['GET', 'OPTIONS'],
                     'create' => ['POST', 'OPTIONS'],
                     'update' => ['POST', 'OPTIONS']
                 ],
@@ -60,6 +62,41 @@ class ProjectController extends ApiController
         return Status::find()
             ->joinWith('useStatuses')
             ->where(['`use_status`.`use`' => UseStatus::USE_PROJECT])->all();
+    }
+
+    public function actionProjectTaskCategoryList($project_id): array
+    {
+        return ProjectTaskCategory::find()->where(['project_id' => $project_id])->all();
+    }
+
+    public function actionCreateProjectTaskCategory()
+    {
+        $projectTaskCategory = new ProjectTaskCategory();
+        $projectTaskCategory->attributes =  \yii::$app->request->post();
+
+        if($projectTaskCategory->validate()) {
+            $projectTaskCategory->save(false);
+            return $projectTaskCategory;
+        }
+        return $projectTaskCategory->errors;
+    }
+
+    public function actionUpdateProjectTaskCategory()
+    {
+        $projectTaskCategory = ProjectTaskCategory::find()
+            ->where(['project_id' => Yii::$app->request->post('project_id')])
+            ->andWhere(['title' => Yii::$app->request->post('title')])
+            ->one();
+
+        if(empty($projectTaskCategory)) {
+            throw new NotFoundHttpException('The project not found');
+        }
+
+        $projectTaskCategory->title = Yii::$app->request->post('new_title');
+        if (!$projectTaskCategory->update() && $projectTaskCategory->hasErrors()) {
+            return $projectTaskCategory->errors;
+        }
+        return $projectTaskCategory;
     }
 
     public function actionCreate()

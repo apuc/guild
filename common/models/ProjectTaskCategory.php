@@ -29,6 +29,8 @@ class ProjectTaskCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['project_id', 'title'], 'required'],
+            [['project_id', 'title'], 'unique', 'targetAttribute' => ['project_id', 'title']],
             [['project_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
