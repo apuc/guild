@@ -119,7 +119,7 @@
     </tr>
     <tr>
         <td>
-            user_id
+            user_card_id
         </td>
         <td>
             Идентификатор карточки пользователя отчета. 
@@ -130,7 +130,7 @@
     Пример запроса:
 </p>
 
-`https://guild.craft-group.xyz/api/reports/index?fromDate=2021-08-01&toDate=2021-08-31&user_id=2&limit=3&offset=2`
+`https://guild.craft-group.xyz/api/reports/index?fromDate=2021-08-01&toDate=2021-08-31&user_card_id=2&limit=3&offset=2`
 
 ### Один отчет
 `https://guild.craft-group.xyz/api/reports/{id}`
@@ -488,7 +488,7 @@
     </tr>
     <tr>
         <td>
-            user_id
+            user_card_id
         </td>
         <td>
             Id пользователя. По умолчанию будет выведен список для текущего пользователя,
@@ -503,7 +503,7 @@
     Пример запроса:
 </p>
 
-`http://guild.loc/api/reports/reports-by-date?fromDate=2022-12-1&toDate=2022-12-31&user_id=1 task&status=1`
+`http://guild.loc/api/reports/reports-by-date?fromDate=2022-12-1&toDate=2022-12-31&user_card_id=1 task&status=1`
 
 <p>
     Возвращаемые параметры: id - идентификатор отчёта, date - дата отчёта, 

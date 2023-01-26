@@ -23,6 +23,9 @@ class DocumentFieldValueController extends Controller
     public function behaviors()
     {
         return [
+            'as AccessBehavior' => [
+                'class' => \developeruz\db_rbac\behaviors\AccessBehavior::className(),
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
