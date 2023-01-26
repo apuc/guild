@@ -45,5 +45,5 @@ environments/            contains environment-based overrides
     php yii rbac/init <br>
     php yii rbac/create-editor <br>
     php yii rbac/create-company-manager-role <br>
-    php yii rbac/create-default-access-rules <br>
+    `php yii rbac/create-default-access-rules` <br>
 </p>

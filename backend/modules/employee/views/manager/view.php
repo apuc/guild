@@ -43,6 +43,10 @@ YiiAsset::register($this);
         ],
     ]) ?>
 
+    <h2>
+        Сотрудники менеджера
+    </h2>
+
     <?= GridView::widget([
         'dataProvider' => $managerEmployeeDataProvider,
         'columns' => [

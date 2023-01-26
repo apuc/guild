@@ -44,6 +44,9 @@ class UserCardSearch extends UserCard
      */
     public function search($params)
     {
+//        $userId = Yii::$app->user->;
+//        $userCard = UserCard::findOne($userId);
+
         $query = UserCard::find();
         $query->where(['id'])->distinct()
             ->leftJoin('card_skill', 'card_skill.card_id=user_card.id')
