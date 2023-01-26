@@ -4,12 +4,12 @@ namespace backend\modules\task\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\task\models\TaskUser;
+use backend\modules\task\models\ProjectTaskUser;
 
 /**
  * TaskUserSearch represents the model behind the search form of `backend\modules\task\models\TaskUser`.
  */
-class TaskUserSearch extends TaskUser
+class TaskUserSearch extends ProjectTaskUser
 {
     public $projectId;
     /**
@@ -41,7 +41,7 @@ class TaskUserSearch extends TaskUser
      */
     public function search($params)
     {
-        $query = TaskUser::find()->joinWith(['task', 'projectUser', 'projectUser.project', 'projectUser.user']);
+        $query = ProjectTaskUser::find()->joinWith(['task', 'projectUser', 'projectUser.project', 'projectUser.user']);
 
         // add conditions that should always apply here
 

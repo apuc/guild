@@ -5,12 +5,12 @@ namespace backend\modules\task\models;
 use backend\modules\project\models\ProjectUser;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\task\models\Task;
+use backend\modules\task\models\ProjectTask;
 
 /**
  * TaskSearch represents the model behind the search form of `backend\modules\task\models\Task`.
  */
-class TaskSearch extends Task
+class TaskSearch extends ProjectTask
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class TaskSearch extends Task
      */
     public function search($params)
     {
-        $query = Task::find();//->joinWith(['user_card', 'project']);
+        $query = ProjectTask::find();//->joinWith(['user_card', 'project']);
 
         // add conditions that should always apply here
 

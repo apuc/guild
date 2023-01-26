@@ -1,6 +1,6 @@
 <?php
 
-use backend\modules\task\models\Task;
+use backend\modules\task\models\ProjectTask;
 use kartik\depdrop\DepDrop;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -8,7 +8,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\task\models\TaskUser */
+/* @var $model backend\modules\task\models\ProjectTaskUser */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $task_id  */
 ?>
@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'task_id')->widget(Select2::className(),[
-        'data' => Task::find()->select(['title', 'id'])->indexBy('id')->column(),
+        'data' => ProjectTask::find()->select(['title', 'id'])->indexBy('id')->column(),
         'options' => ['placeholder' => 'Выберите проект', 'value' => $task_id, 'id' => 'task-id',],
         'pluginOptions' => [
             'allowClear' => false,

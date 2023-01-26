@@ -2,7 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\Task;
+use common\models\ProjectTask;
 use common\services\TaskService;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -25,7 +25,7 @@ class TaskController extends ApiController
      * @throws InvalidConfigException
      * @throws ServerErrorHttpException
      */
-    public function actionCreateTask(): Task
+    public function actionCreateTask(): ProjectTask
     {
         $taskModel = TaskService::createTask(Yii::$app->getRequest()->getBodyParams());
         if ($taskModel->errors) {
@@ -59,7 +59,7 @@ class TaskController extends ApiController
     /**
      * @throws NotFoundHttpException
      */
-    public function actionGetTask($task_id): Task
+    public function actionGetTask($task_id): ProjectTask
     {
         if (empty($task_id) or !is_numeric($task_id)) {
             throw new NotFoundHttpException('Incorrect task ID');
@@ -78,7 +78,7 @@ class TaskController extends ApiController
      * @throws ServerErrorHttpException
      * @throws NotFoundHttpException
      */
-    public function actionUpdate(): ?Task
+    public function actionUpdate(): ?ProjectTask
     {
         $params = Yii::$app->request->getBodyParams();
         if (empty ($params['task_id']) or !TaskService::taskExists($params['task_id'])) {
