@@ -66,6 +66,7 @@ class UserController extends ActiveController
                 'access_token' => $model->login(),
                 'access_token_expired_at' => $model->getUser()->getTokenExpiredAt(),
                 'id' => $model->getUser()->id,
+                'status' => $model->getUser()->status,
                 'card_id' => $model->getUser()->userCard->id ?? null,
             ];
         } else {
