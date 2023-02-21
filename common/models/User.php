@@ -23,6 +23,8 @@ use yii\web\UnauthorizedHttpException;
  * @property integer $updated_at
  * @property $access_token_expired_at
  * @property string $password write-only password
+ *
+ * @property UserCard $userCard
  */
 class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
 {
