@@ -93,6 +93,7 @@ class RbacController extends Controller
         $profileEditor = $auth->getRole('profileEditor');
 
         if(!$auth->getPermission('test')) {
+            echo "create permission: test\n";
             $test = $auth->createPermission('test');
             $test->description = 'Модуль "Тестовые задания"';
             $auth->add($test);
@@ -100,6 +101,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('questionnaire')) {
+            echo "create permission: questionnaire\n";
             $questionnaire = $auth->createPermission('questionnaire');
             $questionnaire->description = 'Модуль "Анкеты": Создание, редактирование анкет, категорий анкет, вопросов, проверка ответов пользователей';
             $auth->add($questionnaire);
@@ -107,6 +109,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('interview')) {
+            echo "create permission: interview\n";
             $interview = $auth->createPermission('interview');
             $interview->description = 'Модуль "Запрос интервью"';
             $auth->add($interview);
@@ -114,6 +117,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('options')) {
+            echo "create permission: options\n";
             $options = $auth->createPermission('options');
             $options->description = 'Модуль "Опции"';
             $auth->add($options);
@@ -121,12 +125,14 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('reports')) {
+            echo "create permission: reports\n";
             $reports = $auth->createPermission('reports');
             $reports->description = 'Модуль "Отчёты"';
             $auth->add($reports);
             $auth->addChild($admin, $reports);
         }
         if(!$auth->getPermission('calendar')) {
+            echo "create permission: calendar\n";
             $calendar = $auth->createPermission('calendar');
             $calendar->description = 'Модуль "Календарь ДР"';
             $auth->add($calendar);
@@ -134,6 +140,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('notes')) {
+            echo "create permission: notes\n";
             $notes = $auth->createPermission('notes');
             $notes->description = 'Модуль "Заметки"';
             $auth->add($notes);
@@ -141,6 +148,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('accesses')) {
+            echo "create permission: accesses\n";
             $accesses = $auth->createPermission('accesses');
             $accesses->description = 'Модуль "Доступы"';
             $auth->add($accesses);
@@ -148,6 +156,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('achievements')) {
+            echo "create permission: achievements\n";
             $achievements = $auth->createPermission('achievements');
             $achievements->description = 'Модуль "Достижения"';
             $auth->add($achievements);
@@ -155,12 +164,14 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('holiday')) {
+            echo "create permission: holiday\n";
             $holiday = $auth->createPermission('holiday');
             $holiday->description = 'Модуль "Отпуска"';
             $auth->add($holiday);
             $auth->addChild($admin, $holiday);
         }
         if(!$auth->getPermission('balance')) {
+            echo "create permission: balance\n";
             $balance = $auth->createPermission('balance');
             $balance->description = 'Модуль "Баланс"';
             $auth->add($balance);
@@ -168,6 +179,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('hh')) {
+            echo "create permission: hh\n";
             $hh = $auth->createPermission('hh');
             $hh->description = 'Модуль "Hh.ru"';
             $auth->add($hh);
@@ -175,6 +187,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('company')) {
+            echo "create permission: company\n";
             $company = $auth->createPermission('company');
             $company->description = 'Модуль "Компании"';
             $auth->add($company);
@@ -182,6 +195,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('task')) {
+            echo "create permission: task\n";
             $task = $auth->createPermission('task');
             $task->description = 'Модуль "Задачи"';
             $auth->add($task);
@@ -189,6 +203,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('project')) {
+            echo "create permission: project\n";
             $project = $auth->createPermission('project');
             $project->description = 'Модуль "Проекты"';
             $auth->add($project);
@@ -196,6 +211,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('document')) {
+            echo "create permission: document\n";
             $documents = $auth->createPermission('document');
             $documents->description = 'Модуль "Документы": Создание, редактирование документов, их полей и шаблонов';
             $auth->add($documents);
@@ -203,6 +219,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('employee')) {
+            echo "create permission: employee\n";
             $employee = $auth->createPermission('employee');
             $employee->description = 'Модуль "Сотрудники"';
             $auth->add($employee);
@@ -210,6 +227,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('card')) {
+            echo "create permission: card\n";
             $card = $auth->createPermission('card');
             $card->description = 'Модуль "Профили"';
             $auth->add($card);
@@ -218,6 +236,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('settings')) {
+            echo "create permission: settings\n";
             $settings = $auth->createPermission('settings');
             $settings->description = 'Модуль "Настройки"';
             $auth->add($settings);
@@ -225,6 +244,7 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('settings/skill')) {
+            echo "create permission: settings/skill\n";
             $skills = $auth->createPermission('settings/skill');
             $skills->description = 'Навыки';
             $auth->add($skills);
@@ -233,13 +253,19 @@ class RbacController extends Controller
         }
 
         if(!$auth->getPermission('settings/mark')) {
+            echo "create permission: settings/mark\n";
             $mark = $auth->createPermission('settings/mark');
             $mark->description = 'Метки';
             $auth->add($mark);
             $auth->addChild($admin, $mark);
         }
 
-        var_dump($auth->getPermission('settings/mark'));
-
+        if(!$auth->getPermission('show_all_profiles')) {
+            echo "create permission: show_all_profiles\n";
+            $showAllProfiles = $auth->createPermission('show_all_profiles');
+            $showAllProfiles->description = 'Показ всех сотрудников в модуле Профили';
+            $auth->add($showAllProfiles);
+            $auth->addChild($admin, $showAllProfiles);
+        }
     }
 }

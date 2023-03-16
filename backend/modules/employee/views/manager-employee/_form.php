@@ -20,8 +20,9 @@ use yii\widgets\ActiveForm;
             'data' => Manager::find()->select(['fio', 'manager.id'])
                 ->joinWith('userCard')->indexBy('manager.id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
+            'hideSearch' => false,
             'pluginOptions' => [
-                'allowClear' => true
+                'allowClear' => true,
             ],
         ]) ?>
 
@@ -30,9 +31,11 @@ use yii\widgets\ActiveForm;
             'data' => UserCard::find()->select(['fio', 'user_card.id'])
                 ->joinWith('manager')->where(['manager.user_card_id' => null])->indexBy('user_card.id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
+            'hideSearch' => false,
             'pluginOptions' => [
                 'allowClear' => true,
                 'multiple' => true,
+                'closeOnSelect' => false
             ],
         ]) ?>
 

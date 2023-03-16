@@ -2,7 +2,7 @@
 
 namespace backend\modules\card\models;
 
-use common\classes\Debug;
+use backend\modules\employee\models\ManagerEmployee;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -42,10 +42,24 @@ class UserCardSearch extends UserCard
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params): ActiveDataProvider
     {
-        $query = UserCard::find();
-        $query->where(['id'])->distinct()
+        if (Yii::$app->user->can('show_all_profiles')) {
+            $query = UserCard::find();
+        } else {
+            $userCard = UserCard::find()
+                ->where(['id_user' => Yii::$app->user->id])
+                ->one();
+
+            $employeeIdList = ManagerEmployee::find()
+                ->where(['manager_id' => $userCard->manager->id])
+                ->select('user_card_id')
+                ->column();
+
+            $query = UserCard::find()->where(['in', 'user_card.id', $employeeIdList]);
+        }
+
+        $query->distinct()
             ->leftJoin('card_skill', 'card_skill.card_id=user_card.id')
             ->leftJoin('skill', 'skill.id=card_skill.skill_id');
 
@@ -61,7 +75,7 @@ class UserCardSearch extends UserCard
             return $dataProvider;
         }
 
-        $query->where(['deleted_at' => null]);
+        $query->andWhere(['deleted_at' => null]);
 
         if (isset($params['month'])) {
             $query->andFilterWhere(['=', 'MONTH(dob)', $params['month']]);
