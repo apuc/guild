@@ -2,7 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\TaskUser;
+use common\models\ProjectTaskUser;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\Controller;
@@ -21,7 +21,7 @@ class TaskUserController extends ApiController
 
     public function actionSetTaskUser()
     {
-        $taskUserModel = new TaskUser();
+        $taskUserModel = new ProjectTaskUser();
 
         $params = Yii::$app->request->post();
         $taskUserModel->attributes = $params;
@@ -57,6 +57,6 @@ class TaskUserController extends ApiController
 
     private function findUsers($project_id): array
     {
-        return TaskUser::find()->where(['task_id' => $project_id])->all();
+        return ProjectTaskUser::find()->where(['task_id' => $project_id])->all();
     }
 }

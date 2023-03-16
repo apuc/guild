@@ -2,12 +2,10 @@
 
 namespace backend\modules\project\models;
 
-use common\classes\Debug;
-use common\models\FieldsValue;
 use common\models\FieldsValueNew;
 use common\models\ProjectUser;
-use yii\helpers\ArrayHelper;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class Project extends \common\models\Project
 {
@@ -59,12 +57,13 @@ class Project extends \common\models\Project
     
     public function behaviors()
     {
-        return [
-            'log' => [
-                'class' => \common\behaviors\LogBehavior::class,
-            ]
+        $behaviors = parent::behaviors();
+        $behaviors['log'] = [
+            'class' => \common\behaviors\LogBehavior::class,
         ];
+        return $behaviors;
     }
+
 
     public function afterSave($insert, $changedAttributes)
     {

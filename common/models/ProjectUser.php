@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
  * @property Project $project
  * @property UserCard $card
  * @property User $user
- * @property TaskUser[] $taskUsers
+ * @property ProjectTaskUser[] $taskUsers
  */
 class ProjectUser extends \yii\db\ActiveRecord
 {
@@ -88,7 +88,7 @@ class ProjectUser extends \yii\db\ActiveRecord
      */
     public function getTasks()
     {
-        return $this->hasMany(Task::className(), ['project_user_id' => 'id']);
+        return $this->hasMany(ProjectTask::className(), ['project_user_id' => 'id']);
     }
 
     /**
@@ -96,7 +96,7 @@ class ProjectUser extends \yii\db\ActiveRecord
      */
     public function getTasksByProject()
     {
-        return $this->hasMany(Task::className(), ['project_id' => 'project_id']);
+        return $this->hasMany(ProjectTask::className(), ['project_id' => 'project_id']);
     }
 
     /**
@@ -104,7 +104,7 @@ class ProjectUser extends \yii\db\ActiveRecord
      */
     public function getTaskUsers()
     {
-        return $this->hasMany(TaskUser::className(), ['project_user_id' => 'id']);
+        return $this->hasMany(ProjectTaskUser::className(), ['project_user_id' => 'id']);
     }
 
     public static function usersByProjectArr($project_id): array
@@ -149,5 +149,16 @@ class ProjectUser extends \yii\db\ActiveRecord
                 $projectUser->save();
             }
         }
+    }
+
+    public static function getUsersNotOnProject($project_id): array
+    {
+        $usersIdList = ProjectUser::find()->where(['project_id' => $project_id])->select('card_id')->column();
+
+        $userCards = UserCard::find()
+            ->where(['not in', 'id', $usersIdList])
+            ->andWhere(['not', ['id_user' => null]])
+            ->all();
+        return ArrayHelper::map($userCards, 'id', 'fio');
     }
 }

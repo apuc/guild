@@ -2,8 +2,6 @@
 
 namespace common\models;
 
-use Yii;
-use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 
 /**
@@ -14,16 +12,16 @@ use yii\db\ActiveQuery;
  * @property int $project_user_id
  *
  * @property ProjectUser $projectUser
- * @property Task $task
+ * @property ProjectTask $task
  */
-class TaskUser extends \yii\db\ActiveRecord
+class ProjectTaskUser extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'task_user';
+        return 'project_task_user';
     }
 
     /**
@@ -35,7 +33,7 @@ class TaskUser extends \yii\db\ActiveRecord
             [['task_id', 'project_user_id'], 'required'],
             ['project_user_id', 'unique', 'targetAttribute' => ['task_id', 'project_user_id'], 'message'=>'Уже закреплён(ы) за задачей'],
             [['project_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectUser::className(), 'targetAttribute' => ['project_user_id' => 'id']],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
+            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectTask::className(), 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
 
@@ -64,6 +62,6 @@ class TaskUser extends \yii\db\ActiveRecord
      */
     public function getTask()
     {
-        return $this->hasOne(Task::className(), ['id' => 'task_id']);
+        return $this->hasOne(ProjectTask::className(), ['id' => 'task_id']);
     }
 }

@@ -8,7 +8,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\task\models\Task */
+/* @var $model backend\modules\task\models\ProjectTask */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

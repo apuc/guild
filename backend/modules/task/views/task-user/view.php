@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\task\models\TaskUser */
+/* @var $model backend\modules\task\models\ProjectTaskUser */
 
 $this->title = 'Изменить назначение сотрудника';
 $this->params['breadcrumbs'][] = ['label' => 'Task Users', 'url' => ['index']];
