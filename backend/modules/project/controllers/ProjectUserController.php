@@ -166,4 +166,25 @@ class ProjectUserController extends Controller
 
         return $this->redirect(['index']);
     }
+
+    public function actionUsersNotOnProject(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $project_id = $parents[0];
+                $categories = ProjectUser::getUsersNotOnProject($project_id);
+
+                $formattedCatArr = array();
+                foreach ($categories as $key => $value){
+                    $formattedCatArr[] = array('id' => $key, 'name' => $value);
+                }
+
+                return ['output'=>$formattedCatArr, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
+    }
 }

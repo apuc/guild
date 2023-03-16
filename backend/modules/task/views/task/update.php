@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\task\models\Task */
+/* @var $model backend\modules\task\models\ProjectTask */
 
 $this->title = 'Исполнители задачи: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];

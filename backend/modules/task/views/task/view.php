@@ -8,7 +8,7 @@ use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\task\models\Task */
+/* @var $model backend\modules\task\models\ProjectTask */
 /* @var $taskDataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Задача: ' . $model->title;

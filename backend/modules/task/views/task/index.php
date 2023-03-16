@@ -3,7 +3,7 @@
 use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
 use backend\modules\project\models\ProjectUser;
-use backend\modules\task\models\Task;
+use backend\modules\task\models\ProjectTask;
 use common\helpers\StatusHelper;
 use common\models\User;
 use kartik\select2\Select2;
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'project_id',
-                    'data' => Task::find()->joinWith('project')
+                    'data' => ProjectTask::find()->joinWith('project')
                         ->select(['project.name', 'project.id'])->indexBy('project.id')->column(),
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'card_id_creator',
-                    'data' => Task::find()->joinWith('userCardCreator')
+                    'data' => ProjectTask::find()->joinWith('userCardCreator')
                         ->select(['user_card.fio', 'user_card.id'])->indexBy('user_card.id')->column(),
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'card_id',
-                    'data' => Task::find()->joinWith('userCard')
+                    'data' => ProjectTask::find()->joinWith('userCard')
                         ->select(['user_card.fio', 'user_card.id'])->indexBy('user_card.id')->column(),
                     'pluginOptions' => [
                         'allowClear' => true,

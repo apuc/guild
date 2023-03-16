@@ -24,16 +24,16 @@ use yii\helpers\ArrayHelper;
  * @property Project $project
  * @property UserCard $card
  * @property UserCard $cardIdCreator
- * @property TaskUser[] $taskUsers
+ * @property ProjectTaskUser[] $taskUsers
  */
-class Task extends ActiveRecord
+class ProjectTask extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'task';
+        return 'project_task';
     }
 
     public function behaviors()
@@ -123,7 +123,7 @@ class Task extends ActiveRecord
      */
     public function getTaskUsers()
     {
-        return $this->hasMany(TaskUser::className(), ['task_id' => 'id']);
+        return $this->hasMany(ProjectTaskUser::className(), ['task_id' => 'id']);
     }
 
     public static function usersByTaskArr($task_id): array
