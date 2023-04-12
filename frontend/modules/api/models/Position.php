@@ -18,6 +18,23 @@ namespace frontend\modules\api\models;
  *     description="Название позиции"
  *  ),
  *)
+ *
+ * @OA\Schema(
+ *  schema="PositionsExample",
+ *  type="array",
+ *  example={{"id": 1, "name": "Back end - разработчик"}, {"id": 2, "name": "Front end - разработчик"}},
+ *  @OA\Items(
+ *      type="object",
+ *      @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *      ),
+ *      @OA\Property(
+ *         property="name",
+ *         type="string",
+ *      ),
+ *  ),
+ *)
  */
 class Position extends \common\models\Position
 {

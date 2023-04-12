@@ -20,7 +20,8 @@ class ProfileController extends ApiController
                 'actions' => [
                     '' => ['GET', 'HEAD', 'OPTIONS'],
                     'profile-with-report-permission' => ['post', 'patch'],
-                    'get-main-data' => ['get']
+                    'get-main-data' => ['get'],
+                    'positions-list' => ['get'],
                 ],
             ]
         ]);
@@ -31,7 +32,7 @@ class ProfileController extends ApiController
      */
     public function actionIndex($id = null): ?array
     {
-        return  ProfileService::getProfile($id, \Yii::$app->request->get());
+        return ProfileService::getProfile($id, \Yii::$app->request->get());
     }
 
     /**
@@ -53,5 +54,32 @@ class ProfileController extends ApiController
     public function actionPortfolioProjects($card_id): array
     {
         return ProfileService::getPortfolioProjects($card_id);
+    }
+
+    /**
+     *
+     * @OA\Get(path="/profile/positions-list",
+     *   summary="Список позиций",
+     *   description="Получить список всех возможных позиций",
+     *   tags={"Profile"},
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает массив позиций",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/PositionsExample"),
+     *     ),
+     *
+     *   ),
+     * )
+     *
+     * @return array
+     */
+    public function actionPositionsList(): array
+    {
+        return ProfileService::getPositionsList();
     }
 }

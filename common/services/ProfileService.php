@@ -4,6 +4,7 @@ namespace common\services;
 
 use common\models\Manager;
 use common\models\ManagerEmployee;
+use common\models\Position;
 use common\models\UserCard;
 use common\models\UserCardPortfolioProjects;
 use frontend\modules\api\models\ProfileSearchForm;
@@ -82,6 +83,14 @@ class ProfileService
             return $profile;
         }
         throw new ServerErrorHttpException('There is no user with this id');
+    }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getPositionsList()
+    {
+        return Position::find()->all();
     }
 
     private static function addPermission(&$profile, $user_card_id)

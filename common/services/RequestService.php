@@ -146,7 +146,7 @@ class RequestService
      */
     public function getByUserId($user_id)
     {
-        return $this->model->find()->where(['user_id' => $user_id])->all();
+        return $this->model->find()->where(['user_id' => $user_id, 'status' => 1])->all();
     }
 
     /**
@@ -158,6 +158,19 @@ class RequestService
         $this->model->user_id = $userId;
 
         return $this;
+    }
+
+    /**
+     * @param int $userId
+     * @return bool
+     */
+    public function validateUser(int $userId): bool
+    {
+        if ($this->model->user_id == $userId){
+            return true;
+        }
+
+        return false;
     }
 
     /**
