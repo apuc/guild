@@ -36,6 +36,7 @@
                             ['label' => 'Шаблоны резюме', 'icon' => 'address-card ', 'url' => ['/card/resume-template'], 'active' => \Yii::$app->controller->id == 'resume-template', 'visible' => Yii::$app->user->can('card')],
                             ['label' => 'Шаблоны документов', 'icon' => 'file', 'url' => ['/document/document-template'], 'active' => \Yii::$app->controller->id == 'document-template', 'visible' => Yii::$app->user->can('document')],
                             ['label' => 'Поля документов', 'icon' => 'file-text', 'url' => ['/document/document-field'], 'active' => \Yii::$app->controller->id == 'document-field', 'visible' => Yii::$app->user->can('document')],
+                            ['label' => 'Уровень знаний', 'icon' => 'code', 'url' => ['/knowledgelevel/knowledge-level'], 'active' => \Yii::$app->controller->id == 'knowledge-level', 'visible' => Yii::$app->user->can('knowledgelevel/knowledge-level')],
                             [
                                 'label' => 'Роли', 'icon' => 'users', 'url' => '#',
                                 'items' => [
@@ -59,6 +60,7 @@
                         ],
                         'visible' => Yii::$app->user->can('employee')
                     ],
+                    ['label' => 'Запросы', 'icon' => 'eye', 'url' => ['/request/request'], 'active' => \Yii::$app->controller->id == 'request', 'visible' => Yii::$app->user->can('request/request')],
                     ['label' => 'Документы', 'icon' => 'archive', 'url' => ['/document/document'], 'active' => \Yii::$app->controller->id == 'document', 'visible' => Yii::$app->user->can('document')],
                     [
                         'label' => 'Проекты', 'icon' => 'cubes', 'url' => ['#'],

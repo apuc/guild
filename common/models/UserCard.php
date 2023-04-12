@@ -261,6 +261,17 @@ class UserCard extends \yii\db\ActiveRecord
         return ArrayHelper::map(self::find()->all(), 'id', 'fio');
     }
 
+
+    public static function getListUserWithUserId($statusId = null)
+    {
+        $list = self::find();
+        if ($statusId){
+            $list->where(['status' => $statusId]);
+        }
+
+        return ArrayHelper::map($list->all(), 'id_user', 'fio');
+    }
+
     public function getManager()
     {
         return $this->hasOne(Manager::class, ['user_card_id' => 'id']);

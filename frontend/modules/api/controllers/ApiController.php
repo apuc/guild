@@ -9,6 +9,36 @@ use yii\filters\ContentNegotiator;
 use yii\rest\Controller;
 use yii\web\Response;
 
+
+/**
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="Документация Гильдия",
+ *      description="Документация для работы с API",
+ *
+ * ),
+ *  @OA\PathItem(
+ *         path="/api"
+ *  ),
+ * @OA\Server(
+ *   url="https://itguild.info/api",
+ *   description="Основной сервер",
+ * ),
+ *
+ * @OA\Server(
+ *   url="https://guild.loc/api",
+ *   description="Локальный сервер",
+ * ),
+ *
+ * @OA\SecurityScheme(
+ *   securityScheme="bearerAuth",
+ *   in="header",
+ *   name="Authorization",
+ *   type="http",
+ *   scheme="bearer",
+ *   bearerFormat="JWT",
+ * ),
+ */
 class ApiController extends Controller
 {
 

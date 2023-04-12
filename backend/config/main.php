@@ -80,6 +80,12 @@ return [
         'document' => [
             'class' => 'backend\modules\document\Document',
         ],
+        'request' => [
+            'class' => 'backend\modules\request\Request',
+        ],
+        'knowledgelevel' => [
+            'class' => 'backend\modules\knowledgelevel\KnowledgeLevel',
+        ],
     ],
     'components' => [
         'request' => [

@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "position".
@@ -45,5 +46,10 @@ class Position extends \yii\db\ActiveRecord
     public function getUserCard(): \yii\db\ActiveQuery
     {
         return $this->hasMany(UserCard::class, ['position_id' => 'id']);
+    }
+
+    public static function getList()
+    {
+        return ArrayHelper::map(self::find()->all(), 'id', 'name');
     }
 }

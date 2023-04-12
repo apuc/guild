@@ -51,10 +51,13 @@ class UserCardSearch extends UserCard
                 ->where(['id_user' => Yii::$app->user->id])
                 ->one();
 
-            $employeeIdList = ManagerEmployee::find()
-                ->where(['manager_id' => $userCard->manager->id])
-                ->select('user_card_id')
-                ->column();
+            $employeeIdList = false;
+            if (isset($userCard->manager)) {
+                $employeeIdList = ManagerEmployee::find()
+                    ->where(['manager_id' => $userCard->manager->id])
+                    ->select('user_card_id')
+                    ->column();
+            }
 
             $query = UserCard::find()->where(['in', 'user_card.id', $employeeIdList]);
         }
