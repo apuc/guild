@@ -2,6 +2,8 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\models\User;
+use common\models\UserCard;
 use common\services\ProfileService;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
@@ -22,6 +24,7 @@ class ProfileController extends ApiController
                     'profile-with-report-permission' => ['post', 'patch'],
                     'get-main-data' => ['get'],
                     'positions-list' => ['get'],
+                    'level-list' => ['get'],
                 ],
             ]
         ]);
@@ -81,5 +84,31 @@ class ProfileController extends ApiController
     public function actionPositionsList(): array
     {
         return ProfileService::getPositionsList();
+    }
+
+    /**
+     *
+     * @OA\Get(path="/profile/level-list",
+     *   summary="Список уровней навыков",
+     *   description="Получить список всех возможных уровней навыков",
+     *   tags={"Profile"},
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает массив позиций",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *     ),
+     *
+     *   ),
+     * )
+     *
+     * @return array
+     */
+    public function actionLevelList(): array
+    {
+        return UserCard::getLevelList();
     }
 }
