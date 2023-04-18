@@ -198,8 +198,9 @@ class RequestService
         }
 
 
-        $q = UserCard::find()->select('user_card.id, fio, user_card.position_id, card_skill.skill_id')
+        $q = UserCard::find()->select('user_card.id, fio, photo, position.name as position_title, user_card.position_id, user_card.level, card_skill.skill_id')
             ->leftJoin('card_skill', 'card_skill.card_id = user_card.id')
+            ->leftJoin('position', 'user_card.position_id = position.id')
             ->where(['deleted_at' => null])
             ->andWhere(['status' => [4, 12]])
             ->andWhere(['not', ['position_id' => null]]);

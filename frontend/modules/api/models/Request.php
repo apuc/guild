@@ -112,8 +112,8 @@ namespace frontend\modules\api\models;
  *  schema="RequestsProfileSearchExample",
  *  type="array",
  *  example={
- *     {"id": 23, "fio": "Иванов Иван Иванович", "position_id": "1", "skill_id": "1"},
- *     {"id": 24, "fio": "Петров Петр Петрович", "position_id": "2", "skill_id": "1"}
+ *     {"id": 23, "fio": "Иванов Иван Иванович", "photo": "/profileava/m5.png", "position_title": "Back end - разработчик", "position_id": "1", "level": "2", "skill_id": "1"},
+ *     {"id": 24, "fio": "Петров Петр Петрович", "photo": "/profileava/m2.png", "position_title": "Back end - разработчик", "position_id": "2", "level": "4", "skill_id": "1"}
  *  },
  *  @OA\Items(
  *      type="object",
@@ -126,7 +126,15 @@ namespace frontend\modules\api\models;
  *         type="string",
  *      ),
  *      @OA\Property(
+ *         property="photo",
+ *         type="string",
+ *      ),
+ *      @OA\Property(
  *         property="position_id",
+ *         type="integer",
+ *      ),
+ *      @OA\Property(
+ *         property="level",
  *         type="integer",
  *      ),
  *      @OA\Property(
