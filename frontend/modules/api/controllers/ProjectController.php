@@ -43,10 +43,45 @@ class ProjectController extends ApiController
         return  Project::findOne($project_id);
     }
 
-    public function actionProjectList($card_id = null): ActiveDataProvider
+    /**
+     *
+     * @OA\Get(path="/project/project-list",
+     *   summary="Список проектов",
+     *   description="Метод для получения списка проетов, если не передан параметр user_id, то возвращаются проеты текущего пользователя.",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *   @OA\Parameter(
+     *      name="user_id",
+     *      in="query",
+     *      required=false,
+     *      @OA\Schema(
+     *        type="integer",
+     *        default=null
+     *      )
+     *   ),
+
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает массив объектов проекта",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectExample"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @param $user_id
+     * @return ActiveDataProvider
+     */
+    public function actionProjectList($user_id = null): ActiveDataProvider
     {
-        if (!empty($card_id)) {
-            $projectIdList = ProjectUser::find()->where(['card_id' => $card_id])->select('project_id')->column();
+        if (!$user_id){
+            $user_id = Yii::$app->user->id;
+        }
+        if (!empty($user_id)) {
+            $projectIdList = ProjectUser::find()->where(['user_id' => $user_id])->select('project_id')->column();
             $query = Project::find()->where([ 'IN', 'id', $projectIdList]);
         } else {
             $query = Project::find();
