@@ -36,6 +36,16 @@ class RequestService
     public bool $isLoad = false;
 
     /**
+     * @var int
+     */
+    public int $resultCount = 0;
+
+    /**
+     * @var array
+     */
+    public array $resultProfiles = [];
+
+    /**
      * @var array
      */
     private array $excludePool = [];
@@ -235,9 +245,9 @@ class RequestService
 
     /**
      * @param int $searchDepth
-     * @return array|int
+     * @return RequestService
      */
-    public function search(int $searchDepth = 0)
+    public function search(int $searchDepth = 0):RequestService
     {
         $cards = $this->_search();
         $res = [];
@@ -254,14 +264,10 @@ class RequestService
             $res = $this->checkLevel(false)->checkPosition(false)->setSkillsFullEntry(false)->useExcludePool()->_search();
         }
 
-        if ($this->returnCount) {
-            if (is_array($res)) {
-                return $cards;
-            }
-            return $res;
-        }
+        $this->resultProfiles = array_merge($cards, $res);
+        $this->resultCount = count($this->resultProfiles);
 
-        return array_merge($cards, $res);
+        return $this;
     }
 
 
@@ -322,13 +328,21 @@ class RequestService
 
     /**
      * @param bool $value
-     * @return $this
+     * @return int
      */
-    public function count(bool $value = true): RequestService
+    public function count(bool $value = true): int
     {
         $this->returnCount = $value;
 
-        return $this;
+        return $this->resultCount;
+    }
+
+    /**
+     * @return array
+     */
+    public function all(): array
+    {
+        return $this->resultProfiles;
     }
 
     public static function q()

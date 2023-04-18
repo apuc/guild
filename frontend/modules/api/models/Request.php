@@ -94,6 +94,10 @@ namespace frontend\modules\api\models;
  *     example="Middle",
  *     description="Текстовое наименование уровня знаний"
  *  ),
+ *  @OA\Property(
+ *     property="result_profiles",
+ *     ref="#/components/schemas/RequestsProfileSearchExample",
+ *  ),
  *)
  *
  * @OA\Schema(
@@ -103,6 +107,35 @@ namespace frontend\modules\api\models;
  *     ref="#/components/schemas/Request",
  *  ),
  *)
+ *
+ * @OA\Schema(
+ *  schema="RequestsProfileSearchExample",
+ *  type="array",
+ *  example={
+ *     {"id": 23, "fio": "Иванов Иван Иванович", "position_id": "1", "skill_id": "1"},
+ *     {"id": 24, "fio": "Петров Петр Петрович", "position_id": "2", "skill_id": "1"}
+ *  },
+ *  @OA\Items(
+ *      type="object",
+ *      @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *      ),
+ *      @OA\Property(
+ *         property="fio",
+ *         type="string",
+ *      ),
+ *      @OA\Property(
+ *         property="position_id",
+ *         type="integer",
+ *      ),
+ *      @OA\Property(
+ *         property="skill_id",
+ *         type="integer",
+ *      ),
+ *  ),
+ *)
+ *
  */
 class Request extends \common\models\Request
 {

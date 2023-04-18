@@ -65,15 +65,18 @@ class RequestController extends ApiController
             throw new NotFoundHttpException('Incorrect request ID');
         }
 
-        $request = RequestService::run($request_id)->getById();
+        $requestService = RequestService::run($request_id);
+        $model = $requestService->getById();
 
-        if (empty($request)) {
+        if (empty($model)) {
             throw new NotFoundHttpException('The request does not exist');
         }
 
-        $request->result_count = RequestService::run($request_id)->count()->search($search_depth);
+        $model->result_count = $requestService->search($search_depth)->count();
+        $model->result_profiles = $requestService->all();
 
-        return $request;
+
+        return $model;
     }
 
     /**
@@ -125,7 +128,9 @@ class RequestController extends ApiController
         $requests = RequestService::run()->getByUserId($user_id);
 
         foreach ($requests as $request) {
-            $request->result_count = RequestService::run($request->id)->count()->search($search_depth);
+            $requestService = RequestService::run($request->id);
+            $request->result_count = $requestService->search($search_depth)->count();
+            $request->result_profiles = $requestService->all();
         }
 
         return $requests;

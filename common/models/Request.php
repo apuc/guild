@@ -24,6 +24,7 @@ use yii\db\Expression;
  * @property int $specialist_count
  * @property int $status
  * @property int $result_count
+ * @property array $result_profiles
  */
 class Request extends \yii\db\ActiveRecord
 {
@@ -31,6 +32,8 @@ class Request extends \yii\db\ActiveRecord
     const STATUS_DISABLE = 0;
 
     public int $result_count = 0;
+
+    public array $result_profiles = [];
 
     public array $skills = [];
 
@@ -77,6 +80,7 @@ class Request extends \yii\db\ActiveRecord
             'position',
             'skills',
             'result_count',
+            'result_profiles',
             'level' => function (Request $model) {
                 return UserCard::getLevelList()[$model->knowledge_level_id];
             },

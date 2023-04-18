@@ -57,7 +57,7 @@ class RequestController extends Controller
     {
         $res = RequestService::run($id)->getById();
 
-        $search = RequestService::run($id)->search(3);
+        $search = RequestService::run($id)->search(3)->all();
 
         $searchDataProvider = new ArrayDataProvider([
             'allModels' => $search,
