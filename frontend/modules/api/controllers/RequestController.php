@@ -330,8 +330,7 @@ class RequestController extends ApiController
 
         $put = array_diff(\Yii::$app->request->getBodyParams(), [null, '']);
 
-        $requestService->load($put, '')
-            ->save();
+        $requestService->load($put, '')->save();
 
         if (!$requestService->isSave) {
             throw new BadRequestHttpException(json_encode($requestService->errors));

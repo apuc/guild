@@ -26,7 +26,7 @@ use yii\web\Response;
  * ),
  *
  * @OA\Server(
- *   url="https://guild.loc/api",
+ *   url="http://guild.loc/api",
  *   description="Локальный сервер",
  * ),
  *
@@ -49,6 +49,7 @@ class ApiController extends Controller
                 'class' => GsCors::class,
                 'cors' => [
                     'Origin' => ['*'],
+                    'Access-Control-Request-Methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
                     //'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Allow-Headers' => [
                         'Access-Control-Allow-Origin',
