@@ -58,7 +58,8 @@ class ApiController extends Controller
                         'Authorization',
                         'X-Requested-With'
                     ],
-                    'Access-Control-Allow-Methods' => ['*'],
+                    'Access-Control-Allow-Methods' => ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+                    'Access-Control-Request-Method' => ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
                 ]
             ],
             'authenticator' => [
