@@ -21,6 +21,17 @@ use mihaildev\elfinder\InputFile;
 
     <?= $form->field($model, 'budget')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'owner_id')->widget(
+        Select2::class,
+        [
+            'data' => \common\models\UserCard::getListUserWithUserId(),
+            'options' => ['placeholder' => '...', 'class' => 'form-control'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]
+    ); ?>
+
     <?= $form->field($model, 'company_id')->widget(Select2::class,
         [
             'data' => \yii\helpers\ArrayHelper::map(\common\models\Company::find()->all(),'id', 'name'),

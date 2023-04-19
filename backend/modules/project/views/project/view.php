@@ -34,6 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Сраница на hh.ru',
                 'attribute' => 'hh.url'
             ],
+            [
+                'attribute' => 'owner_id',
+                'value' => function (\common\models\Project $model) {
+                    return $model->owner->userCard->fio ?? 'Не задано ФИО';
+                }
+            ],
             'description:ntext',
             'status',
             'created_at',

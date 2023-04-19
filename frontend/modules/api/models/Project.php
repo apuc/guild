@@ -36,6 +36,12 @@ use yii\web\Linkable;
  *     description="Идентификатор проекта на hh.ru"
  *  ),
  *  @OA\Property(
+ *     property="owner_id",
+ *     type="int",
+ *     example="19",
+ *     description="Идентификатор владельца проекта"
+ *  ),
+ *  @OA\Property(
  *     property="company",
  *     ref="#/components/schemas/Company",
  *  ),
@@ -67,6 +73,11 @@ use yii\web\Linkable;
  *         example="345343434"
  *      ),
  *      @OA\Property(
+ *         property="owner_id",
+ *         type="integer",
+ *         example="19"
+ *      ),
+ *      @OA\Property(
  *         property="company",
  *         ref="#/components/schemas/Company",
  *      ),
@@ -86,6 +97,7 @@ class Project extends \common\models\Project
             'hh_id' => function() {
                 return $this->hh;
             },
+            'owner_id',
             'company' => function() {
                 return $this->company;
             }

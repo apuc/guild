@@ -41,6 +41,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
             ],
             'budget',
+            [
+                'attribute' => 'owner_id',
+                'value' => function (\common\models\Project $model) {
+                    return $model->owner->userCard->fio ?? 'Не задано';
+                },
+                'filter'    => kartik\select2\Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'owner_id',
+                    'data' => \common\models\UserCard::getListUserWithUserId(),
+                    'options' => ['placeholder' => 'Начните вводить...','class' => 'form-control'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]),
+            ],
             //'description:ntext',
             [
                 'label' => 'Исполнители',

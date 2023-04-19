@@ -10,7 +10,7 @@ use yii\db\StaleObjectException;
  * This is the model class for table "manager".
  *
  * @property int $id
- * @property int $user_card_id
+ * @property int $user_id
  *
  * @property UserCard $userCard
  * @property ManagerEmployee[] $managerEmployees
@@ -31,10 +31,10 @@ class Manager extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_card_id'], 'integer'],
-            [['user_card_id'], 'required'],
-            ['user_card_id', 'unique', 'message'=>'Уже является менеджером'],
-            [['user_card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['user_card_id' => 'id']],
+            [['user_id'], 'integer'],
+            [['user_id'], 'required'],
+            ['user_id', 'unique', 'message' => 'Уже является менеджером'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -45,7 +45,7 @@ class Manager extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_card_id' => 'Карточка менеджера',
+            'user_id' => 'Карточка менеджера',
         ];
     }
 
@@ -55,7 +55,7 @@ class Manager extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
-        foreach ($this->managerEmployees as $employee){
+        foreach ($this->managerEmployees as $employee) {
             $employee->delete();
         }
         return parent::beforeDelete();
@@ -64,9 +64,9 @@ class Manager extends \yii\db\ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getUserCard()
+    public function getUser()
     {
-        return $this->hasOne(UserCard::className(), ['id' => 'user_card_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**
