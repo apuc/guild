@@ -73,6 +73,7 @@
                             ['label' => 'Задачи', 'icon' => 'minus', 'url' => ['/task/task'], 'active' => \Yii::$app->controller->id == 'task'],
                             ['label' => 'Исполнители задачи', 'icon' => 'users', 'url' => ['/task/task-user'], 'active' => \Yii::$app->controller->id == 'task-user'],
                             ['label' => 'Категории задач', 'icon' => 'users', 'url' => ['/task/project-task-category'], 'active' => \Yii::$app->controller->id == 'project-task-category'],
+                            ['label' => 'Колонки', 'icon' => 'tag', 'url' => ['/project/project-column'], 'active' => \Yii::$app->controller->id == 'project-column'],
                         ],
                         'visible' => Yii::$app->user->can('task')
                     ],
