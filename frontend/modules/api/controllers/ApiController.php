@@ -49,16 +49,16 @@ class ApiController extends Controller
                 'class' => GsCors::class,
                 'cors' => [
                     'Origin' => ['*'],
-                    'Access-Control-Request-Methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
                     //'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Allow-Headers' => [
                         'Access-Control-Allow-Origin',
-                        'Access-Control-Request-Methods',
+                        'Access-Control-Allow-Methods',
                         'Content-Type',
                         'Access-Control-Allow-Headers',
                         'Authorization',
                         'X-Requested-With'
                     ],
+                    'Access-Control-Allow-Methods' => ['*'],
                 ]
             ],
             'authenticator' => [
