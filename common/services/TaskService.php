@@ -29,6 +29,11 @@ class TaskService
         return ProjectTask::find()->where(['project_id' => $project_id])->asArray()->all();
     }
 
+    public static function getTaskListByUser($user_id): array
+    {
+        return ProjectTask::find()->where(['user_id' => $user_id])->all();
+    }
+
     public static function updateTask($task_params): ?ProjectTask
     {
         $modelTask = ProjectTask::findOne($task_params['task_id']);

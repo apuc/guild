@@ -24,13 +24,13 @@ use yii\widgets\ActiveForm;
     );
     ?>
 
-    <?= $form->field($model, 'card_id_creator')->widget(Select2::class,
+    <?= $form->field($model, 'user_id')->widget(
+        Select2::class,
         [
-            'data' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control',  'value' => Yii::$app->user->id],
+            'data' => \common\models\UserCard::getListUserWithUserId(),
+            'options' => ['placeholder' => '...', 'class' => 'form-control'],
             'pluginOptions' => [
-                'allowClear' => true,
-                'prompt' => 'Выберите'
+                'allowClear' => true
             ],
         ]
     ); ?>
@@ -44,9 +44,9 @@ use yii\widgets\ActiveForm;
         ]
     ) ?>
 
-    <?= $form->field($model, 'card_id')->widget(Select2::class,
+    <?= $form->field($model, 'column_id')->widget(Select2::class,
         [
-            'data' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
+            'data' => \common\models\ProjectColumn::find()->select(['title', 'id'])->indexBy('id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true,

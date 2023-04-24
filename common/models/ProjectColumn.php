@@ -22,12 +22,37 @@ class ProjectColumn extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = 1;
     const STATUS_DISABLE = 0;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'project_column';
+    }
+
+    /**
+     * @return string[]
+     */
+    public function fields(): array
+    {
+        return [
+            'id',
+            'title',
+            'created_at',
+            'updated_at',
+            'project_id',
+            'status',
+            'tasks',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function extraFields(): array
+    {
+        return [];
     }
 
     /**
@@ -91,5 +116,13 @@ class ProjectColumn extends \yii\db\ActiveRecord
     public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'project_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTasks()
+    {
+        return $this->hasMany(ProjectTask::class, ['column_id' => 'id'])->with('taskUsers');
     }
 }

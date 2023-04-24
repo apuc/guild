@@ -14,7 +14,7 @@ use yii\web\Linkable;
  *  @OA\Property(
  *     property="id",
  *     type="int",
- *     example=1,
+ *     example=95,
  *     description="Идентификатор проекта"
  *  ),
  *  @OA\Property(
@@ -44,6 +44,10 @@ use yii\web\Linkable;
  *  @OA\Property(
  *     property="company",
  *     ref="#/components/schemas/Company",
+ *  ),
+ *  @OA\Property(
+ *     property="columns",
+ *     ref="#/components/schemas/ProjectColumnExample",
  *  ),
  *)
  *
@@ -100,13 +104,14 @@ class Project extends \common\models\Project
             'owner_id',
             'company' => function() {
                 return $this->company;
-            }
+            },
+
         ];
     }
 
     public function extraFields(): array
     {
-        return [];
+        return ['columns',];
     }
 
     public function getLinks(): array

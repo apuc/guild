@@ -9,7 +9,7 @@ use yii\db\ActiveQuery;
  *
  * @property int $id
  * @property int $task_id
- * @property int $project_user_id
+ * @property int $user_id
  *
  * @property ProjectUser $projectUser
  * @property ProjectTask $task
@@ -30,10 +30,28 @@ class ProjectTaskUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['task_id', 'project_user_id'], 'required'],
-            ['project_user_id', 'unique', 'targetAttribute' => ['task_id', 'project_user_id'], 'message'=>'Уже закреплён(ы) за задачей'],
-            [['project_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectUser::className(), 'targetAttribute' => ['project_user_id' => 'id']],
+            [['task_id', 'user_id'], 'required'],
+            ['user_id', 'unique', 'targetAttribute' => ['task_id', 'user_id'], 'message' => 'Уже закреплён(ы) за задачей'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectTask::className(), 'targetAttribute' => ['task_id' => 'id']],
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function fields(): array
+    {
+        return [
+            'id',
+            'task_id',
+            'user_id',
+            'fio' => function () {
+                return $this->user->userCard->fio ?? $this->user->username;
+            },
+            'avatar' => function () {
+                return $this->user->userCard->photo ?? '';
+            }
         ];
     }
 
@@ -45,16 +63,13 @@ class ProjectTaskUser extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'task_id' => 'Задача',
-            'project_user_id' => 'Сотрудник',
+            'user_id' => 'Сотрудник',
         ];
     }
 
-    /**
-     * @return ActiveQuery
-     */
-    public function getProjectUser()
+    public function getUser()
     {
-        return $this->hasOne(ProjectUser::className(), ['id' => 'project_user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**

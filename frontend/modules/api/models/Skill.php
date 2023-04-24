@@ -1,6 +1,7 @@
 <?php
 
 namespace frontend\modules\api\models;
+
 /**
  * @OA\Schema(
  *  schema="Skill",

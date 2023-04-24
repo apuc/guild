@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\classes\Debug;
 use common\models\ProjectTaskCategory;
 use common\models\ProjectUser;
 use common\models\Status;
@@ -10,6 +11,7 @@ use frontend\modules\api\models\Project;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
 class ProjectController extends ApiController
@@ -38,9 +40,49 @@ class ProjectController extends ApiController
         ]);
     }
 
-    public function actionGetProject($project_id): ?Project
+    /**
+     *
+     * @OA\Get(path="/project/get-project",
+     *   summary="Получить данные проекта",
+     *   description="Метод для получения проета",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *   @OA\Parameter(
+     *      name="project_id",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *        default=null
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="expand",
+     *      in="query",
+     *      required=false,
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поле <b>columns</b>",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает массив объектов проекта",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/Project"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @param $project_id
+     * @return array|Project|\yii\db\ActiveRecord|null
+     */
+    public function actionGetProject($project_id)
     {
-        return  Project::findOne($project_id);
+        return  Project::find()->with('columns')->where(['id' => $project_id])->one();
     }
 
     /**
@@ -61,7 +103,16 @@ class ProjectController extends ApiController
      *        default=null
      *      )
      *   ),
-
+     *   @OA\Parameter(
+     *      name="expand",
+     *      in="query",
+     *      required=false,
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поле <b>columns</b>",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Возвращает массив объектов проекта",
@@ -134,10 +185,66 @@ class ProjectController extends ApiController
         return $projectTaskCategory;
     }
 
+    /**
+     *
+     * @OA\Post(path="/project/create",
+     *   summary="Добавить проект",
+     *   description="Метод для создания проекта, если не передан параметр <b>user_id</b>, то будет получен текущий пользователь",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"name", "status"},
+     *          @OA\Property(
+     *              property="name",
+     *              type="string",
+     *              description="Название проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="description",
+     *              type="string",
+     *              description="Описание проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="status",
+     *              type="integer",
+     *              description="статус",
+     *          ),
+     *          @OA\Property(
+     *              property="company_id",
+     *              type="integer",
+     *              description="Компания к которой относится проект",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Проекта",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/Project"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return array|Project
+     * @throws BadRequestHttpException
+     */
     public function actionCreate()
     {
         $project = new Project();
-        $project->attributes =  \yii::$app->request->post();
+        $user_id = \Yii::$app->user->id;
+        if (!$user_id) {
+            throw new BadRequestHttpException(json_encode(['Пользователь не найден']));
+        }
+        $project->load(\yii::$app->request->post(), '');
+        $project->owner_id = $user_id;
 
         if($project->validate()) {
             $project->save(false);

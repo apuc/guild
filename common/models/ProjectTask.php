@@ -17,8 +17,8 @@ use yii\helpers\ArrayHelper;
  * @property int $status
  * @property string $created_at
  * @property string $updated_at
- * @property int $card_id_creator
- * @property int $card_id
+ * @property int $column_id
+ * @property int $user_id
  * @property string $description
  *
  * @property Project $project
@@ -54,15 +54,15 @@ class ProjectTask extends ActiveRecord
     public function rules()
     {
         return [
-            [['project_id', 'status', 'title', 'description', 'card_id_creator',], 'required'],
-            [['project_id', 'status', 'card_id_creator', 'card_id'], 'integer'],
+            [['project_id', 'status', 'title', 'description',], 'required'],
+            [['project_id', 'status', 'column_id', 'user_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message'=>'Такая задача уже создана'],
+            ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
             [['description'], 'string', 'max' => 500],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
-            [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['card_id' => 'id']],
-            [['card_id_creator'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['card_id_creator' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['column_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectColumn::className(), 'targetAttribute' => ['column_id' => 'id']],
         ];
     }
 
@@ -79,14 +79,33 @@ class ProjectTask extends ActiveRecord
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
             'description' => 'Описание',
-            'card_id_creator' => 'Создатель задачи',
-            'card_id' => 'Наблюдатель',
+            'user_id' => 'Создатель задачи',
+            'column_id' => 'Колонка',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function fields(): array
+    {
+        return [
+            'id',
+            'project_id',
+            'title',
+            'created_at',
+            'updated_at',
+            'description',
+            'status',
+            'column_id',
+            'user_id',
+            'taskUsers',
         ];
     }
 
     public function beforeDelete()
     {
-        foreach ($this->taskUsers as $taskUser){
+        foreach ($this->taskUsers as $taskUser) {
             $taskUser->delete();
         }
         return parent::beforeDelete();
@@ -108,14 +127,12 @@ class ProjectTask extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getUserCard()
+    /**
+     * @return ActiveQuery
+     */
+    public function getColumn(): ActiveQuery
     {
-        return $this->hasOne(UserCard::className(), ['id' => 'card_id']);
-    }
-
-    public function getUserCardCreator()
-    {
-        return $this->hasOne(UserCard::className(), ['id' => 'card_id_creator']);
+        return $this->hasOne(ProjectColumn::class, ['id' => 'column_id']);
     }
 
     /**

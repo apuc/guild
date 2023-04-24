@@ -47,12 +47,12 @@ YiiAsset::register($this);
             'created_at',
             'updated_at',
             [
-                'attribute' => 'card_id_creator',
-                'value' => ArrayHelper::getValue($model, 'userCardCreator.fio'),
+                'attribute' => 'column_id',
+                'value' => ArrayHelper::getValue($model, 'column.title'),
             ],
             [
-                'attribute' => 'card_id',
-                'value' => ArrayHelper::getValue($model, 'userCard.fio'),
+                'attribute' => 'user_id',
+                'value' => ArrayHelper::getValue($model, 'user.userCard.fio'),
             ],
             'description',
         ],

@@ -104,6 +104,14 @@ class Project extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getColumns()
+    {
+        return $this->hasMany(ProjectColumn::class, ['project_id' => 'id'])->with('tasks');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getOwner()
     {
         return $this->hasOne(User::class, ['id' => 'owner_id']);

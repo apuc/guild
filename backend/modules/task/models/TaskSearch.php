@@ -18,7 +18,7 @@ class TaskSearch extends ProjectTask
     public function rules()
     {
         return [
-            [['id', 'project_id', 'status', 'card_id_creator', 'card_id'], 'integer'], // 'card_id_creator', 'card_id'
+            [['id', 'project_id', 'status'], 'integer'], // 'card_id_creator', 'card_id'
             [['title', 'created_at', 'updated_at', 'description'], 'safe'],
         ];
     }
@@ -64,8 +64,6 @@ class TaskSearch extends ProjectTask
             'task.status' => $this->status,
             'task.created_at' => $this->created_at,
             'task.updated_at' => $this->updated_at,
-            'task.card_id_creator' => $this->card_id_creator,
-            'task.card_id' => $this->card_id,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
