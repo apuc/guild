@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\classes\Debug;
 use common\models\ProjectTask;
 use common\services\TaskService;
 use Yii;
@@ -23,12 +24,74 @@ class TaskController extends ApiController
     }
 
     /**
+     *
+     * @OA\Post(path="/task/create-task",
+     *   summary="Добавить задачу",
+     *   description="Метод для создания задачи, если не передан параметр <b>user_id</b>, то будет получен текущий пользователь",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"project_id", "status", "title", "description"},
+     *          @OA\Property(
+     *              property="project_id",
+     *              type="string",
+     *              description="Идентификатор проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="title",
+     *              type="string",
+     *              description="Заголовок задачи",
+     *          ),
+     *          @OA\Property(
+     *              property="description",
+     *              type="string",
+     *              description="Описание задачи",
+     *          ),
+     *          @OA\Property(
+     *              property="status",
+     *              type="integer",
+     *              description="статус",
+     *          ),
+     *          @OA\Property(
+     *              property="column_id",
+     *              type="integer",
+     *              description="Колонка к которой относится задача",
+     *          ),
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="Идентификатор создателя задачи",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект задачи",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectTask"),
+     *     ),
+     *   ),
+     * )
+     *
      * @throws InvalidConfigException
      * @throws ServerErrorHttpException
      */
     public function actionCreateTask(): ProjectTask
     {
-        $taskModel = TaskService::createTask(Yii::$app->getRequest()->getBodyParams());
+        $request = Yii::$app->getRequest()->getBodyParams();
+        if(!isset($request['user_id']) or $request['user_id'] == null){
+            $request['user_id'] = Yii::$app->user->id;
+        }
+
+        $taskModel = TaskService::createTask($request);
         if ($taskModel->errors) {
             throw new ServerErrorHttpException(json_encode($taskModel->errors));
         }
@@ -133,6 +196,32 @@ class TaskController extends ApiController
     }
 
     /**
+     *
+     * @OA\Get(path="/task/get-task",
+     *   summary="Получить информацию по задаче",
+     *   description="Метод для получения данных по задаче",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *   @OA\Parameter(
+     *      name="task_id",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Задачи",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectTask"),
+     *     ),
+     *   ),
+     * )
+     *
      * @throws NotFoundHttpException
      */
     public function actionGetTask($task_id): ProjectTask
@@ -150,20 +239,78 @@ class TaskController extends ApiController
     }
 
     /**
+     *
+     * @OA\Put(path="/task/update-task",
+     *   summary="Редактировать задачу",
+     *   description="Метод для редактирования задачи",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"task_id"},
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="Идентификатор пользователя",
+     *              nullable=false,
+     *          ),
+     *          @OA\Property(
+     *              property="task_id",
+     *              type="integer",
+     *              description="Идентификатор задачи",
+     *          ),
+     *          @OA\Property(
+     *              property="title",
+     *              type="string",
+     *              description="Заголовок задачи",
+     *          ),
+     *          @OA\Property(
+     *              property="column_id",
+     *              type="integer",
+     *              description="Идентификатор колонки",
+     *          ),
+     *          @OA\Property(
+     *              property="status",
+     *              type="integer",
+     *              description="Статус запроса",
+     *          ),
+     *          @OA\Property(
+     *              property="description",
+     *              type="string",
+     *              description="Описание запроса",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Задачи",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectTask"),
+     *     ),
+     *   ),
+     * )
+     *
      * @throws InvalidConfigException
      * @throws ServerErrorHttpException
      * @throws NotFoundHttpException
      */
-    public function actionUpdate(): ?ProjectTask
+    public function actionUpdateTask(): ?ProjectTask
     {
-        $params = Yii::$app->request->getBodyParams();
+        $params = array_diff(\Yii::$app->request->getBodyParams(), [null, '']);
         if (empty ($params['task_id']) or !TaskService::taskExists($params['task_id'])) {
             throw new NotFoundHttpException('The task does not exist');
         }
 
         $modelTask = TaskService::updateTask($params);
         if (!empty($modelTask->hasErrors())) {
-            throw new ServerErrorHttpException(json_encode('Bad params'));
+            throw new ServerErrorHttpException(json_encode($modelTask->errors));
         }
 
         return $modelTask;

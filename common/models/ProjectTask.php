@@ -28,6 +28,8 @@ use yii\helpers\ArrayHelper;
  */
 class ProjectTask extends ActiveRecord
 {
+    const STATUS_ACTIVE = 1;
+    const STATUS_DISABLE = 0;
     /**
      * {@inheritdoc}
      */
@@ -100,6 +102,17 @@ class ProjectTask extends ActiveRecord
             'column_id',
             'user_id',
             'taskUsers',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getStatus(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'Активен',
+            self::STATUS_DISABLE => 'Выключен'
         ];
     }
 

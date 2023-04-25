@@ -62,7 +62,7 @@ class ProjectColumnController extends ApiController
             throw new BadRequestHttpException(json_encode(['Проект не найден']));
         }
 
-        $columns = \frontend\modules\api\models\ProjectColumn::find()->where(['project_id' => $project_id])->all();
+        $columns = \frontend\modules\api\models\ProjectColumn::find()->where(['project_id' => $project_id, 'status' => ProjectColumn::STATUS_ACTIVE])->all();
 
         return $columns;
 
@@ -121,9 +121,79 @@ class ProjectColumnController extends ApiController
 
     }
 
+    /**
+     *
+     * @OA\Put(path="/project-column/update-column",
+     *   summary="Редактировать колонку",
+     *   description="Метод для редактирования колонки",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"column_id"},
+     *          @OA\Property(
+     *              property="column_id",
+     *              type="integer",
+     *              description="Идентификатор колонки",
+     *              nullable=false,
+     *          ),
+     *          @OA\Property(
+     *              property="title",
+     *              type="string",
+     *              description="Название колонки",
+     *          ),
+     *          @OA\Property(
+     *              property="project_id",
+     *              type="integer",
+     *              description="Идентификатор проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="status",
+     *              type="integer",
+     *              description="Статус колонки",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Колонки",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectColumn"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return ProjectColumn|null
+     * @throws BadRequestHttpException
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionUpdateColumn()
     {
+        $column_id = \Yii::$app->request->getBodyParam('column_id');
+        if (!$column_id) {
+            throw new BadRequestHttpException(json_encode(['Column not found']));
+        }
 
+        $column = ProjectColumn::find()->where(['id' => $column_id, 'status' => ProjectColumn::STATUS_ACTIVE]);
+
+        $put = array_diff(\Yii::$app->request->getBodyParams(), [null, '']);
+
+        $column->load($put, '');
+
+        if (!$column->validate()){
+            throw new BadRequestHttpException(json_encode($column->errors));
+        }
+
+        $column->save(false);
+
+        return $column;
     }
 
 }

@@ -106,7 +106,7 @@ class Project extends \yii\db\ActiveRecord
      */
     public function getColumns()
     {
-        return $this->hasMany(ProjectColumn::class, ['project_id' => 'id'])->with('tasks');
+        return $this->hasMany(ProjectColumn::class, ['project_id' => 'id'])->with('tasks')->where(['status' => ProjectColumn::STATUS_ACTIVE]);
     }
 
     /**

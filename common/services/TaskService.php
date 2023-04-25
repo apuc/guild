@@ -2,7 +2,10 @@
 
 namespace common\services;
 
+use common\classes\Debug;
 use common\models\ProjectTask;
+use common\models\ProjectTaskUser;
+use common\models\ProjectUser;
 
 class TaskService
 {
@@ -31,7 +34,8 @@ class TaskService
 
     public static function getTaskListByUser($user_id): array
     {
-        return ProjectTask::find()->where(['user_id' => $user_id])->all();
+        $taskIdList = ProjectTaskUser::find()->where(['user_id' => $user_id])->select('task_id')->column();
+        return ProjectTask::find()->where([ 'IN', 'id', $taskIdList])->orWhere(['user_id' => $user_id])->all();
     }
 
     public static function updateTask($task_params): ?ProjectTask
