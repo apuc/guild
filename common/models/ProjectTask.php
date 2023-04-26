@@ -19,6 +19,7 @@ use yii\helpers\ArrayHelper;
  * @property string $updated_at
  * @property int $column_id
  * @property int $user_id
+ * @property int $executor_id
  * @property string $description
  *
  * @property Project $project
@@ -30,6 +31,7 @@ class ProjectTask extends ActiveRecord
 {
     const STATUS_ACTIVE = 1;
     const STATUS_DISABLE = 0;
+
     /**
      * {@inheritdoc}
      */
@@ -57,13 +59,14 @@ class ProjectTask extends ActiveRecord
     {
         return [
             [['project_id', 'status', 'title', 'description',], 'required'],
-            [['project_id', 'status', 'column_id', 'user_id'], 'integer'],
+            [['project_id', 'status', 'column_id', 'user_id', 'executor_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
             [['description'], 'string', 'max' => 500],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['executor_id' => 'id']],
             [['column_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectColumn::className(), 'targetAttribute' => ['column_id' => 'id']],
         ];
     }
@@ -83,6 +86,7 @@ class ProjectTask extends ActiveRecord
             'description' => 'Описание',
             'user_id' => 'Создатель задачи',
             'column_id' => 'Колонка',
+            'executor_id' => 'Исполнитель',
         ];
     }
 
@@ -101,6 +105,23 @@ class ProjectTask extends ActiveRecord
             'status',
             'column_id',
             'user_id',
+            'user' => function () {
+                return [
+                    "fio" => $this->user->userCard->fio ?? $this->user->username,
+                    "avatar" => $this->user->userCard->photo ?? '',
+                ];
+            },
+            'executor_id',
+            'executor' => function () {
+                if ($this->executor){
+                    return [
+                        "fio" => $this->executor->userCard->fio ?? $this->executor->username,
+                        "avatar" => $this->executor->userCard->photo ?? '',
+                    ];
+                }
+
+                return null;
+            },
             'taskUsers',
         ];
     }
@@ -127,7 +148,7 @@ class ProjectTask extends ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getProject()
+    public function getProject(): ActiveQuery
     {
         return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
@@ -135,9 +156,17 @@ class ProjectTask extends ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getUser()
+    public function getUser(): ActiveQuery
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getExecutor(): ActiveQuery
+    {
+        return $this->hasOne(User::class, ['id' => 'executor_id']);
     }
 
     /**

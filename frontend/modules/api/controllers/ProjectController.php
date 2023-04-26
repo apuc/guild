@@ -34,7 +34,7 @@ class ProjectController extends ApiController
                     'status-list' => ['GET', 'OPTIONS'],
                     'project-task-category-list' => ['GET', 'OPTIONS'],
                     'create' => ['POST', 'OPTIONS'],
-                    'update' => ['POST', 'OPTIONS']
+                    'update' => ['PUT', 'OPTIONS']
                 ],
             ]
         ]);
@@ -254,6 +254,58 @@ class ProjectController extends ApiController
     }
 
     /**
+     *
+     * @OA\PUT(path="/project/update",
+     *   summary="Редактировать проект",
+     *   description="Метод для редактирования проекта",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"project_id"},
+     *          @OA\Property(
+     *              property="project_id",
+     *              type="integer",
+     *              description="Идентификатор проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="name",
+     *              type="string",
+     *              description="Название проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="description",
+     *              type="string",
+     *              description="Описание проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="status",
+     *              type="integer",
+     *              description="статус",
+     *          ),
+     *          @OA\Property(
+     *              property="company_id",
+     *              type="integer",
+     *              description="Компания к которой относится проект",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Проекта",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/Project"),
+     *     ),
+     *   ),
+     * )
+     *
      * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\db\StaleObjectException
@@ -261,12 +313,17 @@ class ProjectController extends ApiController
      */
     public function actionUpdate()
     {
-        $project = Project::findOne(Yii::$app->request->post('project_id'));
+        $request = Yii::$app->request->getBodyParams();
+        if (!isset($request['project_id']) || $request['project_id'] == null){
+            throw new BadRequestHttpException(json_encode(['The project ID not found']));
+        }
+        $project = Project::findOne($request['project_id']);
         if(empty($project)) {
             throw new NotFoundHttpException('The project not found');
         }
 
-        $project->load(Yii::$app->request->getBodyParams(), '');
+        $put = array_diff($request, [null, '']);
+        $project->load($put, '');
         if (!$project->update()) {
             return $project->errors;
         }

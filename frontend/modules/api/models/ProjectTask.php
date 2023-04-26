@@ -34,7 +34,23 @@ namespace frontend\modules\api\models;
  *     property="user_id",
  *     type="int",
  *     example="19",
+ *     description="Идентификатор пользователя создавшего задачу"
+ *  ),
+ *  @OA\Property(
+ *     property="user",
+ *     ref="#/components/schemas/ProjectTaskUsersShortExample",
  *     description="Пользователь создавший задачу"
+ *  ),
+ *  @OA\Property(
+ *     property="executor_id",
+ *     type="int",
+ *     example="2",
+ *     description="Идентификатор исполнителя задачи"
+ *  ),
+ *  @OA\Property(
+ *     property="executor",
+ *     ref="#/components/schemas/ProjectTaskUsersShortExample",
+ *     description="Исполнитель задачи"
  *  ),
  *  @OA\Property(
  *     property="description",
@@ -95,6 +111,20 @@ namespace frontend\modules\api\models;
  *         example="/profileava/m8.png"
  *      ),
  *  ),
+ *)
+ *
+ * @OA\Schema(
+ *  schema="ProjectTaskUsersShortExample",
+ *      @OA\Property(
+ *         property="fio",
+ *         type="string",
+ *         example="Сапронов Антон Викторович"
+ *      ),
+ *      @OA\Property(
+ *         property="avatar",
+ *         type="string",
+ *         example="/profileava/m8.png"
+ *      ),
  *)
  *
  */
