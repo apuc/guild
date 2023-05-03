@@ -266,7 +266,10 @@ class ProjectController extends ApiController
      *
      * @OA\PUT(path="/project/update",
      *   summary="Редактировать проект",
-     *   description="Метод для редактирования проекта",
+     *   description="Метод для редактирования проекта<br>
+    Статусы:<br>
+    10 - Закрыт<br>
+    19 - Работает",
      *   security={
      *     {"bearerAuth": {}}
      *   },
