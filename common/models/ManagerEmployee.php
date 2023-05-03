@@ -50,6 +50,21 @@ class ManagerEmployee extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields(): array
+    {
+        return [
+            'id',
+            'manager_id',
+            'employee_id',
+            'employee' => function () {
+                return [
+                    "fio" => $this->employee->userCard->fio ?? $this->employee->username,
+                    "avatar" => $this->employee->userCard->photo ?? '',
+                ];
+            },
+        ];
+    }
+
     /**
      * @return ActiveQuery
      */

@@ -7,6 +7,7 @@ use common\models\ProjectTaskCategory;
 use common\models\ProjectUser;
 use common\models\Status;
 use common\models\UseStatus;
+use frontend\modules\api\models\Manager;
 use frontend\modules\api\models\Project;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -85,7 +86,7 @@ class ProjectController extends ApiController
      */
     public function actionGetProject($project_id)
     {
-        return  Project::find()->with('columns')->where(['id' => $project_id])->one();
+        return Project::find()->with('columns')->where(['id' => $project_id])->one();
     }
 
     /**
@@ -93,9 +94,9 @@ class ProjectController extends ApiController
      * @OA\Get(path="/project/project-list",
      *   summary="Список проектов",
      *   description="Метод для получения списка проетов, если не передан параметр user_id, то возвращаются проеты текущего пользователя.<br>
-     Статусы:<br>
-     10 - Закрыт<br>
-     19 - Работает",
+    Статусы:<br>
+    10 - Закрыт<br>
+    19 - Работает",
      *   security={
      *     {"bearerAuth": {}}
      *   },
@@ -134,12 +135,12 @@ class ProjectController extends ApiController
      */
     public function actionProjectList($user_id = null): ActiveDataProvider
     {
-        if (!$user_id){
+        if (!$user_id) {
             $user_id = Yii::$app->user->id;
         }
         if (!empty($user_id)) {
             $projectIdList = ProjectUser::find()->where(['user_id' => $user_id])->select('project_id')->column();
-            $query = Project::find()->where([ 'IN', 'id', $projectIdList])->andWhere(['status' => Project::STATUS_OTHER])->orWhere(['owner_id' => $user_id]);
+            $query = Project::find()->where(['IN', 'id', $projectIdList])->andWhere(['status' => Project::STATUS_OTHER])->orWhere(['owner_id' => $user_id]);
         } else {
             $query = Project::find();
         }
@@ -164,9 +165,9 @@ class ProjectController extends ApiController
     public function actionCreateProjectTaskCategory()
     {
         $projectTaskCategory = new ProjectTaskCategory();
-        $projectTaskCategory->attributes =  \yii::$app->request->post();
+        $projectTaskCategory->attributes = \yii::$app->request->post();
 
-        if($projectTaskCategory->validate()) {
+        if ($projectTaskCategory->validate()) {
             $projectTaskCategory->save(false);
             return $projectTaskCategory;
         }
@@ -180,7 +181,7 @@ class ProjectController extends ApiController
             ->andWhere(['title' => Yii::$app->request->post('title')])
             ->one();
 
-        if(empty($projectTaskCategory)) {
+        if (empty($projectTaskCategory)) {
             throw new NotFoundHttpException('The project not found');
         }
 
@@ -255,7 +256,7 @@ class ProjectController extends ApiController
         $project->load(\yii::$app->request->post(), '');
         $project->owner_id = $user_id;
 
-        if($project->validate()) {
+        if ($project->validate()) {
             $project->save(false);
             return $project;
         }
@@ -326,11 +327,11 @@ class ProjectController extends ApiController
     public function actionUpdate()
     {
         $request = Yii::$app->request->getBodyParams();
-        if (!isset($request['project_id']) || $request['project_id'] == null){
+        if (!isset($request['project_id']) || $request['project_id'] == null) {
             throw new BadRequestHttpException(json_encode(['The project ID not found']));
         }
         $project = Project::findOne($request['project_id']);
-        if(empty($project)) {
+        if (empty($project)) {
             throw new NotFoundHttpException('The project not found');
         }
 
@@ -340,5 +341,44 @@ class ProjectController extends ApiController
             return $project->errors;
         }
         return $project;
+    }
+
+    /**
+     *
+     * @OA\Get(path="/project/my-employee",
+     *   summary="Список Сотрудников текущего пользователя",
+     *   description="Метод для получения списка сотрудников",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Менеджера",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ManagerEmployee"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return array|\yii\db\ActiveRecord
+     * @throws BadRequestHttpException
+     */
+    public function actionMyEmployee()
+    {
+        $user_id = \Yii::$app->user->id;
+        if (!$user_id) {
+            throw new BadRequestHttpException(json_encode(['Пользователь не найден']));
+        }
+
+        $model = Manager::find()->with(['managerEmployees'])->where(['user_id' => $user_id])->one();
+
+        if (!$model){
+            throw new BadRequestHttpException(json_encode(['Менеджер не найден']));
+        }
+
+        return $model;
     }
 }
