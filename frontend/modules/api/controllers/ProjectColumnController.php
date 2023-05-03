@@ -170,7 +170,7 @@ class ProjectColumnController extends ApiController
      *   ),
      * )
      *
-     * @return ProjectColumn|null
+     * @return array|ProjectColumn|\yii\db\ActiveRecord|null
      * @throws BadRequestHttpException
      * @throws \yii\base\InvalidConfigException
      */
@@ -181,7 +181,7 @@ class ProjectColumnController extends ApiController
             throw new BadRequestHttpException(json_encode(['Column not found']));
         }
 
-        $column = ProjectColumn::find()->where(['id' => $column_id, 'status' => ProjectColumn::STATUS_ACTIVE]);
+        $column = ProjectColumn::find()->where(['id' => $column_id, 'status' => ProjectColumn::STATUS_ACTIVE])->one();
 
         $put = array_diff(\Yii::$app->request->getBodyParams(), [null, '']);
 
