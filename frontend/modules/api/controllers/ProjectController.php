@@ -44,7 +44,10 @@ class ProjectController extends ApiController
      *
      * @OA\Get(path="/project/get-project",
      *   summary="Получить данные проекта",
-     *   description="Метод для получения проета",
+     *   description="Метод для получения проета<br>
+    Статусы:<br>
+    10 - Закрыт<br>
+    19 - Работает",
      *   security={
      *     {"bearerAuth": {}}
      *   },
@@ -89,7 +92,10 @@ class ProjectController extends ApiController
      *
      * @OA\Get(path="/project/project-list",
      *   summary="Список проектов",
-     *   description="Метод для получения списка проетов, если не передан параметр user_id, то возвращаются проеты текущего пользователя.",
+     *   description="Метод для получения списка проетов, если не передан параметр user_id, то возвращаются проеты текущего пользователя.<br>
+     Статусы:<br>
+     10 - Закрыт<br>
+     19 - Работает",
      *   security={
      *     {"bearerAuth": {}}
      *   },
@@ -133,7 +139,7 @@ class ProjectController extends ApiController
         }
         if (!empty($user_id)) {
             $projectIdList = ProjectUser::find()->where(['user_id' => $user_id])->select('project_id')->column();
-            $query = Project::find()->where([ 'IN', 'id', $projectIdList])->orWhere(['owner_id' => $user_id]);
+            $query = Project::find()->where([ 'IN', 'id', $projectIdList])->andWhere(['status' => Project::STATUS_OTHER])->orWhere(['owner_id' => $user_id]);
         } else {
             $query = Project::find();
         }
@@ -189,7 +195,10 @@ class ProjectController extends ApiController
      *
      * @OA\Post(path="/project/create",
      *   summary="Добавить проект",
-     *   description="Метод для создания проекта, если не передан параметр <b>user_id</b>, то будет получен текущий пользователь",
+     *   description="Метод для создания проекта, если не передан параметр <b>user_id</b>, то будет получен текущий пользователь<br>
+    Статусы:<br>
+    10 - Закрыт<br>
+    19 - Работает",
      *   security={
      *     {"bearerAuth": {}}
      *   },

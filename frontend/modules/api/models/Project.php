@@ -91,6 +91,8 @@ use yii\web\Linkable;
  */
 class Project extends \common\models\Project
 {
+    const STATUS_OTHER = 19;
+    const STATUS_CLOSE = 10;
     public function fields(): array
     {
         return [
