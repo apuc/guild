@@ -52,14 +52,16 @@ class UserCardSearch extends UserCard
         } else {
             $manager = Manager::findOne(Yii::$app->user->id);
             if (!$manager){
-                return false;
+                $query = UserCard::find()->where(['id' => 0]);
             }
-            $employeeIdList = ManagerEmployee::find()
-                ->where(['manager_id' => $manager->id])
-                ->select('employee_id')
-                ->column();
+            else {
+                $employeeIdList = ManagerEmployee::find()
+                    ->where(['manager_id' => $manager->id])
+                    ->select('employee_id')
+                    ->column();
 
-            $query = UserCard::find()->where(['in', 'user_card.id', $employeeIdList]);
+                $query = UserCard::find()->where(['in', 'user_card.id', $employeeIdList]);
+            }
         }
 
         $query->distinct()
