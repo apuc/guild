@@ -17,7 +17,7 @@ class ManagerSearch extends Manager
     public function rules()
     {
         return [
-            [['id', 'user_card_id'], 'integer'],
+            [['id', 'user_id'], 'integer'],
         ];
     }
 
@@ -39,7 +39,7 @@ class ManagerSearch extends Manager
      */
     public function search($params)
     {
-        $query = Manager::find()->with('userCard');
+        $query = Manager::find()->with('user');
 
         // add conditions that should always apply here
 
@@ -58,7 +58,7 @@ class ManagerSearch extends Manager
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_card_id' => $this->user_card_id,
+            'user_id' => $this->user_id,
         ]);
 
         return $dataProvider;

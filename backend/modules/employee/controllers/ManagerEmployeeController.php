@@ -2,6 +2,7 @@
 
 namespace backend\modules\employee\controllers;
 
+use common\classes\Debug;
 use Yii;
 use backend\modules\employee\models\ManagerEmployee;
 use backend\modules\employee\models\ManagerEmployeeSearch;
@@ -71,19 +72,18 @@ class ManagerEmployeeController extends Controller
         $post = \Yii::$app->request->post('ManagerEmployee');
 
         if (!empty($post)) {
-            $user_card_id_arr = ArrayHelper::getValue($post,'user_card_id');
+            $user_card_id_arr = ArrayHelper::getValue($post, 'employee_id');
 
-            foreach ($user_card_id_arr as $user_card_id) {
-                $emtModel = new ManagerEmployee();
-                $emtModel->manager_id = $post['manager_id'];
-                $emtModel->user_card_id = $user_card_id;
+            $emtModel = new ManagerEmployee();
+            $emtModel->manager_id = $post['manager_id'];
+            $emtModel->employee_id = $user_card_id_arr;
 
-                if (!$emtModel->save()) {
-                    return $this->render('create', [
-                        'model' => $emtModel,
-                    ]);
-                }
+            if (!$emtModel->save()) {
+                return $this->render('create', [
+                    'model' => $emtModel,
+                ]);
             }
+
 
             return $this->redirect(['index']);
         }
@@ -106,8 +106,7 @@ class ManagerEmployeeController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($manager_id !== null)
-            {
+            if ($manager_id !== null) {
                 return $this->redirect(['manager/view', 'id' => $manager_id]);
             }
             return $this->redirect(['view', 'id' => $model->id]);
@@ -129,8 +128,7 @@ class ManagerEmployeeController extends Controller
     {
         $this->findModel($id)->delete();
 
-        if ($manager_id !== null)
-        {
+        if ($manager_id !== null) {
             return $this->redirect(['manager/view', 'id' => $manager_id]);
         }
 

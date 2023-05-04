@@ -32,8 +32,8 @@ class ManagerEmployee extends \yii\db\ActiveRecord
         return [
             [['manager_id', 'employee_id'], 'required'],
             [['manager_id'], 'integer'],
-            ['employee_id', 'unique', 'targetAttribute' => ['manager_id', 'user_card_id'], 'message' => 'Этот сотрудник уже закреплён за менеджером'],
-            [['employee_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['user_card_id' => 'id']],
+            ['employee_id', 'unique', 'targetAttribute' => ['manager_id', 'employee_id'], 'message' => 'Этот сотрудник уже закреплён за менеджером'],
+            [['employee_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['employee_id' => 'id']],
             [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['manager_id' => 'id']],
         ];
     }

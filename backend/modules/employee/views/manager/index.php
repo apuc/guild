@@ -24,9 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-                'attribute' => 'user_card_id',
-                'filter' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
-                'value' => 'userCard.fio',
+                'attribute' => 'user_id',
+                'value' => 'user.email',
             ],
 
             ['class' => 'yii\grid\ActionColumn'],

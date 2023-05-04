@@ -38,7 +38,7 @@ YiiAsset::register($this);
             'id',
             [
                 'attribute' => 'user_id',
-                'value' => ArrayHelper::getValue($model,'userCard.fio'),
+                'value' => ArrayHelper::getValue($model,'user.email'),
             ],
         ],
     ]) ?>
@@ -52,9 +52,8 @@ YiiAsset::register($this);
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-                'attribute' => 'user_card_id',
-                'filter' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
-                'value' => 'userCard.fio',
+                'attribute' => 'employee_id',
+                'value' => 'employee.email',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

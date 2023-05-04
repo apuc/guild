@@ -26,17 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'manager_id',
-                'filter' => UserCard::find()->select(['fio', 'user_card.id'])
-                    ->joinWith('manager')->where(['not',['manager.user_card_id' => null]])
-                    ->indexBy('user_card.id')->column(),
-                'value' => 'manager.userCard.fio',
+                'value' => 'manager.user.userCard.fio',
             ],
             [
-                'attribute' => 'user_card_id',
-                'filter' => ManagerEmployee::find()->select(['fio', 'manager_employee.id'])
-                    ->joinWith('userCard')
-                    ->indexBy('manager_employee.id')->column(),
-                'value' => 'userCard.fio',
+                'attribute' => 'employee_id',
+                'value' => 'employee.email',
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -17,7 +17,7 @@ class ManagerEmployeeSearch extends ManagerEmployee
     public function rules()
     {
         return [
-            [['id', 'manager_id', 'user_card_id'], 'integer'],
+            [['id', 'manager_id', 'employee_id'], 'integer'],
         ];
     }
 
@@ -39,7 +39,7 @@ class ManagerEmployeeSearch extends ManagerEmployee
      */
     public function search($params)
     {
-        $query = ManagerEmployee::find()->joinWith(['userCard', 'manager']);
+        $query = ManagerEmployee::find()->joinWith(['employee', 'manager']);
 
         // add conditions that should always apply here
 
@@ -59,7 +59,7 @@ class ManagerEmployeeSearch extends ManagerEmployee
         $query->andFilterWhere([
             'id' => $this->id,
             'manager_id' => $this->manager_id,
-            'user_card_id' => $this->user_card_id,
+            'user_card_id' => $this->employee_id,
         ]);
 
         return $dataProvider;

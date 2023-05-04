@@ -15,16 +15,16 @@ use kartik\select2\Select2;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'user_card_id')->widget(Select2::className(),
+    <?= $form->field($model, 'user_id')->widget(
+        Select2::class,
         [
-            'data' => UserCard::find()->select(['user_card.fio', 'user_card.id'])
-                ->joinWith('manager')->where(['manager.user_card_id' => null])
-                ->indexBy('user_card.id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
+            'data' => \common\models\UserCard::getListUserWithUserId(),
+            'options' => ['placeholder' => '...', 'class' => 'form-control'],
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ]) ?>
+        ]
+    ); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

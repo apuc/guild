@@ -17,8 +17,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'manager_id')->widget(Select2::className(),
         [
-            'data' => Manager::find()->select(['fio', 'manager.id'])
-                ->joinWith('userCard')->indexBy('manager.id')->column(),
+            'data' => Manager::find()->select(['email', 'manager.id'])
+                ->joinWith('user')->indexBy('manager.id')->column(),
             'options' => ['placeholder' => '...','class' => 'form-control'],
             'hideSearch' => false,
             'pluginOptions' => [
@@ -26,18 +26,16 @@ use yii\widgets\ActiveForm;
             ],
         ]) ?>
 
-    <?= $form->field($model, 'user_card_id')->widget(Select2::className(),
+    <?= $form->field($model, 'employee_id')->widget(
+        Select2::class,
         [
-            'data' => UserCard::find()->select(['fio', 'user_card.id'])
-                ->joinWith('manager')->where(['manager.user_card_id' => null])->indexBy('user_card.id')->column(),
-            'options' => ['placeholder' => '...','class' => 'form-control'],
-            'hideSearch' => false,
+            'data' => \common\models\UserCard::getListUserWithUserId(),
+            'options' => ['placeholder' => '...', 'class' => 'form-control'],
             'pluginOptions' => [
-                'allowClear' => true,
-                'multiple' => true,
-                'closeOnSelect' => false
+                'allowClear' => true
             ],
-        ]) ?>
+        ]
+    ); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

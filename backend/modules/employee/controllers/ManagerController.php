@@ -60,7 +60,7 @@ class ManagerController extends Controller
         $model = $this->findModel($id);
         $managerEmployeeSearchModel = new ManagerEmployeeSearch();
         $managerEmployeeDataProvider = new ActiveDataProvider([
-            'query' => $model->getManagerEmployees()->with('userCard'),
+            'query' => $model->getManagerEmployees()->with('employee'),
             'pagination' => [
                 'pageSize' => 20,
             ],
