@@ -53,6 +53,7 @@ class UserCardSearch extends UserCard
             $manager = Manager::findOne(Yii::$app->user->id);
             if (!$manager){
                 $query = UserCard::find()->where(['id' => 0]);
+                return new ActiveDataProvider(['query' => $query]);
             }
             else {
                 $employeeIdList = ManagerEmployee::find()
