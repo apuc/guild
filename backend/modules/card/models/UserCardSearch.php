@@ -15,6 +15,7 @@ class UserCardSearch extends UserCard
 {
     public $skills;
     public $total;
+
     /**
      * {@inheritdoc}
      */
@@ -48,17 +49,10 @@ class UserCardSearch extends UserCard
         if (Yii::$app->user->can('show_all_profiles')) {
             $query = UserCard::find();
         } else {
-            $userCard = User::find()
-                ->where(['id' => Yii::$app->user->id])
-                ->one();
-
-            $employeeIdList = false;
-            if (isset($userCard->manager)) {
-                $employeeIdList = ManagerEmployee::find()
-                    ->where(['manager_id' => Yii::$app->user->id])
-                    ->select('employee_id')
-                    ->column();
-            }
+            $employeeIdList = ManagerEmployee::find()
+                ->where(['manager_id' => Yii::$app->user->id])
+                ->select('employee_id')
+                ->column();
 
             $query = UserCard::find()->where(['in', 'user_card.id', $employeeIdList]);
         }
@@ -88,8 +82,8 @@ class UserCardSearch extends UserCard
             $query->andFilterWhere(['=', 'DAY(dob)', $params['day']]);
         }
         if (isset($params['date'])) {
-            $query->andFilterWhere(['=', 'MONTH(dob)', substr($params['date'], 5,2)]);
-            $query->andFilterWhere(['=', 'DAY(dob)', substr($params['date'],8,2)]);
+            $query->andFilterWhere(['=', 'MONTH(dob)', substr($params['date'], 5, 2)]);
+            $query->andFilterWhere(['=', 'DAY(dob)', substr($params['date'], 8, 2)]);
         }
 
         // grid filtering conditions
