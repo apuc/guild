@@ -43,16 +43,16 @@ class UserCardSearch extends UserCard
      *
      * @param array $params
      *
-     * @return ActiveDataProvider
+     * @return ActiveDataProvider | bool
      */
-    public function search($params): ActiveDataProvider
+    public function search($params)
     {
         if (Yii::$app->user->can('show_all_profiles')) {
             $query = UserCard::find();
         } else {
             $manager = Manager::findOne(Yii::$app->user->id);
             if (!$manager){
-                return new ActiveDataProvider();
+                return false;
             }
             $employeeIdList = ManagerEmployee::find()
                 ->where(['manager_id' => $manager->id])
