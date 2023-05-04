@@ -4,6 +4,7 @@ namespace backend\modules\card\models;
 
 use backend\modules\employee\models\Manager;
 use backend\modules\employee\models\ManagerEmployee;
+use common\classes\Debug;
 use common\models\User;
 use Yii;
 use yii\base\Model;
@@ -50,7 +51,7 @@ class UserCardSearch extends UserCard
         if (Yii::$app->user->can('show_all_profiles')) {
             $query = UserCard::find();
         } else {
-            $manager = Manager::findOne(Yii::$app->user->id);
+            $manager = Manager::findOne(['user_id' => Yii::$app->user->id]);
             if (!$manager){
                 $query = UserCard::find()->where(['id' => 0]);
                 return new ActiveDataProvider(['query' => $query]);
@@ -61,7 +62,7 @@ class UserCardSearch extends UserCard
                     ->select('employee_id')
                     ->column();
 
-                $query = UserCard::find()->where(['in', 'user_card.id', $employeeIdList]);
+                $query = UserCard::find()->where(['in', 'user_card.id_user', $employeeIdList]);
             }
         }
 
