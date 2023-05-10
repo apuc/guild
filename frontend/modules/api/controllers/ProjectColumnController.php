@@ -93,6 +93,11 @@ class ProjectColumnController extends ApiController
      *              type="string",
      *              description="Название колонки",
      *          ),
+     *          @OA\Property(
+     *              property="priority",
+     *              type="integer",
+     *              description="Приоритет колонки",
+     *          ),
      *       ),
      *     ),
      *   ),
@@ -151,6 +156,11 @@ class ProjectColumnController extends ApiController
      *              property="project_id",
      *              type="integer",
      *              description="Идентификатор проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="priority",
+     *              type="integer",
+     *              description="Приоритет колонки",
      *          ),
      *          @OA\Property(
      *              property="status",

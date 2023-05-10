@@ -49,6 +49,10 @@ use yii\web\Linkable;
  *     property="columns",
  *     ref="#/components/schemas/ProjectColumnExample",
  *  ),
+ *  @OA\Property(
+ *     property="projectUsers",
+ *     ref="#/components/schemas/ProjectUsersExample",
+ *  ),
  *)
  *
  * @OA\Schema(
@@ -85,6 +89,10 @@ use yii\web\Linkable;
  *         property="company",
  *         ref="#/components/schemas/Company",
  *      ),
+ *      @OA\Property(
+ *         property="projectUsers",
+ *         ref="#/components/schemas/ProjectUsers",
+ *      ),
  *  ),
  *)
  *
@@ -107,13 +115,21 @@ class Project extends \common\models\Project
             'company' => function() {
                 return $this->company;
             },
-
+            'projectUsers',
         ];
     }
 
     public function extraFields(): array
     {
         return ['columns',];
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getProjectUsers()
+    {
+        return $this->hasMany(ProjectUser::class, ['project_id' => 'id']);
     }
 
     public function getLinks(): array

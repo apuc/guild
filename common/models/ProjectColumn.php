@@ -15,6 +15,7 @@ use yii\db\Expression;
  * @property string $created_at
  * @property string $updated_at
  * @property int $status
+ * @property int $priority
  *
  * @property Project $project
  */
@@ -43,6 +44,7 @@ class ProjectColumn extends \yii\db\ActiveRecord
             'updated_at',
             'project_id',
             'status',
+            'priority',
             'tasks',
         ];
     }
@@ -62,7 +64,7 @@ class ProjectColumn extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'project_id'], 'required'],
-            [['project_id', 'status'], 'integer'],
+            [['project_id', 'status', 'priority'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
@@ -81,6 +83,7 @@ class ProjectColumn extends \yii\db\ActiveRecord
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата редактирования',
             'status' => 'Статус',
+            'priority' => 'Приоритет',
         ];
     }
 

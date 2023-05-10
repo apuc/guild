@@ -31,6 +31,12 @@ namespace frontend\modules\api\models;
  *     description="Статус колонки"
  *  ),
  *  @OA\Property(
+ *     property="priority",
+ *     type="int",
+ *     example="1",
+ *     description="Приоритет колонки"
+ *  ),
+ *  @OA\Property(
  *     property="tasks",
  *     ref="#/components/schemas/ProjectTask",
  *  ),
@@ -40,7 +46,7 @@ namespace frontend\modules\api\models;
  *  schema="ProjectColumnExample",
  *  type="array",
  *  example={
- *     {"id": 1, "title": "Задачи на проверку", "project_id": 95, "status": 1,
+ *     {"id": 1, "title": "Задачи на проверку", "project_id": 95, "status": 1, "priority": 1,
  *         "tasks": {
  *             {"id": 95, "title": "Сложная задача", "project_id": 44, "column_id": 1, "user_id": 19, "description": "Описание задачи", "status": 1,
  *                 "taskUsers": {
@@ -56,7 +62,7 @@ namespace frontend\modules\api\models;
  *             }
  *         }
  *     },
- *     {"id": 2, "title": "Новые задачи", "project_id": 95, "status": 1,
+ *     {"id": 2, "title": "Новые задачи", "project_id": 95, "status": 1, "priority": 2,
  *         "tasks": {
  *             {"id": 97, "title": "Очень Сложная задача", "project_id": 44, "column_id": 2, "user_id": 19, "description": "Описание простой задачи", "status": 1},
  *             {"id": 98, "title": "Очень Простая задача", "project_id": 44, "column_id": 2, "user_id": 19, "description": "Описание очень простой задачи", "status": 1}
@@ -79,6 +85,10 @@ namespace frontend\modules\api\models;
  *      ),
  *      @OA\Property(
  *         property="status",
+ *         type="int",
+ *      ),
+ *      @OA\Property(
+ *         property="priority",
  *         type="int",
  *      ),
  *      @OA\Property(

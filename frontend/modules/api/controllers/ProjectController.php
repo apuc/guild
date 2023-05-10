@@ -4,11 +4,11 @@ namespace frontend\modules\api\controllers;
 
 use common\classes\Debug;
 use common\models\ProjectTaskCategory;
-use common\models\ProjectUser;
 use common\models\Status;
 use common\models\UseStatus;
 use frontend\modules\api\models\Manager;
 use frontend\modules\api\models\Project;
+use frontend\modules\api\models\ProjectUser;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -35,6 +35,7 @@ class ProjectController extends ApiController
                     'status-list' => ['GET', 'OPTIONS'],
                     'project-task-category-list' => ['GET', 'OPTIONS'],
                     'create' => ['POST', 'OPTIONS'],
+                    'add-user' => ['POST', 'OPTIONS'],
                     'update' => ['PUT', 'OPTIONS']
                 ],
             ]
@@ -375,10 +376,126 @@ class ProjectController extends ApiController
 
         $model = Manager::find()->with(['managerEmployees'])->where(['user_id' => $user_id])->one();
 
-        if (!$model){
+        if (!$model) {
             throw new BadRequestHttpException(json_encode(['Менеджер не найден']));
         }
 
         return $model;
+    }
+
+    /**
+     *
+     * @OA\Post(path="/project/add-user",
+     *   summary="Добавить пользователя в проект",
+     *   description="Метод для добавления пользователя в проект",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"user_id", "project_id"},
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="Идентификатор пользователя",
+     *          ),
+     *          @OA\Property(
+     *              property="project_id",
+     *              type="integer",
+     *              description="Идентификатор проекта",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectUsers"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return array|ProjectUser
+     * @throws NotFoundHttpException
+     */
+    public function actionAddUser()
+    {
+        $request = Yii::$app->request->post();
+        $project = Project::findOne($request['project_id']);
+        if (empty($project)) {
+            throw new NotFoundHttpException('The project not found');
+        }
+
+        $model = new ProjectUser();
+        $model->load($request, '');
+        if ($model->user->userCard){
+            $model->card_id = $model->user->userCard->id;
+        }
+
+        if (!$model->save()){
+            return $model->errors;
+        }
+
+        return $model;
+    }
+
+    /**
+     *
+     * @OA\Delete(path="/project/del-user",
+     *   summary="Удаление пользователя из проекта",
+     *   description="Метод для Удаления пользователя из проекта",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"project_id", "user_id"},
+     *          @OA\Property(
+     *              property="project_id",
+     *              type="integer",
+     *              description="Идентификатор проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="Идентификатор пользователя",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект проекта",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/Project"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return Project
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionDelUser(): Project
+    {
+        $request = Yii::$app->request->getBodyParams();
+
+        ProjectUser::deleteAll(['project_id' => $request['project_id'], 'user_id' => $request['user_id']]);
+        $project = Project::findOne($request['project_id']);
+        if (empty($project)) {
+            throw new NotFoundHttpException('The project not found');
+        }
+
+        return $project;
     }
 }
