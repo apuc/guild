@@ -434,7 +434,7 @@ class ProjectController extends ApiController
 
         $model = new ProjectUser();
         $model->load($request, '');
-        if ($model->user->userCard){
+        if (isset($model->user->userCard)){
             $model->card_id = $model->user->userCard->id;
         }
 
