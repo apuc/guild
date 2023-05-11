@@ -1,23 +1,18 @@
 <?php
 
-namespace backend\modules\task\controllers;
+namespace backend\modules\comment\controllers;
 
-use backend\modules\project\models\ProjectUser;
-use backend\modules\task\models\ProjectTaskUser;
-use common\classes\Debug;
-use yii\data\ActiveDataProvider;
-use yii\web\Response;
+use backend\modules\comment\models\Comment;
+use backend\modules\comment\models\CommentSearch;
 use Yii;
-use backend\modules\task\models\ProjectTask;
-use backend\modules\task\models\TaskSearch;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
- * TaskController implements the CRUD actions for Task model.
+ * CommentController implements the CRUD actions for Comment model.
  */
-class TaskController extends Controller
+class CommentController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -25,9 +20,6 @@ class TaskController extends Controller
     public function behaviors()
     {
         return [
-            'as AccessBehavior' => [
-                'class' => \developeruz\db_rbac\behaviors\AccessBehavior::className(),
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -38,12 +30,12 @@ class TaskController extends Controller
     }
 
     /**
-     * Lists all Task models.
+     * Lists all Comment models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TaskSearch();
+        $searchModel = new CommentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -53,35 +45,26 @@ class TaskController extends Controller
     }
 
     /**
-     * Displays a single Task model.
+     * Displays a single Comment model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-        $taskDataProvider = new ActiveDataProvider([
-            'query' => \common\models\ProjectTaskUser::find()->where(['task_id' => $id])->with(['user']),
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
-
         return $this->render('view', [
-            'model' => $model,
-            'taskDataProvider' => $taskDataProvider,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Task model.
+     * Creates a new Comment model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new ProjectTask();
+        $model = new Comment();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -93,7 +76,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Updates an existing Task model.
+     * Updates an existing Comment model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -113,7 +96,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Deletes an existing Task model.
+     * Deletes an existing Comment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -127,15 +110,15 @@ class TaskController extends Controller
     }
 
     /**
-     * Finds the Task model based on its primary key value.
+     * Finds the Comment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return ProjectTask the loaded model
+     * @return Comment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ProjectTask::findOne($id)) !== null) {
+        if (($model = Comment::findOne($id)) !== null) {
             return $model;
         }
 

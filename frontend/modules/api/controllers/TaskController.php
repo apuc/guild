@@ -59,6 +59,11 @@ class TaskController extends ApiController
      *              description="статус",
      *          ),
      *          @OA\Property(
+     *              property="priority",
+     *              type="integer",
+     *              description="Приоритет задачи",
+     *          ),
+     *          @OA\Property(
      *              property="column_id",
      *              type="integer",
      *              description="Колонка к которой относится задача",
@@ -275,9 +280,14 @@ class TaskController extends ApiController
      *              description="Идентификатор колонки",
      *          ),
      *          @OA\Property(
+     *              property="priority",
+     *              type="integer",
+     *              description="Приоритет задачи",
+     *          ),
+     *          @OA\Property(
      *              property="status",
      *              type="integer",
-     *              description="Статус запроса",
+     *              description="Статус задачи",
      *          ),
      *          @OA\Property(
      *              property="description",

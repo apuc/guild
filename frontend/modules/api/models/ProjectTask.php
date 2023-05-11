@@ -59,10 +59,16 @@ namespace frontend\modules\api\models;
  *     description="Описание задачи"
  *  ),
  *  @OA\Property(
+ *     property="priority",
+ *     type="int",
+ *     example="1",
+ *     description="Приоритет задачи"
+ *  ),
+ *  @OA\Property(
  *     property="status",
  *     type="int",
  *     example="1",
- *     description="Статус колонки"
+ *     description="Статус задачи"
  *  ),
  *  @OA\Property(
  *     property="taskUsers",

@@ -86,6 +86,9 @@ return [
         'knowledgelevel' => [
             'class' => 'backend\modules\knowledgelevel\KnowledgeLevel',
         ],
+        'comment' => [
+            'class' => 'backend\modules\comment\Comment',
+        ],
     ],
     'components' => [
         'request' => [

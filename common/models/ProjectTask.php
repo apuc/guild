@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper;
  * @property int $column_id
  * @property int $user_id
  * @property int $executor_id
+ * @property int $priority
  * @property string $description
  *
  * @property Project $project
@@ -59,7 +60,7 @@ class ProjectTask extends ActiveRecord
     {
         return [
             [['project_id', 'status', 'title', 'description',], 'required'],
-            [['project_id', 'status', 'column_id', 'user_id', 'executor_id'], 'integer'],
+            [['project_id', 'status', 'column_id', 'user_id', 'executor_id', 'priority'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
@@ -87,6 +88,7 @@ class ProjectTask extends ActiveRecord
             'user_id' => 'Создатель задачи',
             'column_id' => 'Колонка',
             'executor_id' => 'Исполнитель',
+            'priority' => 'Приоритет',
         ];
     }
 
@@ -112,6 +114,7 @@ class ProjectTask extends ActiveRecord
                 ];
             },
             'executor_id',
+            'priority',
             'executor' => function () {
                 if ($this->executor){
                     return [

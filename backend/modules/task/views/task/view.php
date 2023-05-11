@@ -54,13 +54,18 @@ YiiAsset::register($this);
                 'attribute' => 'user_id',
                 'value' => ArrayHelper::getValue($model, 'user.userCard.fio'),
             ],
+            [
+                'attribute' => 'executor_id',
+                'value' => ArrayHelper::getValue($model, 'executor.userCard.fio'),
+            ],
             'description',
+            'priority',
         ],
     ]) ?>
 
     <div>
         <h2>
-            <?= 'Исполнители' ?>
+            <?= 'Участники' ?>
         </h2>
     </div>
 
@@ -71,7 +76,7 @@ YiiAsset::register($this);
 
             [
                 'attribute' => 'project_user_id',
-                'value' => 'projectUser.card.fio'
+                'value' => 'user.email'
             ],
 
             [

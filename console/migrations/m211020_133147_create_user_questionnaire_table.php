@@ -20,7 +20,7 @@ class m211020_133147_create_user_questionnaire_table extends Migration
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
             'score' => $this->integer(),
-            'status' => $this->integer(),
+            'status' => $this->integer()->defaultValue(1),
 
 
         ]);
