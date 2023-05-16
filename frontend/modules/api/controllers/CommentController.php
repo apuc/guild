@@ -125,7 +125,9 @@ class CommentController extends ApiController
 
         $request['user_id'] = $user_id;
 
-        $model->load($request, '');
+        $put = array_diff($request, [null, '']);
+
+        $model->load($put, '');
 
         if (!$model->save()) {
             return $model->errors;
