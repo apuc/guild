@@ -377,7 +377,7 @@ class ProjectController extends ApiController
         $model = Manager::find()->with(['managerEmployees'])->where(['user_id' => $user_id])->one();
 
         if (!$model) {
-            throw new BadRequestHttpException(json_encode(['Менеджер не найден']));
+            return [];
         }
 
         return $model;
