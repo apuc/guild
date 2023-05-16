@@ -71,6 +71,12 @@ namespace frontend\modules\api\models;
  *     description="Статус задачи"
  *  ),
  *  @OA\Property(
+ *     property="comment_count",
+ *     type="int",
+ *     example="5",
+ *     description="Кол-во комментариев"
+ *  ),
+ *  @OA\Property(
  *     property="taskUsers",
  *     ref="#/components/schemas/ProjectTaskUsersExample",
  *  ),

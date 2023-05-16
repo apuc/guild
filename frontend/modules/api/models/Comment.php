@@ -56,6 +56,14 @@ namespace frontend\modules\api\models;
  *  ),
  *)
  *
+ * @OA\Schema(
+ *  schema="CommentExample",
+ *  type="array",
+ *  @OA\Items(
+ *     ref="#/components/schemas/Comment",
+ *  ),
+ *)
+ *
  */
 class Comment extends \common\models\Comment
 {

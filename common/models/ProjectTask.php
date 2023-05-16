@@ -125,6 +125,9 @@ class ProjectTask extends ActiveRecord
 
                 return null;
             },
+            'comment_count' => function(){
+                return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
+            },
             'taskUsers',
         ];
     }

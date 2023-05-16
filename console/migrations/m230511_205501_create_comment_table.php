@@ -20,7 +20,7 @@ class m230511_205501_create_comment_table extends Migration
             'parent_id' => $this->integer(11),
             'entity_type' => $this->integer(2),
             'entity_id' => $this->integer(11),
-            'status' => $this->integer(1),
+            'status' => $this->integer(1)->defaultValue(1),
             'text' => $this->text()
         ]);
     }
