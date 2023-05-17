@@ -227,6 +227,16 @@ class CommentController extends ApiController
      *      )
      *   ),
      *
+     *   @OA\Parameter(
+     *      name="entity_type",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *        default=null
+     *      )
+     *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Возвращает массив объектов Комментариев",
@@ -240,9 +250,9 @@ class CommentController extends ApiController
      * @param int $entity_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionGetByEntity(int $entity_id): array
+    public function actionGetByEntity(int $entity_id, int $entity_type): array
     {
-        $model = Comment::find()->where(['entity_id' => $entity_id, 'status' => Comment::STATUS_ACTIVE])->all();
+        $model = Comment::find()->where(['entity_id' => $entity_id, 'entity_type' => $entity_type, 'status' => Comment::STATUS_ACTIVE])->all();
 
         return $model;
     }
