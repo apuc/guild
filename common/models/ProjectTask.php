@@ -116,7 +116,7 @@ class ProjectTask extends ActiveRecord
             'executor_id',
             'priority',
             'executor' => function () {
-                if ($this->executor){
+                if ($this->executor) {
                     return [
                         "fio" => $this->executor->userCard->fio ?? $this->executor->username,
                         "avatar" => $this->executor->userCard->photo ?? '',
@@ -125,10 +125,11 @@ class ProjectTask extends ActiveRecord
 
                 return null;
             },
-            'comment_count' => function(){
+            'comment_count' => function () {
                 return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
             },
             'taskUsers',
+            'timers',
         ];
     }
 
@@ -189,6 +190,11 @@ class ProjectTask extends ActiveRecord
     public function getTaskUsers()
     {
         return $this->hasMany(ProjectTaskUser::className(), ['task_id' => 'id']);
+    }
+
+    public function getTimers()
+    {
+        return $this->hasMany(Timer::class, ['entity_id' => 'id'])->where(['status' => Timer::STATUS_ACTIVE]);
     }
 
     public static function usersByTaskArr($task_id): array

@@ -2,9 +2,11 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\classes\Debug;
 use common\models\ProjectColumn;
 use frontend\modules\api\models\Project;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 class ProjectColumnController extends ApiController
 {
@@ -15,6 +17,7 @@ class ProjectColumnController extends ApiController
             'get-column' => ['get'],
             'get-column-list' => ['get'],
             'create-column' => ['post'],
+            'set-priority' => ['post'],
             'update-column' => ['put', 'patch'],
         ];
     }
@@ -197,13 +200,80 @@ class ProjectColumnController extends ApiController
 
         $column->load($put, '');
 
-        if (!$column->validate()){
+        if (!$column->validate()) {
             throw new BadRequestHttpException(json_encode($column->errors));
         }
 
         $column->save(false);
 
         return $column;
+    }
+
+    /**
+     *
+     * @OA\Post(path="/project-column/set-priority",
+     *   summary="Установить приоритет колонок",
+     *   description="Метод для установления приоритета колонок в проекте",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"project_id", "data"},
+     *          @OA\Property(
+     *              property="project_id",
+     *              type="integer",
+     *              description="Идентификатор проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="data",
+     *              type="string",
+     *              description="Данные для обновления приоритета. Пример: [{&quot;column_id&quot;:1,&quot;priority&quot;:2},{&quot;column_id&quot;:2,&quot;priority&quot;:3}]",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект проекта",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/Project"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return array|Project|\yii\db\ActiveRecord
+     * @throws BadRequestHttpException
+     */
+    public function actionSetPriority()
+    {
+        $request = \Yii::$app->request->post();
+        $data = $request['data'];
+
+        $project = Project::findOne($request['project_id']);
+        if (empty($project)) {
+            throw new NotFoundHttpException('The project not found');
+        }
+
+        if (!$data = json_decode($data, true)) {
+            throw new BadRequestHttpException('No valid JSON');
+        }
+
+        foreach ($data as $datum) {
+            $model = ProjectColumn::findOne($datum['column_id']);
+            $model->priority = $datum['priority'];
+            if (!$model->validate()){
+                throw new BadRequestHttpException($model->errors);
+            }
+            $model->save();
+        }
+
+        return $project;
     }
 
 }

@@ -4,9 +4,13 @@ namespace frontend\modules\api\controllers;
 
 use common\classes\Debug;
 use common\models\ProjectTask;
+use common\models\ProjectTaskUser;
+use common\models\User;
 use common\services\TaskService;
+use frontend\modules\api\models\ProjectColumn;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -20,6 +24,8 @@ class TaskController extends ApiController
             'get-user-tasks' => ['get'],
             'create-task' => ['post'],
             'update-task' => ['put', 'patch'],
+            'add-user-to-task' => ['post'],
+            'del-user' => ['delete'],
         ];
     }
 
@@ -92,7 +98,7 @@ class TaskController extends ApiController
     public function actionCreateTask(): ProjectTask
     {
         $request = Yii::$app->getRequest()->getBodyParams();
-        if(!isset($request['user_id']) or $request['user_id'] == null){
+        if (!isset($request['user_id']) or $request['user_id'] == null) {
             $request['user_id'] = Yii::$app->user->id;
         }
 
@@ -324,5 +330,204 @@ class TaskController extends ApiController
         }
 
         return $modelTask;
+    }
+
+    /**
+     *
+     * @OA\Post(path="/task/add-user-to-task",
+     *   summary="Добавить пользователя в задачу",
+     *   description="Метод для добавления пользователя в задачу",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"user_id", "task_id"},
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="Идентификатор пользователя",
+     *          ),
+     *          @OA\Property(
+     *              property="task_id",
+     *              type="integer",
+     *              description="Идентификатор задачи",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект связи задачи и пользователя",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectTaskUser"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return ProjectTaskUser
+     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
+     */
+    public function actionAddUserToTask(): ProjectTaskUser
+    {
+        $request = \Yii::$app->request->post();
+
+        $user = User::findOne($request['user_id']);
+        if (!$user) {
+            throw new NotFoundHttpException('User not found');
+        }
+
+        if (empty ($request['task_id']) or !TaskService::taskExists($request['task_id'])) {
+            throw new NotFoundHttpException('The task does not exist');
+        }
+
+        if (ProjectTaskUser::find()->where(['user_id' => $request['user_id'], 'task_id' => $request['task_id']])->exists()) {
+            throw new ServerErrorHttpException('The user has already been added');
+        }
+
+        $model = new ProjectTaskUser();
+        $model->load($request, '');
+
+        if (!$model->validate()) {
+            throw new ServerErrorHttpException($model->errors);
+        }
+
+        $model->save();
+
+        return $model;
+    }
+
+    /**
+     *
+     * @OA\Delete(path="/task/del-user",
+     *   summary="Удаление пользователя из задачи",
+     *   description="Метод для Удаления пользователя из задачи",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"task_id", "user_id"},
+     *          @OA\Property(
+     *              property="task_id",
+     *              type="integer",
+     *              description="Идентификатор задачи",
+     *          ),
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="Идентификатор пользователя",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект задачи",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectTask"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return ProjectTask|null
+     * @throws InvalidConfigException
+     * @throws NotFoundHttpException
+     */
+    public function actionDelUser(): ?ProjectTask
+    {
+        $request = Yii::$app->request->getBodyParams();
+
+        $user = User::findOne($request['user_id']);
+        if (!$user) {
+            throw new NotFoundHttpException('User not found');
+        }
+
+        if (empty ($request['task_id']) or !TaskService::taskExists($request['task_id'])) {
+            throw new NotFoundHttpException('The task does not exist');
+        }
+
+        ProjectTaskUser::deleteAll(['task_id' => $request['task_id'], 'user_id' => $request['user_id']]);
+
+        return TaskService::getTask($request['task_id']);
+    }
+
+    /**
+     *
+     * @OA\Post(path="/task/set-priority",
+     *   summary="Установить приоритет задач",
+     *   description="Метод для установления приоритета задач в колонке",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"column_id", "data"},
+     *          @OA\Property(
+     *              property="column_id",
+     *              type="integer",
+     *              description="Идентификатор проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="data",
+     *              type="string",
+     *              description="Данные для обновления приоритета. Пример: [{&quot;task_id&quot;:3,&quot;priority&quot;:2},{&quot;task_id&quot;:4,&quot;priority&quot;:3}]",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект колонки",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectColumn"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return ProjectColumn
+     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
+     */
+    public function actionSetPriority(): ProjectColumn
+    {
+        $request = \Yii::$app->request->post();
+        $data = $request['data'];
+
+        if (!$data = json_decode($data, true)) {
+            throw new BadRequestHttpException('No valid JSON');
+        }
+
+        $column = ProjectColumn::findOne($request['column_id']);
+        if (empty($column)) {
+            throw new NotFoundHttpException('The column not found');
+        }
+
+        foreach ($data as $datum) {
+            $model = ProjectTask::findOne($datum['task_id']);
+            $model->priority = $datum['priority'];
+            if (!$model->validate()){
+                throw new BadRequestHttpException($model->errors);
+            }
+            $model->save();
+        }
+
+        return $column;
     }
 }

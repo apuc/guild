@@ -80,6 +80,10 @@ namespace frontend\modules\api\models;
  *     property="taskUsers",
  *     ref="#/components/schemas/ProjectTaskUsersExample",
  *  ),
+ *  @OA\Property(
+ *     property="timers",
+ *     ref="#/components/schemas/TimerExample",
+ *  ),
  *)
  *
  * @OA\Schema(
