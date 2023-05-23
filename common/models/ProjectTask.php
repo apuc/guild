@@ -64,7 +64,7 @@ class ProjectTask extends ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
-            [['description'], 'string', 'max' => 500],
+            [['description'], 'string', 'max' => 1500],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['executor_id' => 'id']],
