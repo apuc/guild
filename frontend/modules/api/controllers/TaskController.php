@@ -79,6 +79,11 @@ class TaskController extends ApiController
      *              type="integer",
      *              description="Идентификатор создателя задачи",
      *          ),
+     *          @OA\Property(
+     *              property="executor_id",
+     *              type="integer",
+     *              description="Идентификатор исполнителя задачи",
+     *          ),
      *       ),
      *     ),
      *   ),
@@ -269,6 +274,11 @@ class TaskController extends ApiController
      *              type="integer",
      *              description="Идентификатор пользователя",
      *              nullable=false,
+     *          ),
+     *          @OA\Property(
+     *              property="executor_id",
+     *              type="integer",
+     *              description="Идентификатор исполнителя задачи",
      *          ),
      *          @OA\Property(
      *              property="task_id",

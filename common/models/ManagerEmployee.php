@@ -56,6 +56,9 @@ class ManagerEmployee extends \yii\db\ActiveRecord
             'id',
             'manager_id',
             'employee_id',
+            'user_id' => function(){
+                return $this->employee_id;
+            },
             'employee' => function () {
                 return [
                     "fio" => $this->employee->userCard->fio ?? $this->employee->username,
@@ -69,6 +72,11 @@ class ManagerEmployee extends \yii\db\ActiveRecord
      * @return ActiveQuery
      */
     public function getEmployee()
+    {
+        return $this->hasOne(User::class, ['id' => 'employee_id']);
+    }
+
+    public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'employee_id']);
     }

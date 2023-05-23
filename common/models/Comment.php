@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use Mpdf\Tag\Th;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -78,6 +79,32 @@ class Comment extends \yii\db\ActiveRecord
             'status' => 'Статус',
             'text' => 'Текст',
         ];
+    }
+
+    public function fields(): array
+    {
+        return [
+            'id',
+            'created_at',
+            'updated_at',
+            'user_id',
+            'user' => function () {
+                return [
+                    "fio" => $this->user->userCard->fio ?? $this->user->username,
+                    "avatar" => $this->user->userCard->photo ?? '',
+                ];
+            },
+            'parent_id',
+            'entity_type',
+            'entity_id',
+            'status',
+            'text',
+        ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**

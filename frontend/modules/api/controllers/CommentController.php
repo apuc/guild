@@ -76,7 +76,7 @@ class CommentController extends ApiController
      *     @OA\MediaType(
      *       mediaType="multipart/form-data",
      *       @OA\Schema(
-     *          required={"text"},
+     *          required={"text", "entity_type", "entity_id"},
      *          @OA\Property(
      *              property="text",
      *              type="string",
@@ -91,6 +91,11 @@ class CommentController extends ApiController
      *              property="entity_id",
      *              type="integer",
      *              description="Идентификатор сущности",
+     *          ),
+     *          @OA\Property(
+     *              property="parent_id",
+     *              type="integer",
+     *              description="Идентификатор родительского комментария",
      *          ),
      *          @OA\Property(
      *              property="status",

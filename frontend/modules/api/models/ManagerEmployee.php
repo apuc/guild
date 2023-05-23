@@ -45,6 +45,11 @@ namespace frontend\modules\api\models;
  *         example="19"
  *      ),
  *      @OA\Property(
+ *         property="user_id",
+ *         type="integer",
+ *         example="19"
+ *      ),
+ *      @OA\Property(
  *          property="employee",
  *          type="object",
  *          ref="#/components/schemas/ProjectTaskUsersShortExample",
