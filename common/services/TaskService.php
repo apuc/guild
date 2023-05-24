@@ -42,7 +42,7 @@ class TaskService
     {
         $modelTask = ProjectTask::findOne($task_params['task_id']);
 
-        if ($task_params['executor_id'] == 0){
+        if (isset($task_params['executor_id']) && $task_params['executor_id'] == 0){
             $task_params['executor_id'] = null;
         }
 
