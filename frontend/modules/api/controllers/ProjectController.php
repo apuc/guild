@@ -141,7 +141,7 @@ class ProjectController extends ApiController
         }
         if (!empty($user_id)) {
             $projectIdList = ProjectUser::find()->where(['user_id' => $user_id])->select('project_id')->column();
-            $query = Project::find()->where(['IN', 'id', $projectIdList])->andWhere(['status' => Project::STATUS_OTHER])->orWhere(['owner_id' => $user_id]);
+            $query = Project::find()->where(['IN', 'id', $projectIdList])->orWhere(['owner_id' => $user_id, 'status' => Project::STATUS_OTHER]);
         } else {
             $query = Project::find();
         }

@@ -7,19 +7,19 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
 /**
- * This is the model class for table "file".
+ * This is the model class for table "file_entity".
  *
  * @property int $id
- * @property string $name
- * @property string $path
- * @property string $url
- * @property string $type
- * @property string $mime-type
+ * @property int $file_id
+ * @property int $entity_type
+ * @property int $entity_id
  * @property string $created_at
  * @property string $updated_at
  * @property int $status
+ *
+ * @property File $file
  */
-class File extends \yii\db\ActiveRecord
+class FileEntity extends \yii\db\ActiveRecord
 {
     public function behaviors()
     {
@@ -38,7 +38,7 @@ class File extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'file';
+        return 'file_entity';
     }
 
     /**
@@ -47,10 +47,9 @@ class File extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['path'], 'string'],
+            [['file_id', 'entity_type', 'entity_id', 'status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['status'], 'integer'],
-            [['name', 'type', 'mime-type', 'url'], 'string', 'max' => 255],
+            [['file_id'], 'exist', 'skipOnError' => true, 'targetClass' => File::className(), 'targetAttribute' => ['file_id' => 'id']],
         ];
     }
 
@@ -61,11 +60,9 @@ class File extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'path' => 'Path',
-            'url' => 'URL',
-            'type' => 'Type',
-            'mime-type' => 'Mime Type',
+            'file_id' => 'File ID',
+            'entity_type' => 'Entity Type',
+            'entity_id' => 'Entity ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'status' => 'Status',
@@ -73,19 +70,10 @@ class File extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return string[]
+     * @return \yii\db\ActiveQuery
      */
-    public function fields(): array
+    public function getFile()
     {
-        return [
-            'id',
-            'name',
-            'created_at',
-            'updated_at',
-            'url',
-            'type',
-            'mime-type',
-            'status',
-        ];
+        return $this->hasOne(File::className(), ['id' => 'file_id']);
     }
 }
