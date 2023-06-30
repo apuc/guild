@@ -21,6 +21,9 @@ use yii\db\Expression;
  */
 class FileEntity extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = 1;
+    const STATUS_DISABLE = 0;
+
     public function behaviors()
     {
         return [
@@ -30,6 +33,20 @@ class FileEntity extends \yii\db\ActiveRecord
                 'updatedAtAttribute' => 'updated_at',
                 'value' => new Expression('NOW()'),
             ],
+        ];
+    }
+
+    public function fields(): array
+    {
+        return [
+            'id',
+            'file_id',
+            'file',
+            'entity_type',
+            'entity_id',
+            'created_at',
+            'updated_at',
+            'status',
         ];
     }
 
@@ -75,5 +92,16 @@ class FileEntity extends \yii\db\ActiveRecord
     public function getFile()
     {
         return $this->hasOne(File::className(), ['id' => 'file_id']);
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getStatusList(): array
+    {
+        return [
+            self::STATUS_ACTIVE => "Активен",
+            self::STATUS_DISABLE => "Не активен",
+        ];
     }
 }

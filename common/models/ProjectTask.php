@@ -22,6 +22,7 @@ use yii\helpers\ArrayHelper;
  * @property int $executor_id
  * @property int $priority
  * @property string $description
+ * @property string $dead_line
  *
  * @property Project $project
  * @property UserCard $card
@@ -61,7 +62,7 @@ class ProjectTask extends ActiveRecord
         return [
             [['project_id', 'status', 'title', 'description',], 'required'],
             [['project_id', 'status', 'column_id', 'user_id', 'executor_id', 'priority'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'dead_line'], 'safe'],
             ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
             [['description'], 'string', 'max' => 1500],
@@ -89,6 +90,7 @@ class ProjectTask extends ActiveRecord
             'column_id' => 'Колонка',
             'executor_id' => 'Исполнитель',
             'priority' => 'Приоритет',
+            'dead_line' => 'Срок выполнения задачи',
         ];
     }
 
@@ -103,6 +105,7 @@ class ProjectTask extends ActiveRecord
             'title',
             'created_at',
             'updated_at',
+            'dead_line',
             'description',
             'status',
             'column_id',

@@ -65,6 +65,11 @@ class TaskController extends ApiController
      *              description="статус",
      *          ),
      *          @OA\Property(
+     *              property="dead_line",
+     *              type="string",
+     *              description="Срок выполнения задачи",
+     *          ),
+     *          @OA\Property(
      *              property="priority",
      *              type="integer",
      *              description="Приоритет задачи",
@@ -304,6 +309,11 @@ class TaskController extends ApiController
      *              property="status",
      *              type="integer",
      *              description="Статус задачи",
+     *          ),
+     *          @OA\Property(
+     *              property="dead_line",
+     *              type="string",
+     *              description="Срок выполнения задачи",
      *          ),
      *          @OA\Property(
      *              property="description",

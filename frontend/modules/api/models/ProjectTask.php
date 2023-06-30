@@ -42,6 +42,12 @@ namespace frontend\modules\api\models;
  *     description="Пользователь создавший задачу"
  *  ),
  *  @OA\Property(
+ *     property="dead_line",
+ *     type="string",
+ *     example="2023-04-21 00:44:53",
+ *     description="Срок выполнения задачи"
+ *  ),
+ *  @OA\Property(
  *     property="executor_id",
  *     type="int",
  *     example="2",

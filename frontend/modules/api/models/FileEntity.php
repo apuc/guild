@@ -15,8 +15,13 @@ namespace frontend\modules\api\models;
  *  @OA\Property(
  *     property="file_id",
  *     type="integer",
- *     example=232,
+ *     example=1,
  *     description="Идентификатор файла"
+ *  ),
+ *  @OA\Property(
+ *     property="file",
+ *     ref="#/components/schemas/FileExample",
+ *     description="Файл"
  *  ),
  *  @OA\Property(
  *     property="entity_type",
