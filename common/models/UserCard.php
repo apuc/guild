@@ -379,4 +379,8 @@ class UserCard extends \yii\db\ActiveRecord
 
         return UserCard::find()->where([ 'IN', 'id_user', $usersId])->all();
     }
+
+    public static function getCardByStatus($status_id){
+
+    }
 }

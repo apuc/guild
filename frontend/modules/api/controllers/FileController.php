@@ -186,7 +186,7 @@ class FileController extends ApiController
      *
      *   @OA\RequestBody(
      *     @OA\MediaType(
-     *       mediaType="multipart/form-data",
+     *       mediaType="application/x-www-form-urlencoded",
      *       @OA\Schema(
      *          required={"file_id", "entity_type", "entity_id"},
      *          @OA\Property(
@@ -232,14 +232,14 @@ class FileController extends ApiController
      */
     public function actionDetach(): FileEntity
     {
-        $request = \Yii::$app->request->post();
+        $request = \Yii::$app->request->getBodyParams();
         $file = File::findOne($request['file_id']);
         if (!$file) {
             throw new NotFoundHttpException('File bot found');
         }
 
-        $fileEntity = new FileEntity();
-        $fileEntity->load($request, '');
+        $fileEntity = FileEntity::findOne(['file_id' => $request['file_id'], 'entity_type' => $request['entity_type'], 'entity_id' => $request['entity_id']]);
+        //$fileEntity->load($request, '');
         $fileEntity->status = FileEntity::STATUS_DISABLE;
 
         if (!$fileEntity->validate()) {
