@@ -228,6 +228,11 @@ class MarkController extends ApiController
             throw new NotFoundHttpException('Mark not found');
         }
 
+        $markEntity = MarkEntity::findOne(['mark_id' => $request['mark_id'], 'entity_type' => $request['entity_type'], 'entity_id' => $request['entity_id']]);
+        if ($markEntity) {
+            throw new ServerErrorHttpException('Mark is already attached');
+        }
+
         $markEntity = new MarkEntity();
         $markEntity->load($request, '');
 
