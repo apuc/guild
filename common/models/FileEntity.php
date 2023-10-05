@@ -18,11 +18,15 @@ use yii\db\Expression;
  * @property int $status
  *
  * @property File $file
+ * @property EntityType $entityType
  */
 class FileEntity extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = 1;
     const STATUS_DISABLE = 0;
+
+    const ENTITY_TYPE_TASK = 1;
+    const ENTITY_TYPE_PROJECT = 2;
 
     public function behaviors()
     {
@@ -67,6 +71,7 @@ class FileEntity extends \yii\db\ActiveRecord
             [['file_id', 'entity_type', 'entity_id', 'status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['file_id'], 'exist', 'skipOnError' => true, 'targetClass' => File::className(), 'targetAttribute' => ['file_id' => 'id']],
+            [['entity_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => EntityType::className(), 'targetAttribute' => ['entity_type_id' => 'id']],
         ];
     }
 
@@ -78,7 +83,7 @@ class FileEntity extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'file_id' => 'File ID',
-            'entity_type' => 'Entity Type',
+            'entity_type_id' => 'Entity Type',
             'entity_id' => 'Entity ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -103,5 +108,13 @@ class FileEntity extends \yii\db\ActiveRecord
             self::STATUS_ACTIVE => "Активен",
             self::STATUS_DISABLE => "Не активен",
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntityType()
+    {
+        return $this->hasOne(EntityType::className(), ['id' => 'entity_type_id']);
     }
 }

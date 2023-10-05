@@ -37,7 +37,8 @@
         "kartik-v/yii2-mpdf": "dev-master",
         "mihaildev/yii2-ckeditor": "*",
         "developeruz/yii2-db-rbac": "*",
-        "zircote/swagger-php": "^4.7"
+        "zircote/swagger-php": "^4.7",
+        "diecoding/yii2-seeder": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
