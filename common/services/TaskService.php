@@ -29,7 +29,7 @@ class TaskService
 
     public static function getTaskListByProject($project_id): array
     {
-        return ProjectTask::find()->where(['project_id' => $project_id])->asArray()->all();
+        return ProjectTask::find()->where(['project_id' => $project_id])->all();
     }
 
     public static function getTaskListByUser($user_id): array

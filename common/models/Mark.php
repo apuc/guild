@@ -9,6 +9,9 @@ use Yii;
  *
  * @property int $id
  * @property string $title
+ * @property string $slug
+ * @property string $color
+ * @property int $status
  *
  * @property ProjectMark[] $projectMarks
  */
@@ -28,7 +31,8 @@ class Mark extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'string', 'max' => 255],
+            [['title', 'slug', 'color'], 'string', 'max' => 255],
+            [['status'], 'integer'],
         ];
     }
 
@@ -40,6 +44,9 @@ class Mark extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'title' => 'Название',
+            'slug' => 'Ключ',
+            'color' => 'Цвет',
+            'status' => 'Статус',
         ];
     }
 
