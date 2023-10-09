@@ -102,7 +102,9 @@ class ProjectTask extends ActiveRecord
         return [
             'id',
             'project_id',
-            //'project.name',
+            'project_name' => function () {
+                return $this->project->name ?? null;
+            },
             'title',
             'created_at',
             'updated_at',
@@ -133,7 +135,21 @@ class ProjectTask extends ActiveRecord
                 return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
             },
             'taskUsers',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function extraFields(): array
+    {
+        return [
             'timers',
+            'column' => function () {
+                return [
+                    'column_title' => $this->column->title ?? null
+                ];
+            }
         ];
     }
 
