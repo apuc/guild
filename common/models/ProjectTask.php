@@ -102,7 +102,7 @@ class ProjectTask extends ActiveRecord
         return [
             'id',
             'project_id',
-            'project.name',
+            //'project.name',
             'title',
             'created_at',
             'updated_at',
