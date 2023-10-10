@@ -20,6 +20,61 @@ class UserResponseController extends ApiController
     }
 
     /**
+     * @OA\Post(path="/user-response/set-response",
+     *   summary="Добавить ответ пользователя",
+     *   description="Добавление ответа на вопрос от пользователя",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Tests"},
+     *   @OA\Parameter(
+     *      name="user_id",
+     *      in="query",
+     *      required=true,
+     *     description="ID пользователя",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="question_id",
+     *      in="query",
+     *      required=true,
+     *     description="ID вопроса",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="response_body",
+     *      in="query",
+     *      required=true,
+     *     description="Ответ пользователя",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="user_questionnaire_uuid",
+     *      in="query",
+     *      required=true,
+     *     description="UUID анкеты назначенной пользователю",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
+     *
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает ответ",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/UserResponseExample"),
+     *     ),
+     *   ),
+     * )
+     *
      * @throws InvalidConfigException
      * @throws ServerErrorHttpException|BadRequestHttpException
      */
@@ -33,6 +88,53 @@ class UserResponseController extends ApiController
     }
 
     /**
+     * @OA\Post(path="/user-response/set-responses",
+     *   summary="Добавить массив ответов пользователя",
+     *   description="Добавление массива ответов на вопросы от пользователя",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Tests"},
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"request_id"},
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="Идентификатор пользователя",
+     *              nullable=false,
+     *          ),
+     *          @OA\Property(
+     *              property="question_id",
+     *              type="integer",
+     *              description="Идентификатор вопроса",
+     *          ),
+     *          @OA\Property(
+     *              property="response_body",
+     *              type="string",
+     *              description="UUID анкеты назначенной пользователю",
+     *          ),
+     *          @OA\Property(
+     *              property="user_questionnaire_uuid",
+     *              type="string",
+     *              description="UUID анкеты назначенной пользователю",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Запроса",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/UserResponseExampleArr"),
+     *     ),
+     *   ),
+     * )
+     *
      * @throws InvalidConfigException
      * @throws ServerErrorHttpException|BadRequestHttpException
      */

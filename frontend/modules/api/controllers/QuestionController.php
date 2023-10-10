@@ -29,6 +29,34 @@ class QuestionController extends ApiController
     }
 
     /**
+     * @OA\Get(path="/question/get-questions",
+     *   summary="Список вопросов",
+     *   description="Получение списка вопросов",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Tests"},
+     *   @OA\Parameter(
+     *      name="user",
+     *      in="query",
+     *      required=true,
+     *     description="UUID анкеты назначеной пользователю",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает масив вопросов",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/QuestionExampleArr"),
+     *     ),
+     *
+     *
+     *   ),
+     * )
+     *
      * @throws NotFoundHttpException
      * @throws \Exception
      */
