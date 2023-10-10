@@ -137,6 +137,15 @@ class TaskController extends ApiController
      *        type="integer",
      *      )
      *   ),
+     *   @OA\Parameter(
+     *      name="expand",
+     *      in="query",
+     *      example="column,timers",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b>",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
      *   @OA\Response(
      *     response=200,
      *     description="Возвращает массив объектов Задач",
@@ -182,6 +191,15 @@ class TaskController extends ApiController
      *      required=true,
      *      @OA\Schema(
      *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="expand",
+     *      in="query",
+     *      example="column,timers",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b>",
+     *      @OA\Schema(
+     *        type="string",
      *      )
      *   ),
      *   @OA\Response(
@@ -231,6 +249,15 @@ class TaskController extends ApiController
      *      required=true,
      *      @OA\Schema(
      *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="expand",
+     *      in="query",
+     *      example="column,timers",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b>",
+     *      @OA\Schema(
+     *        type="string",
      *      )
      *   ),
      *   @OA\Response(

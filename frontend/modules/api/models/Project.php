@@ -119,6 +119,9 @@ class Project extends \common\models\Project
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function extraFields(): array
     {
         return ['columns',];

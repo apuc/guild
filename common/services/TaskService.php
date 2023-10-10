@@ -29,13 +29,13 @@ class TaskService
 
     public static function getTaskListByProject($project_id): array
     {
-        return ProjectTask::find()->where(['project_id' => $project_id])->all();
+        return ProjectTask::find()->where(['project_id' => $project_id])->orderBy('priority DESC')->all();
     }
 
     public static function getTaskListByUser($user_id): array
     {
         $taskIdList = ProjectTaskUser::find()->where(['user_id' => $user_id])->select('task_id')->column();
-        return ProjectTask::find()->where([ 'IN', 'id', $taskIdList])->orWhere(['user_id' => $user_id])->all();
+        return ProjectTask::find()->where([ 'IN', 'id', $taskIdList])->orWhere(['user_id' => $user_id])->orderBy('priority DESC')->all();
     }
 
     public static function updateTask($task_params): ?ProjectTask
