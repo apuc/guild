@@ -68,6 +68,14 @@ class ProfileService
         return $searchModel->byParams();
     }
 
+    public static function getProfileById($id): ?array
+    {
+        $searchModel = new ProfileSearchForm();
+        $searchModel->id = $id;
+        return $searchModel->byId();
+
+    }
+
     /**
      * @throws ServerErrorHttpException
      */

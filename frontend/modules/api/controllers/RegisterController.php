@@ -21,7 +21,7 @@ class RegisterController extends ApiController
      * @OA\Post(path="/register/sign-up",
      *   summary="Регистрация",
      *   description="Метод для регистрации",
-     *
+     *   tags={"Registration"},
      *   @OA\RequestBody(
      *     @OA\MediaType(
      *       mediaType="multipart/form-data",
