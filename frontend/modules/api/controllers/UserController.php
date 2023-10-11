@@ -78,6 +78,23 @@ class UserController extends ApiController
     }
 
     /**
+     *
+     * @OA\Get(path="/user/me",
+     *   summary="Получить данные пользователя",
+     *   description="Метод для получения данныех пользователя",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"User"},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает данные пользователя",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *     ),
+     *   ),
+     * )
+     *
      * @return \frontend\modules\api\models\User
      * @throws BadRequestHttpException
      */
