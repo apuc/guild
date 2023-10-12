@@ -2,10 +2,8 @@
 
 namespace common\services;
 
-use common\classes\Debug;
-use common\models\ProjectTask;
 use common\models\ProjectTaskUser;
-use common\models\ProjectUser;
+use frontend\modules\api\models\ProjectTask;
 
 class TaskService
 {

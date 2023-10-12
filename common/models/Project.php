@@ -24,6 +24,8 @@ use yii\helpers\ArrayHelper;
  * @property FieldsValue[] $fieldsValues
  * @property Company $company
  * @property ProjectUser[] $projectUsers
+ * @property Mark[] $mark
+ * @property MarkEntity[] $markEntity
  */
 class Project extends \yii\db\ActiveRecord
 {
@@ -133,6 +135,24 @@ class Project extends \yii\db\ActiveRecord
     public function getProjectUsers()
     {
         return $this->hasMany(ProjectUser::class, ['project_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMark()
+    {
+        return $this->hasMany(Mark::class, ['id' => 'mark_id'])
+            ->via('markEntity');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMarkEntity()
+    {
+        return $this->hasMany(MarkEntity::class, ['entity_id' => 'id'])
+            ->where(['entity_type' => Entity::ENTITY_TYPE_PROJECT]);
     }
 
     /**

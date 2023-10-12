@@ -124,7 +124,7 @@ class Project extends \common\models\Project
      */
     public function extraFields(): array
     {
-        return ['columns',];
+        return ['columns', 'mark'];
     }
 
     /**

@@ -140,8 +140,8 @@ class TaskController extends ApiController
      *   @OA\Parameter(
      *      name="expand",
      *      in="query",
-     *      example="column,timers",
-     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b>",
+     *      example="column,timers,mark",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b> и <b>mark</b>",
      *      @OA\Schema(
      *        type="string",
      *      )
@@ -196,8 +196,8 @@ class TaskController extends ApiController
      *   @OA\Parameter(
      *      name="expand",
      *      in="query",
-     *      example="column,timers",
-     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b>",
+     *      example="column,timers,mark",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b> и <b>mark</b>",
      *      @OA\Schema(
      *        type="string",
      *      )
@@ -254,8 +254,8 @@ class TaskController extends ApiController
      *   @OA\Parameter(
      *      name="expand",
      *      in="query",
-     *      example="column,timers",
-     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b>",
+     *      example="column,timers,mark",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b> и <b>mark</b>",
      *      @OA\Schema(
      *        type="string",
      *      )

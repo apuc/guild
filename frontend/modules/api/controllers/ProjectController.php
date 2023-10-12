@@ -66,8 +66,9 @@ class ProjectController extends ApiController
      *   @OA\Parameter(
      *      name="expand",
      *      in="query",
+     *      example="column,mark",
      *      required=false,
-     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поле <b>columns</b>",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поле <b>columns</b> и <b>mark</b>",
      *      @OA\Schema(
      *        type="string",
      *      )
@@ -114,8 +115,9 @@ class ProjectController extends ApiController
      *   @OA\Parameter(
      *      name="expand",
      *      in="query",
+     *      example="column,mark",
      *      required=false,
-     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поле <b>columns</b>",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поле <b>columns</b> и <b>mark</b>",
      *      @OA\Schema(
      *        type="string",
      *      )

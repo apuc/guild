@@ -25,8 +25,11 @@ use yii\helpers\ArrayHelper;
  * @property string $dead_line
  *
  * @property Project $project
+ * @property User $user
  * @property UserCard $card
  * @property UserCard $cardIdCreator
+ * @property Mark[] $mark
+ * @property MarkEntity[] $markEntity
  * @property ProjectTaskUser[] $taskUsers
  */
 class ProjectTask extends ActiveRecord
@@ -97,65 +100,6 @@ class ProjectTask extends ActiveRecord
     /**
      * @return string[]
      */
-    public function fields(): array
-    {
-        return [
-            'id',
-            'project_id',
-            'project_name' => function () {
-                return $this->project->name ?? null;
-            },
-            'title',
-            'created_at',
-            'updated_at',
-            'dead_line',
-            'description',
-            'status',
-            'column_id',
-            'user_id',
-            'user' => function () {
-                return [
-                    "fio" => $this->user->userCard->fio ?? $this->user->username,
-                    "avatar" => $this->user->userCard->photo ?? '',
-                ];
-            },
-            'executor_id',
-            'priority',
-            'executor' => function () {
-                if ($this->executor) {
-                    return [
-                        "fio" => $this->executor->userCard->fio ?? $this->executor->username,
-                        "avatar" => $this->executor->userCard->photo ?? '',
-                    ];
-                }
-
-                return null;
-            },
-            'comment_count' => function () {
-                return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
-            },
-            'taskUsers',
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function extraFields(): array
-    {
-        return [
-            'timers',
-            'column' => function () {
-                return [
-                    'column_title' => $this->column->title ?? null
-                ];
-            }
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
     public static function getStatus(): array
     {
         return [
@@ -215,6 +159,24 @@ class ProjectTask extends ActiveRecord
     public function getTimers()
     {
         return $this->hasMany(Timer::class, ['entity_id' => 'id'])->where(['status' => Timer::STATUS_ACTIVE]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMark()
+    {
+        return $this->hasMany(Mark::class, ['id' => 'mark_id'])
+            ->via('markEntity');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMarkEntity()
+    {
+        return $this->hasMany(MarkEntity::class, ['entity_id' => 'id'])
+            ->where(['entity_type' => Entity::ENTITY_TYPE_TASK]);
     }
 
     public static function usersByTaskArr($task_id): array
