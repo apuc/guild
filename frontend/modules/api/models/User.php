@@ -17,8 +17,11 @@ class User extends \common\models\User
             'email',
             'username',
             'userCard' => function () {
-                $userCard = new UserCardSearch();
-                return ProfileService::getProfileById($this->userCard->id);
+                if(isset($this->userCard->id)){
+                    return ProfileService::getProfileById($this->userCard->id);
+                }
+
+                return null;
             }
         ];
     }

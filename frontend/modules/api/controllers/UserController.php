@@ -18,8 +18,14 @@ class UserController extends ApiController
 {
     public $modelClass = User::class;
 
-//    public function behaviors()
-//    {
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        if($this->action->id == "login"){
+            unset($behaviors['authenticator']);
+        }
+
+        return $behaviors;
 //        return ArrayHelper::merge(parent::behaviors(), [
 //            [
 //                'class' => ContentNegotiator::class,
@@ -42,7 +48,7 @@ class UserController extends ApiController
 //                ]
 //            ],
 //        ]);
-//    }
+    }
 
     public function actions()
     {
@@ -69,7 +75,7 @@ class UserController extends ApiController
                 'access_token' => $model->login(),
                 'access_token_expired_at' => $model->getUser()->getTokenExpiredAt(),
                 'id' => $user->id,
-                'status' => $user->userCard->status,
+                'status' => $user->userCard->status ?? null,
                 'card_id' => $user->userCard->id ?? null,
             ];
         } else {
