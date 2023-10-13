@@ -37,31 +37,31 @@ class ProjectTask extends ActiveRecord
     const STATUS_ACTIVE = 1;
     const STATUS_DISABLE = 0;
 
-    const PRIORITY_LOW = 0;
-    const PRIORITY_MEDIUM = 1;
-    const PRIORITY_HIGH = 2;
+//    const PRIORITY_LOW = 0;
+//    const PRIORITY_MEDIUM = 1;
+//    const PRIORITY_HIGH = 2;
+//
+//    /**
+//     * @return string[]
+//     */
+//    public static function priorityList() :array
+//    {
+//        return [
+//            self::PRIORITY_LOW => 'Низкий',
+//            self::PRIORITY_MEDIUM => 'Средний',
+//            self::PRIORITY_HIGH => 'Высокий',
+//        ];
+//    }
 
-    /**
-     * @return string[]
-     */
-    public static function priorityList() :array
-    {
-        return [
-            self::PRIORITY_LOW => 'Низкий',
-            self::PRIORITY_MEDIUM => 'Средний',
-            self::PRIORITY_HIGH => 'Высокий',
-        ];
-    }
-
-    /**
-     * @param $priority
-     * @return string
-     * @throws \Exception
-     */
-    public static function getPriority($priority): string
-    {
-        return ArrayHelper::getValue(self::priorityList(), $priority);
-    }
+//    /**
+//     * @param $priority
+//     * @return string
+//     * @throws \Exception
+//     */
+//    public static function getPriority($priority): string
+//    {
+//        return ArrayHelper::getValue(self::priorityList(), $priority);
+//    }
 
     /**
      * {@inheritdoc}
@@ -92,7 +92,7 @@ class ProjectTask extends ActiveRecord
             [['project_id', 'status', 'title', 'description',], 'required'],
             [['project_id', 'status', 'column_id', 'user_id', 'executor_id', 'priority'], 'integer'],
             [['created_at', 'updated_at', 'dead_line'], 'safe'],
-            ['status', 'in', 'range' => [self::PRIORITY_LOW, self::PRIORITY_MEDIUM, self::PRIORITY_HIGH]],
+//            ['status', 'in', 'range' => [self::PRIORITY_LOW, self::PRIORITY_MEDIUM, self::PRIORITY_HIGH]],
             ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
             [['description'], 'string', 'max' => 1500],

@@ -18,7 +18,7 @@ class ProjectTaskSearch extends ProjectTask
     public function rules()
     {
         return [
-            [['id', 'project_id', 'status', 'priority'], 'integer'], // 'card_id_creator', 'card_id'
+            [['id', 'project_id', 'status'], 'integer'], // 'card_id_creator', 'card_id'
             [['title', 'created_at', 'updated_at', 'description'], 'safe'],
         ];
     }
@@ -62,7 +62,6 @@ class ProjectTaskSearch extends ProjectTask
             'id' => $this->id,
             'project_task.project_id' => $this->project_id,
             'project_task.status' => $this->status,
-            'project_task.priority' => $this->priority,
             'project_task.created_at' => $this->created_at,
             'project_task.updated_at' => $this->updated_at,
         ]);

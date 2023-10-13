@@ -60,12 +60,13 @@ YiiAsset::register($this);
                 'value' => ArrayHelper::getValue($model, 'executor.userCard.fio'),
             ],
             'description',
-            [
-                'attribute' => 'priority',
-                'value' => function($model){
-                    return ProjectTask::getPriority($model->status);
-                }
-            ],
+            'priority',
+//            [
+//                'attribute' => 'priority',
+//                'value' => function($model){
+//                    return ProjectTask::getPriority($model->status);
+//                }
+//            ],
         ],
     ]) ?>
 

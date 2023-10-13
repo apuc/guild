@@ -58,14 +58,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     return StatusHelper::statusLabel($model->status);
                 }
             ],
-            [
-                'attribute' => 'priority',
-                'format' => 'raw',
-                'filter' => ProjectTask::priorityList(),
-                'value' => function($model){
-                    return ProjectTask::getPriority($model->status);
-                }
-            ],
+//            [
+//                'attribute' => 'priority',
+//                'format' => 'raw',
+//                'filter' => ProjectTask::priorityList(),
+//                'value' => function($model){
+//                    return ProjectTask::getPriority($model->status);
+//                }
+//            ],
             [
                 'attribute' => 'created_at',
                 'format' => ['datetime', 'php:d.m.Y H:i']
