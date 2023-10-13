@@ -23,6 +23,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property FieldsValue[] $fieldsValues
  * @property Company $company
+ * @property User $owner
  * @property ProjectUser[] $projectUsers
  * @property Mark[] $mark
  * @property MarkEntity[] $markEntity
@@ -55,8 +56,8 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['name', 'unique'],
-            [['name', 'status'], 'required'],
+            [['name', 'owner_id', 'status'], 'required'],
+            [['owner_id', 'name'], 'unique', 'targetAttribute' => ['owner_id', 'name']],
             [['description'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
