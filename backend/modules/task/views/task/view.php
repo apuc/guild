@@ -1,5 +1,6 @@
 <?php
 
+use backend\modules\task\models\ProjectTask;
 use common\helpers\StatusHelper;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
@@ -59,7 +60,12 @@ YiiAsset::register($this);
                 'value' => ArrayHelper::getValue($model, 'executor.userCard.fio'),
             ],
             'description',
-            'priority',
+            [
+                'attribute' => 'priority',
+                'value' => function($model){
+                    return ProjectTask::getPriority($model->status);
+                }
+            ],
         ],
     ]) ?>
 

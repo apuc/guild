@@ -72,7 +72,7 @@ class TaskController extends ApiController
      *          @OA\Property(
      *              property="priority",
      *              type="integer",
-     *              description="Приоритет задачи",
+     *              description="Приоритет задачи. (0 -low, 1 - medium, 2 - high)",
      *          ),
      *          @OA\Property(
      *              property="column_id",

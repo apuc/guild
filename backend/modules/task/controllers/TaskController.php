@@ -2,14 +2,10 @@
 
 namespace backend\modules\task\controllers;
 
-use backend\modules\project\models\ProjectUser;
-use backend\modules\task\models\ProjectTaskUser;
-use common\classes\Debug;
 use yii\data\ActiveDataProvider;
-use yii\web\Response;
 use Yii;
 use backend\modules\task\models\ProjectTask;
-use backend\modules\task\models\TaskSearch;
+use backend\modules\task\models\ProjectTaskSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -43,7 +39,7 @@ class TaskController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new TaskSearch();
+        $searchModel = new ProjectTaskSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

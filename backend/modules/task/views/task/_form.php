@@ -2,6 +2,7 @@
 
 use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
+use backend\modules\task\models\ProjectTask;
 use common\helpers\StatusHelper;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -57,7 +58,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => '6']) ?>
 
-    <?= $form->field($model, 'priority')->input('number') ?>
+    <?= $form->field($model, 'priority')->dropDownList(
+        ProjectTask::priorityList(),
+        [
+            'prompt' => 'Выберите'
+        ]
+    ) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Создать', ['class' => 'btn btn-success']) ?>
