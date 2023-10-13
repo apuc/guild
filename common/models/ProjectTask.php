@@ -100,6 +100,67 @@ class ProjectTask extends ActiveRecord
     /**
      * @return string[]
      */
+    public function fields(): array
+    {
+        return [
+            'id',
+            'project_id',
+            'project_name' => function () {
+                return $this->project->name ?? null;
+            },
+            'title',
+            'created_at',
+            'updated_at',
+            'dead_line',
+            'description',
+            'status',
+            'column_id',
+            'user_id',
+            'user' => function () {
+                return [
+                    "fio" => $this->user->userCard->fio ?? $this->user->id,
+                    "avatar" => $this->user->userCard->photo ?? '',
+                ];
+            },
+            'executor_id',
+            'priority',
+            'executor' => function () {
+                if ($this->executor) {
+                    return [
+                        "fio" => $this->executor->userCard->fio ?? $this->executor->username,
+                        "avatar" => $this->executor->userCard->photo ?? '',
+                    ];
+                }
+
+                return null;
+            },
+            'comment_count' => function () {
+                return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
+            },
+            'taskUsers',
+            'mark'
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function extraFields(): array
+    {
+        return [
+            'timers',
+            'column' => function () {
+                return [
+                    'column_title' => $this->column->title ?? null
+                ];
+            },
+            'mark'
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
     public static function getStatus(): array
     {
         return [
