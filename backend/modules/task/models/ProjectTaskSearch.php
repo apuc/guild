@@ -62,6 +62,7 @@ class ProjectTaskSearch extends ProjectTask
             'id' => $this->id,
             'project_task.project_id' => $this->project_id,
             'project_task.status' => $this->status,
+            'project_task.execution_priority' => $this->execution_priority,
             'project_task.created_at' => $this->created_at,
             'project_task.updated_at' => $this->updated_at,
         ]);

@@ -60,12 +60,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'priority')->input('number') ?>
 
-<!--    --><?//= $form->field($model, 'priority')->dropDownList(
-//        ProjectTask::priorityList(),
-//        [
-//            'prompt' => 'Выберите'
-//        ]
-//    ) ?>
+    <?= $form->field($model, 'execution_priority')->dropDownList(
+        ProjectTask::priorityList(),
+        [
+            'prompt' => 'Выберите'
+        ]
+    ) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Создать', ['class' => 'btn btn-success']) ?>

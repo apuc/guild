@@ -21,6 +21,7 @@ use yii\helpers\ArrayHelper;
  * @property int $user_id
  * @property int $executor_id
  * @property int $priority
+ * @property int $execution_priority
  * @property string $description
  * @property string $dead_line
  *
@@ -37,31 +38,31 @@ class ProjectTask extends ActiveRecord
     const STATUS_ACTIVE = 1;
     const STATUS_DISABLE = 0;
 
-//    const PRIORITY_LOW = 0;
-//    const PRIORITY_MEDIUM = 1;
-//    const PRIORITY_HIGH = 2;
-//
-//    /**
-//     * @return string[]
-//     */
-//    public static function priorityList() :array
-//    {
-//        return [
-//            self::PRIORITY_LOW => 'Низкий',
-//            self::PRIORITY_MEDIUM => 'Средний',
-//            self::PRIORITY_HIGH => 'Высокий',
-//        ];
-//    }
+    const PRIORITY_LOW = 0;
+    const PRIORITY_MEDIUM = 1;
+    const PRIORITY_HIGH = 2;
 
-//    /**
-//     * @param $priority
-//     * @return string
-//     * @throws \Exception
-//     */
-//    public static function getPriority($priority): string
-//    {
-//        return ArrayHelper::getValue(self::priorityList(), $priority);
-//    }
+    /**
+     * @return string[]
+     */
+    public static function priorityList() :array
+    {
+        return [
+            self::PRIORITY_LOW => 'Низкий',
+            self::PRIORITY_MEDIUM => 'Средний',
+            self::PRIORITY_HIGH => 'Высокий',
+        ];
+    }
+
+    /**
+     * @param $priority
+     * @return string
+     * @throws \Exception
+     */
+    public static function getPriority($priority): string
+    {
+        return ArrayHelper::getValue(self::priorityList(), $priority);
+    }
 
     /**
      * {@inheritdoc}
@@ -90,9 +91,9 @@ class ProjectTask extends ActiveRecord
     {
         return [
             [['project_id', 'status', 'title', 'description',], 'required'],
-            [['project_id', 'status', 'column_id', 'user_id', 'executor_id', 'priority'], 'integer'],
+            [['project_id', 'status', 'column_id', 'user_id', 'executor_id', 'priority', 'execution_priority'], 'integer'],
             [['created_at', 'updated_at', 'dead_line'], 'safe'],
-//            ['status', 'in', 'range' => [self::PRIORITY_LOW, self::PRIORITY_MEDIUM, self::PRIORITY_HIGH]],
+            ['execution_priority', 'in', 'range' => [self::PRIORITY_LOW, self::PRIORITY_MEDIUM, self::PRIORITY_HIGH]],
             ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
             [['description'], 'string', 'max' => 1500],
@@ -121,6 +122,7 @@ class ProjectTask extends ActiveRecord
             'executor_id' => 'Исполнитель',
             'priority' => 'Приоритет',
             'dead_line' => 'Срок выполнения задачи',
+            'execution_priority' => 'Приоритет выполнения',
         ];
     }
 
@@ -165,7 +167,8 @@ class ProjectTask extends ActiveRecord
                 return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
             },
             'taskUsers',
-            'mark'
+            'mark',
+            'execution_priority'
         ];
     }
 

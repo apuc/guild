@@ -61,12 +61,12 @@ YiiAsset::register($this);
             ],
             'description',
             'priority',
-//            [
-//                'attribute' => 'priority',
-//                'value' => function($model){
-//                    return ProjectTask::getPriority($model->status);
-//                }
-//            ],
+            [
+                'attribute' => 'execution_priority',
+                'value' => function($model){
+                    return ProjectTask::getPriority($model->status);
+                }
+            ],
         ],
     ]) ?>
 
