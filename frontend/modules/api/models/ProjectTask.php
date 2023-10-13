@@ -71,6 +71,12 @@ namespace frontend\modules\api\models;
  *     description="Приоритет задачи"
  *  ),
  *  @OA\Property(
+ *     property="execution_priority",
+ *     type="integer",
+ *     example="2",
+ *     description="Приоритет выполнения задачи (0 - low, 1 - medium, 2 - high)",
+ *  ),
+ *  @OA\Property(
  *     property="status",
  *     type="int",
  *     example="1",
