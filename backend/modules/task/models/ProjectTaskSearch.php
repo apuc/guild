@@ -10,7 +10,7 @@ use backend\modules\task\models\ProjectTask;
 /**
  * TaskSearch represents the model behind the search form of `backend\modules\task\models\Task`.
  */
-class TaskSearch extends ProjectTask
+class ProjectTaskSearch extends ProjectTask
 {
     /**
      * {@inheritdoc}
@@ -60,14 +60,15 @@ class TaskSearch extends ProjectTask
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'task.project_id' => $this->project_id,
-            'task.status' => $this->status,
-            'task.created_at' => $this->created_at,
-            'task.updated_at' => $this->updated_at,
+            'project_task.project_id' => $this->project_id,
+            'project_task.status' => $this->status,
+            'project_task.execution_priority' => $this->execution_priority,
+            'project_task.created_at' => $this->created_at,
+            'project_task.updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'task.description', $this->description]);
+            ->andFilterWhere(['like', 'project_task.description', $this->description]);
 
         return $dataProvider;
     }

@@ -1,5 +1,6 @@
 <?php
 
+use backend\modules\task\models\ProjectTask;
 use common\helpers\StatusHelper;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
@@ -60,6 +61,12 @@ YiiAsset::register($this);
             ],
             'description',
             'priority',
+            [
+                'attribute' => 'execution_priority',
+                'value' => function($model){
+                    return ProjectTask::getPriority($model->status);
+                }
+            ],
         ],
     ]) ?>
 

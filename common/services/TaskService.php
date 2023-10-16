@@ -2,8 +2,8 @@
 
 namespace common\services;
 
+use common\models\ProjectTask;
 use common\models\ProjectTaskUser;
-use frontend\modules\api\models\ProjectTask;
 
 class TaskService
 {
