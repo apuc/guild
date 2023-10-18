@@ -60,28 +60,6 @@ class SignupForm extends Model
         $authorRole = $auth->getRole('user');
         $auth->assign($authorRole, $user->id);
 
-        if ($user->save()) {
-            $this->sendEmail($user);
-            return $user;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Sends an email with a link, for resetting the password.
-     *
-     * @return bool whether the email was send
-     */
-    private function sendEmail(User $user)
-    {
-        return Yii::$app->mailer->compose(
-            ['html' => 'signup-html', 'text' => 'signup-text'],
-            ['user' => $this]
-        )
-            ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->name . ' robot'])
-            ->setTo($user->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
-            ->send();
+        return $user->save() ? $user : null;
     }
 }

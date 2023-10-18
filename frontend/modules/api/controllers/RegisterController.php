@@ -2,8 +2,9 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\classes\Debug;
+use common\models\email\RegistrationEmail;
 use common\models\User;
+use common\services\EmailService;
 use frontend\models\SignupForm;
 use Yii;
 
@@ -14,6 +15,14 @@ class RegisterController extends ApiController
         unset($newBehavior['authenticator']);
 
         return $newBehavior;
+    }
+
+    private EmailService $emailService;
+
+    public function __construct($id, $module, EmailService $emailService, $config = [])
+    {
+        $this->emailService = $emailService;
+        parent::__construct($id, $module, $config);
     }
 
     /**
@@ -60,6 +69,7 @@ class RegisterController extends ApiController
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '')) {
             /** @var User $user */
             if ($user = $model->signup()) {
+                $this->emailService->sendEmail(new RegistrationEmail($user));
                 return [
                     'id' => $user->id,
                 ];
