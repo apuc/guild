@@ -1,4 +1,4 @@
 <?php
 return [
-    'adminEmail' => 'supp0rt.friday@yandex.ru',
+    'adminEmail' => 'chancellery@itguild.info',
 ];
