@@ -144,7 +144,7 @@ class UserController extends ApiController
      *     @OA\MediaType(
      *       mediaType="application/x-www-form-urlencoded",
      *       @OA\Schema(
-     *          required={"password", newPassword},
+     *          required={"password", "newPassword"},
      *          @OA\Property(
      *              property="password",
      *              type="string",
