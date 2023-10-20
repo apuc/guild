@@ -1,9 +1,8 @@
 <?php
 
-namespace frontend\modules\api\models;
+namespace frontend\modules\api\models\profile;
 
-use backend\modules\card\models\UserCardSearch;
-use common\services\ProfileService;
+use frontend\modules\api\services\ProfileService;
 
 class User extends \common\models\User
 {

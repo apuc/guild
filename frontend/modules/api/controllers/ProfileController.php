@@ -2,12 +2,9 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\User;
 use common\models\UserCard;
-use common\services\ProfileService;
+use frontend\modules\api\services\ProfileService;
 use yii\helpers\ArrayHelper;
-use yii\web\BadRequestHttpException;
-use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 class ProfileController extends ApiController
@@ -30,33 +27,55 @@ class ProfileController extends ApiController
         ]);
     }
 
+    private ProfileService $profileService;
+
+    public function __construct(
+        $id,
+        $module,
+        ProfileService $profileService,
+        $config = []
+    )
+    {
+        $this->profileService = $profileService;
+        parent::__construct($id, $module, $config);
+    }
+
     /**
-     * @throws NotFoundHttpException
+     * @param null $id
+     * @return array|null
      */
     public function actionIndex($id = null): ?array
     {
-        return ProfileService::getProfile($id, \Yii::$app->request->get());
+        return $this->profileService->getProfile($id, \Yii::$app->request->get());
     }
 
     /**
-     * @throws BadRequestHttpException
+     * @param $id
+     * @return array|null
+     * @throws ServerErrorHttpException
      */
     public function actionProfileWithReportPermission($id): ?array
     {
-        return ProfileService::getProfileWithReportPermission($id);
+        return $this->profileService->getProfileWithReportPermission($id);
     }
 
     /**
+     * @param $user_id
+     * @return array
      * @throws ServerErrorHttpException
      */
     public function actionGetMainData($user_id): array
     {
-        return ProfileService::getMainData($user_id);
+        return $this->profileService->getMainData($user_id);
     }
 
+    /**
+     * @param $card_id
+     * @return array
+     */
     public function actionPortfolioProjects($card_id): array
     {
-        return ProfileService::getPortfolioProjects($card_id);
+        return $this->profileService->getPortfolioProjects($card_id);
     }
 
     /**
@@ -83,7 +102,7 @@ class ProfileController extends ApiController
      */
     public function actionPositionsList(): array
     {
-        return ProfileService::getPositionsList();
+        return $this->profileService->getPositionsList();
     }
 
     /**

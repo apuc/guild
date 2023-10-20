@@ -3,16 +3,13 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\behaviors\GsCors;
-use common\classes\Debug;
 use common\models\User;
-use frontend\modules\api\models\LoginForm;
+use frontend\modules\api\models\profile\ProfileChangeEmailForm;
+use frontend\modules\api\models\profile\ProfileChangePersonalDataForm;
+use frontend\modules\api\services\UserService;
 use Yii;
-use yii\filters\ContentNegotiator;
-use yii\helpers\ArrayHelper;
-use yii\rest\ActiveController;
+use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
-use yii\web\Response;
 
 class UserController extends ApiController
 {
@@ -26,28 +23,20 @@ class UserController extends ApiController
         }
 
         return $behaviors;
-//        return ArrayHelper::merge(parent::behaviors(), [
-//            [
-//                'class' => ContentNegotiator::class,
-//                'formats' => [
-//                    'application/json' => Response::FORMAT_JSON,
-//                ],
-//            ],
-//            'corsFilter' => [
-//                'class' => GsCors::class,
-//                'cors' => [
-//                    'Origin' => ['*'],
-//                    //'Access-Control-Allow-Credentials' => true,
-//                    'Access-Control-Allow-Headers' => [
-//                        'Access-Control-Allow-Origin',
-//                        'Content-Type',
-//                        'Access-Control-Allow-Headers',
-//                        'Authorization',
-//                        'X-Requested-With'
-//                    ],
-//                ]
-//            ],
-//        ]);
+    }
+
+
+    private UserService $userService;
+
+    public function __construct(
+        $id,
+        $module,
+        UserService $userService,
+        $config = []
+    )
+    {
+        $this->userService = $userService;
+        parent::__construct($id, $module, $config);
     }
 
     public function actions()
@@ -59,28 +48,23 @@ class UserController extends ApiController
         unset($actions['delete']);
     }
 
-//    protected function verbs(){
-//        return [
-//            'login' => ['POST']
-//        ];
-//    }
-
-    public function actionLogin()
+    public function verbs(): array
     {
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->login()) {
-            /** @var User $user */
-            $user = $model->getUser();
-            return [
-                'access_token' => $model->login(),
-                'access_token_expired_at' => $model->getUser()->getTokenExpiredAt(),
-                'id' => $user->id,
-                'status' => $user->userCard->status ?? null,
-                'card_id' => $user->userCard->id ?? null,
-            ];
-        } else {
-            throw new BadRequestHttpException(json_encode($model->errors));
-        }
+        return [
+            'change-personalData' => ['put', 'patch'],
+            'change-email' => ['put', 'patch'],
+            'change-password' => ['put', 'patch'],
+        ];
+    }
+
+    /**
+     * @return array
+     * @throws BadRequestHttpException
+     * @throws InvalidConfigException
+     */
+    public function actionLogin(): array
+    {
+        return $this->userService->login(Yii::$app->getRequest()->getBodyParams());
     }
 
     /**
@@ -101,16 +85,128 @@ class UserController extends ApiController
      *   ),
      * )
      *
-     * @return \frontend\modules\api\models\User
+     * @return \frontend\modules\api\models\profile\User
      * @throws BadRequestHttpException
      */
-    public function actionMe(): \frontend\modules\api\models\User
+    public function actionMe(): \frontend\modules\api\models\profile\User
     {
-        $user = \frontend\modules\api\models\User::findOne(Yii::$app->user->id);
-        if (!$user){
-            throw new BadRequestHttpException("User not found");
-        }
+        return $this->userService->findCurrentUser();
+    }
 
-        return $user;
+    /**
+     *
+     * @OA\Put(path="/user/change-email",
+     *   summary="Изменить email адрес",
+     *   description="Метод для изменения email адреса пользователя",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"User"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"newEmail"},
+     *          @OA\Property(
+     *              property="newEmail",
+     *              type="string",
+     *              description="Новый email адрес",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает сообщение об успехе",
+     *   ),
+     * )
+     * )
+     *
+     * @return ProfileChangeEmailForm|string[]
+     */
+    public function actionChangeEmail()
+    {
+        return $this->userService->changeEmail(Yii::$app->request->post());
+    }
+
+    /**
+     *
+     * @OA\Put(path="/user/change-password",
+     *   summary="Изменить пароль",
+     *   description="Метод для изменения пароля пользователя",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"User"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"password", newPassword},
+     *          @OA\Property(
+     *              property="password",
+     *              type="string",
+     *              description="Старый пароль",
+     *          ),
+     *         @OA\Property(
+     *                  property="newPassword",
+     *                  type="string",
+     *                  description="Новый пароль",
+     *              ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает сообщение об успехе",
+     *   ),
+     * )
+     * )
+     *
+     * @return ProfileChangeEmailForm|string[]
+     */
+    public function actionChangePassword()
+    {
+        return $this->userService->changePassword(Yii::$app->request->post());
+    }
+
+    /**
+     *
+     * @OA\Put(path="/user/change-personal-data",
+     *   summary="Изменить логин",
+     *   description="Метод для изменения логина пользователя",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"User"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"newUsername"},
+     *          @OA\Property(
+     *              property="newUsername",
+     *              type="string",
+     *              description="Новый логин",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает сообщение об успехе",
+     *   ),
+     * )
+     * )
+     *
+     * @return ProfileChangePersonalDataForm|string[]
+     * @throws \Exception
+     */
+    public function actionChangePersonalData()
+    {
+        return $this->userService->changeChangePersonalData(Yii::$app->request->post());
     }
 }

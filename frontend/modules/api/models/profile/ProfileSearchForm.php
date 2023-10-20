@@ -1,11 +1,10 @@
 <?php
 
 
-namespace frontend\modules\api\models;
+namespace frontend\modules\api\models\profile;
 
 
 use backend\modules\card\models\UserCard;
-use common\classes\Debug;
 use yii\base\Model;
 
 /**

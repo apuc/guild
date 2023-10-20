@@ -17,10 +17,10 @@ return [
         'api' => [
             'components' => [
                 'user' => [
-                    'identityClass' => 'frontend\modules\api\models\User',
+                    'identityClass' => 'frontend\modules\api\models\profile\User',
                     'enableAutoLogin' => true,
                     'enableSession' => false,
-                    'class' => 'frontend\modules\api\models\User',
+                    'class' => 'frontend\modules\api\models\profile\User',
                     //'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
                 ],
             ],
