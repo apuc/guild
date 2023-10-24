@@ -6,4 +6,6 @@ return [
     'senderName' => 'Chancellery ITguild mailer',
     'user.passwordResetTokenExpire' => 3600,
     'user.passwordMinLength' => 8,
+    'tgBotTokenLength' => 6,
+    'tgBotTokenValidityTime' => 180,
 ];

@@ -25,7 +25,6 @@ class UserController extends ApiController
         return $behaviors;
     }
 
-
     private UserService $userService;
 
     public function __construct(
