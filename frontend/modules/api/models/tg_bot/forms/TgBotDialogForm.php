@@ -1,13 +1,13 @@
 <?php
 
-namespace frontend\modules\api\models\profile;
+namespace frontend\modules\api\models\tg_bot\forms;
 use yii\base\Model;
 
-class ProfileChangePasswordForm extends Model
+class TgBotDialogForm extends Model
 {
 
-    public $password;
-    public $newPassword;
+    public $userId;
+    public $dialogId;
 
     /**
      * @return array
@@ -15,8 +15,8 @@ class ProfileChangePasswordForm extends Model
     public function rules()
     {
         return [
-            [['password', 'newPassword'], 'string'],
-            [['password', 'newPassword'], 'required'],
+            [['dialogId', 'userId'], 'integer'],
+            [['dialogId', 'userId'], 'required'],
         ];
     }
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace frontend\modules\api\models\profile;
+namespace frontend\modules\api\models\profile\forms;
+use frontend\modules\api\models\profile\User;
 use yii\base\Model;
 
 class ProfileChangeEmailForm extends Model
 {
-
     public $newEmail;
 
     /**
@@ -28,5 +28,4 @@ class ProfileChangeEmailForm extends Model
     {
         return '';
     }
-
 }

@@ -4,9 +4,9 @@ namespace frontend\modules\api\services;
 
 use Exception;
 use frontend\modules\api\models\LoginForm;
-use frontend\modules\api\models\profile\ProfileChangeEmailForm;
-use frontend\modules\api\models\profile\ProfileChangePasswordForm;
-use frontend\modules\api\models\profile\ProfileChangePersonalDataForm;
+use frontend\modules\api\models\profile\forms\ProfileChangeEmailForm;
+use frontend\modules\api\models\profile\forms\ProfileChangePasswordForm;
+use frontend\modules\api\models\profile\forms\ProfileChangePersonalDataForm;
 use frontend\modules\api\models\profile\User;
 use Yii;
 use yii\web\BadRequestHttpException;

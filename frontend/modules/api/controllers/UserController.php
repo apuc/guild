@@ -4,8 +4,8 @@
 namespace frontend\modules\api\controllers;
 
 use common\models\User;
-use frontend\modules\api\models\profile\ProfileChangeEmailForm;
-use frontend\modules\api\models\profile\ProfileChangePersonalDataForm;
+use frontend\modules\api\models\profile\forms\ProfileChangeEmailForm;
+use frontend\modules\api\models\profile\forms\ProfileChangePersonalDataForm;
 use frontend\modules\api\services\UserService;
 use Yii;
 use yii\base\InvalidConfigException;

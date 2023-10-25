@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\modules\api\models\profile;
+namespace frontend\modules\api\models\profile\forms;
 
 use yii\base\Model;
 

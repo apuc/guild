@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\modules\api\models;
+namespace frontend\modules\api\models\tg_bot;
 
 
 use frontend\modules\api\models\profile\User;

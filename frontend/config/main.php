@@ -86,6 +86,16 @@ return [
                 'api/profile/<id:\d+>' => 'api/profile/index',
                 'api/reports/<id:\d+>' => 'api/reports/view',
                 '' => 'card/user-card/index',
+
+
+                'GET api/tg-bot/token' => 'api/user-tg-bot/get-token',
+                'GET api/tg-bot/user' => 'api/user-tg-bot/get-user',
+
+                'POST api/tg-bot/dialog/create' => 'api/user-tg-bot/set-dialog',
+                'GET api/tg-bot/dialog/user/id' => 'api/user-tg-bot/get-user-id-by-dialog-id',
+                'GET api/tg-bot/dialog/dialog/id' => 'api/user-tg-bot/get-dialog-id-by-user-id',
+
+
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'skills'],
             ],
         ],

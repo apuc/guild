@@ -5,8 +5,10 @@ namespace frontend\modules\api\services;
 
 use DateTime;
 use Exception;
+use frontend\modules\api\models\tg_bot\forms\TgBotDialogForm;
 use frontend\modules\api\models\profile\User;
-use frontend\modules\api\models\UserTgBotToken;
+use frontend\modules\api\models\tg_bot\UserTgBotDialog;
+use frontend\modules\api\models\tg_bot\UserTgBotToken;
 use Yii;
 
 class UserTgBotTokenService
@@ -127,5 +129,62 @@ class UserTgBotTokenService
         }
 
         return $model;
+    }
+
+    /**
+     * @param array $params
+     * @return TgBotDialogForm|string[]
+     * @throws Exception
+     */
+    public function createDialog(array $params)
+    {
+        $form = new TgBotDialogForm();
+        $form->load($params);
+
+        if (!$form->validate()){
+            return $form;
+        }
+
+        $dialog = new UserTgBotDialog();
+        $dialog->user_id = $form->userId;
+        $dialog->dialog_id = $form->dialogId;
+
+        if (!$dialog->save()) {
+            throw new Exception('User dont save');
+        }
+
+        return ['status' => 'success'];
+    }
+
+    /**
+     * @param string $userId
+     * @return array
+     * @throws Exception
+     */
+    public function getDialogIdByUserId(string $userId)
+    {
+        $model = UserTgBotDialog::findOne(['user_id' => $userId]);
+
+        if (!$model) {
+            throw new \Exception('dialog_id не найден!');
+        }
+
+        return ['dialog_id' => $model->dialog_id];
+    }
+
+    /**
+     * @param string $dialogId
+     * @return array
+     * @throws Exception
+     */
+    public function getUserIdByDialogId(string $dialogId)
+    {
+        $model = UserTgBotDialog::findOne(['dialog_id' => $dialogId]);
+
+        if (!$model) {
+            throw new \Exception('user_id не найден!');
+        }
+
+        return ['user_id' => $model->user_id];
     }
 }
