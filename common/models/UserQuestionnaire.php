@@ -179,18 +179,9 @@ class UserQuestionnaire extends ActiveRecord
 
     public static function findActiveUserQuestionnaires($user_id): array
     {
-        $models =  self::find()
+        return  self::find()
             ->where(['user_id' => $user_id])
             ->andWhere(['not', ['user_questionnaire.status' => 0]])
             ->all();
-
-        $modelsArr = array();
-        foreach ($models as $model) {
-            $modelsArr[] = array_merge($model->toArray(), [
-                'questionnaire_title' => $model->getQuestionnaireTitle()
-            ]);
-        }
-
-        return $modelsArr;
     }
 }

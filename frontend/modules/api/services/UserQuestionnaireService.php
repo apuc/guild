@@ -1,9 +1,10 @@
 <?php
 
-namespace common\services;
+namespace frontend\modules\api\services;
 
 use common\models\Question;
-use common\models\UserQuestionnaire;
+use common\services\ScoreCalculatorService;
+use frontend\modules\api\models\UserQuestionnaire;
 use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -12,16 +13,7 @@ class UserQuestionnaireService
 {
     public static function getQuestionnaireList($user_id): array
     {
-        $userQuestionnaireModels = UserQuestionnaire::findActiveUserQuestionnaires($user_id);
-        array_walk($userQuestionnaireModels, function (&$arr) {
-            unset(
-                $arr['questionnaire_id'],
-                $arr['created_at'],
-                $arr['updated_at'],
-                $arr['id']
-            );
-        });
-        return $userQuestionnaireModels;
+        return UserQuestionnaire::findActiveUserQuestionnaires($user_id);
     }
 
     /**

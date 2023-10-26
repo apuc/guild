@@ -99,5 +99,29 @@ namespace frontend\modules\api\models;
  */
 class UserQuestionnaire extends \common\models\UserQuestionnaire
 {
+    public function fields(): array
+    {
+        return [
+            'user_id',
+            'uuid',
+            'score',
+            'status',
+            'percent_correct_answers',
+            'testing_date',
+            'questionnaire_title' => function() {
+                return $this->questionnaire->title;
+            },
+            'description' => function() {
+                return $this->questionnaire->description;
+            },
+        ];
+    }
 
+    /**
+     * @return string[]
+     */
+    public function extraFields(): array
+    {
+        return [];
+    }
 }

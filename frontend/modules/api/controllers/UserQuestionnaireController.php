@@ -2,7 +2,8 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\services\UserQuestionnaireService;
+use frontend\modules\api\models\UserQuestionnaire;
+use frontend\modules\api\services\UserQuestionnaireService;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -99,7 +100,7 @@ class UserQuestionnaireController extends ApiController
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
      */
-    public function actionQuestionnaireCompleted($user_questionnaire_uuid)
+    public function actionQuestionnaireCompleted($user_questionnaire_uuid): UserQuestionnaire
     {
         $userQuestionnaireModel = UserQuestionnaireService::calculateScore($user_questionnaire_uuid);
         if ($userQuestionnaireModel->errors) {
@@ -142,7 +143,7 @@ class UserQuestionnaireController extends ApiController
      * )
      * @throws ServerErrorHttpException
      */
-    public function actionGetPointsNumber($user_questionnaire_uuid)
+    public function actionGetPointsNumber($user_questionnaire_uuid): array
     {
         $questionPointsNumber = UserQuestionnaireService::getPointsNumber($user_questionnaire_uuid);
         if (empty($questionPointsNumber)) {
@@ -185,7 +186,7 @@ class UserQuestionnaireController extends ApiController
      * )
      * @throws ServerErrorHttpException
      */
-    public function actionGetQuestionNumber($user_questionnaire_uuid)
+    public function actionGetQuestionNumber($user_questionnaire_uuid): array
     {
         $questionNumber = UserQuestionnaireService::getQuestionNumber($user_questionnaire_uuid);
         if (empty($questionNumber)) {
