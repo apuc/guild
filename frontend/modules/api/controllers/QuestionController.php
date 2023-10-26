@@ -37,12 +37,12 @@ class QuestionController extends ApiController
      *   },
      *   tags={"Tests"},
      *   @OA\Parameter(
-     *      name="user",
+     *      name="uuid",
      *      in="query",
      *      required=true,
      *     description="UUID анкеты назначеной пользователю",
      *      @OA\Schema(
-     *        type="integer",
+     *        type="string",
      *      )
      *   ),
      *   @OA\Response(
