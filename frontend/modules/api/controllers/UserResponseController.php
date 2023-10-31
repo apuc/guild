@@ -2,7 +2,6 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\UserResponse;
 use common\services\UserResponseService;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -17,74 +16,6 @@ class UserResponseController extends ApiController
             'set-response' => ['post'],
             'set-responses' => ['post'],
         ];
-    }
-
-    /**
-     * @OA\Post(path="/user-response/set-response",
-     *   summary="Добавить ответ пользователя",
-     *   description="Добавление ответа на вопрос от пользователя",
-     *   security={
-     *     {"bearerAuth": {}}
-     *   },
-     *   tags={"Tests"},
-     *   @OA\Parameter(
-     *      name="user_id",
-     *      in="query",
-     *      required=true,
-     *     description="ID пользователя",
-     *      @OA\Schema(
-     *        type="integer",
-     *      )
-     *   ),
-     *   @OA\Parameter(
-     *      name="question_id",
-     *      in="query",
-     *      required=true,
-     *     description="ID вопроса",
-     *      @OA\Schema(
-     *        type="integer",
-     *      )
-     *   ),
-     *   @OA\Parameter(
-     *      name="response_body",
-     *      in="query",
-     *      required=true,
-     *     description="Ответ пользователя",
-     *      @OA\Schema(
-     *        type="string",
-     *      )
-     *   ),
-     *   @OA\Parameter(
-     *      name="user_questionnaire_uuid",
-     *      in="query",
-     *      required=true,
-     *     description="UUID анкеты назначенной пользователю",
-     *      @OA\Schema(
-     *        type="string",
-     *      )
-     *   ),
-     *
-     *
-     *   @OA\Response(
-     *     response=200,
-     *     description="Возвращает ответ",
-     *     @OA\MediaType(
-     *         mediaType="application/json",
-     *         @OA\Schema(ref="#/components/schemas/UserResponseExample"),
-     *     ),
-     *   ),
-     * )
-     *
-     * @throws InvalidConfigException
-     * @throws ServerErrorHttpException|BadRequestHttpException
-     */
-    public function actionSetResponse(): UserResponse
-    {
-        $userResponseModel = UserResponseService::createUserResponse(Yii::$app->getRequest()->getBodyParams());
-        if ($userResponseModel->errors) {
-            throw new ServerErrorHttpException(json_encode($userResponseModel->errors));
-        }
-        return $userResponseModel;
     }
 
     /**

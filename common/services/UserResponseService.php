@@ -13,19 +13,6 @@ class UserResponseService
      * @throws BadRequestHttpException
      * @throws ServerErrorHttpException
      */
-    public static function createUserResponse($userResponseParams): UserResponse
-    {
-        $userResponse = new UserResponse();
-        $userResponse->load($userResponseParams, '');
-        (new UserResponseService)->validateResponseModel($userResponse);
-        (new UserResponseService)->saveModel($userResponse);
-        return $userResponse;
-    }
-
-    /**
-     * @throws BadRequestHttpException
-     * @throws ServerErrorHttpException
-     */
     public static function createUserResponses($userResponsesParams): array
     {
         $userResponseModels = array();
