@@ -65,7 +65,7 @@ class ProjectColumn extends \yii\db\ActiveRecord
         return [
             [['title', 'project_id'], 'required'],
             [['project_id', 'status', 'priority'], 'integer'],
-            [['project_id', 'title'], 'unique', 'targetAttribute' => ['project_id', 'title']],
+            ['title', 'unique', 'targetAttribute' => ['title','project_id' => 'status']],
             [['created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],

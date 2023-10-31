@@ -14,17 +14,11 @@ class ProjectColumnController extends ApiController
     public function verbs(): array
     {
         return [
-            'get-column' => ['get'],
             'get-column-list' => ['get'],
             'create-column' => ['post'],
             'set-priority' => ['post'],
             'update-column' => ['put', 'patch'],
         ];
-    }
-
-    public function actionGetColumn()
-    {
-
     }
 
     /**
