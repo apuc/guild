@@ -29,7 +29,7 @@ class UserTgBotController extends ApiController
     }
 
     /**
-     * @OA\Get(path="/tg-bot/token",
+     * @OA\Get(path="/user-tg-bot/get-token",
      *   summary="Токен ТГ бота",
      *   description="Метод для возвращает токен для ТГ бота",
      *   security={
@@ -56,7 +56,7 @@ class UserTgBotController extends ApiController
 
     /**
      *
-     * @OA\Get(path="/tg-bot/user",
+     * @OA\Get(path="/user-tg-bot/get-user",
      *   summary="Получить данные пользователя",
      *   description="Метод для получения данныех пользователя по токену ТГ бота",
      *   security={
@@ -93,7 +93,7 @@ class UserTgBotController extends ApiController
 
     /**
      *
-     * @OA\Post(path="/tg-bot/dialog/create",
+     * @OA\Post(path="/user-tg-bot/set-dialog",
      *   summary="Сохранить новый id диалога",
      *   description="Метод создает новую запись с id пользователя и id диалога",
      *   security={
@@ -139,7 +139,7 @@ class UserTgBotController extends ApiController
 
     /**
      *
-     * @OA\Get(path="/tg-bot/dialog/dialog/id",
+     * @OA\Get(path="/user-tg-bot/dialog/get-dialog-id",
      *   summary="Получить id диалога по id пользователя",
      *   description="Метод для получения id пользователя по id пользователя",
      *   security={
@@ -169,14 +169,14 @@ class UserTgBotController extends ApiController
      * @return array
      * @throws Exception
      */
-    public function actionGetDialogIdByUserId(string $userId): array
+    public function actionGetDialogId(string $userId): array
     {
         return $this->userTgBotTokenService->getDialogIdByUserId($userId);
     }
 
     /**
      *
-     * @OA\Get(path="/tg-bot/dialog/user/id",
+     * @OA\Get(path="/user-tg-bot/get-user-id",
      *   summary="Получить id пользователя по id диалога",
      *   description="Метод для получения id пользователя по id диалога",
      *   security={
@@ -206,7 +206,7 @@ class UserTgBotController extends ApiController
      * @return array
      * @throws Exception
      */
-    public function actionGetUserIdByDialogId(string $dialogId): array
+    public function actionGetUserId(string $dialogId): array
     {
         return $this->userTgBotTokenService->getUserIdByDialogId($dialogId);
     }

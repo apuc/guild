@@ -50,23 +50,6 @@ return [
                 ],
             ],
         ],
-        'corsFilter' => [
-            'class' => GsCors::class,
-            'cors' => [
-                'Origin' => ['*'],
-                //'Access-Control-Allow-Credentials' => true,
-                'Access-Control-Allow-Headers' => [
-                    'Access-Control-Allow-Origin',
-                    'Access-Control-Allow-Methods',
-                    'Content-Type',
-                    'Access-Control-Allow-Headers',
-                    'Authorization',
-                    'X-Requested-With'
-                ],
-                'Access-Control-Allow-Methods' => ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-                'Access-Control-Request-Method' => ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-            ]
-        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
             'baseUrl' => '',
@@ -105,17 +88,6 @@ return [
                 'api/profile/<id:\d+>' => 'api/profile/index',
                 'api/reports/<id:\d+>' => 'api/reports/view',
                 '' => 'card/user-card/index',
-
-
-                'GET api/tg-bot/token' => 'api/user-tg-bot/get-token',
-                'GET api/tg-bot/user' => 'api/user-tg-bot/get-user',
-
-                'POST api/tg-bot/dialog/create' => 'api/user-tg-bot/set-dialog',
-                'GET api/tg-bot/dialog/user/id' => 'api/user-tg-bot/get-user-id-by-dialog-id',
-                'GET api/tg-bot/dialog/dialog/id' => 'api/user-tg-bot/get-dialog-id-by-user-id',
-
-                'GET api/tg-bot/auth' => 'api/user-tg-bot/auth',
-
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'skills'],
             ],
