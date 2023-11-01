@@ -17,6 +17,16 @@ class UserTgBotController extends ApiController
      */
     private UserTgBotTokenService $userTgBotTokenService;
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        if($this->action->id == "auth"){
+            unset($behaviors['authenticator']);
+        }
+
+        return $behaviors;
+    }
+
     public function __construct(
         $id,
         $module,
@@ -209,5 +219,50 @@ class UserTgBotController extends ApiController
     public function actionGetUserId(string $dialogId): array
     {
         return $this->userTgBotTokenService->getUserIdByDialogId($dialogId);
+    }
+
+    /**
+     *
+     * @OA\Post(path="/user-tg-bot/auth",
+     *   summary="Аутентификация",
+     *   description="Метод производит аутентификацию пользователя по токену ТГ бта",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TgBot"},
+     *   @OA\Parameter(
+     *      name="token",
+     *      in="query",
+     *      example="1",
+     *      required=true,
+     *      description="токен пользователя",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает сообщение об успехе",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *          *     @OA\Schema(
+     *     schema="schemae_5cfb24156100e_category",
+     *          @OA\Property(property="access_token",type="string",description="Category ID",example="HclquHysW2Y6LecQfM_ZZTjL4kBz-jOi"),
+     *          @OA\Property(property="access_token_expired_at",type="dateTime",description="Expired at",example="2023-11-08"),
+     *          @OA\Property(property="id",type="integer",description="ID",example=1),
+     *          @OA\Property(property="status",type="integer",description="status",example=1),
+     *          @OA\Property(property="card_id",type="integer",description="Card ID",example=1),
+     *      ),
+     *     ),
+
+     *   ),
+     * )
+     *
+     * @return array
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionAuth()
+    {
+        return $this->userTgBotTokenService->auth(Yii::$app->request->post());
     }
 }

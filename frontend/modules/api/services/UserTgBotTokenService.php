@@ -5,15 +5,96 @@ namespace frontend\modules\api\services;
 
 use DateTime;
 use Exception;
-use frontend\modules\api\models\tg_bot\forms\TgBotDialogForm;
 use frontend\modules\api\models\profile\User;
+use frontend\modules\api\models\tg_bot\forms\TgBotDialogForm;
+use frontend\modules\api\models\tg_bot\forms\UserTgBotLoginForm;
 use frontend\modules\api\models\tg_bot\UserTgBotDialog;
 use frontend\modules\api\models\tg_bot\UserTgBotToken;
 use Yii;
+use yii\web\BadRequestHttpException;
 
 class UserTgBotTokenService
 {
     const CHARACTERS = '0123456789';
+
+
+    public function auth(array $params)
+    {
+        /** @var UserTgBotToken $model */
+        $model = new UserTgBotLoginForm;
+
+        if ($model->load($params, '') && $model->validate()) {
+
+            $userTgBotToken = UserTgBotToken::findOne(['token' => $model->token]);
+            $user = $userTgBotToken->user;
+            return [
+                'access_token' => $userTgBotToken->updateToken(),
+                'access_token_expired_at' => $userTgBotToken->user->getTokenExpiredAt(),
+                'id' => $user->id,
+                'status' => $user->userCard->status ?? null,
+                'card_id' => $user->userCard->id ?? null,
+            ];
+        } else {
+            throw new BadRequestHttpException(json_encode($model->errors));
+        }
+    }
+
+    /**
+     * @param array $params
+     * @return TgBotDialogForm|string[]
+     * @throws Exception
+     */
+    public function createDialog(array $params)
+    {
+        $form = new TgBotDialogForm();
+        $form->load($params);
+
+        if (!$form->validate()){
+            return $form;
+        }
+
+        $dialog = new UserTgBotDialog();
+        $dialog->user_id = $form->userId;
+        $dialog->dialog_id = $form->dialogId;
+
+        if (!$dialog->save()) {
+            throw new Exception('User dont save');
+        }
+
+        return ['status' => 'success'];
+    }
+
+    /**
+     * @param string $userId
+     * @return array
+     * @throws Exception
+     */
+    public function getDialogIdByUserId(string $userId)
+    {
+        $model = UserTgBotDialog::findOne(['user_id' => $userId]);
+
+        if (!$model) {
+            throw new \Exception('dialog_id не найден!');
+        }
+
+        return ['dialog_id' => $model->dialog_id];
+    }
+
+    /**
+     * @param string $dialogId
+     * @return array
+     * @throws Exception
+     */
+    public function getUserIdByDialogId(string $dialogId)
+    {
+        $model = UserTgBotDialog::findOne(['dialog_id' => $dialogId]);
+
+        if (!$model) {
+            throw new \Exception('user_id не найден!');
+        }
+
+        return ['user_id' => $model->user_id];
+    }
 
     /**
      * @param int $userId
@@ -129,62 +210,5 @@ class UserTgBotTokenService
         }
 
         return $model;
-    }
-
-    /**
-     * @param array $params
-     * @return TgBotDialogForm|string[]
-     * @throws Exception
-     */
-    public function createDialog(array $params)
-    {
-        $form = new TgBotDialogForm();
-        $form->load($params);
-
-        if (!$form->validate()){
-            return $form;
-        }
-
-        $dialog = new UserTgBotDialog();
-        $dialog->user_id = $form->userId;
-        $dialog->dialog_id = $form->dialogId;
-
-        if (!$dialog->save()) {
-            throw new Exception('User dont save');
-        }
-
-        return ['status' => 'success'];
-    }
-
-    /**
-     * @param string $userId
-     * @return array
-     * @throws Exception
-     */
-    public function getDialogIdByUserId(string $userId)
-    {
-        $model = UserTgBotDialog::findOne(['user_id' => $userId]);
-
-        if (!$model) {
-            throw new \Exception('dialog_id не найден!');
-        }
-
-        return ['dialog_id' => $model->dialog_id];
-    }
-
-    /**
-     * @param string $dialogId
-     * @return array
-     * @throws Exception
-     */
-    public function getUserIdByDialogId(string $dialogId)
-    {
-        $model = UserTgBotDialog::findOne(['dialog_id' => $dialogId]);
-
-        if (!$model) {
-            throw new \Exception('user_id не найден!');
-        }
-
-        return ['user_id' => $model->user_id];
     }
 }

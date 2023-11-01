@@ -16,7 +16,6 @@ class UserService
     public function login(array $params)
     {
         $model = new LoginForm();
-        $model->load($params, '');
 
         if ($model->load($params, '') && $model->login()) {
             /** @var User $user */

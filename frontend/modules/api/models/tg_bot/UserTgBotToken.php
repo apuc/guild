@@ -4,6 +4,7 @@ namespace frontend\modules\api\models\tg_bot;
 
 
 use frontend\modules\api\models\profile\User;
+use Yii;
 use yii\db\ActiveQuery;
 
 /**
@@ -43,6 +44,8 @@ use yii\db\ActiveQuery;
  */
 class UserTgBotToken extends \common\models\UserTgBotToken
 {
+    const EXPIRE_TIME = 604800; // token expiration time, valid for 7 days
+
     public function fields(): array
     {
         return [
@@ -57,6 +60,16 @@ class UserTgBotToken extends \common\models\UserTgBotToken
     public function extraFields(): array
     {
         return [];
+    }
+
+    public function updateToken()
+    {
+        $access_token = $this->user->generateAccessToken();
+        $this->user->access_token_expired_at = date('Y-m-d', time() + static::EXPIRE_TIME);
+        $this->user->save(false);
+
+        Yii::$app->user->login($this->user, static::EXPIRE_TIME);
+        return $access_token;
     }
 
     /**
