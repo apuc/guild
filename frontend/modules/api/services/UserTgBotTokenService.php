@@ -13,7 +13,7 @@ use Yii;
 
 class UserTgBotTokenService
 {
-    const CHARACTERS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const CHARACTERS = '0123456789';
 
     /**
      * @param int $userId
