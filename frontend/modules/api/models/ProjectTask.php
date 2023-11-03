@@ -155,6 +155,51 @@ namespace frontend\modules\api\models;
  *      ),
  *)
  *
+ * @OA\Schema(
+ *  schema="ProjectTaskReportsExample",
+ *             type="array",
+ *             @OA\Items(
+ *      @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *         example=1
+ *      ),
+ *      @OA\Property(
+ *         property="report_id",
+ *         type="integer",
+ *         example=12
+ *      ),
+ *      @OA\Property(
+ *         property="task",
+ *         type="string",
+ *         example="Задача"
+ *      ),
+ *      @OA\Property(
+ *         property="hours_spent",
+ *         type="integer",
+ *         example=2
+ *      ),
+ *      @OA\Property(
+ *         property="created_at",
+ *         type="integer",
+ *         example=1671148800
+ *      ),
+ *      @OA\Property(
+ *         property="status",
+ *         type="integer",
+ *         example=1
+ *      ),
+ *      @OA\Property(
+ *         property="minutes_spent",
+ *         type="integer",
+ *         example=0
+ *      ),
+ *             )
+ *
+ *
+
+ *)
+ *
  */
 class ProjectTask extends \common\models\ProjectTask
 {

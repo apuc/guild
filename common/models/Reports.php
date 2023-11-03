@@ -14,6 +14,8 @@ use Yii;
  * @property string $difficulties
  * @property string $tomorrow
  * @property int $user_card_id
+ * @property int $project_id
+ * @property int $company_id
  * @property int $status
  *
  * @property UserCard $userCard
@@ -36,11 +38,13 @@ class Reports extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_card_id', 'status'], 'integer'],
+            [['user_card_id', 'status', 'company_id', 'project_id'], 'integer'],
             [['_task'], 'checkIsArray'],
             [['user_card_id', 'created_at'], 'required'],
             [['today', 'difficulties', 'tomorrow', 'created_at'], 'string', 'max' => 255],
-            [['user_card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['user_card_id' => 'id']],
+            [['user_card_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::class, 'targetAttribute' => ['user_card_id' => 'id']],
+            [['project_id'], 'exist', 'skipOnEmpty' => true, 'targetClass' => Project::class, 'targetAttribute' => ['project_id' => 'id']],
+            [['company_id'], 'exist', 'skipOnEmpty' => true, 'targetClass' => Company::class, 'targetAttribute' => ['company_id' => 'id']],
         ];
     }
 
@@ -56,7 +60,9 @@ class Reports extends \yii\db\ActiveRecord
             'difficulties' => 'Какие сложности возникли?',
             'tomorrow' => 'Что планируется сделать завтра?',
             'user_card_id' => 'Пользователь',
-            'status' => 'Статус'
+            'status' => 'Статус',
+            'project_id' => 'ID проекта',
+            'company_id' => 'ID компании'
         ];
     }
 
