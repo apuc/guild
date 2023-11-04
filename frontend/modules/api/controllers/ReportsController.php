@@ -455,7 +455,7 @@ class ReportsController extends ApiController
      * @return array|array[]|object|object[]|string[]
      * @throws BadRequestHttpException
      */
-    public function actionCheckReportsByDate($fromDate, $toDate, $user_card_id)
+    public function actionReportsByDate($fromDate, $toDate, $user_card_id)
     {
         if (!$this->checkDate($fromDate) || !$this->checkDate($toDate)) {
             throw new BadRequestHttpException('Wrong date format');
