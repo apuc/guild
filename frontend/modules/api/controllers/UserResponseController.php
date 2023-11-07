@@ -2,7 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\services\UserResponseService;
+use frontend\modules\api\services\UserResponseService;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;

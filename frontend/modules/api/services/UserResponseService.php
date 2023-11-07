@@ -1,8 +1,9 @@
 <?php
 
-namespace common\services;
+namespace frontend\modules\api\services;
 
-use common\models\UserResponse;
+use common\services\ScoreCalculatorService;
+use frontend\modules\api\models\UserResponse;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
@@ -16,10 +17,16 @@ class UserResponseService
     public static function createUserResponses($userResponsesParams): array
     {
         $userResponseModels = array();
-        foreach ($userResponsesParams['userResponses'] as $userResponseParams) {
+        foreach ($userResponsesParams as $userResponse) {
             $model = new UserResponse();
-            $model->load($userResponseParams, '');
-            (new UserResponseService)->validateResponseModel($model);
+            $model->load($userResponse, '');
+
+            try {
+                self::validateResponseModel($model);
+            } catch (\Exception $ex) {
+                throw new BadRequestHttpException(json_encode('One of the parameters is empty!'));
+            }
+
 
             array_push($userResponseModels, $model);
         }
@@ -34,7 +41,7 @@ class UserResponseService
     /**
      * @throws BadRequestHttpException
      */
-    protected function validateResponseModel($model)
+    protected  static function validateResponseModel($model)
     {
         if (!$model->validate()) {
             throw new BadRequestHttpException(json_encode($model->errors));
