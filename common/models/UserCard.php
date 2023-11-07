@@ -2,14 +2,11 @@
 
 namespace common\models;
 
-use common\classes\Debug;
 use Exception;
-use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -45,6 +42,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property FieldsValue[] $fieldsValues
  * @property ProjectUser[] $projectUsers
+ * @property CardSkill[] $skillValues
  * @property ResumeTemplate $resumeTemplate
  * @property Position $position
  * @property Status $status0
@@ -244,6 +242,13 @@ class UserCard extends \yii\db\ActiveRecord
     public function getSkillValues()
     {
         return $this->hasMany(CardSkill::class, ['card_id' => 'id'])->with('skill');
+    }
+
+    public function getSkillsName()
+    {
+        return $this->getSkillValues()
+            ->leftJoin('skill', 'card_skill.skill_id = skill.id')
+            ->select('skill.name')->column();
     }
 
     public static function getNameSkills()
