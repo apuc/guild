@@ -18,7 +18,7 @@ class ResumeController extends ApiController
      *   tags={"Resume"},
      *   @OA\Parameter(
      *      name="userId",
-     *      description="Метод для получение резюме",
+     *      description="Метод для получение резюме. userId - обязателен, в случае его отсудствия будет возвращено резюме текущего пользователя",
      *      in="query",
      *      required=false,
      *      @OA\Schema(
