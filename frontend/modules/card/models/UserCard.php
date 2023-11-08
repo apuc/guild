@@ -3,9 +3,14 @@
 namespace frontend\modules\card\models;
 
 use common\models\CardSkill;
+use frontend\modules\api\models\UserCardPortfolioProjects;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
+/**
+ * @property UserCardPortfolioProjects[] $userCardPortfolioProjects
+ */
 class UserCard extends \common\models\UserCard
 {
     public $fields;
@@ -47,5 +52,10 @@ class UserCard extends \common\models\UserCard
     public static function findByUserId($userId): ?UserCard
     {
         return self::findOne(['id_user' => $userId]);
+    }
+
+    public function getUserCardPortfolioProjects(): ActiveQuery
+    {
+        return $this->hasMany(UserCardPortfolioProjects::class, ['card_id' => 'id']);
     }
 }

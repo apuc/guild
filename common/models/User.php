@@ -231,6 +231,6 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
 
     public function getProjectUser()
     {
-        return $this->hasMany(ProjectUser::className(), ['user_id' => 'id']);
+        return $this->hasMany(ProjectUser::class, ['user_id' => 'id']);
     }
 }
