@@ -588,7 +588,7 @@ class TaskController extends ApiController
      *
      * @OA\Get(path="/task/import",
      *   summary="Экспорт задач",
-     *   description="Метод экспорта задач в xlsx",
+     *   description="Метод импорта задач в xlsx",
      *   security={
      *     {"bearerAuth": {}}
      *   },
@@ -597,7 +597,6 @@ class TaskController extends ApiController
      *      name="companyId",
      *      in="query",
      *      description="ID компании",
-     *      required=true,
      *      @OA\Schema(
      *        type="integer",
      *      )
@@ -606,7 +605,6 @@ class TaskController extends ApiController
      *      name="userId",
      *      in="query",
      *      description="ID исполнителя задачи",
-     *      required=true,
      *      @OA\Schema(
      *        type="integer",
      *      )
@@ -615,7 +613,6 @@ class TaskController extends ApiController
      *      name="projectId",
      *      in="query",
      *      description="ID проекта",
-     *      required=true,
      *      @OA\Schema(
      *        type="integer",
      *      )
