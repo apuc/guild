@@ -37,7 +37,9 @@
         "kartik-v/yii2-mpdf": "dev-master",
         "mihaildev/yii2-ckeditor": "*",
         "developeruz/yii2-db-rbac": "*",
-        "zircote/swagger-php": "^4.7"
+        "zircote/swagger-php": "^4.7",
+        "phpoffice/phpspreadsheet": "^1.29",
+        "kartik-v/yii2-widget-datepicker": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

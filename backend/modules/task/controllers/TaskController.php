@@ -2,6 +2,8 @@
 
 namespace backend\modules\task\controllers;
 
+use common\models\forms\TasksImportForm;
+use common\services\ImportProjectTaskService;
 use yii\data\ActiveDataProvider;
 use Yii;
 use backend\modules\task\models\ProjectTask;
@@ -136,5 +138,34 @@ class TaskController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionImport()
+    {
+        $model = new TasksImportForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $importTaskService = new ImportProjectTaskService();
+
+            $query = ProjectTask::genQueryToImport(
+                (int)$model->companyId,
+                (int)$model->userId,
+                (int)$model->projectId,
+                (int)$model->fromDate,
+                (int)$model->toDate
+            );
+            $tasks = $query->all();
+
+            if (!$tasks) {
+                Yii::$app->session->setFlash('danger', 'Задачи не найдены!');
+                return Yii::$app->getResponse()->redirect(['/task/task/import']);
+            } else {
+                return $importTaskService->importTasks($tasks);
+            }
+        }
+
+        return $this->render('_form-import', [
+            'model' => $model,
+        ]);
     }
 }

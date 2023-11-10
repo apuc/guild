@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Создать задачу', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Импорт задач', ['import'], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= GridView::widget([

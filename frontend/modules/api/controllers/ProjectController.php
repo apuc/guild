@@ -2,15 +2,16 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\classes\Debug;
 use common\models\ProjectTaskCategory;
 use common\models\Status;
 use common\models\UseStatus;
 use frontend\modules\api\models\Manager;
-use frontend\modules\api\models\Project;
-use frontend\modules\api\models\ProjectUser;
+use frontend\modules\api\models\project\Project;
+use frontend\modules\api\models\project\ProjectUser;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
@@ -84,7 +85,7 @@ class ProjectController extends ApiController
      * )
      *
      * @param $project_id
-     * @return array|Project|\yii\db\ActiveRecord|null
+     * @return array|ActiveRecord|null
      */
     public function actionGetProject($project_id)
     {
@@ -323,7 +324,7 @@ class ProjectController extends ApiController
      * )
      *
      * @throws \Throwable
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      * @throws \yii\db\StaleObjectException
      * @throws NotFoundHttpException
      */
@@ -366,7 +367,7 @@ class ProjectController extends ApiController
      *   ),
      * )
      *
-     * @return array|\yii\db\ActiveRecord
+     * @return array|ActiveRecord
      * @throws BadRequestHttpException
      */
     public function actionMyEmployee()
@@ -486,7 +487,7 @@ class ProjectController extends ApiController
      * )
      *
      * @return Project
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException|NotFoundHttpException
      */
     public function actionDelUser(): Project
     {

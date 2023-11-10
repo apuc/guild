@@ -11,8 +11,8 @@ use yii\db\ActiveQuery;
  * @property int $task_id
  * @property int $user_id
  *
- * @property ProjectUser $projectUser
  * @property ProjectTask $task
+ * @property User $user
  */
 class ProjectTaskUser extends \yii\db\ActiveRecord
 {

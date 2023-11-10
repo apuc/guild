@@ -29,6 +29,9 @@ use yii\helpers\ArrayHelper;
  * @property User $user
  * @property UserCard $card
  * @property UserCard $cardIdCreator
+ * @property Company $company
+ * @property ProjectColumn $column
+ * @property User $executor
  * @property Mark[] $mark
  * @property MarkEntity[] $markEntity
  * @property ProjectTaskUser[] $taskUsers
@@ -41,6 +44,8 @@ class ProjectTask extends ActiveRecord
     const PRIORITY_LOW = 0;
     const PRIORITY_MEDIUM = 1;
     const PRIORITY_HIGH = 2;
+
+    const DAY_IN_UNIX_TIME = 86340; //  23:59:59
 
     /**
      * @return string[]
@@ -147,7 +152,7 @@ class ProjectTask extends ActiveRecord
             'user_id',
             'user' => function () {
                 return [
-                    "fio" => $this->user->userCard->fio ?? $this->user->id,
+                    "fio" => $this->user->userCard->fio ?? ($this->user->id ?? ''),
                     "avatar" => $this->user->userCard->photo ?? '',
                 ];
             },
@@ -164,12 +169,20 @@ class ProjectTask extends ActiveRecord
                 return null;
             },
             'comment_count' => function () {
-                return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
+                return $this->getCommentCount();
             },
             'taskUsers',
             'mark',
             'execution_priority'
         ];
+    }
+
+    /**
+     * @return bool|int|string|null
+     */
+    public function getCommentCount()
+    {
+        return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
     }
 
     /**
@@ -213,6 +226,15 @@ class ProjectTask extends ActiveRecord
     public function getProject(): ActiveQuery
     {
         return $this->hasOne(Project::className(), ['id' => 'project_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getCompany(): ActiveQuery
+    {
+        return $this->hasOne(Company::class,['id' => 'company_id'])
+            ->via('project');
     }
 
     /**
@@ -274,5 +296,72 @@ class ProjectTask extends ActiveRecord
     {
         return ArrayHelper::map(
             self::find()->joinWith(['user', 'project'])->where(['project_id' => $task_id])->all(), 'id', 'user.username');
+    }
+
+    /**
+     * @return string
+     */
+    public function getTaskUsersToStr(): string
+    {
+        $participants = '';
+        foreach ($this->taskUsers as $taskUser) {
+            $participants .= $taskUser->user->userCard->fio ?? $taskUser->user->username;
+            $participants .= ', ';
+        }
+        return $participants;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMarkTitleToStr(): string
+    {
+        $tags = '';
+        foreach ($this->markEntity as $markEntity) {
+            $tags .= $markEntity->mark->title . ', ';
+        }
+        return $tags;
+    }
+
+    /**
+     * @param int|null $companyId
+     * @param int|null $userId
+     * @param int|null $projectId
+     * @param int|null $fromDate
+     * @param int|null $toDate
+     * @return ActiveQuery
+     */
+    public static function genQueryToImport(
+        int $companyId = null,
+        int $userId = null,
+        int $projectId = null,
+        int $fromDate = null,
+        int $toDate = null
+    ): ActiveQuery
+    {
+        $query = ProjectTask::find();
+
+        if ($companyId) {
+            $query->joinWith('company')
+                ->andWhere(['company.id' => $companyId]);
+        }
+
+        if ($userId) {
+            $query->andWhere(['project_task.user_id' => $userId]);
+        }
+
+        if ($projectId) {
+            $query->andWhere(['project_task.project_id' => $projectId]);
+        }
+
+        if ($fromDate) {
+            $query->andFilterWhere(['>=', 'project_task.created_at', date("Y-m-d H:i:s", $fromDate)]);
+        }
+
+        if ($toDate) {
+            $query->andFilterWhere(['<=', 'project_task.created_at', date("Y-m-d H:i:s", ($toDate + self::DAY_IN_UNIX_TIME))]);
+        }
+
+        return $query;
     }
 }

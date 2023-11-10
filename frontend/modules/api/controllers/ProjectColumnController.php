@@ -2,25 +2,14 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\classes\Debug;
 use common\models\ProjectColumn;
-use frontend\modules\api\models\Project;
+use frontend\modules\api\models\project\Project;
+use yii\db\ActiveRecord;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
 class ProjectColumnController extends ApiController
 {
-
-    public function verbs(): array
-    {
-        return [
-            'get-column-list' => ['get'],
-            'create-column' => ['post'],
-            'set-priority' => ['post'],
-            'update-column' => ['put', 'patch'],
-        ];
-    }
-
     /**
      *
      * @OA\Get(path="/project-column/get-column-list",
@@ -49,17 +38,17 @@ class ProjectColumnController extends ApiController
      * )
      *
      * @param $project_id
-     * @return array|\yii\db\ActiveRecord[]
+     * @return array|ActiveRecord[]
      * @throws BadRequestHttpException
      */
-    public function actionGetColumnList($project_id)
+    public function actionGetColumnList($project_id): array
     {
         $project = Project::findOne($project_id);
         if (!$project) {
             throw new BadRequestHttpException(json_encode(['Проект не найден']));
         }
 
-        $columns = \frontend\modules\api\models\ProjectColumn::find()->where(['project_id' => $project_id, 'status' => ProjectColumn::STATUS_ACTIVE])->all();
+        $columns = \frontend\modules\api\models\project\ProjectColumn::find()->where(['project_id' => $project_id, 'status' => ProjectColumn::STATUS_ACTIVE])->all();
 
         return $columns;
 
@@ -177,7 +166,7 @@ class ProjectColumnController extends ApiController
      *   ),
      * )
      *
-     * @return array|ProjectColumn|\yii\db\ActiveRecord|null
+     * @return array|ProjectColumn|ActiveRecord|null
      * @throws BadRequestHttpException
      * @throws \yii\base\InvalidConfigException
      */
@@ -241,7 +230,7 @@ class ProjectColumnController extends ApiController
      *   ),
      * )
      *
-     * @return array|Project|\yii\db\ActiveRecord
+     * @return array|Project|ActiveRecord
      * @throws BadRequestHttpException
      */
     public function actionSetPriority()

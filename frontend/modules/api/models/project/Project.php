@@ -1,7 +1,8 @@
 <?php
 
-namespace frontend\modules\api\models;
+namespace frontend\modules\api\models\project;
 
+use frontend\modules\api\models\Company;
 use yii\db\ActiveQuery;
 use yii\helpers\Url;
 use yii\web\Link;

@@ -83,7 +83,7 @@ YiiAsset::register($this);
 
             [
                 'attribute' => 'project_user_id',
-                'value' => 'user.email'
+                'value' => 'user.username'
             ],
 
             [
