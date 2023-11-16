@@ -2,36 +2,35 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\helpers\UUIDHelper;
-use common\models\Question;
-use common\models\UserQuestionnaire;
+use Exception;
+use frontend\modules\api\models\questionnaire\forms\QuestionnaireUuidForm;
+use frontend\modules\api\models\questionnaire\Question;
+use frontend\modules\api\models\questionnaire\UserQuestionnaire;
+use frontend\modules\api\services\UserQuestionnaireService;
 use Yii;
-use yii\filters\auth\HttpBearerAuth;
-use yii\rest\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\BadRequestHttpException;
 
 class QuestionController extends ApiController
 {
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::className(),
-        ];
-        return $behaviors;
-    }
+    private UserQuestionnaireService $userQuestionnaireService;
 
-    public function verbs()
+    public function __construct(
+        $id,
+        $module,
+        UserQuestionnaireService $userQuestionnaireService,
+        $config = []
+    )
     {
-        return [
-            'get-questions' => ['get'],
-        ];
+        $this->userQuestionnaireService = $userQuestionnaireService;
+        parent::__construct($id, $module, $config);
     }
 
     /**
      * @OA\Get(path="/question/get-questions",
      *   summary="Список вопросов",
-     *   description="Получение списка вопросов",
+     *   description="Получение списка вопросов и возможные варианты ответа. Сохраняет временную метку начала тестирования,
+         от которой будет отсчитываться временной интервал на выполнение теста. При наличии лимита времени на выполнение теста.
+         При превышении лимита времени на выполнение будет возвращена ошибка: Time's up!",
      *   security={
      *     {"bearerAuth": {}}
      *   },
@@ -53,40 +52,28 @@ class QuestionController extends ApiController
      *         @OA\Schema(ref="#/components/schemas/QuestionExampleArr"),
      *     ),
      *
-     *
      *   ),
      * )
      *
-     * @throws NotFoundHttpException
-     * @throws \Exception
+     * @throws BadRequestHttpException
+     * @throws Exception
      */
     public function actionGetQuestions(): array
     {
-        $uuid = Yii::$app->request->get('uuid');
+        $form = new QuestionnaireUuidForm();
 
-        if(empty($uuid) or !UUIDHelper::is_valid($uuid))
-        {
-            throw new NotFoundHttpException('Incorrect questionnaire UUID');
+        if ($form->load(Yii::$app->request->get()) && !$form->validate()) {
+            $errors = $form->errors;
+            throw new BadRequestHttpException(array_shift($errors)[0]);
         }
 
-        $questionnaire_id = UserQuestionnaire::getQuestionnaireId($uuid);
+        $userQuestionnaire = UserQuestionnaire::findOne(['uuid' => $form->uuid]);
 
-        $questions = Question::activeQuestions($questionnaire_id);
-        if(empty($questions)) {
-            throw new NotFoundHttpException('Questions not found');
+        if (!$this->userQuestionnaireService->checkTimeLimit($userQuestionnaire)) {
+            UserQuestionnaireService::calculateScore($userQuestionnaire->uuid);
+            throw new BadRequestHttpException("Time's up!");
         }
 
-        array_walk( $questions, function(&$arr){
-            unset(
-                $arr['score'],
-                $arr['created_at'],
-                $arr['updated_at'],
-                $arr['status'],
-                $arr['questionnaire_id']
-            );
-        });
-
-        return  $questions;
+        return Question::activeQuestions($userQuestionnaire->questionnaire_id);
     }
-
 }

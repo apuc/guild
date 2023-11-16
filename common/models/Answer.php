@@ -89,11 +89,6 @@ class Answer extends \yii\db\ActiveRecord
             ->viaTable('question', ['id' => 'question_id']);
     }
 
-//    public function getUserQuestionnaire()
-//    {
-//        return $this->hasOne(\backend\modules\questionnaire\models\UserQuestionnaire::className(), ['id'])
-//    }
-
     static function numCorrectAnswers($question_id)
     {
         return Answer::find()

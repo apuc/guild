@@ -14,17 +14,19 @@ class UserResponseService
      * @throws BadRequestHttpException
      * @throws ServerErrorHttpException
      */
-    public static function createUserResponses($userResponsesParams): array
+    public static function createUserResponses($userResponsesParams, $uuid): array
     {
         $userResponseModels = array();
         foreach ($userResponsesParams as $userResponse) {
+
             $model = new UserResponse();
             $model->load($userResponse, '');
+            $model->user_questionnaire_uuid = $uuid;
 
             try {
                 self::validateResponseModel($model);
             } catch (\Exception $ex) {
-                throw new BadRequestHttpException(json_encode('One of the parameters is empty!'));
+                throw new BadRequestHttpException($ex->getMessage());
             }
 
 
@@ -48,7 +50,7 @@ class UserResponseService
         }
 
         if (empty($model->user_id) or empty($model->question_id) or empty($model->user_questionnaire_uuid)) {
-            throw new BadRequestHttpException(json_encode('One of the parameters is empty!'));
+            throw new BadRequestHttpException(json_encode('One of t222he parameters is empty!'));
         }
     }
 

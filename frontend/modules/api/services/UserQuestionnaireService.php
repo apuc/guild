@@ -2,12 +2,12 @@
 
 namespace frontend\modules\api\services;
 
-use common\models\Question;
+use common\helpers\UserQuestionnaireStatusHelper;
 use common\services\ScoreCalculatorService;
-use frontend\modules\api\models\UserQuestionnaire;
+use frontend\modules\api\models\questionnaire\UserQuestionnaire;
 use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
-use yii\web\ServerErrorHttpException;
 
 class UserQuestionnaireService
 {
@@ -26,45 +26,33 @@ class UserQuestionnaireService
         if (empty($userQuestionnaireModel)) {
             throw new NotFoundHttpException('The questionnaire with this uuid does not exist');
         }
-        ScoreCalculatorService::rateResponses($userQuestionnaireModel);
-        if (ScoreCalculatorService::checkAnswerFlagsForNull($userQuestionnaireModel)) {
-            ScoreCalculatorService::calculateScore($userQuestionnaireModel);
-        } else {
-            $userQuestionnaireModel->status = 3;
-            $userQuestionnaireModel->save();
-        }
+
+       if (!in_array($userQuestionnaireModel->status, UserQuestionnaireStatusHelper::listCompleteStatuses() )) {
+           ScoreCalculatorService::rateResponses($userQuestionnaireModel);
+           if (ScoreCalculatorService::checkAnswerFlagsForNull($userQuestionnaireModel)) {
+               ScoreCalculatorService::calculateScore($userQuestionnaireModel);
+           } else {
+               $userQuestionnaireModel->status = 3;
+               $userQuestionnaireModel->save();
+           }
+       }
         return $userQuestionnaireModel;
     }
 
-    /**
-     * @throws ServerErrorHttpException
-     */
-    public static function getQuestionNumber($user_questionnaire_uuid): array
+    public function checkTimeLimit(UserQuestionnaire $userQuestionnaire): bool
     {
-        $userQuestionnaireModel = UserQuestionnaire::findOne(['uuid' => $user_questionnaire_uuid]);
-        if (empty($userQuestionnaireModel)) {
-            throw new ServerErrorHttpException('Not found UserQuestionnaire');
-        }
-        $count = Question::find()
-            ->where(['questionnaire_id' => $userQuestionnaireModel->questionnaire_id])
-            ->andWhere(['status' => 1])
-            ->count();
-        return array('question_number' => $count);
-    }
+        if (!$userQuestionnaire->start_testing) {
+            $userQuestionnaire->start_testing = date('Y:m:d H:i:s');
+            $userQuestionnaire->save();
+        } elseif ($userQuestionnaire->questionnaire->time_limit) {
+            $limitTime = strtotime($userQuestionnaire->questionnaire->time_limit) - strtotime("00:00:00");
+            $currentTime = strtotime(date('Y-m-d H:i:s'));
+            $startTesting = strtotime($userQuestionnaire->start_testing);
 
-    /**
-     * @throws ServerErrorHttpException
-     */
-    public static function getPointsNumber($user_questionnaire_uuid)
-    {
-        $userQuestionnaireModel = UserQuestionnaire::findOne(['uuid' => $user_questionnaire_uuid]);
-        if (empty($userQuestionnaireModel)) {
-            throw new ServerErrorHttpException('Not found UserQuestionnaire');
+            if ($currentTime - $startTesting > $limitTime) {
+                return false;
+            }
         }
-        $pointSum = Question::find()
-            ->where(['questionnaire_id' => $userQuestionnaireModel->questionnaire_id])
-            ->andWhere(['status' => 1])
-            ->sum('score');
-        return array('sum_point' => $pointSum);
+        return true;
     }
 }

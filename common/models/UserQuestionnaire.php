@@ -26,6 +26,8 @@ use \backend\modules\questionnaire\models\Answer;
  * @property int $score
  * @property int $status
  * @property double $percent_correct_answers
+ * @property string $testing_date
+ * @property string $start_testing
  *
  * @property Questionnaire $questionnaire
  * @property User $user
@@ -63,7 +65,7 @@ class UserQuestionnaire extends ActiveRecord
             [['questionnaire_id', 'user_id', 'status'], 'required'],
             [['questionnaire_id', 'user_id', 'score', 'status'], 'integer'],
             [['percent_correct_answers'], 'number'],
-            [['created_at', 'updated_at', 'testing_date'], 'safe'],
+            [['created_at', 'updated_at', 'testing_date', 'start_testing'], 'safe'],
             [['uuid'], 'string', 'max' => 36],
             [['uuid'], 'unique'],
             [['questionnaire_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questionnaire::className(), 'targetAttribute' => ['questionnaire_id' => 'id']],
@@ -98,6 +100,7 @@ class UserQuestionnaire extends ActiveRecord
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
             'testing_date' => 'Дата тестирования',
+            'start_testing' => 'Дата начала тестирования',
             'percent_correct_answers' => 'Процент правильных ответов',
         ];
     }

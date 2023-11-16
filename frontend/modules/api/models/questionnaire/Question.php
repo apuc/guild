@@ -1,7 +1,8 @@
 <?php
 
-namespace frontend\modules\api\models;
+namespace frontend\modules\api\models\questionnaire;
 
+use yii\db\ActiveQuery;
 
 /**
  *
@@ -43,16 +44,16 @@ namespace frontend\modules\api\models;
  *     example="00:22:00",
  *     description="Лимит времени на ответ"
  *  ),
+ *  @OA\Property(
+ *     property="result_profiles",
+ *     ref="#/components/schemas/AnswerExampleArr",
+ *  ),
  *)
  *
  *
  * @OA\Schema(
  *  schema="QuestionExampleArr",
  *  type="array",
- *  example={
- *     {"id": "1", "question_type_id": 2, "question_body": "Вопрос 1", "question_priority": 1, "next_question": 2, "time_limit": "00:10:00",},
- *     {"id": "4", "question_type_id": 3, "question_body": "Вопрос 22", "question_priority": 4, "next_question": 5, "time_limit": "00:10:00",},
- *     },
  *  @OA\Items(
  *      type="object",
  *      @OA\Property(
@@ -79,11 +80,48 @@ namespace frontend\modules\api\models;
  *         property="time_limit",
  *         type="string",
  *      ),
+ *     @OA\Property(
+ *         property="result_profiles",
+ *         ref="#/components/schemas/AnswerExampleArr",
+ *      ),
  *  ),
  *)
  *
+ * @property Answer[] $answers
  */
 class Question extends \common\models\Question
 {
+    /**
+     * @return string[]
+     */
+    public function fields(): array
+    {
+        return [
+            'id',
+            'question_type_id',
+            'question_body',
+            'question_priority',
+            'next_question',
+            'time_limit',
+            'answers' => function () {
+                return $this->answers;
+            }
+        ];
+    }
 
+    /**
+     * @return string[]
+     */
+    public function extraFields(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getAnswers(): ActiveQuery
+    {
+        return $this->hasMany(Answer::class, ['question_id' => 'id']);
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\modules\api\models;
+namespace frontend\modules\api\models\questionnaire;
 
 
 /**
@@ -20,7 +20,7 @@ namespace frontend\modules\api\models;
  *     description="Идентификатор вопроса"
  *  ),
  *  @OA\Property(
- *     property="question_body",
+ *     property="answer_body",
  *     type="string",
  *     example="Вопрос №1",
  *     description="Тело вопроса"
@@ -32,8 +32,8 @@ namespace frontend\modules\api\models;
  *  schema="AnswerExampleArr",
  *  type="array",
  *  example={
- *     {"id": "1", "question_id": 2, "question_body": "Ответ 1",},
- *     {"id": "4", "question_id": 3, "question_body": "Ответ 22",},
+ *     {"id": "1", "question_id": 2, "answer_body": "Ответ 1",},
+ *     {"id": "4", "question_id": 3, "answer_body": "Ответ 22",},
  *     },
  *  @OA\Items(
  *      type="object",
@@ -46,7 +46,7 @@ namespace frontend\modules\api\models;
  *         type="integer",
  *      ),
  *      @OA\Property(
- *         property="question_body",
+ *         property="answer_body",
  *         type="string",
  *      ),
  *  ),
@@ -55,5 +55,24 @@ namespace frontend\modules\api\models;
  */
 class Answer extends \common\models\Answer
 {
+    /**
+     * @return string[]
+     */
+    public function fields(): array
+    {
+        return [
+            'id',
+            'question_id',
+            'answer_body',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function extraFields(): array
+    {
+        return [];
+    }
 
 }

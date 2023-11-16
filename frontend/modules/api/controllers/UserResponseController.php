@@ -2,6 +2,8 @@
 
 namespace frontend\modules\api\controllers;
 
+use frontend\modules\api\models\questionnaire\UserQuestionnaire;
+use frontend\modules\api\services\UserQuestionnaireService;
 use frontend\modules\api\services\UserResponseService;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -10,18 +12,24 @@ use yii\web\ServerErrorHttpException;
 
 class UserResponseController extends ApiController
 {
-    public function verbs(): array
+    private UserQuestionnaireService $userQuestionnaireService;
+
+    public function __construct(
+        $id,
+        $module,
+        UserQuestionnaireService $userQuestionnaireService,
+        $config = []
+    )
     {
-        return [
-            'set-response' => ['post'],
-            'set-responses' => ['post'],
-        ];
+        $this->userQuestionnaireService = $userQuestionnaireService;
+        parent::__construct($id, $module, $config);
     }
 
     /**
      * @OA\Post(path="/user-response/set-responses",
      *   summary="Добавить массив ответов пользователя",
-     *   description="Добавление массива ответов на вопросы от пользователя",
+     *   description="Добавление массива ответов на вопросы от пользователя. При наличии лимита времени на выполнение теста,
+         будет проведена проверка. При превышении лимита времени на выполнение будет возвращена ошибка: Time's up!",
      *   security={
      *     {"bearerAuth": {}}
      *   },
@@ -58,7 +66,7 @@ class UserResponseController extends ApiController
      *
      *   @OA\Response(
      *     response=200,
-     *     description="Возвращает объект Запроса",
+     *     description="Возвращает масив ответов",
      *     @OA\MediaType(
      *         mediaType="application/json",
      *         @OA\Schema(ref="#/components/schemas/UserResponseExampleArr"),
@@ -66,12 +74,25 @@ class UserResponseController extends ApiController
      *   ),
      * )
      *
+     * @return array
+     * @throws BadRequestHttpException
      * @throws InvalidConfigException
-     * @throws ServerErrorHttpException|BadRequestHttpException
+     * @throws ServerErrorHttpException
+     * @throws \yii\web\NotFoundHttpException
      */
     public function actionSetResponses(): array
     {
-        $userResponseModels = UserResponseService::createUserResponses(Yii::$app->getRequest()->getBodyParams());
+        $uuid = Yii::$app->request->post('user_questionnaire_uuid');
+        $userResponses = Yii::$app->request->post('userResponses');
+
+        $userQuestionnaire = UserQuestionnaire::findOne(['uuid' => $uuid]);
+
+        if (!$this->userQuestionnaireService->checkTimeLimit($userQuestionnaire)) {
+            UserQuestionnaireService::calculateScore($userQuestionnaire->uuid);
+            throw new BadRequestHttpException("Time's up!");
+        }
+
+        $userResponseModels = UserResponseService::createUserResponses($userResponses,  $uuid);
         foreach ($userResponseModels as $model) {
             if ($model->errors) {
                 throw new ServerErrorHttpException(json_encode($model->errors));

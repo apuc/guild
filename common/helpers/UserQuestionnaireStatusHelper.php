@@ -23,6 +23,15 @@ class UserQuestionnaireStatusHelper
         ];
     }
 
+    public static function listCompleteStatuses(): array
+    {
+        return [
+            self::STATUS_COMPLETED,
+            self::STATUS_ON_INSPECTION
+        ];
+
+    }
+
     /**
      * @throws Exception
      */
