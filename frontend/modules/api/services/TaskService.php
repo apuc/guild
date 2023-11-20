@@ -30,7 +30,7 @@ class TaskService
         return ProjectTask::findOne($task_id);
     }
 
-    public function getTaskList($task_id): array
+    public function getTaskList($status = null): array
     {
         return ProjectTask::find()->asArray()->all();
     }
@@ -38,6 +38,16 @@ class TaskService
     public function getTaskListByProject($project_id): array
     {
         return ProjectTask::find()->where(['project_id' => $project_id])->orderBy('priority DESC')->all();
+    }
+
+    public function getArchiveTask($project_id, $user_id): array
+    {
+        $query = ProjectTask::find()->where(['project_id' => $project_id])->andWhere(['status' => ProjectTask::STATUS_ARCHIVE]);
+
+        if ($user_id) {
+            $query->andWhere(['user_id' => $user_id]);
+        }
+        return $query->orderBy('priority DESC')->all();
     }
 
     public function getTaskListByUser($user_id): array

@@ -16,6 +16,9 @@ use yii\web\ServerErrorHttpException;
 
 class TaskController extends ApiController
 {
+    /**
+     * @var TaskService
+     */
     private TaskService $taskService;
 
     /**
@@ -166,20 +169,65 @@ class TaskController extends ApiController
      */
     public function actionGetTaskList($project_id): array
     {
-        $tasks = array();
-        if ($project_id) {
-            if (empty($project_id) or !is_numeric($project_id)) {
-                throw new NotFoundHttpException('Incorrect project ID');
-            }
-            $tasks = $this->taskService->getTaskListByProject($project_id);
-        } else {
-            $tasks = $this->taskService->getTaskList($project_id);
-        }
+        $tasks = $this->taskService->getTaskListByProject($project_id);
 
         if (empty($tasks)) {
             throw new NotFoundHttpException('The project does not exist or there are no tasks for it');
         }
         return $tasks;
+    }
+
+    /**
+     *
+     * @OA\Get(path="/task/get-archive-task",
+     *   summary="Получить список архивных задач по проекту",
+     *   description="Метод для получения архивных задач по проекту",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *   @OA\Parameter(
+     *      name="project_id",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="user_id",
+     *      in="query",
+     *      required=false,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="expand",
+     *      in="query",
+     *      example="column,timers,mark",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b> и <b>mark</b>",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает массив объектов Задач",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectTaskExample"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @param $project_id
+     * @param null $user_id
+     * @return array
+     */
+    public function actionGetArchiveTask($project_id, $user_id = null): array
+    {
+        return $this->taskService->getArchiveTask($project_id, $user_id);
     }
 
     /**
@@ -224,15 +272,7 @@ class TaskController extends ApiController
      */
     public function actionGetUserTasks($user_id): array
     {
-        $tasks = array();
-        if ($user_id) {
-            if (empty($user_id) or !is_numeric($user_id)) {
-                throw new NotFoundHttpException('Incorrect project ID');
-            }
-            $tasks = $this->taskService->getTaskListByUser($user_id);
-        } else {
-            $tasks = $this->taskService->getTaskList($user_id);
-        }
+        $tasks = $this->taskService->getTaskListByUser($user_id);
 
         if (empty($tasks)) {
             throw new NotFoundHttpException('The project does not exist or there are no tasks for it');

@@ -80,7 +80,7 @@ namespace frontend\modules\api\models\project;
  *     property="status",
  *     type="int",
  *     example="1",
- *     description="Статус задачи"
+ *     description="Статус задачи(0 - disable, 1 - active, 2 - archive)"
  *  ),
  *  @OA\Property(
  *     property="comment_count",

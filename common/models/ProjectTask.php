@@ -38,8 +38,9 @@ use yii\helpers\ArrayHelper;
  */
 class ProjectTask extends ActiveRecord
 {
-    const STATUS_ACTIVE = 1;
     const STATUS_DISABLE = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_ARCHIVE = 2;
 
     const PRIORITY_LOW = 0;
     const PRIORITY_MEDIUM = 1;
@@ -101,6 +102,7 @@ class ProjectTask extends ActiveRecord
             ['execution_priority', 'in', 'range' => [self::PRIORITY_LOW, self::PRIORITY_MEDIUM, self::PRIORITY_HIGH]],
             ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
+            ['status', 'in', 'range' => [self::STATUS_DISABLE, self::STATUS_ACTIVE, self::STATUS_ARCHIVE]],
             [['description'], 'string', 'max' => 1500],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
