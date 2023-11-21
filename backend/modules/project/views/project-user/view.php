@@ -43,6 +43,14 @@ YiiAsset::register($this);
                 'attribute' => 'card_id',
                 'value' => ArrayHelper::getValue($model, 'card.fio' ),
             ],
+            [
+                'attribute' => 'project_role_id',
+                'value' => ArrayHelper::getValue($model, 'projectRole.title' ),
+            ],
+            [
+                'attribute' => 'status',
+                'value' => ArrayHelper::getValue($model->statusList(),$model->status ),
+            ],
         ],
     ]) ?>
 

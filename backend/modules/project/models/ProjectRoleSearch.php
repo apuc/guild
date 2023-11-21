@@ -4,11 +4,12 @@ namespace backend\modules\project\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use backend\modules\project\models\ProjectRole;
 
 /**
- * ProjectUserSearch represents the model behind the search form of `backend\modules\project\models\ProjectUser`.
+ * ProjectRoleSearch represents the model behind the search form of `backend\modules\project\models\ProjectRole`.
  */
-class ProjectUserSearch extends ProjectUser
+class ProjectRoleSearch extends ProjectRole
 {
     /**
      * {@inheritdoc}
@@ -16,7 +17,8 @@ class ProjectUserSearch extends ProjectUser
     public function rules()
     {
         return [
-            [['id', 'project_id', 'user_id', 'card_id', 'project_role_id'], 'integer'],
+            [['id'], 'integer'],
+            [['title'], 'safe'],
         ];
     }
 
@@ -38,7 +40,7 @@ class ProjectUserSearch extends ProjectUser
      */
     public function search($params)
     {
-        $query = ProjectUser::find()->joinWith(['project', 'user', 'card']);
+        $query = ProjectRole::find();
 
         // add conditions that should always apply here
 
@@ -57,11 +59,9 @@ class ProjectUserSearch extends ProjectUser
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'project_id' => $this->project_id,
-            'user_id' => $this->user_id,
-            'card_id' => $this->card_id,
-            'project_role_id' => $this->project_role_id,
         ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
     }

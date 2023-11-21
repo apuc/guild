@@ -2,7 +2,8 @@
 
 use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
-use common\models\User;
+use backend\modules\project\models\ProjectRole;
+use backend\modules\project\models\ProjectUser;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -34,6 +35,23 @@ use yii\widgets\ActiveForm;
                 'allowClear' => true,
                 'multiple' => false,
             ],
+        ]
+    ) ?>
+
+    <?= $form->field($model, 'project_role_id')->widget(Select2::className(),
+        [
+            'data' => ProjectRole::find()->select(['title', 'id'])->indexBy('id')->column(),
+            'options' => ['placeholder' => '...','class' => 'form-control'],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'multiple' => false,
+            ],
+        ]
+    ) ?>
+
+    <?= $form->field($model, 'status')->dropDownList(ProjectUser::statusList(),
+        [
+            'prompt' => 'Выберите'
         ]
     ) ?>
 

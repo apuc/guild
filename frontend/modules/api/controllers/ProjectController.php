@@ -7,6 +7,7 @@ use common\models\Status;
 use common\models\UseStatus;
 use frontend\modules\api\models\Manager;
 use frontend\modules\api\models\project\Project;
+use frontend\modules\api\models\project\ProjectStatistic;
 use frontend\modules\api\models\project\ProjectUser;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -500,5 +501,41 @@ class ProjectController extends ApiController
         }
 
         return $project;
+    }
+
+    /**
+     *
+     * @OA\Get(path="/project/statistic",
+     *   summary="Получить статистику проекта",
+     *   description="Метод для получения статистики проета",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *   @OA\Parameter(
+     *      name="project_id",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *        default=null
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект статистики проекта",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectStatisticExample"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @param $project_id
+     * @return array|ActiveRecord|null
+     */
+    public function actionStatistic($project_id): array|ActiveRecord|null
+    {
+        return ProjectStatistic::find()->where(['id' => $project_id])->one();
     }
 }
