@@ -147,6 +147,15 @@ class TaskController extends ApiController
      *      )
      *   ),
      *   @OA\Parameter(
+     *      name="user_id",
+     *      description="При передаче этого параметера вернёт все задачи на проекте для пользователя с заданным id",
+     *      in="query",
+     *      required=false,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
      *      name="expand",
      *      in="query",
      *      example="column,timers,mark",
@@ -167,9 +176,9 @@ class TaskController extends ApiController
      *
      * @throws NotFoundHttpException
      */
-    public function actionGetTaskList($project_id): array
+    public function actionGetTaskList($project_id, $user_id = null): array
     {
-        $tasks = $this->taskService->getTaskListByProject($project_id);
+        $tasks = $this->taskService->getTaskListByProject($project_id, $user_id);
 
         if (empty($tasks)) {
             throw new NotFoundHttpException('The project does not exist or there are no tasks for it');
