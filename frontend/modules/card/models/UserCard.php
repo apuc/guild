@@ -32,17 +32,19 @@ class UserCard extends \common\models\UserCard
 
     public function afterSave($insert, $changedAttributes)
     {
-        $post = Yii::$app->request->post('UserCard');
+        if (Yii::$app->request->post('UserCard')) {
+            $post = Yii::$app->request->post('UserCard');
 
-        if ($post['skill']) {
-            CardSkill::deleteAll(['card_id' => $this->id]);
+            if ($post['skill']) {
+                CardSkill::deleteAll(['card_id' => $this->id]);
 
-            foreach ($post['skill'] as $item) {
-                $skill = new CardSkill();
-                $skill->skill_id = $item;
-                $skill->card_id = $this->id;
+                foreach ($post['skill'] as $item) {
+                    $skill = new CardSkill();
+                    $skill->skill_id = $item;
+                    $skill->card_id = $this->id;
 
-                $skill->save();
+                    $skill->save();
+                }
             }
         }
 
