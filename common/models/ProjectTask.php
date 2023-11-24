@@ -62,6 +62,14 @@ class ProjectTask extends ActiveRecord
     }
 
     /**
+     * @return int[]
+     */
+    public static function openTaskStatusList(): array
+    {
+        return [self::STATUS_ACTIVE, self::STATUS_AT_WORK];
+    }
+
+    /**
      * @param $priority
      * @return string
      * @throws \Exception

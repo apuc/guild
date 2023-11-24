@@ -2,10 +2,13 @@
 
 namespace frontend\modules\api\services;
 
+use common\models\Entity;
 use common\models\forms\TasksImportForm;
 use common\services\ImportProjectTaskService;
+use DateTime;
 use frontend\modules\api\models\project\ProjectTask;
 use frontend\modules\api\models\project\ProjectTaskUser;
+use frontend\modules\api\models\Timer;
 use yii\web\BadRequestHttpException;
 
 class TaskService
@@ -15,6 +18,54 @@ class TaskService
     public function __construct(ImportProjectTaskService $importProjectTaskService)
     {
         $this->importProjectTaskService = $importProjectTaskService;
+    }
+
+    public static function getOpenTaskCount(int $user_id, int $project_id): bool|int|string|null
+    {
+        return ProjectTask::find()
+            ->where(['user_id' => $user_id])
+            ->andWhere(['project_id' => $project_id])
+            ->andWhere(['in', 'status', ProjectTask::openTaskStatusList()])
+            ->count();
+    }
+
+    public static function getHoursWorkedForCurrentMonth(int $user_id, int $project_id)
+    {
+        $projectTaskIdArr = ProjectTask::find()
+            ->select('id')
+            ->where(['user_id' => $user_id])
+            ->andWhere(['project_id' => $project_id])
+            ->column();
+
+        $firstMonthDay = new DateTime('first day of this month');
+        $firstMonthDay->setTime(00, 00, 01);
+        $firstMonthDay = $firstMonthDay->format('Y-m-d H:i:s');
+
+
+        $lastMonthDay = new DateTime('last day of this month');
+        $lastMonthDay->setTime(23, 59, 00);
+        $lastMonthDay = $lastMonthDay->format('Y-m-d H:i:s');
+
+        $timers = Timer::find()
+            ->where(['user_id' => $user_id])
+            ->andWhere(['entity_type' => Entity::ENTITY_TYPE_TASK])
+            ->andWhere(['in', 'entity_id', $projectTaskIdArr])
+            ->andWhere(['between', 'created_at', $firstMonthDay, $lastMonthDay ])
+            ->all();
+
+        $hours = 0;
+        /** @var Timer $timer */
+        foreach ($timers as $timer) {
+            // Create two new DateTime-objects...
+            $date1 = new DateTime($timer->created_at);
+            $date2 = new DateTime($timer->stopped_at);
+
+            $diff = $date2->diff($date1);
+
+            $hours += $diff->h + ($diff->days*24);
+
+        }
+        return $hours;
     }
 
     public function createTask($taskParams)
