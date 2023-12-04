@@ -98,5 +98,13 @@ namespace frontend\modules\api\models;
  */
 class UserResponse extends \common\models\UserResponse
 {
-
+    public function fields(): array
+    {
+        return [
+            'user_id',
+            'question_id',
+            'response_body',
+            'user_questionnaire_uuid',
+        ];
+    }
 }

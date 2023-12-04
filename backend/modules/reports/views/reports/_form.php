@@ -1,9 +1,8 @@
 <?php
 
 use kartik\date\DatePicker;
-use kartik\datetime\DateTimePicker;
-use Symfony\Component\Console\Input\Input;
 use unclead\multipleinput\MultipleInput;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -70,7 +69,17 @@ $this->registerCss('.list-cell__task{width:73%}')
     <?= $form->field($model, 'tomorrow')->textarea(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'user_card_id')->dropDownList(
-        \yii\helpers\ArrayHelper::map(common\models\UserCard::find()->all(), 'id', 'fio'),
+        ArrayHelper::map(common\models\UserCard::find()->all(), 'id', 'fio'),
+        ['prompt' => '...']
+    ) ?>
+
+    <?= $form->field($model, 'project_id')->dropDownList(
+        ArrayHelper::map(common\models\Project::find()->all(), 'id', 'name'),
+        ['prompt' => '...']
+    ) ?>
+
+    <?= $form->field($model, 'company_id')->dropDownList(
+        ArrayHelper::map(common\models\Company::find()->all(), 'id', 'name'),
         ['prompt' => '...']
     ) ?>
 

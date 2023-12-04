@@ -2,14 +2,12 @@
 
 namespace backend\modules\task\controllers;
 
-use backend\modules\project\models\ProjectUser;
-use backend\modules\task\models\ProjectTaskUser;
-use common\classes\Debug;
+use common\models\forms\TasksImportForm;
+use common\services\ImportProjectTaskService;
 use yii\data\ActiveDataProvider;
-use yii\web\Response;
 use Yii;
 use backend\modules\task\models\ProjectTask;
-use backend\modules\task\models\TaskSearch;
+use backend\modules\task\models\ProjectTaskSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -43,7 +41,7 @@ class TaskController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new TaskSearch();
+        $searchModel = new ProjectTaskSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -140,5 +138,34 @@ class TaskController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionImport()
+    {
+        $model = new TasksImportForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $importTaskService = new ImportProjectTaskService();
+
+            $query = ProjectTask::genQueryToImport(
+                (int)$model->companyId,
+                (int)$model->userId,
+                (int)$model->projectId,
+                (int)$model->fromDate,
+                (int)$model->toDate
+            );
+            $tasks = $query->all();
+
+            if (!$tasks) {
+                Yii::$app->session->setFlash('danger', 'Задачи не найдены!');
+                return Yii::$app->getResponse()->redirect(['/task/task/import']);
+            } else {
+                return $importTaskService->importTasks($tasks);
+            }
+        }
+
+        return $this->render('_form-import', [
+            'model' => $model,
+        ]);
     }
 }

@@ -46,6 +46,8 @@ use yii\widgets\ActiveForm;
             ]
         ]) ?>
 
+    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Создать', ['class' => 'btn btn-success']) ?>
     </div>

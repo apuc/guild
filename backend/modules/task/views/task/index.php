@@ -12,7 +12,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\modules\task\models\TaskSearch */
+/* @var $searchModel backend\modules\task\models\ProjectTaskSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Задачи';
@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Создать задачу', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Импорт задач', ['import'], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= GridView::widget([
@@ -56,6 +57,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => StatusHelper::statusList(),
                 'value' => function($model){
                     return StatusHelper::statusLabel($model->status);
+                }
+            ],
+            [
+                'attribute' => 'execution_priority',
+                'format' => 'raw',
+                'filter' => ProjectTask::priorityList(),
+                'value' => function($model){
+                    return ProjectTask::getPriority($model->status);
                 }
             ],
             [

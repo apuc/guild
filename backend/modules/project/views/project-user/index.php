@@ -2,6 +2,7 @@
 
 use backend\modules\card\models\UserCard;
 use backend\modules\project\models\Project;
+use backend\modules\project\models\ProjectRole;
 use common\models\User;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -69,6 +70,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'card_id',
                     'data' => UserCard::find()->select(['fio', 'id'])->indexBy('id')->column(),
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '250px',
+                    ],
+                    'options' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Выберите значение'
+                    ],
+                ])
+            ],
+            [
+                'attribute' => 'project_role_id',
+                'value' => 'projectRole.title',
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'project_role_id',
+                    'data' => ProjectRole::find()->select(['title', 'id'])->indexBy('id')->column(),
                     'pluginOptions' => [
                         'allowClear' => true,
                         'width' => '250px',

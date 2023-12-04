@@ -3,9 +3,14 @@
 namespace frontend\modules\card\models;
 
 use common\models\CardSkill;
+use frontend\modules\api\models\UserCardPortfolioProjects;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
+/**
+ * @property UserCardPortfolioProjects[] $userCardPortfolioProjects
+ */
 class UserCard extends \common\models\UserCard
 {
     public $fields;
@@ -27,17 +32,19 @@ class UserCard extends \common\models\UserCard
 
     public function afterSave($insert, $changedAttributes)
     {
-        $post = Yii::$app->request->post('UserCard');
+        if (Yii::$app->request->post('UserCard')) {
+            $post = Yii::$app->request->post('UserCard');
 
-        if ($post['skill']) {
-            CardSkill::deleteAll(['card_id' => $this->id]);
+            if ($post['skill']) {
+                CardSkill::deleteAll(['card_id' => $this->id]);
 
-            foreach ($post['skill'] as $item) {
-                $skill = new CardSkill();
-                $skill->skill_id = $item;
-                $skill->card_id = $this->id;
+                foreach ($post['skill'] as $item) {
+                    $skill = new CardSkill();
+                    $skill->skill_id = $item;
+                    $skill->card_id = $this->id;
 
-                $skill->save();
+                    $skill->save();
+                }
             }
         }
 
@@ -47,5 +54,10 @@ class UserCard extends \common\models\UserCard
     public static function findByUserId($userId): ?UserCard
     {
         return self::findOne(['id_user' => $userId]);
+    }
+
+    public function getUserCardPortfolioProjects(): ActiveQuery
+    {
+        return $this->hasMany(UserCardPortfolioProjects::class, ['card_id' => 'id']);
     }
 }

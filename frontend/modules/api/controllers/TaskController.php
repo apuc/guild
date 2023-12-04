@@ -2,31 +2,35 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\classes\Debug;
 use common\models\ProjectTask;
 use common\models\ProjectTaskUser;
 use common\models\User;
-use common\services\TaskService;
-use frontend\modules\api\models\ProjectColumn;
+use frontend\modules\api\models\project\ProjectColumn;
+use frontend\modules\api\services\TaskService;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 class TaskController extends ApiController
 {
-    public function verbs(): array
+    /**
+     * @var TaskService
+     */
+    private TaskService $taskService;
+
+    /**
+     * @param $id
+     * @param $module
+     * @param TaskService $taskService
+     * @param array $config
+     */
+    public function __construct($id, $module, TaskService $taskService, $config = [])
     {
-        return [
-            'get-task' => ['get'],
-            'get-task-list' => ['get'],
-            'get-user-tasks' => ['get'],
-            'create-task' => ['post'],
-            'update-task' => ['put', 'patch'],
-            'add-user-to-task' => ['post'],
-            'del-user' => ['delete'],
-        ];
+        $this->taskService = $taskService;
+        parent::__construct($id, $module, $config);
     }
 
     /**
@@ -72,7 +76,12 @@ class TaskController extends ApiController
      *          @OA\Property(
      *              property="priority",
      *              type="integer",
-     *              description="Приоритет задачи",
+     *              description="Приоритет задачи.",
+     *          ),
+     *          @OA\Property(
+     *              property="execution_priority",
+     *              type="integer",
+     *              description="Приоритет выполнения задачи (0 - low, 1 - medium, 2 - high)",
      *          ),
      *          @OA\Property(
      *              property="column_id",
@@ -112,7 +121,7 @@ class TaskController extends ApiController
             $request['user_id'] = Yii::$app->user->id;
         }
 
-        $taskModel = TaskService::createTask($request);
+        $taskModel = $this->taskService->createTask($request);
         if ($taskModel->errors) {
             throw new ServerErrorHttpException(json_encode($taskModel->errors));
         }
@@ -138,6 +147,15 @@ class TaskController extends ApiController
      *      )
      *   ),
      *   @OA\Parameter(
+     *      name="user_id",
+     *      description="При передаче этого параметера вернёт все задачи на проекте для пользователя с заданным id",
+     *      in="query",
+     *      required=false,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
      *      name="expand",
      *      in="query",
      *      example="column,timers,mark",
@@ -158,22 +176,67 @@ class TaskController extends ApiController
      *
      * @throws NotFoundHttpException
      */
-    public function actionGetTaskList($project_id): array
+    public function actionGetTaskList($project_id, $user_id = null): array
     {
-        $tasks = array();
-        if ($project_id) {
-            if (empty($project_id) or !is_numeric($project_id)) {
-                throw new NotFoundHttpException('Incorrect project ID');
-            }
-            $tasks = TaskService::getTaskListByProject($project_id);
-        } else {
-            $tasks = TaskService::getTaskList($project_id);
-        }
+        $tasks = $this->taskService->getTaskListByProject($project_id, $user_id);
 
         if (empty($tasks)) {
             throw new NotFoundHttpException('The project does not exist or there are no tasks for it');
         }
         return $tasks;
+    }
+
+    /**
+     *
+     * @OA\Get(path="/task/get-archive-task",
+     *   summary="Получить список архивных задач по проекту",
+     *   description="Метод для получения архивных задач по проекту",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *   @OA\Parameter(
+     *      name="project_id",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="user_id",
+     *      in="query",
+     *      required=false,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="expand",
+     *      in="query",
+     *      example="column,timers,mark",
+     *      description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поля <b>column</b>, <b>timers</b> и <b>mark</b>",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает массив объектов Задач",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectTaskExample"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @param $project_id
+     * @param null $user_id
+     * @return array
+     */
+    public function actionGetArchiveTask($project_id, $user_id = null): array
+    {
+        return $this->taskService->getArchiveTask($project_id, $user_id);
     }
 
     /**
@@ -218,15 +281,7 @@ class TaskController extends ApiController
      */
     public function actionGetUserTasks($user_id): array
     {
-        $tasks = array();
-        if ($user_id) {
-            if (empty($user_id) or !is_numeric($user_id)) {
-                throw new NotFoundHttpException('Incorrect project ID');
-            }
-            $tasks = TaskService::getTaskListByUser($user_id);
-        } else {
-            $tasks = TaskService::getTaskList($user_id);
-        }
+        $tasks = $this->taskService->getTaskListByUser($user_id);
 
         if (empty($tasks)) {
             throw new NotFoundHttpException('The project does not exist or there are no tasks for it');
@@ -278,7 +333,7 @@ class TaskController extends ApiController
             throw new NotFoundHttpException('Incorrect task ID');
         }
 
-        $task = TaskService::getTask($task_id);
+        $task = $this->taskService->getTask($task_id);
         if (empty($task)) {
             throw new NotFoundHttpException('The task does not exist');
         }
@@ -367,11 +422,11 @@ class TaskController extends ApiController
     public function actionUpdateTask(): ?ProjectTask
     {
         $params = array_diff(\Yii::$app->request->getBodyParams(), [null, '']);
-        if (empty ($params['task_id']) or !TaskService::taskExists($params['task_id'])) {
+        if (empty ($params['task_id']) or !$this->taskService->taskExists($params['task_id'])) {
             throw new NotFoundHttpException('The task does not exist');
         }
 
-        $modelTask = TaskService::updateTask($params);
+        $modelTask = $this->taskService->updateTask($params);
         if (!empty($modelTask->hasErrors())) {
             throw new ServerErrorHttpException(json_encode($modelTask->errors));
         }
@@ -430,7 +485,7 @@ class TaskController extends ApiController
             throw new NotFoundHttpException('User not found');
         }
 
-        if (empty ($request['task_id']) or !TaskService::taskExists($request['task_id'])) {
+        if (empty ($request['task_id']) or !$this->taskService->taskExists($request['task_id'])) {
             throw new NotFoundHttpException('The task does not exist');
         }
 
@@ -501,13 +556,13 @@ class TaskController extends ApiController
             throw new NotFoundHttpException('User not found');
         }
 
-        if (empty ($request['task_id']) or !TaskService::taskExists($request['task_id'])) {
+        if (empty ($request['task_id']) or !$this->taskService->taskExists($request['task_id'])) {
             throw new NotFoundHttpException('The task does not exist');
         }
 
         ProjectTaskUser::deleteAll(['task_id' => $request['task_id'], 'user_id' => $request['user_id']]);
 
-        return TaskService::getTask($request['task_id']);
+        return $this->taskService->getTask($request['task_id']);
     }
 
     /**
@@ -576,5 +631,70 @@ class TaskController extends ApiController
         }
 
         return $column;
+    }
+
+    /**
+     *
+     * @OA\Get(path="/task/import",
+     *   summary="Экспорт задач",
+     *   description="Метод импорта задач в xlsx",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *   @OA\Parameter(
+     *      name="companyId",
+     *      in="query",
+     *      description="ID компании",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="userId",
+     *      in="query",
+     *      description="ID исполнителя задачи",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="projectId",
+     *      in="query",
+     *      description="ID проекта",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="fromDate",
+     *      in="query",
+     *      example="2023-11-09",
+     *      description="Поиск задач с указанной даты",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="toDate",
+     *      in="query",
+     *      example="2023-11-09",
+     *      description="Поиск задач до указанной даты",
+     *      @OA\Schema(
+     *        type="string",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает задачи в xlsx файле",
+     *   ),
+     * )
+     *
+     * @return string|void
+     * @throws BadRequestHttpException
+     */
+    public function actionImport()
+    {
+        return $this->taskService->importTasks(Yii::$app->request->get());
     }
 }

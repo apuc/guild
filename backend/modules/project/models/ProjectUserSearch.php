@@ -4,7 +4,6 @@ namespace backend\modules\project\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\project\models\ProjectUser;
 
 /**
  * ProjectUserSearch represents the model behind the search form of `backend\modules\project\models\ProjectUser`.
@@ -17,7 +16,7 @@ class ProjectUserSearch extends ProjectUser
     public function rules()
     {
         return [
-            [['id', 'project_id', 'user_id', 'card_id'], 'integer'],
+            [['id', 'project_id', 'user_id', 'card_id', 'project_role_id'], 'integer'],
         ];
     }
 
@@ -61,6 +60,7 @@ class ProjectUserSearch extends ProjectUser
             'project_id' => $this->project_id,
             'user_id' => $this->user_id,
             'card_id' => $this->card_id,
+            'project_role_id' => $this->project_role_id,
         ]);
 
         return $dataProvider;

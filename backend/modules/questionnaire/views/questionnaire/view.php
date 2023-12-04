@@ -54,6 +54,7 @@ YiiAsset::register($this);
                 'format' => 'raw',
                 'value' => TimeHelper::limitTime($model->time_limit),
             ],
+            'description',
         ],
     ]) ?>
 

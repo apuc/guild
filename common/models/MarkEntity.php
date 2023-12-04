@@ -11,6 +11,8 @@ use Yii;
  * @property int $mark_id
  * @property int $entity_type
  * @property int $entity_id
+ *
+ * @property Mark $mark
  */
 class MarkEntity extends \yii\db\ActiveRecord
 {

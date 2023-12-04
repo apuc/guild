@@ -18,7 +18,8 @@
             $projectItems[] = ['label' => $status, 'icon' => 'user', 'url' => ['/project/project?ProjectSearch[status]=' . $key, 'active' => \Yii::$app->controller->id == 'project']];
         }
         $projectItems[] = ['label' => 'Сотрудники на проектах', 'icon' => 'users', 'url' => ['/project/project-user'], 'active' => \Yii::$app->controller->id == 'project-user'];
-        $projectItems[] = ['label' => 'метки проектов', 'icon' => 'tags', 'url' => ['/project/project-mark'], 'active' => \Yii::$app->controller->id == 'project-mark'];
+        $projectItems[] = ['label' => 'Метки проектов', 'icon' => 'tags', 'url' => ['/project/project-mark'], 'active' => \Yii::$app->controller->id == 'project-mark'];
+        $projectItems[] = ['label' => 'Роли на проекте', 'icon' => 'user-o', 'url' => ['/project/project-role'], 'active' => \Yii::$app->controller->id == 'project-role'];
         ?>
 
         <?= dmstr\widgets\Menu::widget(

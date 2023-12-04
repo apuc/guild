@@ -14,7 +14,57 @@ use yii\web\NotFoundHttpException;
 
 class ReportsController extends ApiController
 {
-    public function actionIndex($user_card_id)
+    /**
+     * @OA\Get(path="/user-response/index",
+     *   summary="Поиск отчётов по промежутку дат",
+     *   description="Осуществляет поиск отчётов пользователя по промежутку дат",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Reports"},
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"user_card_id"},
+     *          @OA\Property(
+     *              property="user_card_id",
+     *              type="integer",
+     *              description="Идентификатор карты(профиля) пользователя",
+     *              nullable=false,
+     *          ),
+     *          @OA\Property(
+     *              property="fromDate",
+     *              type="DateTime",
+     *              description="Дата начала поиска",
+     *              nullable=false,
+     *          ),
+     *          @OA\Property(
+     *              property="toDate",
+     *              type="DateTime",
+     *              description="Дата конца периода поиска",
+     *              nullable=false,
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Запроса",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ReportsResponseExample"),
+     *     ),
+     *   ),
+     *
+     *
+     * )
+     *
+     * @param $user_card_id
+     * @return array
+     */
+    public function actionIndex($user_card_id): array
     {
         $reportsModel = new ReportSearchForm();
 
@@ -32,9 +82,51 @@ class ReportsController extends ApiController
     }
 
     /**
+     * @OA\Get(path="/user-response/find-by-date",
+     *   summary="Поиск отчётов по дате",
+     *   description="Осуществляет поиск отчётов пользователя по дате",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Reports"},
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"user_card_id"},
+     *          @OA\Property(
+     *              property="user_card_id",
+     *              type="integer",
+     *              description="Идентификатор карты(профиля) пользователя",
+     *              nullable=false,
+     *          ),
+     *          @OA\Property(
+     *              property="date",
+     *              type="DateTime",
+     *              description="Дата поиска",
+     *              nullable=false,
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Запроса",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ReportsResponseExample"),
+     *     ),
+     *   ),
+     *
+     *
+     * )
+     *
+     * @return array
+     * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      */
-    public function actionFindByDate()//: array
+    public function actionFindByDate(): array
     {
         $reportsModel = new ReportSearchForm();
 
@@ -57,7 +149,118 @@ class ReportsController extends ApiController
         return $reportsModel->findByDate();
     }
 
-    public function actionCreate()
+    /**
+     * @OA\Post(path="/reports/create",
+     *   summary="Создание отчёта",
+     *   description="Метод для создания нового отчёта",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Reports"},
+     *   @OA\Parameter(
+     *     name="difficulties",
+     *     in="query",
+     *     required=false,
+     *     description="Описание сложностей возникших при выполнении задач",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="tomorrow",
+     *     in="query",
+     *     required=false,
+     *     description="Описание планов на завтра",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="created_at",
+     *     in="query",
+     *     required=false,
+     *     description="Дата создания",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="status",
+     *     in="query",
+     *     required=false,
+     *     description="Статус",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="user_card_id",
+     *     in="query",
+     *     required=false,
+     *     description="ID карты(профиля) пользователя",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="project_id",
+     *     in="query",
+     *     required=false,
+     *     description="ID проекта",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="company_id",
+     *     in="query",
+     *     required=false,
+     *     description="ID компании",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="tasks[]",
+     *     in="query",
+     *     required=false,
+     *     description="Масив задач. ",
+     *     @OA\Schema(
+     *          type="array",
+     *          @OA\Items(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="task",
+     *                      description="Название задачи",
+     *                      type="string",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="hours_spent",
+     *                      description="Затраченное количество часов",
+     *                      type="string",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="minutes_spent",
+     *                      description="Затраченное количество минут",
+     *                      type="string",
+     *                  )
+     *              )
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Запроса",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ReportsResponseCreateExample"),
+     *     ),
+     *   ),
+     *     )
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     */
+    public function actionCreate(): array
     {
         $params = Yii::$app->request->post();
         if (!isset($params['tasks'])){
@@ -93,6 +296,41 @@ class ReportsController extends ApiController
         return array_merge($reportsModel->toArray());
     }
 
+
+    /**
+     * @OA\Get(path="/user-response/delete",
+     *   summary="Удаление отчёта",
+     *   description="Осуществляет удаление отчёта",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Reports"},
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={"id"},
+     *          @OA\Property(
+     *              property="id",
+     *              type="integer",
+     *              description="Идентификатор отчётая",
+     *              nullable=false,
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает true в случае успеха",
+     *   ),
+     * )
+     *
+     * @return bool
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
     public function actionDelete()
     {
         $id = Yii::$app->request->get('id');
@@ -110,6 +348,82 @@ class ReportsController extends ApiController
         return true;
     }
 
+    /**
+     * @OA\Get(path="/reports/update",
+     *   summary="Обновление отчёта",
+     *   description="Метод для Обновления отчёта",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Reports"},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="query",
+     *     required=true,
+     *     description="ID отчёта",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="created_at",
+     *     in="query",
+     *     required=false,
+     *     description="Дата создания (yyyy-mm-dd)",
+     *     @OA\Schema(
+     *       type="DateTime",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="today",
+     *     in="query",
+     *     required=false,
+     *     description="Сделанное сегодня",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="difficulties",
+     *     in="query",
+     *     required=false,
+     *     description="Описание сложностей возникших при выполнении задач",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="tomorrow",
+     *     in="query",
+     *     required=false,
+     *     description="Описание планов на завтра",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="status",
+     *     in="query",
+     *     required=false,
+     *     description="Статус",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Запроса",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ReportsResponseCreateExample"),
+     *     ),
+     *   ),
+     *     )
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
+     */
     public function actionUpdate(): array
     {
         $params = Yii::$app->request->get();
@@ -135,7 +449,11 @@ class ReportsController extends ApiController
     }
 
     /**
-     * @throws NotFoundHttpException
+     * @param $fromDate
+     * @param $toDate
+     * @param $user_card_id
+     * @return array|array[]|object|object[]|string[]
+     * @throws BadRequestHttpException
      */
     public function actionReportsByDate($fromDate, $toDate, $user_card_id)
     {
@@ -170,5 +488,4 @@ class ReportsController extends ApiController
         }
         return true;
     }
-
 }

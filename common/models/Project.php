@@ -2,9 +2,8 @@
 
 namespace common\models;
 
-use common\classes\Debug;
-use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -23,9 +22,11 @@ use yii\helpers\ArrayHelper;
  *
  * @property FieldsValue[] $fieldsValues
  * @property Company $company
+ * @property User $owner
  * @property ProjectUser[] $projectUsers
  * @property Mark[] $mark
  * @property MarkEntity[] $markEntity
+ * @property ProjectTask[] $projectTask
  */
 class Project extends \yii\db\ActiveRecord
 {
@@ -55,8 +56,8 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['name', 'unique'],
-            [['name', 'status'], 'required'],
+            [['name', 'owner_id', 'status'], 'required'],
+            [['owner_id', 'name'], 'unique', 'targetAttribute' => ['owner_id', 'name']],
             [['description'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status' => 'id']],
@@ -88,7 +89,7 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFieldsValues()
     {
@@ -96,7 +97,7 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getCompany()
     {
@@ -104,7 +105,7 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getColumns()
     {
@@ -114,7 +115,15 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     */
+    public function getProjectTask(): ActiveQuery
+    {
+        return $this->hasMany(ProjectTask::class, ['project_id' => 'id']);
+    }
+
+    /**
+     * @return ActiveQuery
      */
     public function getOwner()
     {
@@ -122,7 +131,7 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getHh()
     {
@@ -130,7 +139,7 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProjectUsers()
     {
@@ -138,7 +147,7 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getMark()
     {
@@ -147,7 +156,7 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getMarkEntity()
     {

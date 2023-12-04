@@ -49,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return TimeHelper::limitTime($model->time_limit);
                 }
             ],
+            'description',
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

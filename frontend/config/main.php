@@ -1,4 +1,7 @@
 <?php
+
+use common\behaviors\GsCors;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -8,7 +11,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
-    'name' => 'Guild',
+    'name' => 'itGuild',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
@@ -17,10 +20,10 @@ return [
         'api' => [
             'components' => [
                 'user' => [
-                    'identityClass' => 'frontend\modules\api\models\User',
+                    'identityClass' => 'frontend\modules\api\models\profile\User',
                     'enableAutoLogin' => true,
                     'enableSession' => false,
-                    'class' => 'frontend\modules\api\models\User',
+                    'class' => 'frontend\modules\api\models\profile\User',
                     //'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
                 ],
             ],
@@ -47,7 +50,6 @@ return [
                 ],
             ],
         ],
-
         'request' => [
             'csrfParam' => '_csrf-frontend',
             'baseUrl' => '',
@@ -86,6 +88,7 @@ return [
                 'api/profile/<id:\d+>' => 'api/profile/index',
                 'api/reports/<id:\d+>' => 'api/reports/view',
                 '' => 'card/user-card/index',
+
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'skills'],
             ],
         ],

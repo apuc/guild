@@ -15,6 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property int $category_id
  * @property string $title
  * @property int $status
+ * @property string $description
  * @property string $created_at
  * @property string $updated_at
  * @property string $time_limit
@@ -55,7 +56,7 @@ class Questionnaire extends ActiveRecord
             [['category_id', 'status'], 'integer'],
             [['created_at', 'updated_at', 'time_limit'], 'safe'],
             ['title', 'unique'],
-            [['title'], 'string', 'max' => 255],
+            [['title', 'description'], 'string', 'max' => 255],
             ['status', 'default', 'value' => true],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => QuestionnaireCategory::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
@@ -70,6 +71,7 @@ class Questionnaire extends ActiveRecord
             'id' => 'ID',
             'category_id' => 'Категория',
             'title' => 'Название анкеты',
+            'description' => 'Описание',
             'status' => 'Статус',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
