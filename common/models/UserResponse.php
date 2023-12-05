@@ -54,7 +54,7 @@ class UserResponse extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'question_id'], 'integer'],
+            [['user_id', 'question_id', 'answer_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['answer_flag'], 'number'],
             [['response_body'], 'string', 'max' => 255],
@@ -74,6 +74,7 @@ class UserResponse extends ActiveRecord
             'id' => 'ID',
             'user_id' => 'Пользователь',
             'question_id' => 'Вопрос',
+            'answer_id' => 'Идентификатор ответа',
             'response_body' => 'Ответ пользователя',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -96,6 +97,14 @@ class UserResponse extends ActiveRecord
     public function getQuestion()
     {
         return $this->hasOne(Question::className(), ['id' => 'question_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getAnswer(): ActiveQuery
+    {
+        return $this->hasOne(Answer::class, ['id' => 'answer_id']);
     }
 
     /**

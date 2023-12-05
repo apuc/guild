@@ -2,7 +2,9 @@
 
 namespace frontend\modules\api\services;
 
+use common\classes\Debug;
 use common\services\ScoreCalculatorService;
+use frontend\modules\api\models\questionnaire\UserQuestionnaire;
 use frontend\modules\api\models\UserResponse;
 use Yii;
 use yii\web\BadRequestHttpException;
@@ -14,14 +16,21 @@ class UserResponseService
      * @throws BadRequestHttpException
      * @throws ServerErrorHttpException
      */
-    public static function createUserResponses($userResponsesParams, $uuid): array
+    public static function createUserResponses($userResponsesParams, UserQuestionnaire $userQuestionnaire): array
     {
         $userResponseModels = array();
-        foreach ($userResponsesParams as $userResponse) {
+        try {
+            $userResponsesParamsArray = json_decode($userResponsesParams, true);
+        }
+        catch (\Exception $ex) {
+            throw new BadRequestHttpException('userResponses is not json');
+        }
 
+        foreach ($userResponsesParamsArray as $userResponse) {
             $model = new UserResponse();
             $model->load($userResponse, '');
-            $model->user_questionnaire_uuid = $uuid;
+            $model->user_id = $userQuestionnaire->user_id;
+            $model->user_questionnaire_uuid = $userQuestionnaire->uuid;
 
             try {
                 self::validateResponseModel($model);
@@ -30,7 +39,7 @@ class UserResponseService
             }
 
 
-            array_push($userResponseModels, $model);
+            $userResponseModels[] = $model;
         }
 
         foreach ($userResponseModels as $responseModel) {
