@@ -128,7 +128,7 @@ class ProjectColumn extends \yii\db\ActiveRecord
     public function getTasks()
     {
         return $this->hasMany(ProjectTask::class, ['column_id' => 'id'])
-            ->with(['taskUsers', ''])
+            ->with(['taskUsers'])
             ->where(['status' => ProjectTask::STATUS_ACTIVE])
             ->orderBy('priority');
     }
