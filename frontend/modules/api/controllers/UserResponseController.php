@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\classes\Debug;
 use frontend\modules\api\models\questionnaire\UserQuestionnaire;
 use frontend\modules\api\services\UserQuestionnaireService;
 use frontend\modules\api\services\UserResponseService;
@@ -29,7 +30,11 @@ class UserResponseController extends ApiController
      * @OA\Post(path="/user-response/set-responses",
      *   summary="Добавить массив ответов пользователя",
      *   description="Добавление массива ответов на вопросы от пользователя. При наличии лимита времени на выполнение теста,
-         будет проведена проверка. При превышении лимита времени на выполнение будет возвращена ошибка: Time's up!",
+         будет проведена проверка. При превышении лимита времени на выполнение будет возвращена ошибка: Time's up!
+         <br>
+         Пример запроса <b>userResponses</b><br>
+         <code>[{'question_id': 1,'response_body':'Otvet','answer_id':3},{'question_id': 2,'response_body':'Otvet 2','answer_id':5}]</code>
+     ",
      *   security={
      *     {"bearerAuth": {}}
      *   },
@@ -38,7 +43,7 @@ class UserResponseController extends ApiController
      *     @OA\MediaType(
      *       mediaType="application/x-www-form-urlencoded",
      *       @OA\Schema(
-     *          required={"request_id"},
+     *          required={"user_id", "userResponses", "user_questionnaire_uuid"},
      *          @OA\Property(
      *              property="user_id",
      *              type="integer",
@@ -46,14 +51,10 @@ class UserResponseController extends ApiController
      *              nullable=false,
      *          ),
      *          @OA\Property(
-     *              property="question_id",
-     *              type="integer",
-     *              description="Идентификатор вопроса",
-     *          ),
-     *          @OA\Property(
-     *              property="response_body",
+     *              property="userResponses",
      *              type="string",
-     *              description="UUID анкеты назначенной пользователю",
+     *              description="Ответы пользователя",
+     *              example="{}",
      *          ),
      *          @OA\Property(
      *              property="user_questionnaire_uuid",
@@ -92,7 +93,7 @@ class UserResponseController extends ApiController
             throw new BadRequestHttpException("Time's up!");
         }
 
-        $userResponseModels = UserResponseService::createUserResponses($userResponses,  $uuid);
+        $userResponseModels = UserResponseService::createUserResponses($userResponses,  $userQuestionnaire);
         foreach ($userResponseModels as $model) {
             if ($model->errors) {
                 throw new ServerErrorHttpException(json_encode($model->errors));

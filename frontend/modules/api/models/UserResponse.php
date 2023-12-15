@@ -71,8 +71,8 @@ namespace frontend\modules\api\models;
  *  schema="UserResponseExampleArr",
  *  type="array",
  *  example={
- *     {"user_id": 23, "question_id": 22, "response_body": "Ответ 1", "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",},
- *     {"user_id": 16, "question_id": 3, "response_body": "Ответ 22", "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",},
+ *     {"user_id": 23, "question_id": 22, "answer_id": 32, "response_body": "Ответ 1", "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",},
+ *     {"user_id": 16, "question_id": 3, "answer_id": 44, "response_body": "Ответ 22", "user_questionnaire_uuid": "d222f858-60fd-47fb-8731-dc9d5fc384c5",},
  *  },
  *  @OA\Items(
  *      type="object",
@@ -82,6 +82,10 @@ namespace frontend\modules\api\models;
  *      ),
  *      @OA\Property(
  *         property="question_id",
+ *         type="integer",
+ *      ),
+ *      @OA\Property(
+ *         property="answer_id",
  *         type="integer",
  *      ),
  *      @OA\Property(
@@ -103,6 +107,7 @@ class UserResponse extends \common\models\UserResponse
         return [
             'user_id',
             'question_id',
+            'answer_id',
             'response_body',
             'user_questionnaire_uuid',
         ];
