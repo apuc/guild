@@ -128,7 +128,7 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
      */
     public static function findByEmail($email)
     {
-        return static::findOne(['username' => $email, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
