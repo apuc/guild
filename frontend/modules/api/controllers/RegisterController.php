@@ -76,13 +76,13 @@ class RegisterController extends ApiController
             /** @var User $user */
             if ($user = $model->signup()) {
                 $this->emailService->sendEmail(new RegistrationEmail($user));
-                return [
+                return $this->asJson([
                     'id' => $user->id,
-                ];
+                ]);
             }
         }
 
-        return null;
+        return $this->asJson(['errors' => $model->errors]);
     }
 
     /**
