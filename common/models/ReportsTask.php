@@ -19,14 +19,14 @@ use Yii;
  */
 class ReportsTask extends \yii\db\ActiveRecord
 {
-    const SCENARIO_WITHOUT_REPORT_ID = 'withoutReportID';
-
-    public function scenarios()
-    {
-        $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_WITHOUT_REPORT_ID] = self::attributes();
-        return $scenarios;
-    }
+//    const SCENARIO_WITHOUT_REPORT_ID = 'withoutReportID';
+//
+//    public function scenarios()
+//    {
+//        $scenarios = parent::scenarios();
+//        $scenarios[self::SCENARIO_WITHOUT_REPORT_ID] = self::attributes();
+//        return $scenarios;
+//    }
 
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class ReportsTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['report_id'], 'required', 'on' => self::SCENARIO_DEFAULT],
+            //[['report_id'], 'required', 'on' => self::SCENARIO_DEFAULT],
             [['report_id', 'created_at', 'status', 'minutes_spent'], 'integer'],
             [['hours_spent'], 'number'],
             ['minutes_spent', 'compare', 'compareValue' => 60, 'operator' => '<'],

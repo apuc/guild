@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\classes\Debug;
 use common\models\Reports;
 use common\models\ReportsTask;
 use common\models\UserCard;
@@ -14,39 +15,48 @@ use yii\web\NotFoundHttpException;
 
 class ReportsController extends ApiController
 {
+    public function verbs(): array
+    {
+        return [
+            'index' => ['get'],
+            'attach' => ['post'],
+            'delete' => ['delete'],
+            'update' => ['put', 'patch'],
+        ];
+    }
+
     /**
-     * @OA\Get(path="/user-response/index",
+     * @OA\Get(path="/reports/index",
      *   summary="Поиск отчётов по промежутку дат",
      *   description="Осуществляет поиск отчётов пользователя по промежутку дат",
      *   security={
      *     {"bearerAuth": {}}
      *   },
      *   tags={"Reports"},
-     *   @OA\RequestBody(
-     *     @OA\MediaType(
-     *       mediaType="application/x-www-form-urlencoded",
-     *       @OA\Schema(
-     *          required={"user_card_id"},
-     *          @OA\Property(
-     *              property="user_card_id",
-     *              type="integer",
-     *              description="Идентификатор карты(профиля) пользователя",
-     *              nullable=false,
-     *          ),
-     *          @OA\Property(
-     *              property="fromDate",
-     *              type="DateTime",
-     *              description="Дата начала поиска",
-     *              nullable=false,
-     *          ),
-     *          @OA\Property(
-     *              property="toDate",
-     *              type="DateTime",
-     *              description="Дата конца периода поиска",
-     *              nullable=false,
-     *          ),
-     *       ),
-     *     ),
+     *   @OA\Parameter(
+     *      name="user_id",
+     *      description="Идентификатор пользователя",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="fromDate",
+     *      description="Дата начала поиска",
+     *      in="query",
+     *      @OA\Schema(
+     *        type="DateTime",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="toDate",
+     *      description="Дата конца периода поиска",
+     *      in="query",
+     *      @OA\Schema(
+     *        type="DateTime",
+     *      )
      *   ),
      *
      *   @OA\Response(
@@ -61,10 +71,9 @@ class ReportsController extends ApiController
      *
      * )
      *
-     * @param $user_card_id
      * @return array
      */
-    public function actionIndex($user_card_id): array
+    public function actionIndex(): array
     {
         $reportsModel = new ReportSearchForm();
 
@@ -82,32 +91,30 @@ class ReportsController extends ApiController
     }
 
     /**
-     * @OA\Get(path="/user-response/find-by-date",
+     * @OA\Get(path="/reports/find-by-date",
      *   summary="Поиск отчётов по дате",
      *   description="Осуществляет поиск отчётов пользователя по дате",
      *   security={
      *     {"bearerAuth": {}}
      *   },
      *   tags={"Reports"},
-     *   @OA\RequestBody(
-     *     @OA\MediaType(
-     *       mediaType="application/x-www-form-urlencoded",
-     *       @OA\Schema(
-     *          required={"user_card_id"},
-     *          @OA\Property(
-     *              property="user_card_id",
-     *              type="integer",
-     *              description="Идентификатор карты(профиля) пользователя",
-     *              nullable=false,
-     *          ),
-     *          @OA\Property(
-     *              property="date",
-     *              type="DateTime",
-     *              description="Дата поиска",
-     *              nullable=false,
-     *          ),
-     *       ),
-     *     ),
+     *   @OA\Parameter(
+     *      name="user_id",
+     *      description="Идентификатор пользователя",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="date",
+     *      description="Дата поиска",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="DateTime",
+     *      )
      *   ),
      *
      *   @OA\Response(
@@ -131,7 +138,7 @@ class ReportsController extends ApiController
         $reportsModel = new ReportSearchForm();
 
         $params = Yii::$app->request->get();
-        if(!isset($params['user_card_id']) or !isset($params['date'])){
+        if(!isset($params['user_id']) or !isset($params['date'])){
             throw new NotFoundHttpException('Required parameter are missing!');
         }
 
@@ -157,96 +164,75 @@ class ReportsController extends ApiController
      *     {"bearerAuth": {}}
      *   },
      *   tags={"Reports"},
-     *   @OA\Parameter(
-     *     name="difficulties",
-     *     in="query",
-     *     required=false,
-     *     description="Описание сложностей возникших при выполнении задач",
-     *     @OA\Schema(
-     *       type="string",
-     *     )
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"tasks"},
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="Идентификатор пользователя",
+     *          ),
+     *          @OA\Property(
+     *              property="created_at",
+     *              type="Date",
+     *              description="Идентификатор пользователя",
+     *          ),
+     *          @OA\Property(
+     *              property="difficulties",
+     *              type="string",
+     *              description="Описание сложностей возникших при выполнении задач",
+     *          ),
+     *          @OA\Property(
+     *              property="tomorrow",
+     *              type="string",
+     *              description="Описание планов на завтра",
+     *          ),
+     *          @OA\Property(
+     *              property="Статус",
+     *              type="integer",
+     *              description="Статус",
+     *          ),
+     *          @OA\Property(
+     *              property="project_id",
+     *              type="integer",
+     *              description="Идентификатор проекта",
+     *          ),
+     *          @OA\Property(
+     *              property="company_id",
+     *              type="integer",
+     *              description="Идентификатор компании",
+     *          ),
+     *          @OA\Property(
+     *              property="tasks[]",
+     *              type="array",
+     *              description="Массив выполненых задач",
+     *                  @OA\Items(
+     *                          type="object",
+     *                          @OA\Property(
+     *                              property="task",
+     *                              description="Название задачи",
+     *                              type="string",
+     *                          ),
+     *                          @OA\Property(
+     *                              property="hours_spent",
+     *                              description="Затраченное количество часов",
+     *                              type="string",
+     *                          ),
+     *                          @OA\Property(
+     *                              property="minutes_spent",
+     *                              description="Затраченное количество минут",
+     *                              type="string",
+     *                          )
+     *                      )
+     *
+     *          ),
+     *       ),
+     *     ),
      *   ),
-     *   @OA\Parameter(
-     *     name="tomorrow",
-     *     in="query",
-     *     required=false,
-     *     description="Описание планов на завтра",
-     *     @OA\Schema(
-     *       type="string",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="created_at",
-     *     in="query",
-     *     required=false,
-     *     description="Дата создания",
-     *     @OA\Schema(
-     *       type="string",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="status",
-     *     in="query",
-     *     required=false,
-     *     description="Статус",
-     *     @OA\Schema(
-     *       type="integer",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="user_card_id",
-     *     in="query",
-     *     required=false,
-     *     description="ID карты(профиля) пользователя",
-     *     @OA\Schema(
-     *       type="integer",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="project_id",
-     *     in="query",
-     *     required=false,
-     *     description="ID проекта",
-     *     @OA\Schema(
-     *       type="integer",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="company_id",
-     *     in="query",
-     *     required=false,
-     *     description="ID компании",
-     *     @OA\Schema(
-     *       type="integer",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="tasks[]",
-     *     in="query",
-     *     required=false,
-     *     description="Масив задач. ",
-     *     @OA\Schema(
-     *          type="array",
-     *          @OA\Items(
-     *                  type="object",
-     *                  @OA\Property(
-     *                      property="task",
-     *                      description="Название задачи",
-     *                      type="string",
-     *                  ),
-     *                  @OA\Property(
-     *                      property="hours_spent",
-     *                      description="Затраченное количество часов",
-     *                      type="string",
-     *                  ),
-     *                  @OA\Property(
-     *                      property="minutes_spent",
-     *                      description="Затраченное количество минут",
-     *                      type="string",
-     *                  )
-     *              )
-     *      )
-     *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Возвращает объект Запроса",
@@ -267,11 +253,12 @@ class ReportsController extends ApiController
             throw new BadRequestHttpException('Нет параметра tasks');
         }
 
-        if(!isset($params['user_card_id'])){
-            $userCard = UserCard::find()->where(['id_user' => Yii::$app->user->id])->one();
-            if($userCard){
-                $params['user_card_id'] = $userCard->id;
-            }
+        if(!isset($params['user_id'])){
+            $params['user_id'] = Yii::$app->user->id;
+        }
+
+        if (!isset($params['created_at'])){
+            $params['created_at'] = date("Y-m-d");
         }
 
         $reportsModel = new Reports();
@@ -283,7 +270,7 @@ class ReportsController extends ApiController
         $tasks = $params['tasks'];
         foreach ($tasks as $task) {
             $reportsTask = new ReportsTask();
-            $reportsTask->attributes = $task;
+            $reportsTask->load($task, '');
             $reportsTask->report_id = $reportsModel->id;
             $reportsTask->created_at = $reportsTask->created_at ?? strtotime($reportsModel->created_at);
             $reportsTask->status = $reportsTask->status ?? 1;
@@ -298,26 +285,21 @@ class ReportsController extends ApiController
 
 
     /**
-     * @OA\Get(path="/user-response/delete",
+     * @OA\Delete (path="/reports/delete",
      *   summary="Удаление отчёта",
      *   description="Осуществляет удаление отчёта",
      *   security={
      *     {"bearerAuth": {}}
      *   },
      *   tags={"Reports"},
-     *   @OA\RequestBody(
-     *     @OA\MediaType(
-     *       mediaType="application/x-www-form-urlencoded",
-     *       @OA\Schema(
-     *          required={"id"},
-     *          @OA\Property(
-     *              property="id",
-     *              type="integer",
-     *              description="Идентификатор отчётая",
-     *              nullable=false,
-     *          ),
-     *       ),
-     *     ),
+     *   @OA\Parameter(
+     *      name="id",
+     *      description="Идентификатор отчета",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
      *   ),
      *
      *   @OA\Response(
@@ -331,10 +313,8 @@ class ReportsController extends ApiController
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete()
+    public function actionDelete($id): bool
     {
-        $id = Yii::$app->request->get('id');
-
         $report = Reports::findOne($id);
 
         if(null === $report) {
@@ -349,7 +329,7 @@ class ReportsController extends ApiController
     }
 
     /**
-     * @OA\Get(path="/reports/update",
+     * @OA\Put (path="/reports/update",
      *   summary="Обновление отчёта",
      *   description="Метод для Обновления отчёта",
      *   security={
@@ -365,50 +345,61 @@ class ReportsController extends ApiController
      *       type="integer",
      *     )
      *   ),
-     *   @OA\Parameter(
-     *     name="created_at",
-     *     in="query",
-     *     required=false,
-     *     description="Дата создания (yyyy-mm-dd)",
-     *     @OA\Schema(
-     *       type="DateTime",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="today",
-     *     in="query",
-     *     required=false,
-     *     description="Сделанное сегодня",
-     *     @OA\Schema(
-     *       type="string",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="difficulties",
-     *     in="query",
-     *     required=false,
-     *     description="Описание сложностей возникших при выполнении задач",
-     *     @OA\Schema(
-     *       type="string",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="tomorrow",
-     *     in="query",
-     *     required=false,
-     *     description="Описание планов на завтра",
-     *     @OA\Schema(
-     *       type="string",
-     *     )
-     *   ),
-     *   @OA\Parameter(
-     *     name="status",
-     *     in="query",
-     *     required=false,
-     *     description="Статус",
-     *     @OA\Schema(
-     *       type="integer",
-     *     )
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="application/x-www-form-urlencoded",
+     *       @OA\Schema(
+     *          required={},
+     *          @OA\Property(
+     *              property="created_at",
+     *              type="DateTime",
+     *              description="Дата создания (yyyy-mm-dd)",
+     *          ),
+     *          @OA\Property(
+     *              property="today",
+     *              type="string",
+     *              description="Сделанное сегодня",
+     *          ),
+     *          @OA\Property(
+     *              property="difficulties",
+     *              type="string",
+     *              description="Описание сложностей возникших при выполнении задач",
+     *          ),
+     *          @OA\Property(
+     *              property="tomorrow",
+     *              type="string",
+     *              description="Описание планов на завтра",
+     *          ),
+     *          @OA\Property(
+     *              property="status",
+     *              type="integer",
+     *              description="Статус",
+     *          ),
+     *          @OA\Property(
+     *              property="tasks[]",
+     *              type="array",
+     *              description="Массив выполненых задач",
+     *                  @OA\Items(
+     *                          type="object",
+     *                          @OA\Property(
+     *                              property="task",
+     *                              description="Название задачи",
+     *                              type="string",
+     *                          ),
+     *                          @OA\Property(
+     *                              property="hours_spent",
+     *                              description="Затраченное количество часов",
+     *                              type="string",
+     *                          ),
+     *                          @OA\Property(
+     *                              property="minutes_spent",
+     *                              description="Затраченное количество минут",
+     *                              type="string",
+     *                          ),
+     *                      ),
+     *              ),
+     *       ),
+     *     ),
      *   ),
      *   @OA\Response(
      *     response=200,
@@ -418,32 +409,50 @@ class ReportsController extends ApiController
      *         @OA\Schema(ref="#/components/schemas/ReportsResponseCreateExample"),
      *     ),
      *   ),
-     *     )
+     *     ),
      *
      * @return array
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      */
-    public function actionUpdate(): array
+    public function actionUpdate($id): array
     {
-        $params = Yii::$app->request->get();
+        $params = Yii::$app->getRequest()->getBodyParams();
+        $reportsModel = Reports::findone($id);
 
-        $reportsModel = Reports::findone($params['id']);
         if(!isset($reportsModel)) {
             throw new NotFoundHttpException('report not found');
         }
 
-        if(isset($params['user_card_id'])) {
+        if (!isset($params['tasks'])){
+            throw new BadRequestHttpException('Нет параметра tasks');
+        }
+
+        if(isset($params['user_id'])) {
             throw new \RuntimeException('constraint by user_card_id');
         }
 
-        $reportsModel->attributes = $params;
+        $reportsModel->load($params, '');
 
         if(!$reportsModel->validate()){
             throw new BadRequestHttpException(json_encode($reportsModel->errors));
         }
 
         $reportsModel->save();
+
+        ReportsTask::deleteAll(['report_id' => $reportsModel->id]);
+        foreach ($params['tasks'] as $task) {
+            $reportsTask = new ReportsTask();
+            $reportsTask->load($task, '');
+            $reportsTask->report_id = $reportsModel->id;
+            $reportsTask->created_at = $reportsTask->created_at ?? strtotime($reportsModel->created_at);
+            $reportsTask->status = $reportsTask->status ?? 1;
+
+            if(!$reportsTask->validate() ){
+                throw new BadRequestHttpException(json_encode($reportsTask->errors));
+            }
+            $reportsTask->save();
+        }
 
         return $reportsModel->toArray();
     }

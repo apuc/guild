@@ -4,6 +4,7 @@
 namespace console\controllers;
 
 
+use common\models\Reports;
 use common\models\UserCard;
 use Yii;
 use yii\console\Controller;
@@ -21,11 +22,10 @@ class SqlController extends Controller
     {
         $model = UserCard::find()->all();
         foreach ($model as $item) {
-            if(!$item->photo){
-                if($item->gender === 1){
+            if (!$item->photo) {
+                if ($item->gender === 1) {
                     $item->photo = '/profileava/f' . random_int(1, 6) . '.png';
-                }
-                else {
+                } else {
                     $item->photo = '/profileava/m' . random_int(1, 10) . '.png';
                 }
                 $item->save();
@@ -37,5 +37,17 @@ class SqlController extends Controller
     public function actionGenerateUser()
     {
         echo UserCard::generateUserForUserCard() . "\n";
+    }
+
+    public function actionAddUserIdToReports()
+    {
+        $reports = Reports::find()->all();
+        foreach ($reports as $report) {
+            $report->user_id = $report->userCard->id_user;
+            $report->save();
+            echo "user $report->user_id changed\n";
+        }
+
+        echo "script completed successfully\n";
     }
 }

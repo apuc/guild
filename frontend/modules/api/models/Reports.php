@@ -35,6 +35,12 @@ namespace frontend\modules\api\models;
  *     description="ID карты(профиля) пользователя"
  *  ),
  *  @OA\Property(
+ *     property="user_id",
+ *     type="integer",
+ *     example=23,
+ *     description="ID пользователя"
+ *  ),
+ *  @OA\Property(
  *     property="project_id",
  *     type="integer",
  *     example=1,
@@ -75,6 +81,10 @@ namespace frontend\modules\api\models;
  *         type="integer",
  *      ),
  *      @OA\Property(
+ *         property="user_id",
+ *         type="integer",
+ *      ),
+ *      @OA\Property(
  *         property="project_id",
  *         type="integer",
  *      ),
@@ -108,6 +118,10 @@ namespace frontend\modules\api\models;
  *      ),
  *      @OA\Property(
  *         property="user_card_id",
+ *         type="integer",
+ *      ),
+ *      @OA\Property(
+ *         property="user_id",
  *         type="integer",
  *      ),
  *      @OA\Property(
