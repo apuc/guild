@@ -83,11 +83,11 @@ class ReportsController extends ApiController
         $reportsModel->limit = $params['limit'] ?? $reportsModel->limit;
         $reportsModel->offset = $params['offset'] ?? $reportsModel->offset;
 
-        if(!$reportsModel->validate()){
+        if (!$reportsModel->validate()) {
             return $reportsModel->errors;
         }
 
-        return  $reportsModel->byParams();
+        return $reportsModel->byParams();
     }
 
     /**
@@ -138,7 +138,7 @@ class ReportsController extends ApiController
         $reportsModel = new ReportSearchForm();
 
         $params = Yii::$app->request->get();
-        if(!isset($params['user_id']) or !isset($params['date'])){
+        if (!isset($params['user_id']) or !isset($params['date'])) {
             throw new NotFoundHttpException('Required parameter are missing!');
         }
 
@@ -149,7 +149,7 @@ class ReportsController extends ApiController
             throw new BadRequestHttpException('Wrong date format');
         }
 
-        if(!$reportsModel->validate()){
+        if (!$reportsModel->validate()) {
             return $reportsModel->errors;
         }
 
@@ -249,21 +249,25 @@ class ReportsController extends ApiController
     public function actionCreate(): array
     {
         $params = Yii::$app->request->post();
-        if (!isset($params['tasks'])){
+        if (!isset($params['tasks'])) {
             throw new BadRequestHttpException('Нет параметра tasks');
         }
 
-        if(!isset($params['user_id'])){
+        if (!isset($params['user_id'])) {
             $params['user_id'] = Yii::$app->user->id;
         }
 
-        if (!isset($params['created_at'])){
+        if (!isset($params['created_at'])) {
             $params['created_at'] = date("Y-m-d");
+        }
+
+        if (Reports::find()->where(['created_at' => $params['created_at'], 'user_id' => $params['user_id']])->exists()) {
+            throw new BadRequestHttpException('Этот пользователь уже заполнил отчет в этот день');
         }
 
         $reportsModel = new Reports();
         $reportsModel->attributes = $params;
-        if(!$reportsModel->validate() || !$reportsModel->save()){
+        if (!$reportsModel->validate() || !$reportsModel->save()) {
             throw new BadRequestHttpException(json_encode($reportsModel->errors));
         }
 
@@ -275,7 +279,7 @@ class ReportsController extends ApiController
             $reportsTask->created_at = $reportsTask->created_at ?? strtotime($reportsModel->created_at);
             $reportsTask->status = $reportsTask->status ?? 1;
 
-            if(!$reportsTask->validate() || !$reportsTask->save()){
+            if (!$reportsTask->validate() || !$reportsTask->save()) {
                 throw new BadRequestHttpException(json_encode($reportsTask->errors));
             }
         }
@@ -317,11 +321,11 @@ class ReportsController extends ApiController
     {
         $report = Reports::findOne($id);
 
-        if(null === $report) {
+        if (null === $report) {
             throw new NotFoundHttpException('Report not found');
         }
 
-        if(false === ($report->delete())) {
+        if (false === ($report->delete())) {
             throw new \RuntimeException('Report not deleted');
         }
 
@@ -420,21 +424,21 @@ class ReportsController extends ApiController
         $params = Yii::$app->getRequest()->getBodyParams();
         $reportsModel = Reports::findone($id);
 
-        if(!isset($reportsModel)) {
+        if (!isset($reportsModel)) {
             throw new NotFoundHttpException('report not found');
         }
 
-        if (!isset($params['tasks'])){
+        if (!isset($params['tasks'])) {
             throw new BadRequestHttpException('Нет параметра tasks');
         }
 
-        if(isset($params['user_id'])) {
+        if (isset($params['user_id'])) {
             throw new \RuntimeException('constraint by user_card_id');
         }
 
         $reportsModel->load($params, '');
 
-        if(!$reportsModel->validate()){
+        if (!$reportsModel->validate()) {
             throw new BadRequestHttpException(json_encode($reportsModel->errors));
         }
 
@@ -448,7 +452,7 @@ class ReportsController extends ApiController
             $reportsTask->created_at = $reportsTask->created_at ?? strtotime($reportsModel->created_at);
             $reportsTask->status = $reportsTask->status ?? 1;
 
-            if(!$reportsTask->validate() ){
+            if (!$reportsTask->validate()) {
                 throw new BadRequestHttpException(json_encode($reportsTask->errors));
             }
             $reportsTask->save();
@@ -477,7 +481,7 @@ class ReportsController extends ApiController
         $reportsModel->user_card_id = $user_card_id;
 
         $reports = $reportsModel->reportsByDate();
-        return ArrayHelper::toArray($reports , [
+        return ArrayHelper::toArray($reports, [
             'common\models\Reports' => [
                 'date' => 'created_at',
                 'id',
