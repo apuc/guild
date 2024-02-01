@@ -52,7 +52,7 @@ class ProjectTask extends ActiveRecord
     /**
      * @return string[]
      */
-    public static function priorityList() :array
+    public static function priorityList(): array
     {
         return [
             self::PRIORITY_LOW => 'Низкий',
@@ -182,6 +182,9 @@ class ProjectTask extends ActiveRecord
             'comment_count' => function () {
                 return $this->getCommentCount();
             },
+            'file_count' => function () {
+                return $this->getFileCount();
+            },
             'taskUsers',
             'mark',
             'execution_priority'
@@ -194,6 +197,14 @@ class ProjectTask extends ActiveRecord
     public function getCommentCount()
     {
         return Comment::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => Comment::STATUS_ACTIVE])->count();
+    }
+
+    /**
+     * @return bool|int|string|null
+     */
+    public function getFileCount()
+    {
+        return FileEntity::find()->where(['entity_id' => $this->id, 'entity_type' => 2, 'status' => FileEntity::STATUS_ACTIVE])->count();
     }
 
     /**
@@ -244,7 +255,7 @@ class ProjectTask extends ActiveRecord
      */
     public function getCompany(): ActiveQuery
     {
-        return $this->hasOne(Company::class,['id' => 'company_id'])
+        return $this->hasOne(Company::class, ['id' => 'company_id'])
             ->via('project');
     }
 
