@@ -55,8 +55,8 @@ class ReportSearchForm extends Model
             $queryBuilder->andWhere(['reports.user_id' => $this->user_id]);
         }
 
-        $queryBuilder->limit($this->limit)
-            ->offset($this->offset);
+//        $queryBuilder->limit($this->limit)
+//            ->offset($this->offset);
 
         return $queryBuilder->asArray()->all();
     }
