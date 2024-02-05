@@ -57,6 +57,11 @@ class RegisterController extends ApiController
      *              type="string",
      *              description="Пароль пользователя",
      *          ),
+     *          @OA\Property(
+     *              property="is_partner",
+     *              type="integer",
+     *              description="Является ли пользователь Партнером. Возможные значения 0 или 1. По умолчанию 0",
+     *          ),
      *       ),
      *     ),
      *   ),

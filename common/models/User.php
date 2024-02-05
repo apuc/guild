@@ -240,8 +240,31 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
         return $this->hasOne(UserCard::class, ['id_user' => 'id']);
     }
 
-    public function getProjectUser()
+    public function getProjectUser(): \yii\db\ActiveQuery
     {
         return $this->hasMany(ProjectUser::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * @param string $email
+     * @param int $status
+     * @return UserCard|false
+     */
+    public static function createSimpleProfile(string $email, int $status = 18): UserCard | bool
+    {
+        $user = User::find()->where(['email' => $email])->one();
+        if ($user) {
+            $profile = new UserCard();
+            $profile->id_user = $user->id;
+            $profile->status = $status;
+            $profile->fio = $email;
+            if ($profile->save()) {
+                return $profile;
+            }
+
+            return false;
+        }
+
+        return false;
     }
 }

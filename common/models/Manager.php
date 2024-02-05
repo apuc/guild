@@ -34,7 +34,7 @@ class Manager extends \yii\db\ActiveRecord
             [['user_id'], 'integer'],
             [['user_id'], 'required'],
             ['user_id', 'unique', 'message' => 'Уже является менеджером'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserCard::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 

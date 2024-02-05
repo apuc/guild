@@ -5,12 +5,32 @@ namespace console\controllers;
 
 
 use common\models\Reports;
+use common\models\User;
 use common\models\UserCard;
 use Yii;
 use yii\console\Controller;
 
 class SqlController extends Controller
 {
+    public $email = "";
+
+    /**
+     * @param $actionID
+     * @return string[]
+     */
+    public function options($actionID)
+    {
+        return ['email'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function optionAliases()
+    {
+        return ['e' => 'email'];
+    }
+
     public function actionSalary()
     {
         $sql = "UPDATE user_card SET salary=REPLACE( `salary`, ' ', '' )";
@@ -49,5 +69,15 @@ class SqlController extends Controller
         }
 
         echo "script completed successfully\n";
+    }
+
+    public function actionCreateProfile()
+    {
+        if ($profile = User::createSimpleProfile($this->email, 17)) {
+            echo "Профиль $profile->id успешно создан\n";
+            return;
+        }
+
+        echo "Пользователь $this->email не найден\n";
     }
 }

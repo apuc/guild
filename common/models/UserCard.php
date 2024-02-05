@@ -62,6 +62,8 @@ class UserCard extends \yii\db\ActiveRecord
     const SCENARIO_UPDATE_RESUME_TEXT = 'update_resume_text';
     const SCENARIO_DOWNLOAD_RESUME = 'download_resume_text';
 
+    const SCENARIO_CREATE_FROM_ADMIN = 'create_from_admin';
+
     const AT_PROJECT_BUSY = 1;
     const AT_PROJECT_FREE = 0;
 
@@ -114,7 +116,8 @@ class UserCard extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fio', 'status', 'gender', 'email', 'level', 'position_id'], 'required'],
+            [['fio', 'status', ], 'required'],
+            [['gender', 'email', 'level', 'position_id'], 'required', 'on' => self::SCENARIO_CREATE_FROM_ADMIN],
             [['gender', 'status', 'position_id', 'id_user', 'level', 'years_of_exp', 'resume_tariff', 'at_project'], 'integer'],
             [['dob', 'created_at', 'updated_at', 'deleted_at', 'vc_text', 'vc_text_short', 'test_task_getting_date', 'test_task_complete_date'], 'safe'],
             ['email', 'unique', 'message'=>'Почтовый адрес уже используется'],

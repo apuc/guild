@@ -4,7 +4,7 @@
 /* @var $user common\models\User */
 
 ?>
-Hello <?= $user->username ?>,
+Здравствуйте, <?= $user->username ?>,
 
-You have successfully registered!
+Благодорим за регистрацию.
 

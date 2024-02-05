@@ -13,7 +13,7 @@ class RegistrationEmail extends Email
     public function __construct(User $user)
     {
         $this->sendTo = $user->email;
-        $this->subject = 'Account registration at ' . Yii::$app->name;
+        $this->subject = 'Регистрация в ' . Yii::$app->name;
         $this->mailLayout = ['html' => 'signup-html', 'text' => 'signup-text'];
         $this->params = ['user' => $user];
     }

@@ -138,6 +138,7 @@ class UserCardController extends Controller
     public function actionCreate()
     {
         $model = new UserCard();
+        $model->scenario = UserCard::SCENARIO_CREATE_FROM_ADMIN;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             UserCard::generateUserForUserCard($model->id);

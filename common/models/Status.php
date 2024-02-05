@@ -72,4 +72,9 @@ class Status extends \yii\db\ActiveRecord
     {
         return $this->hasMany(UserCard::class, ['status' => 'id']);
     }
+
+    public static function getByName($name)
+    {
+        return Status::find()->where(['name' => $name])->one()->id ?? false;
+    }
 }

@@ -2,6 +2,7 @@
 namespace frontend\models;
 
 use common\classes\Debug;
+use common\models\Status;
 use Yii;
 use yii\base\Model;
 use common\models\User;
@@ -14,6 +15,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $is_partner = 0;
 
 
     /**
@@ -35,6 +37,8 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+
+            ['is_partner', 'integer']
         ];
     }
 
@@ -59,6 +63,8 @@ class SignupForm extends Model
         $auth = Yii::$app->authManager;
         $authorRole = $auth->getRole('user');
         $auth->assign($authorRole, $user->id);
+
+        User::createSimpleProfile($user->email, $this->is_partner ? Status::getByName("Партнер") : Status::getByName("Аутстафинг"));
 
         return $user->save() ? $user : null;
     }
