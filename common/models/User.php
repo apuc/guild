@@ -257,6 +257,7 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
             $profile = new UserCard();
             $profile->id_user = $user->id;
             $profile->status = $status;
+            $profile->email = $email;
             $profile->fio = $email;
             if ($profile->save()) {
                 return $profile;

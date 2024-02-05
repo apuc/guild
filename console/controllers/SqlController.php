@@ -73,7 +73,7 @@ class SqlController extends Controller
 
     public function actionCreateProfile()
     {
-        if ($profile = User::createSimpleProfile($this->email, 17)) {
+        if ($profile = User::createSimpleProfile($this->email, 18)) {
             echo "Профиль $profile->id успешно создан\n";
             return;
         }
