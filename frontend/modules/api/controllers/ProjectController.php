@@ -4,6 +4,7 @@ namespace frontend\modules\api\controllers;
 
 use common\models\ProjectTaskCategory;
 use common\models\Status;
+use common\models\User;
 use common\models\UseStatus;
 use frontend\modules\api\models\Manager;
 use frontend\modules\api\models\project\Project;
@@ -438,11 +439,11 @@ class ProjectController extends ApiController
 
         $model = new ProjectUser();
         $model->load($request, '');
-        if (isset($model->user->userCard)){
+        if (isset($model->user->userCard)) {
             $model->card_id = $model->user->userCard->id;
         }
 
-        if (!$model->save()){
+        if (!$model->save()) {
             return $model->errors;
         }
 
@@ -537,5 +538,67 @@ class ProjectController extends ApiController
     public function actionStatistic($project_id): array|ActiveRecord|null
     {
         return ProjectStatistic::find()->where(['id' => $project_id])->one();
+    }
+
+    /**
+     *
+     * @OA\Post(path="/project/add-user-by-email",
+     *   summary="Добавить пользователя в проект по почте",
+     *   description="Метод для добавления пользователя в проект по почте",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TaskManager"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"email", "project_id"},
+     *          @OA\Property(
+     *              property="email",
+     *              type="integer",
+     *              description="Email пользователя",
+     *          ),
+     *          @OA\Property(
+     *              property="project_id",
+     *              type="integer",
+     *              description="Идентификатор проекта",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ProjectUsers"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return ProjectUser
+     * @throws NotFoundHttpException
+     */
+    public function actionAddUserByEmail(): ProjectUser
+    {
+        $request = Yii::$app->request->post();
+        $project = Project::findOne($request['project_id']);
+        if (empty($project)) {
+            throw new NotFoundHttpException('The project not found');
+        }
+
+        $user = User::findByEmail($request['email']);
+        if (empty($user)) {
+            throw new NotFoundHttpException('The user not found');
+        }
+
+        $model = new ProjectUser();
+        $model->user_id = $user->id;
+        $model->project_id = $project->id;
+        $model->save();
+
+        return $model;
     }
 }

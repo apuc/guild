@@ -50,7 +50,7 @@ class ProjectUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'project_id', 'card_id'], 'required'],
+            [['user_id', 'project_id'], 'required'],
             ['user_id', 'unique', 'targetAttribute' => ['user_id', 'project_id'], 'message'=>'Сотрудник уже назначен на этот проект'],
             ['card_id', 'unique', 'targetAttribute' => ['card_id', 'project_id'], 'message'=>'Сотрудник уже назначен на этот проект'],
             [['card_id', 'project_id', 'user_id', 'project_role_id', 'status'], 'integer'],
