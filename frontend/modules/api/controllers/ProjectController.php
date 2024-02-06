@@ -2,10 +2,12 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\models\email\AddToProjectEmail;
 use common\models\ProjectTaskCategory;
 use common\models\Status;
 use common\models\User;
 use common\models\UseStatus;
+use common\services\EmailService;
 use frontend\modules\api\models\Manager;
 use frontend\modules\api\models\project\Project;
 use frontend\modules\api\models\project\ProjectStatistic;
@@ -20,11 +22,18 @@ use yii\web\NotFoundHttpException;
 
 class ProjectController extends ApiController
 {
+    public EmailService $emailService;
     public $modelClass = 'frontend\modules\api\models\Project';
     public $serializer = [
         'class' => 'yii\rest\Serializer',
         'collectionEnvelope' => 'projects',
     ];
+
+    public function __construct($id, $module, EmailService $emailService, $config = [])
+    {
+        $this->emailService = $emailService;
+        parent::__construct($id, $module, $config);
+    }
 
     public function behaviors(): array
     {
@@ -580,6 +589,7 @@ class ProjectController extends ApiController
      *
      * @return ProjectUser
      * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
      */
     public function actionAddUserByEmail(): ProjectUser
     {
@@ -594,10 +604,16 @@ class ProjectController extends ApiController
             throw new NotFoundHttpException('The user not found');
         }
 
+        if (\common\models\ProjectUser::find()->where(['user_id' => $user->id, 'project_id' => $project->id])->exists()){
+            throw new BadRequestHttpException('Пользователь уже добавлен в проект');
+        }
+
         $model = new ProjectUser();
         $model->user_id = $user->id;
         $model->project_id = $project->id;
         $model->save();
+
+        $this->emailService->sendEmail(new AddToProjectEmail($user, $project));
 
         return $model;
     }
