@@ -557,7 +557,7 @@ class ProjectController extends ApiController
      *          required={"email", "project_id"},
      *          @OA\Property(
      *              property="email",
-     *              type="integer",
+     *              type="string",
      *              description="Email пользователя",
      *          ),
      *          @OA\Property(
