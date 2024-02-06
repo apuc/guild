@@ -35,6 +35,9 @@ use \backend\modules\questionnaire\models\Answer;
  */
 class UserQuestionnaire extends ActiveRecord
 {
+    const STATUS_ACTIVE = 1;
+    const STATUS_DISABLE = 0;
+
     /**
      * {@inheritdoc}
      */
@@ -149,6 +152,15 @@ class UserQuestionnaire extends ActiveRecord
     }
 
     /**
+     * @param $questionnaire_id
+     * @return bool|int|string|null
+     */
+    public function countCorrectAnswers($questionnaire_id): bool|int|string|null
+    {
+        return UserResponse::find()->where(['user_questionnaire_uuid' => $questionnaire_id, 'answer_flag' => 1])->count();
+    }
+
+    /**
      * @throws InvalidConfigException
      */
     public function numCorrectAnswersWithoutOpenQuestions()
@@ -182,7 +194,7 @@ class UserQuestionnaire extends ActiveRecord
 
     public static function findActiveUserQuestionnaires($user_id): array
     {
-        return  self::find()
+        return self::find()
             ->where(['user_id' => $user_id])
             ->andWhere(['not', ['user_questionnaire.status' => 0]])
             ->all();
