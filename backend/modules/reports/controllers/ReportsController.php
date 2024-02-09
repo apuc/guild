@@ -88,7 +88,7 @@ class ReportsController extends Controller
     public function actionCalendar($user_id)
     {
         $searchModel = new ReportsSearch();
-        $searchModel->user_card_id = $user_id;
+        $searchModel->user_id = $user_id;
         $dataProvider = $searchModel->search([]);
 
 

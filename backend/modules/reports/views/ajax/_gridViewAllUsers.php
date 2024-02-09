@@ -17,7 +17,7 @@ echo GridView::widget([
             'attribute' => 'user_card_id',
             'value' => function ($model) {
                 return Html::a(Reports::getFio($model) . ' ' . Html::tag('i', null, ['class' => 'far fa-calendar-alt']),
-                    \yii\helpers\Url::base(true) . '/reports/reports/calendar?user_id=' . $model['user_card_id'], ['data-pjax' => 0]);
+                    \yii\helpers\Url::base(true) . '/reports/reports/calendar?user_id=' . $model['user_id'], ['data-pjax' => 0]);
             },
         ],
         [

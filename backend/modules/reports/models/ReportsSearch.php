@@ -20,7 +20,7 @@ class ReportsSearch extends Reports
     public function rules()
     {
         return [
-            [['id', 'created_at', 'user_card_id'], 'integer'],
+            [['id', 'created_at', 'user_card_id', 'user_id'], 'integer'],
             [['today', 'difficulties', 'tomorrow', 'fio'], 'safe'],
         ];
     }
@@ -60,7 +60,7 @@ class ReportsSearch extends Reports
         $this->load($params);
 
         if (isset($params['user_id'])) {
-           $this->user_card_id = $params['user_id'];
+           $this->user_id = $params['user_id'];
         }
         if (isset($params['year'])) {
             $query->andFilterWhere(['=', 'YEAR(reports.created_at)', $params['year']]);
