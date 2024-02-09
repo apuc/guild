@@ -112,6 +112,12 @@ class Project extends \common\models\Project
                 return $this->hh;
             },
             'owner_id',
+            'owner_info' => function(){
+                return [
+                    "fio" => $this->owner->userCard->fio ?? ($this->user->id ?? ''),
+                    "avatar" => $this->owner->userCard->photo ?? '',
+                ];
+            },
             'company' => function() {
                 return $this->company;
             },
