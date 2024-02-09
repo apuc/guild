@@ -137,7 +137,8 @@ class Reports extends \yii\db\ActiveRecord
 
     public static function getFio($data)
     {
-        $user_card = UserCard::findOne(['id' => $data->user_card_id]);
+        //Debug::dd($data);
+        $user_card = UserCard::findOne(['id_user' => $data->user_id]);
         return $user_card->fio ?? null;
     }
 
