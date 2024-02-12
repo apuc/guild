@@ -8,6 +8,8 @@ class Entity
     const ENTITY_TYPE_PROJECT = 1;
     const ENTITY_TYPE_TASK = 2;
 
+    const ENTITY_TYPE_REQUEST = 3;
+
     /**
      * @return string[]
      */
@@ -16,6 +18,7 @@ class Entity
         return [
             self::ENTITY_TYPE_PROJECT => "Проект",
             self::ENTITY_TYPE_TASK => "Задача",
+            self::ENTITY_TYPE_REQUEST => "Запрос на создание проекта",
         ];
     }
 

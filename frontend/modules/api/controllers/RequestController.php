@@ -82,8 +82,8 @@ class RequestController extends ApiController
     /**
      *
      * @OA\Get(path="/request/get-request-list",
-     *   summary="Создать запрос",
-     *   description="Метод для создания запроса, если параметр user_id не передан, то запрос создается от имени текущего пользователя.",
+     *   summary="Получить список запросов",
+     *   description="Метод для получения списка запросов, если параметр user_id не передан, то запрос создается от имени текущего пользователя.",
      *   security={
      *     {"bearerAuth": {}}
      *   },
@@ -108,7 +108,7 @@ class RequestController extends ApiController
      *   ),
      *   @OA\Response(
      *     response=200,
-     *     description="Возвращает объект Запроса",
+     *     description="Возвращает массив объектов Запроса",
      *     @OA\MediaType(
      *         mediaType="application/json",
      *         @OA\Schema(ref="#/components/schemas/RequestsExample"),

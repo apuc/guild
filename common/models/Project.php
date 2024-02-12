@@ -89,6 +89,25 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $insert
+     * @param $changedAttributes
+     * @return void
+     */
+    public function afterSave($insert, $changedAttributes): void
+    {
+        if ($insert) {
+            $model = new ProjectUser();
+            $model->user_id = $this->owner_id;
+            $model->project_id = $this->id;
+            $model->status = 1;
+            if ($model->save()) {
+
+            }
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
      * @return ActiveQuery
      */
     public function getFieldsValues()

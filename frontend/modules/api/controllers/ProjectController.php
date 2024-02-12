@@ -197,7 +197,7 @@ class ProjectController extends ApiController
             ->one();
 
         if (empty($projectTaskCategory)) {
-            throw new NotFoundHttpException('The project not found');
+            throw new BadRequestHttpException('This user cannot be added to the project');
         }
 
         $projectTaskCategory->title = Yii::$app->request->post('new_title');
