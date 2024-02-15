@@ -98,6 +98,11 @@ class Reports extends \yii\db\ActiveRecord
         return $this->hasOne(UserCard::className(), ['id' => 'user_card_id']);
     }
 
+    public function getProject()
+    {
+        return $this->hasOne(Project::class, ['id' => 'project_id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -120,7 +125,7 @@ class Reports extends \yii\db\ActiveRecord
                 $taskModel->report_id = $this->id;
                 $taskModel->task = $task['task'];
                 $taskModel->hours_spent = (float)$task['hours_spent'];
-                $taskModel->minutes_spent = (int) $task['minutes_spent'];
+                $taskModel->minutes_spent = (int)$task['minutes_spent'];
                 $taskModel->status = 1;
                 $taskModel->created_at = time();
                 $taskModel->save();

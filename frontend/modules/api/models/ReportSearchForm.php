@@ -4,8 +4,9 @@
 namespace frontend\modules\api\models;
 
 use common\classes\Debug;
-use common\models\Reports;
 use yii\base\Model;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**  */
 class ReportSearchForm extends Model
@@ -43,9 +44,12 @@ class ReportSearchForm extends Model
         ];
     }
 
-    public function byParams()
+    /**
+     * @return array|ActiveRecord
+     */
+    public function byParams(): array | ActiveRecord
     {
-        $queryBuilder = Reports::find()->with('task');
+        $queryBuilder = Reports::find();
 
         if ($this->fromDate && $this->toDate) {
             $queryBuilder->andWhere(['between', 'reports.created_at', $this->fromDate, $this->toDate]);
@@ -58,7 +62,7 @@ class ReportSearchForm extends Model
 //        $queryBuilder->limit($this->limit)
 //            ->offset($this->offset);
 
-        return $queryBuilder->asArray()->all();
+        return $queryBuilder->all();
     }
 
     public function findByDate()

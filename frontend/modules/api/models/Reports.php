@@ -136,11 +136,34 @@ namespace frontend\modules\api\models;
  *         property="task",
  *         ref="#/components/schemas/ProjectTaskReportsExample",
  *      ),
+ *      @OA\Property(
+ *         property="project",
+ *         ref="#/components/schemas/ProjectExample",
+ *      ),
  *  ),
  *)
  *
  */
 class Reports extends \common\models\Reports
 {
+
+    /**
+     * @return string[]
+     */
+    public function fields(): array
+    {
+        return [
+            'difficulties',
+            'tomorrow',
+            'created_at',
+            'status',
+            'user_card_id',
+            'user_id',
+            'project_id',
+            'project',
+            'company_id',
+            'task',
+        ];
+    }
 
 }
