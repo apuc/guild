@@ -10,6 +10,8 @@ class Entity
 
     const ENTITY_TYPE_REQUEST = 3;
 
+    const ENTITY_TYPE_REPORT = 4;
+
     /**
      * @return string[]
      */
@@ -19,6 +21,7 @@ class Entity
             self::ENTITY_TYPE_PROJECT => "Проект",
             self::ENTITY_TYPE_TASK => "Задача",
             self::ENTITY_TYPE_REQUEST => "Запрос на создание проекта",
+            self::ENTITY_TYPE_REPORT => "Отчет",
         ];
     }
 
