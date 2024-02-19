@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\classes\Debug;
 use common\models\ProjectTask;
 use common\models\ProjectTaskUser;
 use common\models\User;

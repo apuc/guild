@@ -108,11 +108,11 @@ class ProjectTask extends ActiveRecord
     public function rules()
     {
         return [
-            [['project_id', 'status', 'title', 'description',], 'required', 'on' => self::SCENARIO_DEFAULT],
+            [['project_id', 'status', 'title', 'description'], 'required'],
             [['project_id', 'status', 'column_id', 'user_id', 'executor_id', 'priority', 'execution_priority'], 'integer'],
             [['created_at', 'updated_at', 'dead_line'], 'safe'],
             ['execution_priority', 'in', 'range' => [self::PRIORITY_LOW, self::PRIORITY_MEDIUM, self::PRIORITY_HIGH]],
-            ['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
+            //['title', 'unique', 'targetAttribute' => ['title', 'project_id'], 'message' => 'Такая задача уже создана'],
             [['title'], 'string', 'max' => 255],
             ['status', 'in', 'range' => [self::STATUS_DISABLE, self::STATUS_ACTIVE, self::STATUS_ARCHIVE, self::STATUS_AT_WORK]],
             [['description'], 'string', 'max' => 1500],
@@ -192,6 +192,16 @@ class ProjectTask extends ActiveRecord
             'mark',
             'execution_priority'
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function scenarios(): array
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_UPDATE_TASK] = ['id'];
+        return $scenarios;
     }
 
     /**
