@@ -47,6 +47,9 @@ class ProjectTask extends ActiveRecord
     const PRIORITY_MEDIUM = 1;
     const PRIORITY_HIGH = 2;
 
+    const SCENARIO_UPDATE_TASK = 'update';
+
+
     const DAY_IN_UNIX_TIME = 86340; //  23:59:59
 
     /**
@@ -105,7 +108,7 @@ class ProjectTask extends ActiveRecord
     public function rules()
     {
         return [
-            [['project_id', 'status', 'title', 'description',], 'required'],
+            [['project_id', 'status', 'title', 'description',], 'required', 'on' => self::SCENARIO_DEFAULT],
             [['project_id', 'status', 'column_id', 'user_id', 'executor_id', 'priority', 'execution_priority'], 'integer'],
             [['created_at', 'updated_at', 'dead_line'], 'safe'],
             ['execution_priority', 'in', 'range' => [self::PRIORITY_LOW, self::PRIORITY_MEDIUM, self::PRIORITY_HIGH]],

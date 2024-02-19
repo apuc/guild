@@ -115,6 +115,7 @@ class TaskService
     public function updateTask($task_params): ?ProjectTask
     {
         $modelTask = ProjectTask::findOne($task_params['task_id']);
+        $modelTask->scenario = ProjectTask::SCENARIO_UPDATE_TASK;
 
         if (isset($task_params['executor_id']) && $task_params['executor_id'] == 0){
             $task_params['executor_id'] = null;
