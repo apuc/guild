@@ -101,6 +101,7 @@
                     ['label' => 'Заметки', 'icon' => 'sticky-note', 'url' => ['/notes/notes'], 'active' => \Yii::$app->controller->id == 'notes', 'visible' => Yii::$app->user->can('notes')],
                     ['label' => 'Календарь ДР', 'icon' => 'calendar-check-o', 'url' => ['/calendar/calendar'], 'active' => \Yii::$app->controller->id == 'calendar', 'visible' => Yii::$app->user->can('calendar')],
                     ['label' => 'Отчеты', 'icon' => 'calendar', 'url' => ['/reports/reports'], 'active' => \Yii::$app->controller->id == 'reports', 'visible' => Yii::$app->user->can('reports')],
+                    ['label' => 'Экспорт отчетов', 'icon' => 'calendar', 'url' => ['/reports/reports/extract'], 'active' => \Yii::$app->controller->id == 'reports', 'visible' => Yii::$app->user->can('reports')],
                     ['label' => 'Опции', 'icon' => 'list-alt', 'url' => ['/options/options'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('options')],
                     [
                         'label' => 'Запрос интервью (' . \common\models\InterviewRequest::getNewCount() . ')',
