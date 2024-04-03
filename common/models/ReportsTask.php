@@ -68,7 +68,15 @@ class ReportsTask extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getReport()
+    public function getReport(): \yii\db\ActiveQuery
+    {
+        return $this->hasOne(Reports::className(), ['id' => 'report_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReports(): \yii\db\ActiveQuery
     {
         return $this->hasOne(Reports::className(), ['id' => 'report_id']);
     }

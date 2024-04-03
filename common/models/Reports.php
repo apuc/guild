@@ -106,7 +106,7 @@ class Reports extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    private function getUser(): \yii\db\ActiveQuery
+    public function getUser(): \yii\db\ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }

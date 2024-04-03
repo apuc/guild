@@ -3,6 +3,9 @@
 namespace backend\modules\reports\controllers;
 
 use backend\modules\card\models\UserCardSearch;
+use backend\modules\reports\models\ExtractForm;
+use common\classes\Debug;
+use common\models\ReportsTask;
 use Yii;
 use common\models\Reports;
 use backend\modules\reports\models\ReportsSearch;
@@ -58,7 +61,7 @@ class ReportsController extends Controller
                     return Reports::getFio($report);
                 }
             ],
-        ]),'user_card_id', 'fio');
+        ]), 'user_card_id', 'fio');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index');
@@ -74,7 +77,7 @@ class ReportsController extends Controller
                     return Reports::getFio($report);
                 }
             ],
-        ]),'user_card_id', 'fio');
+        ]), 'user_card_id', 'fio');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('list', [
@@ -110,8 +113,8 @@ class ReportsController extends Controller
             ],
         ]);
 
-        if (!$dataProvider->getCount()){
-            return  $this->render('non-exist_user_id', ['id' => $user_id]);
+        if (!$dataProvider->getCount()) {
+            return $this->render('non-exist_user_id', ['id' => $user_id]);
         }
         return $this->render('calendarOneUser', [
             'reports' => $reports_array,
@@ -197,6 +200,44 @@ class ReportsController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionExtractForm(): string
+    {
+        $model = new ExtractForm();
+
+        return $this->render('extract-form', ['model' => $model]);
+    }
+
+    public function actionExtract()
+    {
+        $model = new ExtractForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $query = ReportsTask::find()->joinWith('reports')
+                ->where(['reports.user_id' => $model->user_id])
+                ->andWhere(['between', 'reports.created_at', $model->date_from, $model->date_to]);
+
+            $file = \Yii::createObject([
+                'class' => 'codemix\excelexport\ExcelFile',
+                'sheets' => [
+                    'Reports' => [
+                        'class' => 'codemix\excelexport\ActiveExcelSheet',
+                        'query' => $query,
+                        'attributes' => [
+                            'reports.created_at',
+                            'task',
+                            'hours_spent'
+                        ],
+                    ]
+                ]
+            ]);
+
+            $file->send('reports.xlsx');
+        } else {
+            return $this->render('extract-form', ['model' => $model]);
+        }
+
     }
 
     /**
