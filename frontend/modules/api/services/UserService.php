@@ -32,6 +32,10 @@ class UserService
         }
     }
 
+    /**
+     * @return User
+     * @throws BadRequestHttpException
+     */
     public function findCurrentUser(): User
     {
         $user = User::findOne(Yii::$app->user->id);
@@ -41,6 +45,22 @@ class UserService
 
         return $user;
     }
+
+    /**
+     * @param int $id
+     * @return User
+     * @throws BadRequestHttpException
+     */
+    public function findUserById(int $id): User
+    {
+        $user = User::findOne($id);
+        if (!$user){
+            throw new BadRequestHttpException("User not found");
+        }
+
+        return $user;
+    }
+
     /**
      * @throws Exception
      */

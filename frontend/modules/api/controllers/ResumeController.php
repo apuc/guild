@@ -2,24 +2,29 @@
 
 namespace frontend\modules\api\controllers;
 
+use frontend\modules\api\models\profile\User;
 use frontend\modules\api\models\resume\forms\ChangeResumeForm;
 use frontend\modules\api\models\resume\Resume;
 use frontend\modules\api\services\ResumeService;
+use frontend\modules\api\services\UserService;
 use Yii;
 use yii\web\BadRequestHttpException;
 
 class ResumeController extends ApiController
 {
     public ResumeService $resumeService;
+    protected UserService $userService;
 
     public function __construct(
         $id,
         $module,
         ResumeService $resumeService,
+        UserService $userService,
         $config = []
     )
     {
         $this->resumeService = $resumeService;
+        $this->userService = $userService;
         parent::__construct($id, $module, $config);
     }
 
@@ -45,17 +50,18 @@ class ResumeController extends ApiController
      *     description="Возвращает объект Резюме",
      *     @OA\MediaType(
      *         mediaType="application/json",
-     *         @OA\Schema(ref="#/components/schemas/Resume"),
+     *         @OA\Schema(ref="#/components/schemas/UserResponse"),
      *     ),
      *   ),
      * )
      *
      * @param int|null $userId
-     * @return Resume|null
+     * @return User|null
+     * @throws BadRequestHttpException
      */
-    public function actionIndex(int $userId = null): ?Resume
+    public function actionIndex(int $userId = null): ?User
     {
-        return Resume::findOne($userId ?? Yii::$app->user->identity->id);
+        return $this->userService->findUserById($userId ?? Yii::$app->user->identity->id);
     }
 
     /**
