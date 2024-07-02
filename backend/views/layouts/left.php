@@ -125,6 +125,7 @@
                         'visible' => Yii::$app->user->can('questionnaire')
                     ],
                     ['label' => 'Тестовые задания', 'icon' => 'file-text-o', 'url' => ['/test/test-task'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('test')],
+                    ['label' => 'Парсин TG', 'icon' => 'file-text-o', 'url' => ['/tgparsing/tgparsing'], 'active' => \Yii::$app->controller->id == 'options', 'visible' => Yii::$app->user->can('tgparsing/tgparsing')],
 
 
                     /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],

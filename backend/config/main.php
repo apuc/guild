@@ -89,6 +89,9 @@ return [
         'comment' => [
             'class' => 'backend\modules\comment\Comment',
         ],
+        'tgparsing' => [
+            'class' => 'backend\modules\tgparsing\Tgparsing',
+        ],
     ],
     'components' => [
         'request' => [

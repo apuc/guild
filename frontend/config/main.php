@@ -13,7 +13,7 @@ return [
     'id' => 'app-frontend',
     'name' => 'itGuild',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'oauth2'],
     'controllerNamespace' => 'frontend\controllers',
 
     'modules' => [
@@ -38,6 +38,23 @@ return [
         'reports' => [
             'class' => 'frontend\modules\reports\Reports',
         ],
+        'oauth2' => [
+            'class' => 'filsh\yii2\oauth2server\Module',
+            'tokenParamName' => 'accessToken',
+            'tokenAccessLifetime' => 3600 * 24,
+            'storageMap' => [
+                'user_credentials' => 'common\models\User',
+            ],
+            'grantTypes' => [
+                'user_credentials' => [
+                    'class' => 'OAuth2\GrantType\UserCredentials',
+                ],
+                'refresh_token' => [
+                    'class' => 'OAuth2\GrantType\RefreshToken',
+                    'always_issue_new_refresh_token' => true
+                ]
+            ]
+        ]
     ],
 
     'components' => [
@@ -84,6 +101,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
                 'site/index' => 'card/user-card/index',
                 'api/profile/<id:\d+>' => 'api/profile/index',
                 'api/reports/<id:\d+>' => 'api/reports/view',
