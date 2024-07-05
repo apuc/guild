@@ -9,6 +9,8 @@ use common\models\UserCard;
 use DateTime;
 use frontend\modules\api\models\ReportSearchForm;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
@@ -178,7 +180,7 @@ class ReportsController extends ApiController
      *          @OA\Property(
      *              property="created_at",
      *              type="Date",
-     *              description="Идентификатор пользователя",
+     *              description="Дата создания отсета",
      *          ),
      *          @OA\Property(
      *              property="difficulties",
@@ -241,7 +243,7 @@ class ReportsController extends ApiController
      *         @OA\Schema(ref="#/components/schemas/ReportsResponseCreateExample"),
      *     ),
      *   ),
-     *     )
+     *)
      *
      * @return array
      * @throws BadRequestHttpException
@@ -490,6 +492,175 @@ class ReportsController extends ApiController
                 },
             ],
         ]);
+    }
+
+    /**
+     *
+     * @OA\Post(path="/reports/add-task-to-report",
+     *   summary="Добавить задачу в отчет",
+     *   description="Метод для добавления задачи в существующий отчет",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Reports"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"tasks", "report_id"},
+     *          @OA\Property(
+     *              property="report_id",
+     *              type="integer",
+     *              description="Идентификатор отчета",
+     *          ),
+     *          @OA\Property(
+     *              property="tasks",
+     *              type="string",
+     *              description="Описание задачи",
+     *          ),
+     *          @OA\Property(
+     *              property="hours_spent",
+     *              type="string",
+     *              description="Кол-во затраченых часов",
+     *          ),
+     *          @OA\Property(
+     *              property="minutes_spent",
+     *              type="string",
+     *              description="Кол-во затраченых минут",
+     *          ),
+     *       ),
+     *     ),
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Запроса",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ReportsResponseCreateExample"),
+     *     ),
+     *   ),
+     *)
+     *
+     * @return array
+     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
+     * @throws InvalidConfigException
+     * @throws Exception
+     */
+    public function actionAddTaskToReport(): array
+    {
+        $params = Yii::$app->getRequest()->getBodyParams();
+        $reportsModel = Reports::findone($params['report_id']);
+
+        if (!isset($reportsModel)) {
+            throw new NotFoundHttpException('report not found');
+        }
+
+        $reportTaskModel = new ReportsTask();
+        $reportTaskModel->report_id = $params['report_id'];
+        $reportTaskModel->task = $params['task'] ?? null;
+        $reportTaskModel->hours_spent = $params['hours_spent'] ?? 0;
+        $reportTaskModel->minutes_spent = $params['minutes_spent'] ?? 0;
+        $reportTaskModel->created_at = time();
+        $reportTaskModel->status = 1;
+
+        if (!$reportTaskModel->validate()) {
+            throw new BadRequestHttpException(json_encode($reportTaskModel->errors));
+        }
+        $reportTaskModel->save();
+
+        return $reportsModel->toArray();
+    }
+
+    /**
+     *
+     * @OA\Get(path="/reports/find-or-create",
+     *   summary="Поиск отчётов по дате, если отчета не существует, то он будет создан",
+     *   description="Осуществляет поиск отчётов пользователя по дате, если отчета не существкет, то этот метод его создаст",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"Reports"},
+     *   @OA\Parameter(
+     *      name="user_id",
+     *      description="Идентификатор пользователя",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="created_at",
+     *      description="Дата отчета",
+     *      in="query",
+     *      @OA\Schema(
+     *        type="Date",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="project_id",
+     *      description="Идентификатор проекта",
+     *      in="query",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="company_id",
+     *      description="Идентификатор компании",
+     *      in="query",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Запроса",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ReportsResponseExample"),
+     *     ),
+     *   ),
+     *
+     *
+     * )
+     *
+     * @return array|Reports
+     * @throws BadRequestHttpException
+     * @throws Exception
+     * @throws NotFoundHttpException
+     */
+    public function actionFindOrCreate(): array
+    {
+        $reportsModel = new ReportSearchForm();
+
+        $params = Yii::$app->request->get();
+        if (!isset($params['user_id']) or !isset($params['created_at'])) {
+            throw new NotFoundHttpException('Required parameter are missing!');
+        }
+
+        $reportsModel->attributes = $params;
+        $reportsModel->date = $params['created_at'];
+
+        if (!$reportsModel->validate()) {
+            return $reportsModel->errors;
+        }
+
+        $model =  $reportsModel->findByDate();
+
+        if (!$model){
+            $model = new Reports();
+            $model->load($params, '');
+            if (!$model->validate() || !$model->save()) {
+                throw new BadRequestHttpException(json_encode($reportsModel->errors));
+            }
+        }
+
+        return $model;
     }
 
     private function checkDate($date): bool

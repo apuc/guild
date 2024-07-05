@@ -24,6 +24,12 @@ namespace frontend\modules\api\models;
  *     description="Название канала"
  *  ),
  *  @OA\Property(
+ *     property="content",
+ *     type="string",
+ *     example="Очень интересный пост",
+ *     description="Текст поста"
+ *  ),
+ *  @OA\Property(
  *     property="status",
  *     type="int",
  *     example=1,
