@@ -65,7 +65,7 @@ class Project extends \common\models\Project
     }
 
 
-    public function afterSave($insert, $changedAttributes)
+    public function afterSave($insert, $changedAttributes): void
     {
         $post = \Yii::$app->request->post('Project');
 

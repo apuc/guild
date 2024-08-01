@@ -75,6 +75,16 @@ class UserController extends ApiController
      *     {"bearerAuth": {}}
      *   },
      *   tags={"User"},
+     *   @OA\Parameter(
+     *       name="expand",
+     *       in="query",
+     *       example="projectUser",
+     *       required=false,
+     *       description="В этом параметре по необходимости передаются поля, которые нужно добавить в ответ сервера, сейчас доступно только поле <b>projectUser</b>",
+     *       @OA\Schema(
+     *         type="string",
+     *       )
+     *    ),
      *   @OA\Response(
      *     response=200,
      *     description="Возвращает данные пользователя",

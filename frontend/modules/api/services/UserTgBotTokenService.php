@@ -3,6 +3,7 @@
 namespace frontend\modules\api\services;
 
 
+use common\classes\Debug;
 use DateTime;
 use Exception;
 use frontend\modules\api\models\profile\User;
@@ -18,7 +19,7 @@ class UserTgBotTokenService
     const CHARACTERS = '0123456789';
 
 
-    public function auth(array $params)
+    public function auth(array $params): array
     {
         /** @var UserTgBotToken $model */
         $model = new UserTgBotLoginForm;
@@ -44,13 +45,13 @@ class UserTgBotTokenService
      * @return TgBotDialogForm|string[]
      * @throws Exception
      */
-    public function createDialog(array $params)
+    public function createDialog(array $params): array|TgBotDialogForm
     {
         $form = new TgBotDialogForm();
         $form->load($params);
-
+        Debug::dd($form);
         if (!$form->validate()){
-            return $form;
+            return $form->errors;
         }
 
         $dialog = new UserTgBotDialog();
@@ -69,7 +70,7 @@ class UserTgBotTokenService
      * @return array
      * @throws Exception
      */
-    public function getDialogIdByUserId(string $userId)
+    public function getDialogIdByUserId(string $userId): array
     {
         $model = UserTgBotDialog::findOne(['user_id' => $userId]);
 
@@ -85,7 +86,7 @@ class UserTgBotTokenService
      * @return array
      * @throws Exception
      */
-    public function getUserIdByDialogId(string $dialogId)
+    public function getUserIdByDialogId(string $dialogId): array
     {
         $model = UserTgBotDialog::findOne(['dialog_id' => $dialogId]);
 
@@ -101,7 +102,7 @@ class UserTgBotTokenService
      * @return UserTgBotToken
      * @throws Exception
      */
-    public function getToken(int $userId)
+    public function getToken(int $userId): UserTgBotToken
     {
         $model = UserTgBotToken::findOne(['user_id' => $userId]);
         if (!empty($model)) {
@@ -116,7 +117,7 @@ class UserTgBotTokenService
      * @return User|string[]
      * @throws Exception
      */
-    public function getUserByToken(string $token)
+    public function getUserByToken(string $token): array|User
     {
         $model = UserTgBotToken::findOne(['token' => $token]);
         if (!empty($model) ) {
@@ -174,7 +175,7 @@ class UserTgBotTokenService
     /**
      * @return false|string
      */
-    private function generateExpiredAtTime()
+    private function generateExpiredAtTime(): false|string
     {
         return date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s")) +  Yii::$app->params['tgBotTokenValidityTime']);
     }
@@ -184,7 +185,7 @@ class UserTgBotTokenService
      * @return UserTgBotToken
      * @throws Exception
      */
-    private function checkExpiredAtTime(UserTgBotToken $model)
+    private function checkExpiredAtTime(UserTgBotToken $model): UserTgBotToken
     {
         $currentTime = new DateTime();
 
@@ -200,7 +201,7 @@ class UserTgBotTokenService
      * @return UserTgBotToken
      * @throws Exception
      */
-    private function updateExpiredAtTime(UserTgBotToken $model)
+    private function updateExpiredAtTime(UserTgBotToken $model): UserTgBotToken
     {
         $model->token = $this->generateToken();
         $model->expired_at = $this->generateExpiredAtTime();

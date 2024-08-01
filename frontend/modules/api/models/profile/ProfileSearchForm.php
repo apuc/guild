@@ -56,6 +56,7 @@ class ProfileSearchForm extends Model
         if ($this->id) {
             return $this->exclude(UserCard::find()
                 ->where(['id' => $this->id])
+                ->with(['position'])
                 ->with(['skillValues'])
                 ->with(['achievements'])
                 ->asArray()
@@ -70,7 +71,7 @@ class ProfileSearchForm extends Model
         $model = UserCard::find();
 
         if ($this->skills) {
-            $model->joinWith(['skillValues']);
+            $model->joinWith(['skillValues', 'position']);
             $this->skills = explode(',', $this->skills);
             $model->where(['card_skill.skill_id' => $this->skills]);
             $model->having('COUNT(DISTINCT skill_id) = ' . count($this->skills));

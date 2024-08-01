@@ -6,17 +6,17 @@ use yii\base\Model;
 class TgBotDialogForm extends Model
 {
 
-    public $userId;
-    public $dialogId;
+    public int $userId;
+    public int $dialogId;
 
     /**
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            [['dialogId', 'userId'], 'integer'],
-            [['dialogId', 'userId'], 'required'],
+            [['dialog_id', 'user_id'], 'integer'],
+            [['dialog_id'], 'required'],
         ];
     }
 

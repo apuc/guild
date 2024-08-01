@@ -3,6 +3,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\classes\Debug;
 use Exception;
 use frontend\modules\api\models\profile\User;
 use frontend\modules\api\models\tg_bot\forms\TgBotDialogForm;
@@ -20,7 +21,7 @@ class UserTgBotController extends ApiController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        if($this->action->id == "auth"){
+        if ($this->action->id == "auth") {
             unset($behaviors['authenticator']);
         }
 
@@ -110,25 +111,23 @@ class UserTgBotController extends ApiController
      *     {"bearerAuth": {}}
      *   },
      *   tags={"TgBot"},
-     *   @OA\Parameter(
-     *      name="userId",
-     *      in="query",
-     *      example="1",
-     *      required=true,
-     *      description="id пользователя",
-     *      @OA\Schema(
-     *        type="integer",
-     *      )
-     *   ),
-     *   @OA\Parameter(
-     *      name="dialogId",
-     *      in="query",
-     *      example="2355",
-     *      required=true,
-     *      description="id диалога",
-     *      @OA\Schema(
-     *        type="integer",
-     *      )
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          required={"dialog_id"},
+     *          @OA\Property(
+     *              property="dialog_id",
+     *              type="integer",
+     *              description="id диалога",
+     *          ),
+     *          @OA\Property(
+     *              property="user_id",
+     *              type="integer",
+     *              description="id пользователя",
+     *          ),
+     *       ),
+     *     ),
      *   ),
      *   @OA\Response(
      *     response=200,
@@ -142,7 +141,7 @@ class UserTgBotController extends ApiController
      * @return TgBotDialogForm|string[]
      * @throws Exception
      */
-    public function actionSetDialog()
+    public function actionSetDialog(): array|TgBotDialogForm
     {
         return $this->userTgBotTokenService->createDialog(Yii::$app->request->post());
     }
@@ -254,15 +253,19 @@ class UserTgBotController extends ApiController
      *          @OA\Property(property="card_id",type="integer",description="Card ID",example=1),
      *      ),
      *     ),
-
      *   ),
      * )
      *
      * @return array
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionAuth()
+    public function actionAuth(): array
     {
         return $this->userTgBotTokenService->auth(Yii::$app->request->post());
+    }
+
+    public function actionCreateAnonymousDialog()
+    {
+
     }
 }
