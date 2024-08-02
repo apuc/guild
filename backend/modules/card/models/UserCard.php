@@ -5,6 +5,7 @@ namespace backend\modules\card\models;
 use common\models\AchievementUserCard;
 use common\models\CardSkill;
 use common\models\FieldsValueNew;
+use common\models\Request;
 use common\models\UserCardPortfolioProjects;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -15,6 +16,19 @@ class UserCard extends \common\models\UserCard
     public $skill;
     public $achievements;
     public $portfolioProjects;
+
+    public function fields(): array
+    {
+        $fields = parent::fields();
+
+        $additionalFields = [
+            'level_title' => function (Request $model) {
+                return \common\models\UserCard::getLevelList()[$model->level];
+            },
+        ];
+
+        return array_merge($fields, $additionalFields);
+    }
 
     public function init()
     {

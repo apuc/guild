@@ -54,13 +54,16 @@ class ProfileSearchForm extends Model
     public function byId()
     {
         if ($this->id) {
-            return $this->exclude(UserCard::find()
+            $model = $this->exclude(UserCard::find()
                 ->where(['id' => $this->id])
                 ->with(['position'])
                 ->with(['skillValues'])
                 ->with(['achievements'])
                 ->asArray()
                 ->one());
+            $model['level_title'] = \common\models\UserCard::getLevelList()[$model['level']];
+
+            return $model;
         }
 
         return null;
@@ -99,6 +102,7 @@ class ProfileSearchForm extends Model
         foreach ($res as $re){
             $resArr[] = $this->exclude($re);
         }
+        $resArr['level_title'] = \common\models\UserCard::getLevelList()[$model->level];
 
         return $resArr;
     }
