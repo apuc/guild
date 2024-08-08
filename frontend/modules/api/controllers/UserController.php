@@ -4,11 +4,13 @@
 namespace frontend\modules\api\controllers;
 
 use common\models\User;
+use frontend\modules\api\models\Manager;
 use frontend\modules\api\models\profile\forms\ProfileChangeEmailForm;
 use frontend\modules\api\models\profile\forms\ProfileChangePersonalDataForm;
 use frontend\modules\api\services\UserService;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
 use yii\web\BadRequestHttpException;
 
 class UserController extends ApiController
@@ -217,5 +219,44 @@ class UserController extends ApiController
     public function actionChangePersonalData()
     {
         return $this->userService->changeChangePersonalData(Yii::$app->request->post());
+    }
+
+    /**
+     *
+     * @OA\Get(path="/user/my-employee",
+     *   summary="Список Сотрудников текущего пользователя",
+     *   description="Метод для получения списка сотрудников",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"User"},
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает объект Менеджера",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/ManagerEmployee"),
+     *     ),
+     *   ),
+     * )
+     *
+     * @return array|ActiveRecord
+     * @throws BadRequestHttpException
+     */
+    public function actionMyEmployee(): array|ActiveRecord
+    {
+        $user_id = \Yii::$app->user->id;
+        if (!$user_id) {
+            throw new BadRequestHttpException(json_encode(['Пользователь не найден']));
+        }
+
+        $model = Manager::find()->with(['managerEmployees'])->where(['user_id' => $user_id])->one();
+
+        if (!$model) {
+            return [];
+        }
+
+        return $model;
     }
 }

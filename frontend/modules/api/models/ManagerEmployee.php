@@ -61,4 +61,16 @@ namespace frontend\modules\api\models;
 class ManagerEmployee extends \common\models\ManagerEmployee
 {
 
+    /**
+     * @return string[]
+     */
+    public function extraFields(): array
+    {
+        return [
+            'profile' => function () {
+                return $this->user->userCard;
+            }
+        ];
+    }
+
 }

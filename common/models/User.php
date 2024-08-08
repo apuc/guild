@@ -245,6 +245,11 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
         return $this->hasMany(ProjectUser::class, ['user_id' => 'id']);
     }
 
+    public function getProjectUserWithTitle(): \yii\db\ActiveQuery
+    {
+        return $this->hasMany(ProjectUser::class, ['user_id' => 'id'])->with('project')->asArray();
+    }
+
     /**
      * @param string $email
      * @param int $status

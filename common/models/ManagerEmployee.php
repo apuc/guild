@@ -63,6 +63,9 @@ class ManagerEmployee extends \yii\db\ActiveRecord
                 return [
                     "fio" => $this->employee->userCard->fio ?? $this->employee->username,
                     "avatar" => $this->employee->userCard->photo ?? '',
+                    "level_title" => \common\models\UserCard::getLevelList()[$this->employee->userCard->level] ?? '',
+                    "position" => $this->employee->userCard->position ?? '',
+                    "projects" => $this->employee->projectUserWithTitle,
                 ];
             },
         ];
@@ -71,12 +74,12 @@ class ManagerEmployee extends \yii\db\ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getEmployee()
+    public function getEmployee(): ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'employee_id']);
     }
 
-    public function getUser()
+    public function getUser(): ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'employee_id']);
     }
@@ -84,7 +87,7 @@ class ManagerEmployee extends \yii\db\ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getManager()
+    public function getManager(): ActiveQuery
     {
         return $this->hasOne(Manager::className(), ['id' => 'manager_id']);
     }
