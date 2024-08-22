@@ -7,9 +7,11 @@ use common\classes\Debug;
 use Exception;
 use frontend\modules\api\models\profile\User;
 use frontend\modules\api\models\tg_bot\forms\TgBotDialogForm;
+use frontend\modules\api\models\tg_bot\UserTgBotDialog;
 use frontend\modules\api\models\tg_bot\UserTgBotToken;
 use frontend\modules\api\services\UserTgBotTokenService;
 use Yii;
+use yii\web\BadRequestHttpException;
 
 class UserTgBotController extends ApiController
 {
@@ -97,7 +99,7 @@ class UserTgBotController extends ApiController
      * @return User|string[]
      * @throws Exception
      */
-    public function actionGetUser(string $token)
+    public function actionGetUser(string $token): array|User
     {
         return $this->userTgBotTokenService->getUserByToken($token);
     }
@@ -138,10 +140,10 @@ class UserTgBotController extends ApiController
      *   ),
      * )
      *
-     * @return TgBotDialogForm|string[]
-     * @throws Exception
+     * @return array|UserTgBotDialog|TgBotDialogForm
+     * @throws \yii\db\Exception
      */
-    public function actionSetDialog(): array|TgBotDialogForm
+    public function actionSetDialog(): array|UserTgBotDialog|TgBotDialogForm
     {
         return $this->userTgBotTokenService->createDialog(Yii::$app->request->post());
     }
@@ -181,6 +183,91 @@ class UserTgBotController extends ApiController
     public function actionGetDialogId(string $userId): array
     {
         return $this->userTgBotTokenService->getDialogIdByUserId($userId);
+    }
+
+    /**
+     *
+     * @OA\Get(path="/user-tg-bot/get-dialog",
+     *   summary="Получить диалог по id",
+     *   description="Метод для получения диалога по id",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TgBot"},
+     *   @OA\Parameter(
+     *      name="dialog_id",
+     *      in="query",
+     *      example="134576",
+     *      required=true,
+     *      description="id диалога",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает диалог",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *     ),
+     *   ),
+     * )
+     *
+     * @param int $dialog_id
+     * @return UserTgBotDialog
+     * @throws Exception
+     */
+    public function actionGetDialog(int $dialog_id): UserTgBotDialog
+    {
+        return $this->userTgBotTokenService->getDialogById($dialog_id);
+    }
+
+    /**
+     *
+     * @OA\Post(path="/user-tg-bot/set-user-at-dialog",
+     *   summary="Установить пользователя в диалог",
+     *   description="Метод для установления пользователя в диалог",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TgBot"},
+     *   @OA\RequestBody(
+     *      @OA\MediaType(
+     *        mediaType="multipart/form-data",
+     *        @OA\Schema(
+     *           required={"dialog_id", "user_id"},
+     *           @OA\Property(
+     *               property="dialog_id",
+     *               type="integer",
+     *               description="id диалога",
+     *           ),
+     *           @OA\Property(
+     *               property="user_id",
+     *               type="integer",
+     *               description="id пользователя",
+     *           ),
+     *        ),
+     *      ),
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает диалог",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *     ),
+     *   ),
+     * )
+     *
+     * @return UserTgBotDialog|array
+     * @throws \yii\db\Exception
+     */
+    public function actionSetUserAtDialog(): UserTgBotDialog|array
+    {
+        $request = \Yii::$app->request->post();
+
+        $request = array_diff($request, [null, '']);
+
+        return $this->userTgBotTokenService->setUserAtDialog($request['dialog_id'], $request['user_id']);
     }
 
     /**

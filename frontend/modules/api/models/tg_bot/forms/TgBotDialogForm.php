@@ -6,8 +6,8 @@ use yii\base\Model;
 class TgBotDialogForm extends Model
 {
 
-    public int $userId;
-    public int $dialogId;
+    public int|null $user_id = null;
+    public int $dialog_id;
 
     /**
      * @return array

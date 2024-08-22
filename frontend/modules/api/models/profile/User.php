@@ -16,6 +16,7 @@ class User extends \common\models\User
     public function fields(): array
     {
         return [
+            'id',
             'email',
             'username',
             'userCard' => function () {

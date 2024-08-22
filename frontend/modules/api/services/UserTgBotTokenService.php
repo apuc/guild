@@ -42,27 +42,31 @@ class UserTgBotTokenService
 
     /**
      * @param array $params
-     * @return TgBotDialogForm|string[]
+     * @return array|UserTgBotDialog|TgBotDialogForm
+     * @throws \yii\db\Exception
      * @throws Exception
      */
-    public function createDialog(array $params): array|TgBotDialogForm
+    public function createDialog(array $params): array|UserTgBotDialog|TgBotDialogForm
     {
         $form = new TgBotDialogForm();
         $form->load($params);
-        Debug::dd($form);
         if (!$form->validate()){
             return $form->errors;
         }
 
-        $dialog = new UserTgBotDialog();
-        $dialog->user_id = $form->userId;
-        $dialog->dialog_id = $form->dialogId;
-
-        if (!$dialog->save()) {
-            throw new Exception('User dont save');
+        if ($this->hasDialog($form->dialog_id, $form->user_id)){
+            return $this->getDialogById($form->dialog_id);
         }
 
-        return ['status' => 'success'];
+        $dialog = new UserTgBotDialog();
+        $dialog->user_id = $form->user_id;
+        $dialog->dialog_id = $form->dialog_id;
+
+        if (!$dialog->save()) {
+            return ['status' => 'error', 'message' => $dialog->errors];
+        }
+
+        return $dialog;
     }
 
     /**
@@ -79,6 +83,45 @@ class UserTgBotTokenService
         }
 
         return ['dialog_id' => $model->dialog_id];
+    }
+
+    /**
+     * @param int $dialog_id
+     * @return UserTgBotDialog
+     * @throws Exception
+     */
+    public function getDialogById(int $dialog_id): UserTgBotDialog
+    {
+        $model = UserTgBotDialog::findOne(['dialog_id' => $dialog_id]);
+
+        if (!$model) {
+            throw new \Exception('dialog не найден!');
+        }
+
+        return $model;
+    }
+
+    /**
+     * @param int $dialog_id
+     * @param int $user_id
+     * @return array|UserTgBotDialog
+     * @throws \yii\db\Exception
+     * @throws Exception
+     */
+    public function setUserAtDialog(int $dialog_id, int $user_id): UserTgBotDialog|array
+    {
+        $model = UserTgBotDialog::findOne(['dialog_id' => $dialog_id]);
+
+        if (!$model) {
+            throw new \Exception('dialog не найден!');
+        }
+
+        $model->user_id = $user_id;
+        if ($model->save()){
+            return $model;
+        }
+
+        return $model->errors;
     }
 
     /**
@@ -134,6 +177,22 @@ class UserTgBotTokenService
 
         return ['error' => 'Token not found!'];
     }
+
+    /**
+     * @param int $dialog_id
+     * @param int|null $user_id
+     * @return bool
+     */
+    public function hasDialog(int $dialog_id, int $user_id = null): bool
+    {
+        $model = UserTgBotDialog::findOne(['user_id' => $user_id, 'dialog_id' => $dialog_id]);
+        if ($model){
+            return true;
+        }
+
+        return false;
+    }
+
 
     /**
      * @return string
@@ -212,4 +271,6 @@ class UserTgBotTokenService
 
         return $model;
     }
+
+
 }
