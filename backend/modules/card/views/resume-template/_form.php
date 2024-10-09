@@ -57,6 +57,8 @@ use yii\widgets\ActiveForm;
                 ?>
             </div>
 
+            <?= $form->field($model, "show_header")->checkbox() ?>
+
             <?= $form->field($model, 'footer_text')->textInput(['maxlength' => true]) ?>
 
             <div class="imgUpload form-group">
@@ -79,6 +81,8 @@ use yii\widgets\ActiveForm;
                 ]);
                 ?>
             </div>
+
+            <?= $form->field($model, "show_footer")->checkbox() ?>
 
             <div class="form-group">
                 <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
