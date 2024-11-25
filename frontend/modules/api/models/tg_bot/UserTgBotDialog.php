@@ -12,6 +12,11 @@ class UserTgBotDialog extends \common\models\UserTgBotDialog
         return [
             'user_id',
             'dialog_id',
+            'username',
+            'first_name',
+            'last_name',
+            'key_words',
+            'status',
         ];
     }
 

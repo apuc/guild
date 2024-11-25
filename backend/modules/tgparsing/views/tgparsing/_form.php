@@ -17,12 +17,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'channel_title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'content')->widget(CKEditor::className(),[
-        'editorOptions' => [
-            'preset' => 'full',
-            'inline' => false,
-        ],
-    ]); ?>
+    <?= $form->field($model, "content")->textarea() ?>
+
+<!--    --><?php //= $form->field($model, 'content')->widget(CKEditor::className(),[
+//        'editorOptions' => [
+//            'preset' => 'full',
+//            'inline' => false,
+//        ],
+//    ]); ?>
 
 
     <?= $form->field($model, 'status')->dropDownList(\common\models\Tgparsing::getStatus()) ?>

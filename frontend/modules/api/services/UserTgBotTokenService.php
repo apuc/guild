@@ -61,6 +61,11 @@ class UserTgBotTokenService
         $dialog = new UserTgBotDialog();
         $dialog->user_id = $form->user_id;
         $dialog->dialog_id = $form->dialog_id;
+        $dialog->username = $form->username;
+        $dialog->first_name = $form->first_name;
+        $dialog->last_name = $form->last_name;
+        $dialog->key_words = $form->key_words;
+        $dialog->status = $form->status;
 
         if (!$dialog->save()) {
             return ['status' => 'error', 'message' => $dialog->errors];

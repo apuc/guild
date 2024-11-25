@@ -24,6 +24,7 @@ class Tgparsing extends \yii\db\ActiveRecord
     const STATUS_NEW = 1;
     const STATUS_READY_TO_SEND = 2;
     const STATUS_SENT = 3;
+    const STATUS_SENT_TO_ADMIN = 4;
 
     /**
      * {@inheritdoc}
@@ -89,6 +90,7 @@ class Tgparsing extends \yii\db\ActiveRecord
             self::STATUS_NEW => "Новый",
             self::STATUS_READY_TO_SEND => "Готов к отправке",
             self::STATUS_SENT => "Отправлен",
+            self::STATUS_SENT_TO_ADMIN => "Отправлено администратору",
         ];
     }
 }

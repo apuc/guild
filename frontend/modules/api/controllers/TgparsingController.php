@@ -84,7 +84,7 @@ class TgparsingController extends ApiController
      *
      * @OA\Get(path="/tgparsing/get-to-send",
      *   summary="Получить пост для отправки ботом",
-     *   description="Метод для для получения поста, возвращает один пост со статусом 'Готов к отправке' ",
+     *   description="Метод для получения поста, возвращает один пост со статусом 'Готов к отправке' ",
      *   tags={"TG parsing"},
      *   security={
      *     {"bearerAuth": {}}
@@ -105,6 +105,51 @@ class TgparsingController extends ApiController
     public function actionGetToSend(): array|\yii\db\ActiveRecord|null
     {
         return Tgparsing::find()->where(['status' => Tgparsing::STATUS_READY_TO_SEND])->orderBy('id ASC')->one();
+    }
+
+
+    public function actionAdminGetToSend(): array|\yii\db\ActiveRecord|null
+    {
+        $post = Tgparsing::find()->where(['status' => Tgparsing::STATUS_NEW])->orderBy('id ASC')->one();
+        $post->status = Tgparsing::STATUS_SENT_TO_ADMIN;
+        $post->save();
+        return $post;
+    }
+
+    /**
+     *
+     * @OA\Get(path="/tgparsing/get-by-id",
+     *   summary="Получить пост по идентификатору",
+     *   description="Метод для получения постапо идентификатору",
+     *   tags={"TG parsing"},
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Parameter(
+     *       name="id",
+     *       description="Идентификатор поста",
+     *       in="query",
+     *       required=true,
+     *       @OA\Schema(
+     *         type="integer",
+     *       )
+     *    ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает один пост",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(ref="#/components/schemas/Tgparsing"),
+     *     ),
+     *
+     *   ),
+     * )
+     *
+     * @return array|\yii\db\ActiveRecord|null
+     */
+    public function actionGetById($id): ?Tgparsing
+    {
+        return Tgparsing::findOne($id);
     }
 
     /**

@@ -4,6 +4,7 @@
 namespace frontend\modules\api\controllers;
 
 use common\classes\Debug;
+use common\models\UserTgBotDialog as UserTgBotDialogAlias;
 use Exception;
 use frontend\modules\api\models\profile\User;
 use frontend\modules\api\models\tg_bot\forms\TgBotDialogForm;
@@ -127,6 +128,31 @@ class UserTgBotController extends ApiController
      *              property="user_id",
      *              type="integer",
      *              description="id пользователя",
+     *          ),
+     *          @OA\Property(
+     *               property="username",
+     *               type="string",
+     *               description="TG username",
+     *          ),
+     *          @OA\Property(
+     *                property="first_name",
+     *                type="string",
+     *                description="TG first_name",
+     *          ),
+     *          @OA\Property(
+     *                 property="last_name",
+     *                 type="string",
+     *                 description="TG last_name",
+     *          ),
+     *          @OA\Property(
+     *                  property="key_words",
+     *                  type="string",
+     *                  description="Ключевые слова",
+     *          ),
+     *          @OA\Property(
+     *                   property="status",
+     *                   type="integer",
+     *                   description="Статус",
      *          ),
      *       ),
      *     ),
@@ -349,6 +375,11 @@ class UserTgBotController extends ApiController
     public function actionAuth(): array
     {
         return $this->userTgBotTokenService->auth(Yii::$app->request->post());
+    }
+
+    public function actionGetAdmins(): array
+    {
+        return UserTgBotDialog::find()->where(["status" => [UserTgBotDialogAlias::STATUS_ADMIN, UserTgBotDialogAlias::STATUS_EXPERT]])->all();
     }
 
     public function actionCreateAnonymousDialog()
