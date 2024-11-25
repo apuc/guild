@@ -382,6 +382,11 @@ class UserTgBotController extends ApiController
         return UserTgBotDialog::find()->where(["status" => [UserTgBotDialogAlias::STATUS_ADMIN, UserTgBotDialogAlias::STATUS_EXPERT]])->all();
     }
 
+    public function actionGetAll(): array
+    {
+        return UserTgBotDialog::find()->all();
+    }
+
     public function actionCreateAnonymousDialog()
     {
 
