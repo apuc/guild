@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\classes\Debug;
 use developeruz\db_rbac\interfaces\UserRbacInterface;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -18,6 +19,7 @@ use yii\web\UnauthorizedHttpException;
  * @property string $password_reset_token
  * @property string $email
  * @property string $auth_key
+ * @property string $access_token
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -107,6 +109,24 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
     public function getTokenExpiredAt()
     {
         return $this->access_token_expired_at;
+    }
+
+    public function tokenIsExpire(): bool
+    {
+        $format = "Y-m-d H:i:s";
+        $now  = date($format);
+        $today_time = strtotime($now);
+        $expire_time = strtotime($this->access_token_expired_at);
+        if ($expire_time < $today_time) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getAccessToken(): string
+    {
+        return $this->access_token;
     }
 
     /**
