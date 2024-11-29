@@ -104,7 +104,9 @@ class TgparsingController extends ApiController
      */
     public function actionGetToSend(): array|\yii\db\ActiveRecord|null
     {
-        return Tgparsing::find()->where(['status' => Tgparsing::STATUS_READY_TO_SEND])->orderBy('id ASC')->one();
+        $post = Tgparsing::find()->where(['status' => Tgparsing::STATUS_READY_TO_SEND])->orderBy('id ASC')->one();
+        $post->status = \common\models\Tgparsing::STATUS_SENT;
+        return $post;
     }
 
 
