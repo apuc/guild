@@ -1,4 +1,3 @@
-
 $(function(){
     $('#options').change(function(){
         month = $('#options :selected').val();
@@ -39,8 +38,7 @@ $(document).ready(function () {
 });
 
 function gen_password(len){
-    var password = "";
-    var symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let password = "", symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (var i = 0; i < len; i++){
         password += symbols.charAt(Math.floor(Math.random() * symbols.length));
     }

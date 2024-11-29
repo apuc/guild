@@ -17,7 +17,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'channel_title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, "content")->textarea() ?>
+    <?= $form->field($model, "content")->textarea(['rows' => 12, 'id' => 'post_content']) ?>
+    <div class="form-group">
+        <?= Html::button("secure", ['data-target' => 'post_content']) ?>
+    </div>
 
 <!--    --><?php //= $form->field($model, 'content')->widget(CKEditor::className(),[
 //        'editorOptions' => [

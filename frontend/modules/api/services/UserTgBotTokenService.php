@@ -12,6 +12,7 @@ use frontend\modules\api\models\tg_bot\forms\UserTgBotLoginForm;
 use frontend\modules\api\models\tg_bot\UserTgBotDialog;
 use frontend\modules\api\models\tg_bot\UserTgBotToken;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
 
 class UserTgBotTokenService

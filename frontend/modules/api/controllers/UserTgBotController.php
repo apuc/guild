@@ -10,6 +10,7 @@ use frontend\modules\api\models\profile\User;
 use frontend\modules\api\models\tg_bot\forms\TgBotDialogForm;
 use frontend\modules\api\models\tg_bot\UserTgBotDialog;
 use frontend\modules\api\models\tg_bot\UserTgBotToken;
+use frontend\modules\api\services\UserTgBotService;
 use frontend\modules\api\services\UserTgBotTokenService;
 use Yii;
 use yii\web\BadRequestHttpException;
@@ -20,6 +21,7 @@ class UserTgBotController extends ApiController
      * @var UserTgBotTokenService
      */
     private UserTgBotTokenService $userTgBotTokenService;
+    private UserTgBotService $botService;
 
     public function behaviors()
     {
@@ -39,6 +41,7 @@ class UserTgBotController extends ApiController
     )
     {
         $this->userTgBotTokenService = $userTgBotTokenService;
+        $this->botService = new UserTgBotService();
         parent::__construct($id, $module, $config);
     }
 
@@ -375,6 +378,42 @@ class UserTgBotController extends ApiController
     public function actionAuth(): array
     {
         return $this->userTgBotTokenService->auth(Yii::$app->request->post());
+    }
+
+    /**
+     *
+     * @OA\Get(path="/user-tg-bot/get-dialog-by-status",
+     *   summary="Получить пользователя по статусу диалога",
+     *   description="Метод для получения пользователя по статусу диалога",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   tags={"TgBot"},
+     *   @OA\Parameter(
+     *      name="status",
+     *      in="query",
+     *      example="2",
+     *      required=true,
+     *      description="Статус",
+     *      @OA\Schema(
+     *        type="integer",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Возвращает диалог",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *     ),
+     *   ),
+     * )
+     *
+     * @param integer $status
+     * @throws Exception
+     */
+    public function actionGetDialogByStatus(int $status): \yii\data\ActiveDataProvider
+    {
+        return $this->botService->getDialogsByStatus($status);
     }
 
     public function actionGetAdmins(): array
