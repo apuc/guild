@@ -92,6 +92,9 @@ return [
         'tgparsing' => [
             'class' => 'backend\modules\tgparsing\Tgparsing',
         ],
+        'tgbotmsg' => [
+            'class' => 'backend\modules\tgbotmsg\TgBotMsg',
+        ],
     ],
     'components' => [
         'request' => [
